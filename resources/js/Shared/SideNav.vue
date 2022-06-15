@@ -35,12 +35,11 @@
             <div class="main-menu-content scroll-area">
                 <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
                     <li class=" nav-item">
-                        <Link preserve-scroll class="d-flex align-items-center" href="index.html">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/test">
                             <vue-feather type="home" />
                             <span class="menu-title text-truncate" data-i18n="Dashboards">Dashboards</span>
                         </Link>
                     </li>
-
 
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="app-email.html">

@@ -1,4 +1,10 @@
 {
     "/js/app.js": "/js/app.js",
+    "/js/picker.js": "/js/picker.js",
+    "/js/legacy.js": "/js/legacy.js",
+    "/js/picker.date.js": "/js/picker.date.js",
+    "/js/picker.time.js": "/js/picker.time.js",
+    "/js/flatpickr.min.js": "/js/flatpickr.min.js",
+    "/js/form-pickers.js": "/js/form-pickers.js",
     "/css/app.css": "/css/app.css"
 }
