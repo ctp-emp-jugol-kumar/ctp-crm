@@ -121,16 +121,17 @@ let form = useForm({
     password: '',
 });
 const togglePasswordVisibility = () => {
-    passwordFieldType.value = passwordFieldType.value === "password" ? "text" : "password" 
+    passwordFieldType.value = passwordFieldType.value === "password" ? "text" : "password"
 }
 const passwordToggleIcon = computed(() =>{
     return passwordFieldType.value === 'password' ? 'eye' : 'eye-off'
 })
+
 let submit = () => {
     form.post('/login');
 };
 </script>
 
 <style lang="scss">
-@import '../../../sass/base/pages/authentication.scss'
+@import '../../../sass/base/pages/authentication.scss';
 </style>

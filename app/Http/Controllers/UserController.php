@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use function Symfony\Component\Mime\Header\all;
 
 class UserController extends Controller
 {
@@ -32,11 +34,24 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        $res = $request->validate([
+            'email' => 'required|unique:users',
+            'first_name' => 'required',
+            'username'  => 'required',
+            'password' => 'required'
+        ]);
+
+        User::create([
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => $request->password,
+        ]);
+
+        return back();
     }
 
     /**

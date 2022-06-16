@@ -15,7 +15,7 @@ table.dataTable {
   }
   td,
   th {
-    padding: $table-cell-padding-y 1.5rem;
+    padding: 1.5rem 1.5rem;
     vertical-align: middle;
   }
   thead {
@@ -25,11 +25,11 @@ table.dataTable {
     .sorting_desc {
       padding-right: inherit;
       &:before {
-        background-image: url(str-replace(str-replace($chevron-up, 'currentColor', $table-head-color), '#', '%23'));
+        //background-image: url(str-replace(str-replace($chevron-up, 'currentColor', $table-head-color), '#', '%23'));
         background-repeat: no-repeat;
         background-position: center;
         background-size: 12px;
-        color: $body-color;
+
         width: 14px;
         height: 14px;
         content: '';
@@ -37,11 +37,11 @@ table.dataTable {
         top: 0.5rem;
       }
       &:after {
-        background-image: url(str-replace(str-replace($chevron-down, 'currentColor', $table-head-color), '#', '%23'));
+        //background-image: url(str-replace(str-replace($chevron-down, 'currentColor', $table-head-color), '#', '%23'));
         background-repeat: no-repeat;
         background-position: center;
         background-size: 12px;
-        color: $body-color;
+
         width: 14px;
         height: 14px;
         content: '';
@@ -54,7 +54,7 @@ table.dataTable {
 
 // Export button dropdown UI
 div.dataTables_wrapper .dt-button-collection {
-  background-color: $dropdown-bg;
+
   > div[role='menu'] {
     text-align: left;
     box-shadow: 0px 5px 16px -8px;
@@ -123,14 +123,14 @@ div.dataTables_wrapper {
   // info text color
   .dataTables_info {
     padding-top: 1.25rem !important;
-    color: $text-muted;
+    //color: $text-muted;
   }
 }
 
 // row grouping
 tr.group {
   // row grouping color
-  background-color: $table-row-group-bg;
+  //background-color: $table-row-group-bg;
 }
 
 @media only screen and (max-width: 992px) {

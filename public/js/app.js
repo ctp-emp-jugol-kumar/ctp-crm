@@ -22902,13 +22902,53 @@ var __default__ = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Modules/Users/Create.vue?vue&type=script&lang=js":
-/*!*********************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Modules/Users/Create.vue?vue&type=script&lang=js ***!
-  \*********************************************************************************************************************************************************************************************************/
-/***/ (() => {
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Modules/Users/Create.vue?vue&type=script&setup=true&lang=js":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Modules/Users/Create.vue?vue&type=script&setup=true&lang=js ***!
+  \********************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: E:\\practice\\inertia\\erp_software\\erp\\resources\\js\\Pages\\Modules\\Users\\Create.vue: Unexpected token, expected \"from\" (5:0)\n\n  3 |     import FormDatepickerBasic from './FormDatepickerBasic.vue'\n  4 |     import From\n> 5 |\n    | ^\n    at instantiate (E:\\practice\\inertia\\erp_software\\erp\\node_modules\\@babel\\parser\\lib\\index.js:72:32)\n    at constructor (E:\\practice\\inertia\\erp_software\\erp\\node_modules\\@babel\\parser\\lib\\index.js:358:12)\n    at Parser.raise (E:\\practice\\inertia\\erp_software\\erp\\node_modules\\@babel\\parser\\lib\\index.js:3341:19)\n    at Parser.unexpected (E:\\practice\\inertia\\erp_software\\erp\\node_modules\\@babel\\parser\\lib\\index.js:3379:16)\n    at Parser.expectContextual (E:\\practice\\inertia\\erp_software\\erp\\node_modules\\@babel\\parser\\lib\\index.js:3979:18)\n    at Parser.parseImport (E:\\practice\\inertia\\erp_software\\erp\\node_modules\\@babel\\parser\\lib\\index.js:16268:12)\n    at Parser.parseStatementContent (E:\\practice\\inertia\\erp_software\\erp\\node_modules\\@babel\\parser\\lib\\index.js:14755:27)\n    at Parser.parseStatement (E:\\practice\\inertia\\erp_software\\erp\\node_modules\\@babel\\parser\\lib\\index.js:14645:17)\n    at Parser.parseBlockOrModuleBlockBody (E:\\practice\\inertia\\erp_software\\erp\\node_modules\\@babel\\parser\\lib\\index.js:15288:25)\n    at Parser.parseBlockBody (E:\\practice\\inertia\\erp_software\\erp\\node_modules\\@babel\\parser\\lib\\index.js:15279:10)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
+/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  setup: function setup(__props, _ref) {
+    var expose = _ref.expose;
+    expose();
+    var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm)({
+      prefix: "",
+      first_name: "",
+      last_name: "",
+      is_active: Boolean,
+      username: "",
+      password: "",
+      password_confirmation: "",
+      allow_login: Boolean
+    });
+
+    var submit = function submit() {
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__.Inertia.post("/users", form);
+    };
+
+    var __returned__ = {
+      form: form,
+      submit: submit,
+      useForm: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.useForm,
+      Inertia: _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_1__.Inertia
+    };
+    Object.defineProperty(__returned__, '__isScriptSetup', {
+      enumerable: false,
+      value: true
+    });
+    return __returned__;
+  }
+});
 
 /***/ }),
 
@@ -23565,18 +23605,219 @@ var _hoisted_18 = {
 
 var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"dropdown-menu dropdown-menu-end\"><a class=\"dropdown-item\" href=\"app-todo.html\"><i class=\"me-1\" data-feather=\"check-square\"></i><span class=\"align-middle\">Todo</span></a><a class=\"dropdown-item\" href=\"app-chat.html\"><i class=\"me-1\" data-feather=\"message-square\"></i><span class=\"align-middle\">Chat</span></a><a class=\"dropdown-item\" href=\"app-email.html\"><i class=\"me-1\" data-feather=\"mail\"></i><span class=\"align-middle\">Email</span></a><a class=\"dropdown-item\" href=\"app-calendar.html\"><i class=\"me-1\" data-feather=\"calendar\"></i><span class=\"align-middle\">Calendar</span></a></div>", 1);
 
-var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"content-body\"><section id=\"basic-input\"><div class=\"row\"><div class=\"col-md-12\"><div class=\"card\"><div class=\"card-header\"><h4 class=\"card-title\">Basic Information</h4></div><div class=\"card-body\"><div class=\"row\"><div class=\"col-xl-4 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"prefix\">Prefix</label><input type=\"text\" class=\"form-control\" id=\"prefix\" placeholder=\"Prefix\"></div></div><div class=\"col-xl-4 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"first_name\">First Name <span class=\"text-danger\">*</span></label><input type=\"text\" class=\"form-control\" id=\"first_name\" placeholder=\"First Name\"></div></div><div class=\"col-xl-4 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"last_name\">Last name</label><input type=\"text\" class=\"form-control\" id=\"last_name\" placeholder=\"Last name\"></div></div><div class=\"col-xl-4 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"email\">Email <span class=\"text-danger\">*</span></label><input type=\"email\" id=\"email\" class=\"form-control\" placeholder=\"eg.example@testmail.com\"></div></div><div class=\"col-xl-4 col-md-6 col-12\"><div class=\"d-flex flex-column\"><label class=\"form-check-label mb-50\" for=\"is_active\">Is Active ?</label><div class=\"form-check form-check-success form-switch\"><input type=\"checkbox\" checked class=\"form-check-input\" id=\"is_active\"></div></div></div></div></div></div></div></div></section><section id=\"\"><div class=\"row\"><div class=\"col-md-12\"><div class=\"card\"><div class=\"card-header\"><h4 class=\"card-title\">Authentication information</h4></div><div class=\"card-body\"><div class=\"row\"><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"username\">User Name <span class=\"text-danger\">*</span></label><input type=\"text\" class=\"form-control\" id=\"username\" placeholder=\"User Name\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"password\">Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"d-flex flex-column\"><label class=\"form-check-label mb-50\" for=\"allow_login\">Allow login ?</label><div class=\"form-check form-check-success form-switch\"><input type=\"checkbox\" checked class=\"form-check-input\" id=\"allow_login\"></div></div></div></div></div></div></div></div></section><section id=\"\"><div class=\"row\"><div class=\"col-md-12\"><div class=\"card\"><div class=\"card-header\"><h4 class=\"card-title\">More Information&#39;s</h4></div><div class=\"card-body\"><div class=\"row\"><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"row\"><div class=\"col-md-6 mb-1\"><label class=\"form-label\" for=\"fp-default\">Default</label><input type=\"text\" id=\"fp-default\" class=\"form-control flatpickr-basic\" placeholder=\"YYYY-MM-DD\"></div><div class=\"col-md-6 mb-1\"><label class=\"form-label\" for=\"fp-time\">Time picker</label><input type=\"text\" id=\"fp-time\" class=\"form-control flatpickr-time text-start\" placeholder=\"HH:MM\"></div></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"password\">Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"></div></div></div><div class=\"row\"><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"username\">User Name <span class=\"text-danger\">*</span></label><input type=\"text\" class=\"form-control\" id=\"username\" placeholder=\"User Name\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"password\">Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"></div></div></div><div class=\"row\"><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"username\">User Name <span class=\"text-danger\">*</span></label><input type=\"text\" class=\"form-control\" id=\"username\" placeholder=\"User Name\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"password\">Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"></div></div></div><div class=\"row\"><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"username\">User Name <span class=\"text-danger\">*</span></label><input type=\"text\" class=\"form-control\" id=\"username\" placeholder=\"User Name\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"password\">Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"></div></div></div><div class=\"row\"><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"username\">User Name <span class=\"text-danger\">*</span></label><input type=\"text\" class=\"form-control\" id=\"username\" placeholder=\"User Name\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"password\">Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"></div></div><div class=\"col-xl-3 col-md-6 col-12\"><div class=\"mb-1\"><label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label><input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"></div></div></div></div></div></div></div></section></div>", 1);
+var _hoisted_20 = {
+  "class": "content-body"
+};
+var _hoisted_21 = {
+  id: "basic-input"
+};
+var _hoisted_22 = {
+  "class": "row"
+};
+var _hoisted_23 = {
+  "class": "col-md-12"
+};
+var _hoisted_24 = {
+  "class": "card"
+};
 
-function render(_ctx, _cache) {
+var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "card-header"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
+  "class": "card-title"
+}, "Basic Information")], -1
+/* HOISTED */
+);
+
+var _hoisted_26 = {
+  "class": "card-body"
+};
+var _hoisted_27 = {
+  "class": "row"
+};
+var _hoisted_28 = {
+  "class": "col-xl-4 col-md-6 col-12"
+};
+var _hoisted_29 = {
+  "class": "mb-1"
+};
+
+var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "form-label",
+  "for": "prefix"
+}, "Prefix", -1
+/* HOISTED */
+);
+
+var _hoisted_31 = {
+  "class": "col-xl-4 col-md-6 col-12"
+};
+var _hoisted_32 = {
+  "class": "mb-1"
+};
+
+var _hoisted_33 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "form-label",
+  "for": "first_name"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("First Name "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "text-danger"
+}, "*")], -1
+/* HOISTED */
+);
+
+var _hoisted_34 = {
+  "class": "col-xl-4 col-md-6 col-12"
+};
+var _hoisted_35 = {
+  "class": "mb-1"
+};
+
+var _hoisted_36 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "form-label",
+  "for": "last_name"
+}, "Last name", -1
+/* HOISTED */
+);
+
+var _hoisted_37 = {
+  "class": "col-xl-4 col-md-6 col-12"
+};
+var _hoisted_38 = {
+  "class": "mb-1"
+};
+
+var _hoisted_39 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "form-label",
+  "for": "email"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Email "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "text-danger"
+}, "*")], -1
+/* HOISTED */
+);
+
+var _hoisted_40 = {
+  "class": "col-xl-4 col-md-6 col-12"
+};
+var _hoisted_41 = {
+  "class": "d-flex flex-column"
+};
+
+var _hoisted_42 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "form-check-label mb-50",
+  "for": "is_active"
+}, "Is Active ?", -1
+/* HOISTED */
+);
+
+var _hoisted_43 = {
+  "class": "form-check form-check-success form-switch"
+};
+var _hoisted_44 = {
+  "class": "row"
+};
+var _hoisted_45 = {
+  "class": "col-md-12"
+};
+var _hoisted_46 = {
+  "class": "card"
+};
+
+var _hoisted_47 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "card-header"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
+  "class": "card-title"
+}, "Authentication information")], -1
+/* HOISTED */
+);
+
+var _hoisted_48 = {
+  "class": "card-body"
+};
+var _hoisted_49 = {
+  "class": "row"
+};
+var _hoisted_50 = {
+  "class": "col-xl-3 col-md-6 col-12"
+};
+var _hoisted_51 = {
+  "class": "mb-1"
+};
+
+var _hoisted_52 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "form-label",
+  "for": "username"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("User Name "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "text-danger"
+}, "*")], -1
+/* HOISTED */
+);
+
+var _hoisted_53 = {
+  "class": "col-xl-3 col-md-6 col-12"
+};
+var _hoisted_54 = {
+  "class": "mb-1"
+};
+
+var _hoisted_55 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "form-label",
+  "for": "password"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Password "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "text-danger"
+}, "*")], -1
+/* HOISTED */
+);
+
+var _hoisted_56 = {
+  "class": "col-xl-3 col-md-6 col-12"
+};
+var _hoisted_57 = {
+  "class": "mb-1"
+};
+
+var _hoisted_58 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "form-label",
+  "for": "conform_password"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Conform Password "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "text-danger"
+}, "*")], -1
+/* HOISTED */
+);
+
+var _hoisted_59 = {
+  "class": "col-xl-3 col-md-6 col-12"
+};
+var _hoisted_60 = {
+  "class": "d-flex flex-column"
+};
+
+var _hoisted_61 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  "class": "form-check-label mb-50",
+  "for": "allow_login"
+}, "Allow login ?", -1
+/* HOISTED */
+);
+
+var _hoisted_62 = {
+  "class": "form-check form-check-success form-switch"
+};
+
+var _hoisted_63 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "d-flex justify-content-end"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  type: "reset",
+  "class": "btn btn-danger me-1"
+}, "Cancle"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  type: "submit",
+  "class": "btn btn-success"
+}, "Submit")], -1
+/* HOISTED */
+);
+
+function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Link");
 
   var _component_vue_feather = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("vue-feather");
-
-  var _component_form_datepicker_basic = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("form-datepicker-basic");
-
-  var _component_b_col = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("b-col");
-
-  var _component_b_row = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("b-row");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" User Create:START "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [_hoisted_2, _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [_hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ol", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Link, {
     href: "/test"
@@ -23589,26 +23830,104 @@ function render(_ctx, _cache) {
 
   })]), _hoisted_14])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_vue_feather, {
     type: "settings"
-  })]), _hoisted_19])])])]), _hoisted_20])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_row, {
-    "class": "match-height"
-  }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_col, {
-        lg: "6"
-      }, {
-        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_form_datepicker_basic)];
-        }),
-        _: 1
-        /* STABLE */
-
-      })];
+  })]), _hoisted_19])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+    onSubmit: _cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+      return $setup.submit && $setup.submit.apply($setup, arguments);
+    }, ["prevent"]))
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", _hoisted_21, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [_hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_28, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_29, [_hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+      return $setup.form.prefix = $event;
     }),
-    _: 1
-    /* STABLE */
-
-  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" User Create:END ")], 64
-  /* STABLE_FRAGMENT */
+    type: "text",
+    "class": "form-control",
+    id: "prefix",
+    placeholder: "Prefix"
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.prefix]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [_hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
+      return $setup.form.first_name = $event;
+    }),
+    type: "text",
+    "class": "form-control",
+    id: "first_name",
+    placeholder: "First Name"
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.first_name]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [_hoisted_36, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+      return $setup.form.last_name = $event;
+    }),
+    type: "text",
+    "class": "form-control",
+    id: "last_name",
+    placeholder: "Last name"
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.last_name]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, [_hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+      return $setup.form.email = $event;
+    }),
+    type: "email",
+    id: "email",
+    "class": "form-control",
+    placeholder: "eg.example@testmail.com"
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.email]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_41, [_hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_43, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+      return $setup.form.is_active = $event;
+    }),
+    type: "checkbox",
+    checked: "",
+    "class": "form-check-input",
+    id: "is_active"
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $setup.form.is_active]])])])])])])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("section", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_45, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_46, [_hoisted_47, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_51, [_hoisted_52, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+      return $setup.form.username = $event;
+    }),
+    type: "text",
+    "class": "form-control",
+    id: "username",
+    placeholder: "User Name"
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.username]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_53, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_54, [_hoisted_55, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
+      return $setup.form.password = $event;
+    }),
+    type: "password",
+    "class": "form-control",
+    id: "password",
+    placeholder: "Password"
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.password]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_56, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_57, [_hoisted_58, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "onUpdate:modelValue": _cache[7] || (_cache[7] = function ($event) {
+      return $setup.form.password_confirmation = $event;
+    }),
+    type: "password",
+    "class": "form-control",
+    id: "conform_password",
+    placeholder: "Password"
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.password_confirmation]])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_59, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_60, [_hoisted_61, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_62, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    "onUpdate:modelValue": _cache[8] || (_cache[8] = function ($event) {
+      return $setup.form.allow_login = $event;
+    }),
+    type: "checkbox",
+    checked: "",
+    "class": "form-check-input",
+    id: "allow_login"
+  }, null, 512
+  /* NEED_PATCH */
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelCheckbox, $setup.form.allow_login]])])])])])])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("\n                                    <section >\n                                        <div class=\"row\">\n                                            <div class=\"col-md-12\">\n                                                <div class=\"card\">\n                                                    <div class=\"card-header\">\n                                                        <h4 class=\"card-title\">More Information's</h4>\n                                                    </div>\n                                                    <div class=\"card-body\">\n                                                        <div class=\"row\">\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"row\">\n                                                                    <div class=\"col-md-6 mb-1\">\n                                                                        <label class=\"form-label\" for=\"fp-default\">Default</label>\n                                                                        <input type=\"text\" id=\"fp-default\" class=\"form-control flatpickr-basic\" placeholder=\"YYYY-MM-DD\" />\n                                                                    </div>\n                                                                    <div class=\"col-md-6 mb-1\">\n                                                                        <label class=\"form-label\" for=\"fp-time\">Time picker</label>\n                                                                        <input type=\"text\" id=\"fp-time\" class=\"form-control flatpickr-time text-start\" placeholder=\"HH:MM\" />\n                                                                    </div>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"password\">Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n\n                                                        </div>\n                                                        <div class=\"row\">\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"username\">User Name <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"text\" class=\"form-control\" id=\"username\" placeholder=\"User Name\" />\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"password\">Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n\n                                                        </div>\n                                                        <div class=\"row\">\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"username\">User Name <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"text\" class=\"form-control\" id=\"username\" placeholder=\"User Name\" />\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"password\">Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n\n                                                        </div>\n                                                        <div class=\"row\">\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"username\">User Name <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"text\" class=\"form-control\" id=\"username\" placeholder=\"User Name\" />\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"password\">Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n\n                                                        </div>\n                                                        <div class=\"row\">\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"username\">User Name <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"text\" class=\"form-control\" id=\"username\" placeholder=\"User Name\" />\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"password\">Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n                                                            <div class=\"col-xl-3 col-md-6 col-12\">\n                                                                <div class=\"mb-1\">\n                                                                    <label class=\"form-label\" for=\"conform_password\">Conform Password <span class=\"text-danger\">*</span></label>\n                                                                    <input type=\"password\" class=\"form-control\" id=\"conform_password\" placeholder=\"Password\"/>\n                                                                </div>\n                                                            </div>\n\n                                                        </div>\n                                                    </div>\n                                                </div>\n                                            </div>\n                                        </div>\n                                    </section>")]), _hoisted_63], 32
+  /* HYDRATE_EVENTS */
+  )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" User Create:END ")], 2112
+  /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
   );
 }
 
@@ -23625,8 +23944,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "render": () => (/* binding */ render)
 /* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+var _hoisted_1 = {
+  "class": "app-content content"
+};
+
+var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"content-overlay\"></div><div class=\"header-navbar-shadow\"></div><div class=\"content-wrapper container-xxl p-0\"><div class=\"content-header row\"><div class=\"content-header-left col-md-9 col-12 mb-2\"><div class=\"row breadcrumbs-top\"><div class=\"col-12\"><h2 class=\"content-header-title float-start mb-0\">DataTables</h2><div class=\"breadcrumb-wrapper\"><ol class=\"breadcrumb\"><li class=\"breadcrumb-item\"><a href=\"index.html\">Home</a></li><li class=\"breadcrumb-item\"><a href=\"#\">Datatable</a></li><li class=\"breadcrumb-item active\">Basic </li></ol></div></div></div></div><div class=\"content-header-right text-md-end col-md-3 col-12 d-md-block d-none\"><div class=\"mb-1 breadcrumb-right\"><div class=\"dropdown\"><button class=\"btn-icon btn btn-primary btn-round btn-sm dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"><i data-feather=\"grid\"></i></button><div class=\"dropdown-menu dropdown-menu-end\"><a class=\"dropdown-item\" href=\"app-todo.html\"><i class=\"me-1\" data-feather=\"check-square\"></i><span class=\"align-middle\">Todo</span></a><a class=\"dropdown-item\" href=\"app-chat.html\"><i class=\"me-1\" data-feather=\"message-square\"></i><span class=\"align-middle\">Chat</span></a><a class=\"dropdown-item\" href=\"app-email.html\"><i class=\"me-1\" data-feather=\"mail\"></i><span class=\"align-middle\">Email</span></a><a class=\"dropdown-item\" href=\"app-calendar.html\"><i class=\"me-1\" data-feather=\"calendar\"></i><span class=\"align-middle\">Calendar</span></a></div></div></div></div></div><div class=\"content-body\"><div class=\"row\"><div class=\"col-12\"><p>Read full documnetation <a href=\"https://datatables.net/\" target=\"_blank\">here</a></p></div></div><!-- Basic table --><section id=\"basic-datatable\"><div class=\"row\"><div class=\"col-12\"><div class=\"card\"><table class=\"datatables-basic table\"><thead><tr><th></th><th></th><th>id</th><th>Name</th><th>Email</th><th>Date</th><th>Salary</th><th>Status</th><th>Action</th></tr></thead></table></div></div></div><!-- Modal to add new record --><div class=\"modal modal-slide-in fade\" id=\"modals-slide-in\"><div class=\"modal-dialog sidebar-sm\"><form class=\"add-new-record modal-content pt-0\"><button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\">×</button><div class=\"modal-header mb-1\"><h5 class=\"modal-title\" id=\"exampleModalLabel\">New Record</h5></div><div class=\"modal-body flex-grow-1\"><div class=\"mb-1\"><label class=\"form-label\" for=\"basic-icon-default-fullname\">Full Name</label><input type=\"text\" class=\"form-control dt-full-name\" id=\"basic-icon-default-fullname\" placeholder=\"John Doe\" aria-label=\"John Doe\"></div><div class=\"mb-1\"><label class=\"form-label\" for=\"basic-icon-default-post\">Post</label><input type=\"text\" id=\"basic-icon-default-post\" class=\"form-control dt-post\" placeholder=\"Web Developer\" aria-label=\"Web Developer\"></div><div class=\"mb-1\"><label class=\"form-label\" for=\"basic-icon-default-email\">Email</label><input type=\"text\" id=\"basic-icon-default-email\" class=\"form-control dt-email\" placeholder=\"john.doe@example.com\" aria-label=\"john.doe@example.com\"><small class=\"form-text\"> You can use letters, numbers &amp; periods </small></div><div class=\"mb-1\"><label class=\"form-label\" for=\"basic-icon-default-date\">Joining Date</label><input type=\"text\" class=\"form-control dt-date\" id=\"basic-icon-default-date\" placeholder=\"MM/DD/YYYY\" aria-label=\"MM/DD/YYYY\"></div><div class=\"mb-4\"><label class=\"form-label\" for=\"basic-icon-default-salary\">Salary</label><input type=\"text\" id=\"basic-icon-default-salary\" class=\"form-control dt-salary\" placeholder=\"$12000\" aria-label=\"$12000\"></div><button type=\"button\" class=\"btn btn-primary data-submit me-1\">Submit</button><button type=\"reset\" class=\"btn btn-outline-secondary\" data-bs-dismiss=\"modal\">Cancel</button></div></form></div></div></section><!--/ Basic table --><!-- Complex Headers --><section id=\"complex-header-datatable\"><div class=\"row\"><div class=\"col-12\"><div class=\"card\"><div class=\"card-header border-bottom\"><h4 class=\"card-title\">Complex Headers</h4></div><div class=\"card-datatable\"><table class=\"dt-complex-header table table-bordered table-responsive\"><thead><tr><th rowspan=\"2\">Name</th><th colspan=\"2\">Contact</th><th colspan=\"3\">HR Information</th><th rowspan=\"2\">Action</th></tr><tr><th>E-mail</th><th>City</th><th>Position</th><th>Salary</th><th class=\"cell-fit\">Status</th></tr></thead></table></div></div></div></div></section><!--/ Complex Headers --><!-- Row grouping --><section id=\"row-grouping-datatable\"><div class=\"row\"><div class=\"col-12\"><div class=\"card\"><div class=\"card-header border-bottom\"><h4 class=\"card-title\">Row Grouping</h4></div><div class=\"card-datatable\"><table class=\"dt-row-grouping table\"><thead><tr><th></th><th>Name</th><th>Position</th><th>Email</th><th>City</th><th>Date</th><th>Salary</th><th>Status</th><th>Action</th></tr></thead><tfoot><tr><th></th><th>Name</th><th>Position</th><th>Email</th><th>City</th><th>Date</th><th>Salary</th><th>Status</th><th>Action</th></tr></tfoot></table></div></div></div></div></section><!--/ Row grouping --><!-- Multilingual --><section id=\"multilingual-datatable\"><div class=\"row\"><div class=\"col-12\"><div class=\"card\"><div class=\"card-header border-bottom\"><h4 class=\"card-title\">Multilingual</h4></div><div class=\"card-datatable\"><table class=\"dt-multilingual table\"><thead><tr><th></th><th>Name</th><th>Position</th><th>Email</th><th>Date</th><th>Salary</th><th>Status</th><th>Action</th></tr></thead></table></div></div></div></div></section><!--/ Multilingual --></div></div>", 3);
+
+var _hoisted_5 = [_hoisted_2];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return null;
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, _hoisted_5);
 }
 
 /***/ }),
@@ -29870,6 +30198,30 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, ".auth-wrapper {\n  display: flex;\n  flex-basis: 100%;\n  min-height: 100vh;\n  min-height: calc(var(--vh, 1vh) * 100);\n  width: 100%;\n}\n.auth-wrapper .auth-inner {\n  width: 100%;\n}\n.auth-wrapper.auth-basic {\n  align-items: center;\n  justify-content: center;\n  overflow: hidden;\n}\n.auth-wrapper.auth-basic .auth-inner {\n  position: relative;\n}\n.auth-wrapper.auth-basic .auth-inner:before {\n  width: 244px;\n  height: 243px;\n  content: \" \";\n  position: absolute;\n  top: -54px;\n  left: -46px;\n  background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPQAAADzCAMAAACG9Mt0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAA9KADAAQAAAABAAAA8wAAAADhQHfUAAAAyVBMVEUAAAD///+AgP+AgP9mZv+AgNWAgP9tbf9gYP+AgP9xcf9mZv+AZuaAgP9dXf90dOhiYv92dv9mZu5mZv93d+53d/9paf94afCAcfFrXvJra/9mZvJzZvJzc/JoaP96b/Rqav91aupsYvV2bOt2bPVxaPZ7cfZqavZyau1waPd4aO9xafBxafh4afB1bfh4avFuZ/F2afJzZvJzZ/N0aPN0bvN3bPR0ae5yZ/R3be93bfR1au9zafBxbPVzavV0a/F0a/ZyafFwaPKZm3nTAAAAQ3RSTlMAAQIEBQYGBwgICQoKCgsLDQ0PDw8PERESExMUFBQWFxgYGhoaGxsdHSAgIiIiIyQlJygqLCwtLi8vLzAzNDU3Nzg7h9vbHgAAA9RJREFUeNrt3ftS2kAUx/Fc1gSyWsErtuJdRDQiiteolb7/QzUoTm07k4AzObuu3/MCez45yWbzT36eZ6b8erO1e1B97baadd+zocJWmg0HaXe/+uqmg2GWtkLT5Lle1m9LdhG2+1lvzuiUO1knEF81yFc1N+35m15kZOGodz1vyLx+v2Lseq/erxtZd/NuweCTtfiwaWLOD5FnsqI7+VnP3y8afnEs3Es/1+H1qvETwuq18B7e6VlwLup1ZM8kWWQBOsrmHL7GVtxvYRZYgQ4ywae61ffsqH5Lbq20bQm6ncp9P2ehJegwE/u+rl95ttSwLrVSc2ANetAU28dSa9Cp2E623bUG3d2VWmn/wBq0XCugQYMGLdVKoOJaoiuok1NdXSW1WAUfRPtRUllflaJf5ZE/O9pXVbZUPTov5c+IDqvtRwStdTgLutoxy6GnGfYb2o+1I2gd+1OiqzfLocvVE7TSDqG1mgodaqfQZbvZC9rXjqG1X45WzqFVKVpk0LLo4lGP0ZGD6KgMnTiITkrQgXYQrYNitHISrYrRsZPouBhdcxJdK0YnTqKTYrR2Eq1BgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRoh9DH59ag86ACoSYOL61B55EUQk1s3VqDzsNHhJpYe7QGncfMSHUxaliCHgcKSXVxeWQJehwdJdXF4dAS9DgkTKqLxuibFeiXODixNi7OrEC/BP+JtbE0WrYA/RrxKNfH2YUF6NegSbk+Gk87xtErN6EsWm88fzeMXpwE9EruLns/l42io4dJFLPo2/Po1w+D6IW7t9Bt2SPx3vOOMfS7eHVZtN54ulg2go56138Ct4XRunE2Ovsmjg46WeddUoUWr6WL0fCoIYgO2/2s91fstDZQjcPL0ePt5flpdXUwqW46uMrS1j95JNpQrW0dHp9UV/uT2m416/8HVGg3qzhpBjRo0KBBgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRo0KBBgwYNGjRo0KC/FDpx0pwUo2tOomvF6NhJdFyMVk6iVTE6cBIdeF9vJyvZx/I/AzuIjsrQvoNovwzt4FamSs0Ojrp80PmvoB0zh940pb7azf1yg7t0LIt978uppzbnalfucDW92ZndLPRmKweGPduYJ+zoM5/Dk+gD5NdvLhXXPp88qcUqmEH5G5JZRs6cuxwIAAAAAElFTkSuQmCC\");\n}\n@media (max-width: 575.98px) {\n.auth-wrapper.auth-basic .auth-inner:before {\n    display: none;\n}\n}\n.auth-wrapper.auth-basic .auth-inner:after {\n  width: 272px;\n  height: 272px;\n  content: \" \";\n  position: absolute;\n  bottom: -55px;\n  right: -75px;\n  background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARAAAAEQCAMAAABP1NsnAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAABEKADAAQAAAABAAABEAAAAAAQWxS2AAAAwFBMVEUAAAD///+AgICAgP9VVaqqVf+qqv+AgL+AgP9mZsxmZv+ZZv+AgNWAgP9tbdttbf+Sbf+AYN+AgN+AgP9xceNmZv+AZuaAZv90dOh0dP9qav+AauqAav+AgP92dv9tbf+Abe2Abf93Zu53d+6AcO94afCAcfF5a+R5a/JzZuaAZvKAc/J5bed5bfOAaPN6b/R1auqAavR6ZvV6cPV2bOuAbPV7aPZ2be2AbfZ7au17avZ3Zu53b+57a+97a/d4aO9J6CoeAAAAQHRSTlMAAQICAwMDBAQFBQUGBgcHBwgICAkKCgoLCwwMDAwNDg4ODw8QERITExQUFBUVFhcYGBkZGhobHBwdHR4eHx8gJ5uMWwAAA/FJREFUeNrt2G1XEkEYxvHZNk2xHGzdbKFl0cTwgdSkCKzu7/+t4pw6sAjtjIueE/f8r3fMO35nZnbuy5gVGcvfzJe0rnTfGI+MggGJRUZnbpPIhJKt88nU53JnFULvyISY6KAv8vPj0vr2rYwiE2Z2B9J+uNYcyyQxwWZvaeGH3G4bMjsvI/kcwTC/V+7kLoahlITzQojP3ZFgsJCh7IJQzpX0QFj4uMiY18eDMZ9bZCF9OQahnK6cm/Y7js0sh/LF3Auv1PlQd3MxbdXYIQspV44EEEAAAWTNDAYYkKdJbNMsLzYueZbaZ2iM46RVbHBaiZ9Js+nHEdli42N9XuSen5hGp1CQTuOJQDRsD99N4gMSpYWapNH6IJo83CIeILZQFesEaber79NCWRoukOpNEnW0gXQqD81w6ACxhbrYde7VuFCYeA2QRCNIsgZISyNIqz6IyhPjOjNVIFYniK3dmKU6QdLaJUimEySrDZLrBMlrgxRKU7sxCw/EMe0CAggggADySJCqxixIkKpNEh6IozELD8RxjQACCCCAAPJIkKrGLEgQXqqAAEJjxrQLCCCAAEJjRmNGY8a0CwgggABCYwYIfQgggNCYMe0CAggggNCY0ZjRmDHtAgIIIIAAQmNGHwIIIDRmTLuAAAIIIDRmNGY0Zky7gAACCCCA0JjRhwACCI0Z0y4ggAACCI0ZjRmNGdMuIIAAAgggNGb0IYAAQmPGtAsIIIAAQmNGY0ZjxrQLCCCAAAIIjRl9CCCA0Jgx7QICCCCA0JjRmNGYMe0CAggggABCY0YfAgggNGZMu4AAAgggNGY0ZjRmTLuAAAIIIIDQmNGHAAIIjRnTLiCAAAIIjRmNGY0ZIEy7gAACCCA0ZvQhgABCY8a0CwgggABCY0ZjBgiNGdMuIIAAAgiN2f/Sh+Q6PfLaIJlOkKw2SKoTJK3dmFmdILb2tBvrBIlrg5iWRo+WqQ+SaARJ1gCJAzsxThCN16p1vNurGjNjoo42j07kAHFskoY2kEbl33U0ZgoPjXW+Rl0gkarnahqtDaJKxMPDDWIiNafGenh4gExvVhXfmk7Da6L1AVGxSby2h6MxK79Zk42ea1pJbJ48sU2zDezQ8iy1z6BBwoyjMQsvXp8YQAAhgADilRfyy+wf8WqZZUfGZihvgZiB3FybC+kCUU5XLkAo50C+gbBQdUzkAIVyejIAYfFTI1solHP2HgNCnHn5AYNy4jvpoVB6fVzL91cwzLJ9Lfd7S0jhehxO5H5/yePr1W6gHonI7fJ5ORSR/n6Q2yQanq763zuXU5LJZRKiyD/W9/pjkdPZz0/yJ8fqVyry+qQZDMjJKoDfy8bRVhHhQTwAAAAASUVORK5CYII=\");\n  z-index: -1;\n}\n@media (max-width: 575.98px) {\n.auth-wrapper.auth-basic .auth-inner:after {\n    display: none;\n}\n}\n.auth-wrapper.auth-cover {\n  align-items: flex-start;\n}\n.auth-wrapper.auth-cover .auth-inner {\n  height: 100vh;\n  overflow-y: auto;\n  height: calc(var(--vh, 1vh) * 100);\n}\n.auth-wrapper.auth-cover .brand-logo {\n  position: absolute;\n  top: 2rem;\n  left: 2rem;\n  margin: 0;\n  z-index: 1;\n  justify-content: unset;\n}\n.auth-wrapper.auth-basic .auth-inner {\n  max-width: 400px;\n}\n.auth-wrapper .brand-logo {\n  display: flex;\n  justify-content: center;\n  margin: 1rem 0 2rem 0;\n}\n.auth-wrapper .brand-logo .brand-text {\n  font-weight: 600;\n}\n.auth-wrapper .auth-footer-btn .btn {\n  padding: 0.6rem !important;\n}\n.auth-wrapper .auth-footer-btn .btn:not(:last-child) {\n  margin-right: 1rem;\n}\n.auth-wrapper .auth-footer-btn .btn:focus {\n  box-shadow: none;\n}\n.auth-wrapper .auth-input {\n  max-width: 50px;\n  padding-right: 0.571rem;\n  padding-left: 0.571rem;\n}\n.auth-wrapper .custom-options-checkable .plan-price .pricing-value {\n  font-size: 3rem;\n}\n.auth-wrapper .custom-options-checkable .plan-price sup {\n  top: -1.5rem;\n  left: 0.2rem;\n}\n.auth-wrapper .custom-options-checkable .plan-price sub {\n  bottom: 0;\n  right: 0.14rem;\n}\n@media (min-width: 1200px) {\n.auth-wrapper.auth-cover .auth-card {\n    width: 400px;\n}\n}\n@media (max-width: 575.98px) {\n.auth-wrapper.auth-cover .brand-logo {\n    left: 1.5rem;\n    padding-left: 0;\n}\n}\n.auth-wrapper .auth-bg {\n  background-color: #fff;\n}\n.dark-layout .auth-wrapper .auth-bg {\n  background-color: #283046;\n}\n@media (max-height: 825px) and (max-width: 991.98px) {\n.dark-layout .auth-wrapper .auth-inner {\n    background-color: #283046;\n}\n.auth-wrapper .auth-bg {\n    padding-top: 3rem;\n    margin: auto 0;\n}\n.auth-wrapper .auth-inner {\n    background-color: #fff;\n}\n.auth-wrapper.auth-cover .auth-inner {\n    padding-bottom: 1rem;\n    display: flex;\n    flex-direction: column;\n    flex-wrap: nowrap;\n}\n.auth-wrapper.auth-cover .brand-logo {\n    position: relative;\n    left: 0;\n    padding-left: 1.5rem;\n}\n}", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Modules/Users/Index.vue?vue&type=style&index=0&id=7f7480ac&lang=scss":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Modules/Users/Index.vue?vue&type=style&index=0&id=7f7480ac&lang=scss ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "/*@import \"../../../../sass/base/plugins/tables/datatables\";*/", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -40333,6 +40685,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Modules/Users/Index.vue?vue&type=style&index=0&id=7f7480ac&lang=scss":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Modules/Users/Index.vue?vue&type=style&index=0&id=7f7480ac&lang=scss ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_use_3_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Index_vue_vue_type_style_index_0_id_7f7480ac_lang_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!../../../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!../../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Index.vue?vue&type=style&index=0&id=7f7480ac&lang=scss */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Modules/Users/Index.vue?vue&type=style&index=0&id=7f7480ac&lang=scss");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_use_3_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Index_vue_vue_type_style_index_0_id_7f7480ac_lang_scss__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_use_3_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Index_vue_vue_type_style_index_0_id_7f7480ac_lang_scss__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css?vue&type=style&index=0&lang=css":
 /*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css?vue&type=style&index=0&lang=css ***!
@@ -40826,7 +41208,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Login_vue_vue_type_template_id_a2ac2cea__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Login.vue?vue&type=template&id=a2ac2cea */ "./resources/js/Pages/Auth/Login.vue?vue&type=template&id=a2ac2cea");
 /* harmony import */ var _Login_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Login.vue?vue&type=script&setup=true&lang=js */ "./resources/js/Pages/Auth/Login.vue?vue&type=script&setup=true&lang=js");
 /* harmony import */ var _Login_vue_vue_type_style_index_0_id_a2ac2cea_lang_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Login.vue?vue&type=style&index=0&id=a2ac2cea&lang=scss */ "./resources/js/Pages/Auth/Login.vue?vue&type=style&index=0&id=a2ac2cea&lang=scss");
-/* harmony import */ var E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
@@ -40834,7 +41216,7 @@ __webpack_require__.r(__webpack_exports__);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_Login_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Login_vue_vue_type_template_id_a2ac2cea__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Pages/Auth/Login.vue"]])
+const __exports__ = /*#__PURE__*/(0,F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_Login_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Login_vue_vue_type_template_id_a2ac2cea__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Pages/Auth/Login.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -40855,14 +41237,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Create_vue_vue_type_template_id_70268054__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=70268054 */ "./resources/js/Pages/Modules/Users/Create.vue?vue&type=template&id=70268054");
-/* harmony import */ var _Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js */ "./resources/js/Pages/Modules/Users/Create.vue?vue&type=script&lang=js");
-/* harmony import */ var E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Create_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&setup=true&lang=js */ "./resources/js/Pages/Modules/Users/Create.vue?vue&type=script&setup=true&lang=js");
+/* harmony import */ var F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Create_vue_vue_type_template_id_70268054__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Pages/Modules/Users/Create.vue"]])
+const __exports__ = /*#__PURE__*/(0,F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Create_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Create_vue_vue_type_template_id_70268054__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Pages/Modules/Users/Create.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -40884,13 +41266,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Index_vue_vue_type_template_id_7f7480ac__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=7f7480ac */ "./resources/js/Pages/Modules/Users/Index.vue?vue&type=template&id=7f7480ac");
 /* harmony import */ var _Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js */ "./resources/js/Pages/Modules/Users/Index.vue?vue&type=script&lang=js");
-/* harmony import */ var E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _Index_vue_vue_type_style_index_0_id_7f7480ac_lang_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Index.vue?vue&type=style&index=0&id=7f7480ac&lang=scss */ "./resources/js/Pages/Modules/Users/Index.vue?vue&type=style&index=0&id=7f7480ac&lang=scss");
+/* harmony import */ var F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Index_vue_vue_type_template_id_7f7480ac__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Pages/Modules/Users/Index.vue"]])
+
+
+const __exports__ = /*#__PURE__*/(0,F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Index_vue_vue_type_template_id_7f7480ac__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Pages/Modules/Users/Index.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -40911,12 +41296,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Test_vue_vue_type_template_id_430422bb__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Test.vue?vue&type=template&id=430422bb */ "./resources/js/Pages/Test.vue?vue&type=template&id=430422bb");
-/* harmony import */ var E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 const script = {}
 
 ;
-const __exports__ = /*#__PURE__*/(0,E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__["default"])(script, [['render',_Test_vue_vue_type_template_id_430422bb__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Pages/Test.vue"]])
+const __exports__ = /*#__PURE__*/(0,F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_1__["default"])(script, [['render',_Test_vue_vue_type_template_id_430422bb__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Pages/Test.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -40938,13 +41323,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Layout_vue_vue_type_template_id_6bf30086__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Layout.vue?vue&type=template&id=6bf30086 */ "./resources/js/Shared/Layout.vue?vue&type=template&id=6bf30086");
 /* harmony import */ var _Layout_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Layout.vue?vue&type=script&setup=true&lang=js */ "./resources/js/Shared/Layout.vue?vue&type=script&setup=true&lang=js");
-/* harmony import */ var E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Layout_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Layout_vue_vue_type_template_id_6bf30086__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Shared/Layout.vue"]])
+const __exports__ = /*#__PURE__*/(0,F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Layout_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Layout_vue_vue_type_template_id_6bf30086__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Shared/Layout.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -40967,7 +41352,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SideNav_vue_vue_type_template_id_62e76da0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SideNav.vue?vue&type=template&id=62e76da0 */ "./resources/js/Shared/SideNav.vue?vue&type=template&id=62e76da0");
 /* harmony import */ var _SideNav_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SideNav.vue?vue&type=script&setup=true&lang=js */ "./resources/js/Shared/SideNav.vue?vue&type=script&setup=true&lang=js");
 /* harmony import */ var vue3_perfect_scrollbar_dist_vue3_perfect_scrollbar_css_vue_type_style_index_0_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css?vue&type=style&index=0&lang=css */ "./node_modules/vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css?vue&type=style&index=0&lang=css");
-/* harmony import */ var E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
@@ -40975,7 +41360,7 @@ __webpack_require__.r(__webpack_exports__);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_SideNav_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SideNav_vue_vue_type_template_id_62e76da0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Shared/SideNav.vue"]])
+const __exports__ = /*#__PURE__*/(0,F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_SideNav_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_SideNav_vue_vue_type_template_id_62e76da0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Shared/SideNav.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -40997,13 +41382,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _TopNav_vue_vue_type_template_id_e140b22c__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TopNav.vue?vue&type=template&id=e140b22c */ "./resources/js/Shared/TopNav.vue?vue&type=template&id=e140b22c");
 /* harmony import */ var _TopNav_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TopNav.vue?vue&type=script&setup=true&lang=js */ "./resources/js/Shared/TopNav.vue?vue&type=script&setup=true&lang=js");
-/* harmony import */ var E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_TopNav_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_TopNav_vue_vue_type_template_id_e140b22c__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Shared/TopNav.vue"]])
+const __exports__ = /*#__PURE__*/(0,F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_TopNav_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_TopNav_vue_vue_type_template_id_e140b22c__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/Shared/TopNav.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -41025,13 +41410,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _DarkToggle_vue_vue_type_template_id_129f0e15__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DarkToggle.vue?vue&type=template&id=129f0e15 */ "./resources/js/components/DarkToggle.vue?vue&type=template&id=129f0e15");
 /* harmony import */ var _DarkToggle_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DarkToggle.vue?vue&type=script&setup=true&lang=js */ "./resources/js/components/DarkToggle.vue?vue&type=script&setup=true&lang=js");
-/* harmony import */ var E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,E_practice_inertia_erp_software_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_DarkToggle_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_DarkToggle_vue_vue_type_template_id_129f0e15__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/DarkToggle.vue"]])
+const __exports__ = /*#__PURE__*/(0,F_inertia_erp_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_DarkToggle_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_DarkToggle_vue_vue_type_template_id_129f0e15__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"resources/js/components/DarkToggle.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -41056,18 +41441,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/Pages/Modules/Users/Create.vue?vue&type=script&lang=js":
-/*!*****************************************************************************!*\
-  !*** ./resources/js/Pages/Modules/Users/Create.vue?vue&type=script&lang=js ***!
-  \*****************************************************************************/
+/***/ "./resources/js/Pages/Modules/Users/Create.vue?vue&type=script&setup=true&lang=js":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/Pages/Modules/Users/Create.vue?vue&type=script&setup=true&lang=js ***!
+  \****************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+/* harmony export */   "default": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Create_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"])
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Modules/Users/Create.vue?vue&type=script&lang=js");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Create_vue_vue_type_script_setup_true_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Create.vue?vue&type=script&setup=true&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Modules/Users/Create.vue?vue&type=script&setup=true&lang=js");
  
 
 /***/ }),
@@ -41289,6 +41674,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_use_3_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Login_vue_vue_type_style_index_0_id_a2ac2cea_lang_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader/dist/cjs.js!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!../../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Login.vue?vue&type=style&index=0&id=a2ac2cea&lang=scss */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Auth/Login.vue?vue&type=style&index=0&id=a2ac2cea&lang=scss");
+
+
+/***/ }),
+
+/***/ "./resources/js/Pages/Modules/Users/Index.vue?vue&type=style&index=0&id=7f7480ac&lang=scss":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/Pages/Modules/Users/Index.vue?vue&type=style&index=0&id=7f7480ac&lang=scss ***!
+  \*************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_use_1_node_modules_vue_loader_dist_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_use_3_node_modules_vue_loader_dist_index_js_ruleSet_0_use_0_Index_vue_vue_type_style_index_0_id_7f7480ac_lang_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!../../../../../node_modules/vue-loader/dist/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!../../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!../../../../../node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./Index.vue?vue&type=style&index=0&id=7f7480ac&lang=scss */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./resources/js/Pages/Modules/Users/Index.vue?vue&type=style&index=0&id=7f7480ac&lang=scss");
 
 
 /***/ }),

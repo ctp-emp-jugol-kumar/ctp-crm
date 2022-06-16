@@ -40,58 +40,74 @@
                     </div>
                 </div>
             </div>
-            <div class="content-body">
-                <section id="basic-input">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">Basic Information</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-xl-4 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="prefix">Prefix</label>
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    id="prefix"
-                                                    placeholder="Prefix"
-                                                />
+            <form @submit.prevent="submit">
+
+                <div class="content-body">
+                    <section id="basic-input">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Basic Information</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-xl-4 col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="prefix">Prefix</label>
+                                                    <input
+                                                        v-model="form.prefix"
+                                                        type="text"
+                                                        class="form-control"
+                                                        id="prefix"
+                                                        placeholder="Prefix"
+                                                    />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-xl-4 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="first_name">First Name <span class="text-danger">*</span></label>
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    id="first_name"
-                                                    placeholder="First Name" />
+                                            <div class="col-xl-4 col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="first_name">First Name <span class="text-danger">*</span></label>
+                                                    <input
+                                                        v-model="form.first_name"
+                                                        type="text"
+                                                        class="form-control"
+                                                        id="first_name"
+                                                        placeholder="First Name" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-xl-4 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="last_name">Last name</label>
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    id="last_name"
-                                                    placeholder="Last name" />
+                                            <div class="col-xl-4 col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="last_name">Last name</label>
+                                                    <input
+                                                        v-model="form.last_name"
+                                                        type="text"
+                                                        class="form-control"
+                                                        id="last_name"
+                                                        placeholder="Last name" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-xl-4 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="email">Email <span class="text-danger">*</span></label>
-                                                <input type="email" id="email" class="form-control" placeholder="eg.example@testmail.com" />
+                                            <div class="col-xl-4 col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="email">Email <span class="text-danger">*</span></label>
+                                                    <input
+                                                        v-model="form.email"
+                                                        type="email"
+                                                        id="email"
+                                                        class="form-control"
+                                                        placeholder="eg.example@testmail.com" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-xl-4 col-md-6 col-12">
-                                            <div class="d-flex flex-column">
-                                                <label class="form-check-label mb-50" for="is_active">Is Active ?</label>
-                                                <div class="form-check form-check-success form-switch">
-                                                    <input type="checkbox" checked class="form-check-input" id="is_active" />
+                                            <div class="col-xl-4 col-md-6 col-12">
+                                                <div class="d-flex flex-column">
+                                                    <label class="form-check-label mb-50" for="is_active">Is Active ?</label>
+                                                    <div class="form-check form-check-success form-switch">
+                                                        <input
+                                                            v-model="form.is_active"
+                                                            type="checkbox"
+                                                            checked
+                                                            class="form-check-input"
+                                                            id="is_active" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -99,41 +115,61 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <section id="">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">Authentication information</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="username">User Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="username" placeholder="User Name" />
+                    </section>
+                    <section >
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Authentication information</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-xl-3 col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="username">User Name <span class="text-danger">*</span></label>
+                                                    <input
+                                                        v-model="form.username"
+                                                        type="text"
+                                                        class="form-control"
+                                                        id="username"
+                                                        placeholder="User Name" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="password" placeholder="Password"/>
+                                            <div class="col-xl-3 col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
+                                                    <input
+                                                        v-model="form.password"
+                                                        type="password"
+                                                        class="form-control"
+                                                        id="password"
+                                                        placeholder="Password"/>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
+                                            <div class="col-xl-3 col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
+                                                    <input
+                                                        v-model="form.password_confirmation"
+                                                        type="password"
+                                                        class="form-control"
+                                                        id="conform_password"
+                                                        placeholder="Password"/>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="d-flex flex-column">
-                                                <label class="form-check-label mb-50" for="allow_login">Allow login ?</label>
-                                                <div class="form-check form-check-success form-switch">
-                                                    <input type="checkbox" checked class="form-check-input" id="allow_login" />
+                                            <div class="col-xl-3 col-md-6 col-12">
+                                                <div class="d-flex flex-column">
+                                                    <label class="form-check-label mb-50" for="allow_login">Allow login ?</label>
+                                                    <div class="form-check form-check-success form-switch">
+                                                        <input
+                                                            v-model="form.allow_login"
+                                                            type="checkbox"
+                                                            checked
+                                                            class="form-check-input"
+                                                            id="allow_login" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -141,181 +177,202 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                    <!--
+                                    <section >
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h4 class="card-title">More Information's</h4>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-1">
+                                                                        <label class="form-label" for="fp-default">Default</label>
+                                                                        <input type="text" id="fp-default" class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-1">
+                                                                        <label class="form-label" for="fp-time">Time picker</label>
+                                                                        <input type="text" id="fp-time" class="form-control flatpickr-time text-start" placeholder="HH:MM" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
 
-                <section id="">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">More Information's</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-xl-3 col-md-6 col-12">
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="username">User Name <span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control" id="username" placeholder="User Name" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
 
-                                            <div class="row">
-                                                <div class="col-md-6 mb-1">
-                                                    <label class="form-label" for="fp-default">Default</label>
-                                                    <input type="text" id="fp-default" class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="username">User Name <span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control" id="username" placeholder="User Name" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="username">User Name <span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control" id="username" placeholder="User Name" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="username">User Name <span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control" id="username" placeholder="User Name" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3 col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
+                                                                    <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-6 mb-1">
-                                                    <label class="form-label" for="fp-time">Time picker</label>
-                                                    <input type="text" id="fp-time" class="form-control flatpickr-time text-start" placeholder="HH:MM" />
-                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="password" placeholder="Password"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
-                                            </div>
-                                        </div>
+                                    </section>-->
+                </div>
 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="username">User Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="username" placeholder="User Name" />
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="password" placeholder="Password"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
-                                            </div>
-                                        </div>
+                <div class="d-flex justify-content-end">
+                    <button type="reset" class="btn btn-danger me-1">Cancle</button>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="username">User Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="username" placeholder="User Name" />
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="password" placeholder="Password"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="username">User Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="username" placeholder="User Name" />
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="password" placeholder="Password"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="username">User Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="username" placeholder="User Name" />
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="password" placeholder="Password"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label class="form-label" for="conform_password">Conform Password <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control" id="conform_password" placeholder="Password"/>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
+            </form>
         </div>
     </div>
 
-    <b-row class="match-height">
-        <b-col lg="6">
-            <form-datepicker-basic />
-        </b-col>
-    </b-row>
 <!-- User Create:END -->
 </template>
 <script>
-    import { BRow, BCol } from 'bootstrap-vue'
-    import FormDatepickerBasic from './FormDatepickerBasic.vue'
-    import From
-</script>
 
+</script>
+<script setup>
+    import {useForm} from "@inertiajs/inertia-vue3";
+    import {Inertia} from "@inertiajs/inertia";
+
+
+    let form = useForm({
+        prefix:"",
+        first_name:"",
+        last_name:"",
+        is_active:Boolean,
+
+        username:"",
+        password:"",
+        password_confirmation:"",
+        allow_login:Boolean,
+
+    });
+
+    let submit = () =>{
+        Inertia.post("/users", form,);
+    }
+
+
+</script>
 
 
 <style>
