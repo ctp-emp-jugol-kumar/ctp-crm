@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOauthPersonalAccessClientsTable extends Migration
+class AddDiscountToQuotationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateOauthPersonalAccessClientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('oauth_personal_access_clients', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('client_id')->index();
-            $table->timestamps();
+        Schema::table('quotations', function (Blueprint $table) {
+            $table->unsignedInteger('discount')->nullable();
         });
     }
 
@@ -27,6 +25,8 @@ class CreateOauthPersonalAccessClientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('oauth_personal_access_clients');
+        Schema::table('quotations', function (Blueprint $table) {
+            $table->dropColumn(['discount']);
+        });
     }
 }

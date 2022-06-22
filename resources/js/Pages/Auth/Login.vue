@@ -53,7 +53,7 @@
                                         </svg>
                                     </a>
 
-                                    <h4 class="card-title mb-1">Welcome to Vuexy! 👋</h4>
+                                    <h4 class="card-title mb-1">Welcome to Creative Take Park! 👋</h4>
                                     <p class="card-text mb-2">Please sign-in to your account and start the adventure</p>
 
                                     <form class="auth-login-form mt-2" @submit.prevent="submit">
@@ -72,11 +72,14 @@
                                                     <small>Forgot Password?</small>
                                                 </a>
                                             </div>
+
+
                                             <div class="input-group input-group-merge form-password-toggle">
                                                 <input :type="passwordFieldType" v-model="form.password" class="form-control form-control-merge"
                                                     id="login-password" tabindex="2"
-                                                    placeholder=""
+                                                    placeholder="******"
                                                     aria-describedby="login-password" />
+
                                                 <span class="input-group-text">
                                                     <vue-feather class="cursor-pointer" :type="passwordToggleIcon"
                                                         @click="togglePasswordVisibility" />
@@ -84,6 +87,8 @@
                                                 <span v-if="form.errors.password" id="login-password-error" class="error">{{ form.errors.password }}</span>
                                             </div>
                                         </div>
+
+
                                         <div class="mb-1">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="remember-me"
@@ -128,7 +133,7 @@ const passwordToggleIcon = computed(() =>{
 })
 
 let submit = () => {
-    form.post('/login');
+    form.post('admin/login');
 };
 </script>
 

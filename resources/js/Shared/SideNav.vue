@@ -19,7 +19,7 @@
                             href="#">
                             <span class="brand-logo">
                             </span>
-                            <h2 class="brand-text">Vuexy</h2>
+                            <h2 class="brand-text">CTP BD CRM</h2>
                         </Link></li>
                     <li class="nav-item nav-toggle">
                         <Link preserve-scroll class="nav-link modern-nav-toggle">
@@ -35,7 +35,7 @@
             <div class="main-menu-content scroll-area">
                 <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
                     <li class=" nav-item">
-                        <Link preserve-scroll class="d-flex align-items-center" href="/test">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/dashboard">
                             <vue-feather type="home" />
                             <span class="menu-title text-truncate" data-i18n="Dashboards">Dashboards</span>
                         </Link>
@@ -122,7 +122,7 @@
                         </Link>
                         <ul class="menu-content">
                             <li>
-                                <Link preserve-scroll class="d-flex align-items-center" href="#">
+                                <Link preserve-scroll class="d-flex align-items-center" href="/admin/users">
                                     <vue-feather type="circle" />
                                     <span class="menu-item text-truncate" data-i18n="Login">Admin</span>
                                 </Link>
@@ -149,19 +149,28 @@
                         </Link>
                         <ul class="menu-content">
                             <li>
-                                <Link preserve-scroll class="d-flex align-items-center" href="/users/create">
+                                <Link preserve-scroll class="d-flex align-items-center" href="/admin/users/create">
                                     <vue-feather type="circle" />
                                     <span class="menu-item text-truncate" data-i18n="Login">Create user</span>
                                 </Link>
                             </li>
                             <li>
-                                <Link preserve-scroll class="d-flex align-items-center" href="/users">
+                                <Link preserve-scroll class="d-flex align-items-center" href="/admin/users">
                                     <vue-feather type="circle" />
                                     <span class="menu-item text-truncate" data-i18n="Login">Manage user</span>
                                 </Link>
                             </li>
                         </ul>
                     </li>
+
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/clients">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Clients</span>
+                        </Link>
+                    </li>
+
                 </ul>
             </div>
         </perfect-scrollbar>

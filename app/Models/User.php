@@ -2,38 +2,37 @@
 
 namespace App\Models;
 
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
-use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @method static create(array $array)
  */
 class User extends Authenticatable
 {
-    use HasApiTokens,
-        HasFactory,
-        Notifiable,
-        SoftDeletes;
+    use HasFactory, Notifiable;
+    use  HasRoles;
+
+    protected $guard_name = 'backpack';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var array
      */
-
-    protected $guarded = [
-        'id'
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * The attributes that should be hidden for arrays.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $hidden = [
         'password',
@@ -41,17 +40,27 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * The attributes that should be cast to native types.
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
-    public function setPasswordAttribute($value){
-        $this->attributes['password'] = Hash::make($value);
+
+
+    public function quotations()
+    {
+        return $this->hasMany('App\Models\Quotation');
+    }
+    public function clients()
+    {
+        return $this->belongsToMany('App\Models\Client', 'client_user');
     }
 
-
+    public function projects()
+    {
+        return $this->belongsToMany('App\Models\Project', 'project_user');
+    }
 }

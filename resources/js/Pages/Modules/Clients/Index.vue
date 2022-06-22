@@ -7,12 +7,11 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">DataTables</h2>
+                            <h2 class="content-header-title float-start mb-0">Clients</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="#">Datatable</a></li>
-                                    <li class="breadcrumb-item active">Basic</li>
+                                    <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                                    <li class="breadcrumb-item active">Clients</li>
                                 </ol>
                             </div>
                         </div>
@@ -34,8 +33,9 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-header border-bottom">
-                                    <h4 class="card-title">Advanced Search</h4>
+                                <div class="card-header border-bottom d-flex justify-content-between">
+                                    <h4 class="card-title">Clients Information's </h4>
+                                    <a class="btn btn-primary btn-sm"> Add Client</a>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -62,9 +62,9 @@
                                     <table class="user-list-table table">
                                         <thead class="table-light">
                                         <tr class="">
-                                            <th class="sorting">Name</th>
-                                            <th class="sorting">Role</th>
-                                            <th class="sorting">Active on</th>
+                                            <th class="sorting">Client</th>
+                                            <th class="sorting">Phone</th>
+                                            <th class="sorting">Created At</th>
                                             <th class="sorting">Actions</th>
                                         </tr>
                                         </thead>
@@ -80,14 +80,14 @@
                                                     </div>
                                                     <div class="d-flex flex-column">
                                                         <div class="user_name text-truncate text-body">
-                                                            <span class="fw-bolder">{{ user.username }}</span>
+                                                            <span class="fw-bolder">{{ user.name }}</span>
                                                         </div>
                                                         <small class="emp_post text-muted">{{ user.email }}</small>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>{{ user.username }}</td>
-                                            <td>{{ user.is_active }}</td>
+                                            <td>{{ user.phone }} <span v-if="user.secondary_phone">/ {{ user.secondary_phone }}</span></td>
+                                            <td>{{ user.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
                                                     <button type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
@@ -104,64 +104,6 @@
 
                                     <Pagination :links="users.links" :from="users.from" :to="users.to" :total="users.total" />
                                 </div>
-                                <!--
-                                <div class="card-datatable">
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <thead>
-                                            <tr>
-                                                <th>Project</th>
-                                                <th>Client</th>
-                                                <th>Users</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="user in users.data" :key="user.id">
-                                                    <td>
-                                                        Id# {{ user.id }}
-                                                    </td>
-                                                    <td>{{ user.first_name }}</td>
-                                                    <td>
-                                                        <div class="avatar-group">
-&lt;!&ndash;                                                            <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar pull-up my-0" title="Lilian Nenez">&ndash;&gt;
-&lt;!&ndash;                                                                <img src="../../../app-assets/images/portrait/small/avatar-s-5.jpg" alt="Avatar" height="26" width="26" />&ndash;&gt;
-&lt;!&ndash;                                                            </div>&ndash;&gt;
-&lt;!&ndash;                                                            <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar pull-up my-0" title="Alberto Glotzbach">&ndash;&gt;
-&lt;!&ndash;                                                                <img src="../../../app-assets/images/portrait/small/avatar-s-6.jpg" alt="Avatar" height="26" width="26" />&ndash;&gt;
-&lt;!&ndash;                                                            </div>&ndash;&gt;
-&lt;!&ndash;                                                            <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar pull-up my-0" title="Alberto Glotzbach">&ndash;&gt;
-&lt;!&ndash;                                                                <img src="../../../app-assets/images/portrait/small/avatar-s-7.jpg" alt="Avatar" height="26" width="26" />&ndash;&gt;
-&lt;!&ndash;                                                            </div>&ndash;&gt;
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <span v-if="user.is_active" class="badge rounded-pill badge-light-primary me-1">Active</span>
-                                                        <span v-else class="badge rounded-pill badge-light-danger me-1">Inactive</span>
-                                                    </td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <button type="button" class="btn btn-sm dropdown-toggle hide-arrow py-0" data-bs-toggle="dropdown">
-                                                                <i data-feather="more-vertical"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu dropdown-menu-end">
-                                                                <a class="dropdown-item" href="#">
-                                                                    <i data-feather="edit-2" class="me-50"></i>
-                                                                    <span>Edit</span>
-                                                                </a>
-                                                                <a class="dropdown-item" href="#">
-                                                                    <i data-feather="trash" class="me-50"></i>
-                                                                    <span>Delete</span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>-->
                             </div>
                         </div>
                     </div>

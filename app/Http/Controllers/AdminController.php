@@ -2,28 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
-use App\Http\Resources\UserResource;
 use App\Models\User;
-//use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Request;
-use Inertia\Inertia;
-use Symfony\Component\HttpFoundation\Response;
-use function Symfony\Component\Mime\Header\all;
 
-class UserController extends Controller
+
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
     public function index()
     {
 
-
-        return inertia('Modules/Users/Index', [
+        return inertia('Modules/Admin/Index', [
             'users' => User::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('email', 'like', "%{$search}%");
@@ -41,46 +34,17 @@ class UserController extends Controller
         ]);
 
 
-
-
-
-
-
-//        return Inertia::render('Modules/Users/Index', [
-//            'users' => UserResource::collection(User::all())
-//        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Inertia\Response
-     */
-    public function create()
-    {
-        return Inertia::render('Modules/Users/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param UserRequest $request
-     * @param $users
-     * @return \Inertia\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(Request $request)
     {
-
-        $user = User::create($request->validated());
-
-        return Inertia::render('Modules/Users/Create', [
-           'user' => new UserResource($user),
-            'notification' => [
-                'success'  => true,
-                'status'   => Response::HTTP_CREATED,
-                'message'  => 'This User Created Successfully Done!'
-            ]
-        ]);
+        //
     }
 
     /**
@@ -90,17 +54,6 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
     {
         //
     }
