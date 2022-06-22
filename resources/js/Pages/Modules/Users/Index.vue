@@ -10,12 +10,9 @@
                             <h2 class="content-header-title float-start mb-0">DataTables</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.html">Home</a>
-                                    </li>
-                                    <li class="breadcrumb-item"><a href="#">Datatable</a>
-                                    </li>
-                                    <li class="breadcrumb-item active">Basic
-                                    </li>
+                                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="#">Datatable</a></li>
+                                    <li class="breadcrumb-item active">Basic</li>
                                 </ol>
                             </div>
                         </div>
@@ -31,190 +28,220 @@
                 </div>
             </div>
             <div class="content-body">
-                <div class="row">
-                    <div class="col-12">
-                        <p>Read full documnetation <a href="https://datatables.net/" target="_blank">here</a></p>
-                    </div>
-                </div>
-                <!-- Basic table -->
-                <section id="basic-datatable">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <table class="datatables-basic table">
-                                    <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th></th>
-                                        <th>id</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Date</th>
-                                        <th>Salary</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Modal to add new record -->
-                    <div class="modal modal-slide-in fade" id="modals-slide-in">
-                        <div class="modal-dialog sidebar-sm">
-                            <form class="add-new-record modal-content pt-0">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
-                                <div class="modal-header mb-1">
-                                    <h5 class="modal-title" id="exampleModalLabel">New Record</h5>
-                                </div>
-                                <div class="modal-body flex-grow-1">
-                                    <div class="mb-1">
-                                        <label class="form-label" for="basic-icon-default-fullname">Full Name</label>
-                                        <input type="text" class="form-control dt-full-name" id="basic-icon-default-fullname" placeholder="John Doe" aria-label="John Doe" />
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-label" for="basic-icon-default-post">Post</label>
-                                        <input type="text" id="basic-icon-default-post" class="form-control dt-post" placeholder="Web Developer" aria-label="Web Developer" />
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-label" for="basic-icon-default-email">Email</label>
-                                        <input type="text" id="basic-icon-default-email" class="form-control dt-email" placeholder="john.doe@example.com" aria-label="john.doe@example.com" />
-                                        <small class="form-text"> You can use letters, numbers & periods </small>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label class="form-label" for="basic-icon-default-date">Joining Date</label>
-                                        <input type="text" class="form-control dt-date" id="basic-icon-default-date" placeholder="MM/DD/YYYY" aria-label="MM/DD/YYYY" />
-                                    </div>
-                                    <div class="mb-4">
-                                        <label class="form-label" for="basic-icon-default-salary">Salary</label>
-                                        <input type="text" id="basic-icon-default-salary" class="form-control dt-salary" placeholder="$12000" aria-label="$12000" />
-                                    </div>
-                                    <button type="button" class="btn btn-primary data-submit me-1">Submit</button>
-                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </section>
-                <!--/ Basic table -->
 
-                <!-- Complex Headers -->
-                <section id="complex-header-datatable">
+                <!-- Advanced Search -->
+                <section id="advanced-search-datatable">
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header border-bottom">
-                                    <h4 class="card-title">Complex Headers</h4>
+                                    <h4 class="card-title">Advanced Search</h4>
                                 </div>
-                                <div class="card-datatable">
-                                    <table class="dt-complex-header table table-bordered table-responsive">
-                                        <thead>
-                                        <tr>
-                                            <th rowspan="2">Name</th>
-                                            <th colspan="2">Contact</th>
-                                            <th colspan="3">HR Information</th>
-                                            <th rowspan="2">Action</th>
-                                        </tr>
-                                        <tr>
-                                            <th>E-mail</th>
-                                            <th>City</th>
-                                            <th>Position</th>
-                                            <th>Salary</th>
-                                            <th class="cell-fit">Status</th>
+                                <div class="card-datatable table-responsive pt-0">
+                                    <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
+                                        <div class="col-sm-12 col-lg-4 d-flex justify-content-center justify-content-lg-start">
+                                            <div class="select-search-area">
+                                                <label>Show <select class="form-select" v-model="perPage">
+                                                    <option :value="undefined">10</option>
+                                                    <option value="25">25</option>
+                                                    <option value="50">50</option>
+                                                    <option value="100">100</option>
+                                                </select> entries</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-lg-8 ps-xl-75 ps-0">
+                                            <div
+                                                class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
+                                                <div class="select-search-area">
+                                                    <label>Search:<input v-model="search" type="search" class="form-control" placeholder=""
+                                                                         aria-controls="DataTables_Table_0"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="user-list-table table">
+                                        <thead class="table-light">
+                                        <tr class="">
+                                            <th class="sorting">Name</th>
+                                            <th class="sorting">Role</th>
+                                            <th class="sorting">Active on</th>
+                                            <th class="sorting">Actions</th>
                                         </tr>
                                         </thead>
+                                        <tbody>
+                                        <tr v-for="user in users.data" :key="user.id">
+                                            <td>
+                                                <div class="d-flex justify-content-left align-items-center">
+                                                    <div class="avatar-wrapper">
+                                                        <div class="avatar  me-1">
+                                                            <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d"
+                                                                 alt="{{ user.username }}" height="32" width="32">
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <div class="user_name text-truncate text-body">
+                                                            <span class="fw-bolder">{{ user.username }}</span>
+                                                        </div>
+                                                        <small class="emp_post text-muted">{{ user.email }}</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>{{ user.username }}</td>
+                                            <td>{{ user.is_active }}</td>
+                                            <td>
+                                                <div class="demo-inline-spacing">
+                                                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                        <Icon title="eye" />
+                                                    </button>
+                                                    <button @click="deleteItemModal(user.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+                                                        <Icon title="trash" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
                                     </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <!--/ Complex Headers -->
 
-                <!-- Row grouping -->
-                <section id="row-grouping-datatable">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header border-bottom">
-                                    <h4 class="card-title">Row Grouping</h4>
+                                    <Pagination :links="users.links" :from="users.from" :to="users.to" :total="users.total" />
                                 </div>
+                                <!--
                                 <div class="card-datatable">
-                                    <table class="dt-row-grouping table">
-                                        <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Email</th>
-                                            <th>City</th>
-                                            <th>Date</th>
-                                            <th>Salary</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        </thead>
-                                        <tfoot>
-                                        <tr>
-                                            <th></th>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Email</th>
-                                            <th>City</th>
-                                            <th>Date</th>
-                                            <th>Salary</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>Project</th>
+                                                <th>Client</th>
+                                                <th>Users</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="user in users.data" :key="user.id">
+                                                    <td>
+                                                        Id# {{ user.id }}
+                                                    </td>
+                                                    <td>{{ user.first_name }}</td>
+                                                    <td>
+                                                        <div class="avatar-group">
+&lt;!&ndash;                                                            <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar pull-up my-0" title="Lilian Nenez">&ndash;&gt;
+&lt;!&ndash;                                                                <img src="../../../app-assets/images/portrait/small/avatar-s-5.jpg" alt="Avatar" height="26" width="26" />&ndash;&gt;
+&lt;!&ndash;                                                            </div>&ndash;&gt;
+&lt;!&ndash;                                                            <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar pull-up my-0" title="Alberto Glotzbach">&ndash;&gt;
+&lt;!&ndash;                                                                <img src="../../../app-assets/images/portrait/small/avatar-s-6.jpg" alt="Avatar" height="26" width="26" />&ndash;&gt;
+&lt;!&ndash;                                                            </div>&ndash;&gt;
+&lt;!&ndash;                                                            <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar pull-up my-0" title="Alberto Glotzbach">&ndash;&gt;
+&lt;!&ndash;                                                                <img src="../../../app-assets/images/portrait/small/avatar-s-7.jpg" alt="Avatar" height="26" width="26" />&ndash;&gt;
+&lt;!&ndash;                                                            </div>&ndash;&gt;
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span v-if="user.is_active" class="badge rounded-pill badge-light-primary me-1">Active</span>
+                                                        <span v-else class="badge rounded-pill badge-light-danger me-1">Inactive</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button type="button" class="btn btn-sm dropdown-toggle hide-arrow py-0" data-bs-toggle="dropdown">
+                                                                <i data-feather="more-vertical"></i>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                <a class="dropdown-item" href="#">
+                                                                    <i data-feather="edit-2" class="me-50"></i>
+                                                                    <span>Edit</span>
+                                                                </a>
+                                                                <a class="dropdown-item" href="#">
+                                                                    <i data-feather="trash" class="me-50"></i>
+                                                                    <span>Delete</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>
                 </section>
-                <!--/ Row grouping -->
-
-                <!-- Multilingual -->
-                <section id="multilingual-datatable">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header border-bottom">
-                                    <h4 class="card-title">Multilingual</h4>
-                                </div>
-                                <div class="card-datatable">
-                                    <table class="dt-multilingual table">
-                                        <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Email</th>
-                                            <th>Date</th>
-                                            <th>Salary</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <!--/ Advanced Search -->
                 <!--/ Multilingual -->
             </div>
         </div>
     </div>
 </template>
-
 <script>
 
-export default {
+</script>
+<script setup>
+    import Pagination from "../../../components/Pagination"
+    import Icon from '../../../components/Icon'
+    import {ref, watch} from "vue";
+    import debounce from "lodash/debounce";
+    import {Inertia} from "@inertiajs/inertia";
+    import Swal from 'sweetalert2'
 
 
-}
+
+    // defineProps({
+    //     users:Array,
+    //     notification:Array,
+    // });
+
+    let props = defineProps({
+        users: Object,
+        filters: Object,
+        //   can: Object,
+        notification:Object,
+    });
+
+
+    let deleteItemModal = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Inertia.delete(adminPath.value + '/users/' + id, { preserveState: true, replace: true, onSuccess: page => {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )
+                    },
+                    onError: errors => {
+                        Swal.fire(
+                            'Oops...',
+                            'Something went wrong!',
+                            'error'
+                        )
+                    }})
+            }
+        })
+    };
+
+
+
+
+
+    let search = ref(props.filters.search);
+    let perPage = ref(props.filters.perPage);
+
+    watch([search, perPage], debounce(function ([val, val2]) {
+        Inertia.get('/users', { search: val, perPage: val2 }, { preserveState: true, replace: true });
+    }, 300));
+
+
+
+
+
 </script>
 
 <style lang="scss">

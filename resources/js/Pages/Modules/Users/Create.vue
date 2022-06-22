@@ -41,7 +41,6 @@
                 </div>
             </div>
             <form @submit.prevent="submit">
-
                 <div class="content-body">
                     <section id="basic-input">
                         <div class="row">
@@ -54,38 +53,17 @@
                                         <div class="row">
                                             <div class="col-xl-4 col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label class="form-label" for="prefix">Prefix</label>
+                                                    <label class="form-label" for="first_name">Full Name <span class="text-danger">*</span></label>
                                                     <input
-                                                        v-model="form.prefix"
-                                                        type="text"
-                                                        class="form-control"
-                                                        id="prefix"
-                                                        placeholder="Prefix"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-4 col-md-6 col-12">
-                                                <div class="mb-1">
-                                                    <label class="form-label" for="first_name">First Name <span class="text-danger">*</span></label>
-                                                    <input
-                                                        v-model="form.first_name"
+                                                        v-model="form.full_name"
                                                         type="text"
                                                         class="form-control"
                                                         id="first_name"
                                                         placeholder="First Name" />
                                                 </div>
                                             </div>
-                                            <div class="col-xl-4 col-md-6 col-12">
-                                                <div class="mb-1">
-                                                    <label class="form-label" for="last_name">Last name</label>
-                                                    <input
-                                                        v-model="form.last_name"
-                                                        type="text"
-                                                        class="form-control"
-                                                        id="last_name"
-                                                        placeholder="Last name" />
-                                                </div>
-                                            </div>
+
+
                                             <div class="col-xl-4 col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label class="form-label" for="email">Email <span class="text-danger">*</span></label>
@@ -166,7 +144,7 @@
                                                         <input
                                                             v-model="form.allow_login"
                                                             type="checkbox"
-                                                            checked
+                                                            checked="true"
                                                             class="form-check-input"
                                                             id="allow_login" />
                                                     </div>
@@ -352,24 +330,35 @@
 <script setup>
     import {useForm} from "@inertiajs/inertia-vue3";
     import {Inertia} from "@inertiajs/inertia";
+    import {defineProps} from "@vue/runtime-core";
 
 
     let form = useForm({
-        prefix:"",
-        first_name:"",
-        last_name:"",
+        full_name:"",
         is_active:Boolean,
 
         username:"",
         password:"",
         password_confirmation:"",
-        allow_login:Boolean,
+        allow_login:true,
 
     });
 
     let submit = () =>{
-        Inertia.post("/users", form,);
+        Inertia.post("/users", form,{
+            onSuccess:  () =>{
+                alert('Data Save Successfully done.');
+            },
+            onError: () =>{
+                alert('Have Some Errors');
+            }
+        });
     }
+
+    defineProps({
+       'user' : Object,
+       'notification' : Array,
+    });
 
 
 </script>

@@ -10,6 +10,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @method static create(array $array)
+ */
 class User extends Authenticatable
 {
     use HasApiTokens,
@@ -22,10 +25,9 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
+
+    protected $guarded = [
+        'id'
     ];
 
     /**
