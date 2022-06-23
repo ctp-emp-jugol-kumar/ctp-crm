@@ -171,6 +171,121 @@
                         </Link>
                     </li>
 
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/designs">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Package</span>
+                        </Link>
+                    </li>
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/designs">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Package</span>
+                        </Link>
+                    </li>
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/services">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Services</span>
+                        </Link>
+                    </li>
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/platforms">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Platforms</span>
+                        </Link>
+                    </li>
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/features">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Feature</span>
+                        </Link>
+                    </li>
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/works">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Works</span>
+                        </Link>
+                    </li>
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/domains">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Domains</span>
+                        </Link>
+                    </li>
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/hostings">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Hostings</span>
+                        </Link>
+                    </li>
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/quotations">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Quotations</span>
+                        </Link>
+                    </li>
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/invoices">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Invoice</span>
+                        </Link>
+                    </li>
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/methods">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Methods</span>
+                        </Link>
+                    </li>
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/purposes">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
+                        </Link>
+                    </li>
+
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/purposes">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
+                        </Link>
+                    </li>
+
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/purposes">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
+                        </Link>
+                    </li>
+
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/purposes">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
+                        </Link>
+                    </li>
+
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/purposes">
+                            <vue-feather type="message-square" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
+                        </Link>
+                    </li>
+
                 </ul>
             </div>
         </perfect-scrollbar>

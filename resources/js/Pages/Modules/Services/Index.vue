@@ -7,11 +7,11 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">Clients</h2>
+                            <h2 class="content-header-title float-start mb-0">Services</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-                                    <li class="breadcrumb-item active">Clients</li>
+                                    <li class="breadcrumb-item active">Services</li>
                                 </ol>
                             </div>
                         </div>
@@ -34,10 +34,10 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
-                                    <h4 class="card-title">Clients Information's </h4>
+                                    <h4 class="card-title">Services Information's </h4>
                                     <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
                                             data-bs-target="#createNewCategory"
-                                    >Add Client</button>
+                                    >Add Service</button>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -64,31 +64,20 @@
                                     <table class="user-list-table table">
                                         <thead class="table-light">
                                         <tr class="">
-                                            <th class="sorting">Client</th>
-                                            <th class="sorting">Phone</th>
+                                            <th class="sorting">#id</th>
+                                            <th class="sorting">Name</th>
+                                            <th class="sorting">Price</th>
+                                            <th class="sorting">Description</th>
                                             <th class="sorting">Created At</th>
                                             <th class="sorting">Actions</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr v-for="user in users.data" :key="user.id">
-                                            <td>
-                                                <div class="d-flex justify-content-left align-items-center">
-                                                    <div class="avatar-wrapper">
-                                                        <div class="avatar  me-1">
-                                                            <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d"
-                                                                 alt="{{ user.username }}" height="32" width="32">
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex flex-column">
-                                                        <div class="user_name text-truncate text-body">
-                                                            <span class="fw-bolder">{{ user.name }}</span>
-                                                        </div>
-                                                        <small class="emp_post text-muted">{{ user.email }}</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>{{ user.phone }} <span v-if="user.secondary_phone">/ {{ user.secondary_phone }}</span></td>
+                                            <td>{{ user.id }}</td>
+                                            <td>{{ user.name }}</td>
+                                            <td>{{ user.price }} </td>
+                                            <td>{{ user.description }} </td>
                                             <td>{{ user.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
@@ -211,6 +200,12 @@
     import {useForm} from "@inertiajs/inertia-vue3";
 
 
+
+    // defineProps({
+    //     users:Array,
+    //     notification:Array,
+    // });
+
     let props = defineProps({
         users: Object,
         filters: Object,
@@ -222,6 +217,7 @@
         name:"",
         processing:Boolean,
     })
+
 
     let deleteItemModal = (id) => {
         Swal.fire({

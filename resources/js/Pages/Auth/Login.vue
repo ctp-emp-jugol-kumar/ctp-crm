@@ -133,7 +133,7 @@ const passwordToggleIcon = computed(() =>{
 })
 
 let submit = () => {
-    form.post('admin/login');
+    form.post('/admin/login');
 };
 </script>
 
