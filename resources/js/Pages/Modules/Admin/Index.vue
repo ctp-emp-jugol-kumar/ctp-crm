@@ -80,7 +80,7 @@
                                                     </div>
                                                     <div class="d-flex flex-column">
                                                         <div class="user_name text-truncate text-body">
-                                                            <span class="fw-bolder">{{ user.username }}</span>
+                                                            <span class="fw-bolder">{{ user.name }}</span>
                                                         </div>
                                                         <small class="emp_post text-muted">{{ user.email }}</small>
                                                     </div>

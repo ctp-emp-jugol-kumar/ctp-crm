@@ -25,7 +25,7 @@ class AdminController extends Controller
                 ->withQueryString()
                 ->through(fn($user) => [
                     'id' => $user->id,
-                    'name' => $user->username,
+                    'name' => $user->name,
                     'email' => $user->email,
                     'active_on' => $user->created_at->format('d M Y'),
                 ]),

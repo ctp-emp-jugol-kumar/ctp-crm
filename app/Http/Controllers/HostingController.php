@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\HostingsRequest;
 use App\Models\Hosting;
 use Illuminate\Support\Facades\Request;
 
@@ -37,11 +38,12 @@ class HostingController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(HostingsRequest $request)
     {
-        //
+        Hosting::create($request->validated());
+        return redirect()->route('hostings.index');
     }
 
     /**
@@ -71,10 +73,11 @@ class HostingController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Hosting  $hosting
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Hosting $hosting)
     {
-        //
+        $hosting->delete();
+        return redirect()->route('hostings.index');
     }
 }

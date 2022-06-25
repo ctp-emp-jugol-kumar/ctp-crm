@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DesignRequest;
 use App\Models\Client;
 use App\Models\Design;
 use Illuminate\Support\Facades\Request;
@@ -40,11 +41,12 @@ class DesignController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(DesignRequest $request)
     {
-        //
+        Design::create($request->validated());
+        return redirect()->route('designs.index');
     }
 
     /**
@@ -74,10 +76,11 @@ class DesignController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Design  $design
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Design $design)
     {
-        //
+        $design->delete();
+        return redirect()->route('designs.index');
     }
 }

@@ -71,7 +71,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr v-for="user in users.data" :key="user.id">
+                                        <tr v-for="user in clients.data" :key="user.id">
                                             <td>
                                                 <div class="d-flex justify-content-left align-items-center">
                                                     <div class="avatar-wrapper">
@@ -119,69 +119,75 @@
 
 
     <Modal id="createNewCategory" title="Add New Client" v-vb-is:modal :size="{defalut:'lg'}">
-        <form @submit.prevent="createNewCategory">
+        <form @submit.prevent="createClientForm">
             <div class="modal-body">
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Name: </label>
+                        <label>Name: <Required/></label>
                         <div class="">
                             <input v-model="createForm.name" type="text" placeholder="Name" class="form-control">
-                            <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
+                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
                         </div>
                     </div>
                     <div class="col-md">
-                        <label>Email: </label>
+                        <label>Email: <span class="text-danger">*</span></label>
                         <div class="">
-                            <input v-model="createForm.name" type="text" placeholder="Email" class="form-control">
-                            <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
+                            <input v-model="createForm.email" type="email" placeholder="eg.example@creativetechpark.com" class="form-control">
+                            <span v-if="errors.email" class="error text-sm text-danger">{{ errors.email }}</span>
                         </div>
                     </div>
                 </div>
                 <div class="row mb-1">
                     <div class="col-md">
                         <label>Secondary Email: </label>
-                        <input v-model="createForm.name" type="text" placeholder="Secondary Email" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
+                        <input v-model="createForm.secondary_email" type="email" placeholder="second.eg@ctpbd.com" class="form-control">
+                        <span v-if="errors.secondary_email" class="error text-sm text-danger">{{ errors.secondary_email }}</span>
                     </div>
                     <div class="col-md">
-                        <label>Phone: </label>
-                        <input v-model="createForm.name" type="text" placeholder="Phone" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
+                        <label>Phone: <span class="text-danger">*</span></label>
+                        <input v-model="createForm.phone" type="text" placeholder="+88017********" class="form-control">
+                        <span v-if="errors.phone" class="error text-sm text-danger">{{ errors.phone }}</span>
                     </div>
                 </div>
                 <div class="row mb-1">
                     <div class="col-md">
                         <label>Secondary Phone: </label>
-                        <input v-model="createForm.name" type="text" placeholder="Secondary Phone" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
+                        <input v-model="createForm.secondary_phone" type="text" placeholder="+88017********" class="form-control">
+                        <span v-if="errors.secondary_phone" class="error text-sm text-danger">{{ errors.secondary_phone }}</span>
                     </div>
                     <div class="col-md">
                         <label>Company: </label>
-                        <input v-model="createForm.name" type="text" placeholder="company" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
+                        <input v-model="createForm.company" type="text" placeholder="Enter Company Name" class="form-control">
+                        <span v-if="errors.company" class="error text-sm text-danger">{{ errors.company }}</span>
                     </div>
                 </div>
                 <div class="row mb-1">
                     <div class="col-md">
                         <label>Address: </label>
-                        <textarea v-model="createForm.name" type="text" placeholder="address" rows="5" class="form-control"></textarea>
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
+                        <textarea v-model="createForm.address" type="text" placeholder="Enter Full Address" rows="5" class="form-control"></textarea>
+                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.address }}</span>
                     </div>
                     <div class="col-md">
                         <label>Nots: </label>
-                        <textarea v-model="createForm.name" type="text" placeholder="note" rows="5" class="form-control"></textarea>
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
+                        <textarea v-model="createForm.note" type="text" placeholder="Enter note messages" rows="5" class="form-control"></textarea>
+                        <span v-if="errors.note" class="error text-sm text-danger">{{ errors.note }}</span>
                     </div>
                 </div>
-                <div class="mb-1">
-                    <label>Status: </label>
-                    <select class="form-control" name="options">
-                        <option value="">One</option>
-                        <option value="">One</option>
-                        <option value="">One</option>
-                        <option value="">One</option>
-                        <option value="">One</option>
-                    </select>
+
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Assign Agent: </label>
+                        <select class="form-control" v-model="createForm.status">
+                            <option v-for="optoin in status" :value="optoin" :selected="optoin === 'New Lead'">{{ optoin }}</option>
+                        </select>
+
+                    </div>
+                    <div class="col-md">
+                        <label>Assign Agent: </label>
+                        <select class="form-control" v-model="createForm.agents" multiple>
+                            <option v-for="user in users" :value="user.id">{{ user.name }}</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -212,16 +218,32 @@
 
 
     let props = defineProps({
+        clients:Object,
         users: Object,
         filters: Object,
         //   can: Object,
         notification:Object,
+        errors:Object,
     });
 
     let createForm = useForm({
         name:"",
+        email: "",
+        secondary_email: "",
+        phone: "",
+        secondary_phone: "",
+        company: "",
+        address: "",
+        note: "",
+        status:"",
+        agents:Object,
+
         processing:Boolean,
     })
+
+    let status = [
+        'New Lead', 'Contacted', 'Proposal Sent', 'Quote Sent','Qualified','Disqualified', 'Convarted To Customer'
+    ]
 
     let deleteItemModal = (id) => {
         Swal.fire({
@@ -234,7 +256,7 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Inertia.delete(adminPath.value + '/users/' + id, { preserveState: true, replace: true, onSuccess: page => {
+                Inertia.delete('clients/' + id, { preserveState: true, replace: true, onSuccess: page => {
                         Swal.fire(
                             'Deleted!',
                             'Your file has been deleted.',
@@ -252,9 +274,22 @@
         })
     };
 
-
-
-
+    let createClientForm = ( )=>{
+        Inertia.post('clients', createForm, {
+            preserveState: true,
+            onStart: () =>{ createForm.processing = true},
+            onFinish: () => {createForm.processing = false},
+            onSuccess: ()=> {
+                document.getElementById('createNewCategory').$vb.modal.hide()
+                createForm.reset()
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Saved.',
+                    'success'
+                )
+            },
+        })
+    }
 
     let search = ref(props.filters.search);
     let perPage = ref(props.filters.perPage);

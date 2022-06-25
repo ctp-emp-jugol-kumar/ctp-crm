@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MethodRequest;
 use App\Models\Method;
 use Illuminate\Support\Facades\Request;
 
@@ -37,11 +38,12 @@ class MethodController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(MethodRequest $request)
     {
-        //
+        Method::create($request->validated());
+        return redirect()->route('methods.index');
     }
 
     /**
@@ -71,10 +73,11 @@ class MethodController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Method  $method
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Method $method)
     {
-        //
+        $method->delete();
+        return redirect()->route('methods.index');
     }
 }

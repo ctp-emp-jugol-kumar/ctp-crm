@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PurposeRequest;
 use App\Models\Purpose;
 use Illuminate\Support\Facades\Request;
 
@@ -14,7 +15,6 @@ class PurposeController extends Controller
      */
     public function index()
     {
-
         return inertia('Modules/Purpose/Index', [
             'users' => Purpose::query()
                 ->when(Request::input('search'), function ($query, $search) {
@@ -37,11 +37,12 @@ class PurposeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(PurposeRequest $request)
     {
-        //
+        Purpose::create($request->validated());
+        return redirect()->route('purposes.index');
     }
 
     /**
@@ -71,10 +72,11 @@ class PurposeController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Purpose  $purpose
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Purpose $purpose)
     {
-        //
+        $purpose->delete();
+        return redirect()->route('purposes.index');
     }
 }

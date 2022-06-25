@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ServicesRequest;
 use App\Models\Design;
 use App\Models\Website;
 use App\Models\Work;
@@ -41,11 +42,12 @@ class WebsiteController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(ServicesRequest $request)
     {
-        //
+        Website::create($request->validated());
+        return redirect()->route('services.index');
     }
 
     /**
@@ -54,7 +56,7 @@ class WebsiteController extends Controller
      * @param  \App\Models\Design  $design
      * @return \Illuminate\Http\Response
      */
-    public function show(Design $design)
+    public function show(Website $design)
     {
         //
     }
@@ -66,7 +68,7 @@ class WebsiteController extends Controller
      * @param  \App\Models\Design  $design
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Design $design)
+    public function update(Request $request, Website $design)
     {
         //
     }
@@ -74,11 +76,13 @@ class WebsiteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Design  $design
-     * @return \Illuminate\Http\Response
+     * @param Website $website
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Design $design)
+    public function destroy($id)
     {
-        //
+
+        Website::findOrFail($id)->delete();
+        return redirect()->route('services.index');
     }
 }

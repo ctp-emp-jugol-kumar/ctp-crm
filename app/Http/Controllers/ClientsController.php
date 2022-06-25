@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClientRequest;
 use App\Models\Client;
 use App\Models\User;
 use Illuminate\Support\Facades\Request;
+use Inertia\Response;
+use mysql_xdevapi\Exception;
 
 
 class ClientsController extends Controller
@@ -17,7 +20,7 @@ class ClientsController extends Controller
     public function index()
     {
         return inertia('Modules/Clients/Index', [
-            'users' => Client::query()
+            'clients' => Client::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('email', 'like', "%{$search}%");
                 })
@@ -35,6 +38,7 @@ class ClientsController extends Controller
                     'note' => $client->note,
                     'created_at' => $client->created_at->format('d M Y'),
                 ]),
+            'users' => User::all(),
             'filters' => Request::only(['search','perPage'])
         ]);
 
@@ -45,11 +49,20 @@ class ClientsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(ClientRequest $request)
     {
-        //
+        try {
+            $client = Client::create($request->validated());
+
+            if ($request->agents){
+                $client->users()->attach($request->input('agents'));
+            }
+            return redirect()->route('clients.index');
+        }catch (\Exception $e){
+            return redirect()->route('clients.index');
+        }
     }
 
     /**
@@ -79,10 +92,11 @@ class ClientsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        //
+        Client::findOrFail($id)->delete();
+        return redirect()->route('clients.index');
     }
 }

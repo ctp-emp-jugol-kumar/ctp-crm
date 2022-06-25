@@ -36,7 +36,7 @@
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Works Information's </h4>
                                     <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#createNewCategory"
+                                            data-bs-target="#createWork"
                                     >Add Work</button>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
@@ -107,70 +107,27 @@
 
 
 
-    <Modal id="createNewCategory" title="Add New Client" v-vb-is:modal :size="{defalut:'lg'}">
-        <form @submit.prevent="createNewCategory">
+
+    <Modal id="createWork" title="Add New Work" v-vb-is:modal :size="{defalut:'lg'}">
+        <form @submit.prevent="createWork">
             <div class="modal-body">
                 <div class="row mb-1">
+                </div>
+                <div class="row mb-1">
                     <div class="col-md">
-                        <label>Name: </label>
+                        <label>Work Name: <Required/></label>
                         <div class="">
-                            <input v-model="createForm.name" type="text" placeholder="Name" class="form-control">
-                            <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
+                            <input v-model="createForm.name" type="text" placeholder="Work Name" class="form-control">
+                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
                         </div>
                     </div>
                     <div class="col-md">
-                        <label>Email: </label>
+                        <label>Price: <Required/></label>
                         <div class="">
-                            <input v-model="createForm.name" type="text" placeholder="Email" class="form-control">
-                            <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
+                            <input v-model="createForm.price" type="number" placeholder="Work Price" class="form-control">
+                            <span v-if="errors.price" class="error text-sm text-danger">{{ errors.price }}</span>
                         </div>
                     </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Secondary Email: </label>
-                        <input v-model="createForm.name" type="text" placeholder="Secondary Email" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Phone: </label>
-                        <input v-model="createForm.name" type="text" placeholder="Phone" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Secondary Phone: </label>
-                        <input v-model="createForm.name" type="text" placeholder="Secondary Phone" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Company: </label>
-                        <input v-model="createForm.name" type="text" placeholder="company" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Address: </label>
-                        <textarea v-model="createForm.name" type="text" placeholder="address" rows="5" class="form-control"></textarea>
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Nots: </label>
-                        <textarea v-model="createForm.name" type="text" placeholder="note" rows="5" class="form-control"></textarea>
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                </div>
-                <div class="mb-1">
-                    <label>Status: </label>
-                    <select class="form-control" name="options">
-                        <option value="">One</option>
-                        <option value="">One</option>
-                        <option value="">One</option>
-                        <option value="">One</option>
-                        <option value="">One</option>
-                    </select>
                 </div>
             </div>
 
@@ -185,11 +142,11 @@
 
 
 
+
 </template>
 <script>
 
-</script>
-<script setup>
+</script><script setup>
     import Pagination from "../../../components/Pagination"
     import Icon from '../../../components/Icon'
     import Modal from '../../../components/Modal'
@@ -211,13 +168,18 @@
         filters: Object,
         //   can: Object,
         notification:Object,
+        errors:Object,
+        platforms:Object,
     });
+
 
     let createForm = useForm({
         name:"",
+        price:"",
+        platform_id:"",
+
         processing:Boolean,
     })
-
 
     let deleteItemModal = (id) => {
         Swal.fire({
@@ -230,7 +192,7 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Inertia.delete(adminPath.value + '/users/' + id, { preserveState: true, replace: true, onSuccess: page => {
+                Inertia.delete( 'works/' + id, { preserveState: true, replace: true, onSuccess: page => {
                         Swal.fire(
                             'Deleted!',
                             'Your file has been deleted.',
@@ -249,7 +211,22 @@
     };
 
 
-
+    let createWork = ( )=>{
+        Inertia.post('works', createForm, {
+            preserveState: true,
+            onStart: () =>{ createForm.processing = true},
+            onFinish: () => {createForm.processing = false},
+            onSuccess: ()=> {
+                document.getElementById('createWork').$vb.modal.hide()
+                createForm.reset()
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Saved.',
+                    'success'
+                )
+            },
+        })
+    }
 
 
     let search = ref(props.filters.search);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PlatformRequest;
 use App\Models\Design;
 use App\Models\Platform;
 use Illuminate\Support\Facades\Request;
@@ -17,7 +18,7 @@ class PlatformController extends Controller
     public function index()
     {
 
-        return inertia('Modules/Package/Index', [
+        return inertia('Modules/Platforms/Index', [
             'users' => Platform::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('email', 'like', "%{$search}%");
@@ -40,11 +41,12 @@ class PlatformController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(PlatformRequest $request)
     {
-        //
+        Platform::create($request->validated());
+        return redirect()->route('platforms.index');
     }
 
     /**
@@ -74,10 +76,11 @@ class PlatformController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Platform  $platform
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Platform $platform)
     {
-        //
+        $platform->delete();
+        return redirect()->route('platforms.index');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DomainRequest;
 use App\Models\Domain;
 use Illuminate\Support\Facades\Request;
 
@@ -38,11 +39,12 @@ class DomainController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(DomainRequest $request)
     {
-        //
+        Domain::create($request->validated());
+        return redirect()->route('domains.index');
     }
 
     /**
@@ -72,10 +74,11 @@ class DomainController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Domain  $domain
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Domain $domain)
     {
-        //
+        $domain->delete();
+        return redirect()->route('domains.index');
     }
 }

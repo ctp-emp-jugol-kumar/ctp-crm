@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\WorkRequest;
 use App\Models\Website;
 use App\Models\Work;
 use Illuminate\Support\Facades\Request;
@@ -38,11 +39,12 @@ class WorkController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(WorkRequest $request)
     {
-        //
+        Work::create($request->validated());
+        return redirect()->route('works.index');
     }
 
     /**
@@ -72,10 +74,11 @@ class WorkController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Work  $work
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Work $work)
     {
-        //
+        $work->delete();
+        return redirect()->route('works.index');
     }
 }

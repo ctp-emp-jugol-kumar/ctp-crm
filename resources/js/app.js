@@ -2,6 +2,7 @@ import { createApp, h } from "vue";
 import { createInertiaApp, Link, Head } from "@inertiajs/inertia-vue3";
 import { InertiaProgress } from "@inertiajs/progress";
 import VueFeather from 'vue-feather';
+import Required from './components/RequiredBatch'
 import Layout from "./Shared/Layout";
 import store from './Store'
 import { createVbPlugin } from 'vue3-plugin-bootstrap5'
@@ -27,6 +28,7 @@ createInertiaApp({
       .component("Link", Link)
       .component("Head", Head)
       .component(VueFeather.name, VueFeather)
+      .component("Required", Required)
       .mount(el);
   },
 
