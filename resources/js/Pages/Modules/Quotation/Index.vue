@@ -7,7 +7,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">Quotations</h2>
+                            <h2 class="content-header-title float-start mb-0">Manage Quotations</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
@@ -35,9 +35,7 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Quotations Information's </h4>
-                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#createNewCategory"
-                                    >Add Quotations</button>
+                                    <Link href="quotations/create" class="dt-button add-new btn btn-primary">Add Quotations</Link>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -80,6 +78,19 @@
                                             <td>{{ user.description }} </td>
                                             <td>{{ user.created_at }}</td>
                                             <td>
+                                                <!--  <div class="btn-group">
+                                                <button class="btn btn-flat-secondary dropdown-toggle"
+                                                        type="button" :id="user.name"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Secondary
+                                                </button>
+                                                <div class="dropdown-menu" :aria-labelledby="user.name">
+                                                    <a class="dropdown-item" href="#">Option 1</a>
+                                                    <a class="dropdown-item" href="#">Option 2</a>
+                                                    <a class="dropdown-item" href="#">Option 3</a>
+                                                </div>
+                                            </div>-->
+
                                                 <div class="demo-inline-spacing">
                                                     <button type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
@@ -104,85 +115,6 @@
             </div>
         </div>
     </div>
-
-
-
-    <Modal id="createNewCategory" title="Add New Client" v-vb-is:modal :size="{defalut:'lg'}">
-        <form @submit.prevent="createNewCategory">
-            <div class="modal-body">
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Name: </label>
-                        <div class="">
-                            <input v-model="createForm.name" type="text" placeholder="Name" class="form-control">
-                            <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <label>Email: </label>
-                        <div class="">
-                            <input v-model="createForm.name" type="text" placeholder="Email" class="form-control">
-                            <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Secondary Email: </label>
-                        <input v-model="createForm.name" type="text" placeholder="Secondary Email" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Phone: </label>
-                        <input v-model="createForm.name" type="text" placeholder="Phone" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Secondary Phone: </label>
-                        <input v-model="createForm.name" type="text" placeholder="Secondary Phone" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Company: </label>
-                        <input v-model="createForm.name" type="text" placeholder="company" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Address: </label>
-                        <textarea v-model="createForm.name" type="text" placeholder="address" rows="5" class="form-control"></textarea>
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Nots: </label>
-                        <textarea v-model="createForm.name" type="text" placeholder="note" rows="5" class="form-control"></textarea>
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                </div>
-                <div class="mb-1">
-                    <label>Status: </label>
-                    <select class="form-control" name="options">
-                        <option value="">One</option>
-                        <option value="">One</option>
-                        <option value="">One</option>
-                        <option value="">One</option>
-                        <option value="">One</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button :disabled="createForm.processing" type="submit"
-                        class="btn btn-primary waves-effect waves-float waves-light">Submit</button>
-                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                        aria-label="Close">Cancel</button>
-            </div>
-        </form>
-    </Modal>
-
 
 
 </template>
@@ -231,19 +163,19 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 Inertia.delete(adminPath.value + '/users/' + id, { preserveState: true, replace: true, onSuccess: page => {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
-                        )
-                    },
-                    onError: errors => {
-                        Swal.fire(
-                            'Oops...',
-                            'Something went wrong!',
-                            'error'
-                        )
-                    }})
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                },
+                onError: errors => {
+                    Swal.fire(
+                        'Oops...',
+                        'Something went wrong!',
+                        'error'
+                    )
+                }})
             }
         })
     };

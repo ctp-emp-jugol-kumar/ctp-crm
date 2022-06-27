@@ -12,9 +12,16 @@ const mix = require("laravel-mix");
  */
 //
 
-mix.js("resources/js/app.js", "public/js")
+mix.js(
+    [
+        "resources/js/app.js",
+        "resources/js/vendors/config.js",
+        "resources/js/vendors/form-repeater.min.js",
+        "resources/js/vendors/jquery.repeater.min.js",
+    ], "public/js")
     .vue(3)
-    .sass("resources/sass/app.scss", "public/css");
+    .sass("resources/sass/app.scss", "public/css")
+    .version();
 
 mix.webpackConfig({
     output: {

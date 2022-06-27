@@ -64,6 +64,11 @@ class Quotation extends Model
         });
     }
 
+    public function quotationItems(){
+        return $this->hasMany(QuotationItem::class, 'quotation_id');
+    }
+
+
     public function getTotalAmountAttribute()
     {
         // return $this->quotation->user ? $this->quotation->user->name : '-';
