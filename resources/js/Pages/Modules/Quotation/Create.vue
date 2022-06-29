@@ -65,7 +65,7 @@
                                                             <select class="select2 form-select" id="select2-basic" v-model="data.client_id">
                                                                 <option v-for="option in clients" :value="option.id">{{ option.name }}</option>
                                                             </select>
-                                                            <span  class="error text-sm text-danger"></span>
+                                                            <span  class="error text-sm text-danger" v-if="errors.client_id">{{ errors.client_id}}</span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md">
@@ -79,24 +79,24 @@
 
                                                 <div class="row mb-1">
                                                     <div class="col-md">
-                                                        <label for="select2-basic">Date :</label>
+                                                        <label for="select2-basic">Date : <Required/></label>
                                                         <div class="">
                                                             <input type="date" class="form-control" v-model="data.date">
-                                                            <span  class="error text-sm text-danger"></span>
+                                                            <span  class="error text-sm text-danger" v-if="errors.date">{{ errors.date }}</span>
                                                         </div>
                                                     </div>
                                                     <div class="col-md">
-                                                        <label>Valid until : </label>
+                                                        <label>Valid until : <Required/></label>
                                                         <div class="">
                                                             <input type="date" class="form-control" v-model="data.valid_until">
-                                                            <span  class="error text-sm text-danger"></span>
+                                                            <span  class="error text-sm text-danger" v-if="errors.valid_until">{{ errors.valid_until }}</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                     </div>
                                 </div>
-
+<!--
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="modal-body">
@@ -141,16 +141,16 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
 
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4 class="card-title">Select a Service</h4>
+                                        <h4 class="card-title">Select Service</h4>
                                     </div>
                                     <div class="card-body">
                                         <div class="demo-inline-spacing">
-                                            <div class="form-check form-check-primary" v-for="(option , index) in services" :key="index">
-                                                <input type="radio" v-model="data.website_id" :id="option.name" :value="option.id" class="form-check-input" :checked="index===0">
+                                            <div class="form-check form-check-primary" v-for="(option , index) in works" :key="index">
+                                                <input type="checkbox" class="form-check-input" v-model="data.woarks" :id="option.name" :value="option.id" :checked="index === 0">
                                                 <label class="form-check-label" :for="option.name">{{ option.name }}</label>
                                             </div>
                                         </div>
@@ -199,7 +199,7 @@
                                     </div>
                                 </div>
 
-                                <div class="card">
+                   <!--             <div class="card">
                                     <div class="card-header">
                                         <h4 class="card-title">Select a platform</h4>
                                     </div>
@@ -225,7 +225,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
 
                                 <div class="card">
                                     <div class="card-body">
@@ -280,6 +280,13 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="col-md-2 col-12">
+                                                    <div class="mb-1">
+                                                        <label class="form-label" for="itemdiscount">Discount</label>
+                                                        <input type="text" id="itemdiscount" class="form-control" v-model="data.quatations[index].discount" aria-describedby="itemquantity" placeholder="1" />
+                                                    </div>
+                                                </div>
+
 
                                                 <div class="col-md-2 col-12" v-if="index != 0">
                                                     <button class="btn btn-outline-danger text-nowrap px-1" @click="deleteRow(index)" data-repeater-delete type="button">
@@ -295,11 +302,28 @@
                                 </div>
 
 
-                                <div class="float-end">
-                                    <button  type="submit"
-                                            class="btn btn-primary waves-effect waves-float waves-light me-2">Submit</button>
-                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                                            aria-label="Close">Cancel</button>
+                                <div class="card" >
+                                    <div class="card-body">
+                                        <div class="d-flex align-item-center justify-content-between">
+                                            <div class="d-flex flex-column">
+                                                <label class="form-check-label mb-50" for="customSwitch10">Primary</label>
+                                                <div class="form-check form-switch form-check-primary">
+                                                    <input type="checkbox" class="form-check-input" v-model="data.status" id="customSwitch10" checked />
+                                                    <label class="form-check-label" for="customSwitch10">
+                                                        <span class="switch-icon-left"><i data-feather="check"></i></span>
+                                                        <span class="switch-icon-right"><i data-feather="x"></i></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <button  type="submit"
+                                                         class="btn btn-primary waves-effect waves-float waves-light me-2">Submit</button>
+                                                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                                                        aria-label="Close">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -341,6 +365,7 @@
         hostings:Object,
         //   can: Object,
         notification:Object,
+        errors:Object,
     })
 
 
@@ -426,6 +451,7 @@
                     terms_of_service:"",
                     date:"",
                     woarks:[],
+                    status:"",
 
 
                     // processing:Boolean,

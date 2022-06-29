@@ -63,20 +63,29 @@
                                         <thead class="table-light">
                                         <tr class="">
                                             <th class="sorting">#id</th>
-                                            <th class="sorting">Name</th>
-                                            <th class="sorting">Price</th>
-                                            <th class="sorting">Description</th>
-                                            <th class="sorting">Created At</th>
+                                            <th class="sorting">Date</th>
+                                            <th class="sorting">Client</th>
+                                            <th class="sorting">Created by</th>
+                                            <th class="sorting">Status</th>
+                                            <th class="sorting">Total</th>
+                                            <th class="sorting">Domain</th>
+                                            <th class="sorting">Hosting</th>
                                             <th class="sorting">Actions</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr v-for="user in users.data" :key="user.id">
-                                            <td>{{ user.id }}</td>
-                                            <td>{{ user.name }}</td>
-                                            <td>{{ user.price }} </td>
-                                            <td>{{ user.description }} </td>
-                                            <td>{{ user.created_at }}</td>
+                                        <tr v-for="qut in quotations.data" :key="qut.id">
+                                            <td>{{ qut.id }}</td>
+                                            <td>{{ qut.date }}</td>
+                                            <td>{{ qut.client_name ?? " " }} </td>
+                                            <td>{{ qut.user_name ?? " " }} </td>
+                                            <td>
+                                                <span v-if="qut.status" class="badge badge-light-success">Success</span>
+                                                <span v-else class="badge badge-light-warning">Pending</span>
+                                            </td>
+                                            <td>{{ qut.totalPrice }} TK</td>
+                                            <td>{{ qut.domain ?? " "}}</td>
+                                            <td>{{ qut.hosting ?? " " }}</td>
                                             <td>
                                                 <!--  <div class="btn-group">
                                                 <button class="btn btn-flat-secondary dropdown-toggle"
@@ -92,10 +101,10 @@
                                             </div>-->
 
                                                 <div class="demo-inline-spacing">
-                                                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                    <button @click="showQuotation(qut.id)"  type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
                                                     </button>
-                                                    <button @click="deleteItemModal(user.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+                                                    <button @click="deleteItemModal(qut.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
                                                         <Icon title="trash" />
                                                     </button>
                                                 </div>
@@ -104,7 +113,7 @@
                                         </tbody>
                                     </table>
 
-                                    <Pagination :links="users.links" :from="users.from" :to="users.to" :total="users.total" />
+                                    <Pagination :links="quotations.links" :from="quotations.from" :to="quotations.to" :total="quotations.total" />
                                 </div>
                             </div>
                         </div>
@@ -117,10 +126,54 @@
     </div>
 
 
+
+
+    <Modal id="showQuotation" title="Show Quotations" v-vb-is:modal :size="{defalut:'lg'}">
+        <form @submit.prevent="createPlatforms">
+            <div class="card-body">
+                 <h2>Cllling</h2>
+            </div>
+            <div class="modal-footer">
+                <button :disabled="createForm.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit</button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel</button>
+            </div>
+        </form>
+    </Modal>
+
+
+
+
+
+
 </template>
+
 <script>
 
+    import axios from "axios";
+
+    export default {
+        // props: [
+        //   'url',
+        // ],
+        // methods:{
+        //     showQuotation(id){
+        //         axios.get(route('quotations.show')).then(function (data) {
+        //             document.getElementById('showQuotation').$vb.modal.show();
+        //             console.log(data);
+        //         }).catch(function (err) {
+        //         })
+        //     }
+        // },
+        // setup(props){
+        //     console.log(props.url);
+        // }
+    }
+
 </script>
+
+
 <script setup>
     import Pagination from "../../../components/Pagination"
     import Icon from '../../../components/Icon'
@@ -130,19 +183,14 @@
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
+    import {defineProps} from "@vue/runtime-core";
 
-
-
-    // defineProps({
-    //     users:Array,
-    //     notification:Array,
-    // });
 
     let props = defineProps({
-        users: Object,
+        quotations: Object,
         filters: Object,
-        //   can: Object,
         notification:Object,
+        url:String,
     });
 
     let createForm = useForm({
@@ -178,10 +226,22 @@
                 }})
             }
         })
-    };
+    }
 
 
+    let showQuotation = (id) => {
+        Inertia.get(props.url+"/"+id, "",{
+            onStart: () =>{ createForm.processing = true},
+            onFinish: (data) =>{
+                createForm.processing = false;
+                document.getElementById('showQuotation').$vb.modal.show();
+            },
+            onSuccess: (data) =>{
+                document.getElementById('showQuotation').$vb.modal.show();
+            }
+        });
 
+    }
 
 
     let search = ref(props.filters.search);
@@ -190,10 +250,6 @@
     watch([search, perPage], debounce(function ([val, val2]) {
         Inertia.get('/users', { search: val, perPage: val2 }, { preserveState: true, replace: true });
     }, 300));
-
-
-
-
 
 </script>
 

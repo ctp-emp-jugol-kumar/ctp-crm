@@ -64,10 +64,6 @@ class Quotation extends Model
         });
     }
 
-    public function quotationItems(){
-        return $this->hasMany(QuotationItem::class, 'quotation_id');
-    }
-
 
     public function getTotalAmountAttribute()
     {
@@ -78,6 +74,8 @@ class Quotation extends Model
         $w_total = 0;
         $other_total = 0;
         $additional_total = 0;
+//        {"quatations":[{"itemname":"need seo","cost":"10","quantity":"1"},{"itemname":"support","cost":"15","quantity":"1","discount":"5"}],"client_id":3,"subject":"first qutation","valid_until":"2022-06-28","website_id":null,"platform_id":null,"design_id":6,"domain_id":5,"hosting_id":5,"page":null,"page_price":null,"content_page":null,"content_price":null,"payment_policy":"ddd","terms_of_service":"ddd","date":"2022-06-28","woarks":[6,7],"status":true}
+//        $other_total += $this->works();
 
         $other_total += $this->website_id ? $this->website->price : 0;
         $other_total += $this->platform_id ? $this->platform->price : 0;
@@ -85,16 +83,25 @@ class Quotation extends Model
         $other_total += $this->domain_id ? $this->domain->price : 0;
         $other_total += $this->hosting_id ? $this->hosting->price : 0;
 
-        $other_total += $this->page && $this->page_price ? $this->page * $this->page_price : 0;
-        $other_total += $this->content_page && $this->content_price ? $this->content_page * $this->content_price : 0;
+//        return $this->works;
 
-        $additional_total += $this->additional ? $this->additional_price : 0;
-        $additional_total += $this->additional2 ? $this->additional2_price : 0;
-        $additional_total += $this->additional3 ? $this->additional3_price : 0;
 
-        foreach ($this->features as $feature) {
-            $f_total += $feature->price;
+//        $other_total += $this->page && $this->page_price ? $this->page * $this->page_price : 0;
+//        $other_total += $this->content_page && $this->content_price ? $this->content_page * $this->content_price : 0;
+//
+//        $additional_total += $this->additional ? $this->additional_price : 0;
+//        $additional_total += $this->additional2 ? $this->additional2_price : 0;
+//        $additional_total += $this->additional3 ? $this->additional3_price : 0;
+//
+//        foreach ($this->features as $feature) {
+//            $f_total += $feature->price;
+//        }
+
+        foreach ($this->quotationItems as $quotationItem) {
+            $f_total += ($quotationItem->cost * $quotationItem->quantity);
+//            $f_total += $quotationItem->cost;
         }
+
         foreach ($this->works as $work) {
             $w_total += $work->price;
         }
@@ -111,6 +118,10 @@ class Quotation extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+
+    public function quotationItems(){
+        return $this->hasMany(QuotationItem::class, 'quotation_id');
+    }
 
     public function user()
     {
