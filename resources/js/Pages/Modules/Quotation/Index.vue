@@ -87,21 +87,13 @@
                                             <td>{{ qut.domain ?? " "}}</td>
                                             <td>{{ qut.hosting ?? " " }}</td>
                                             <td>
-                                                <!--  <div class="btn-group">
-                                                <button class="btn btn-flat-secondary dropdown-toggle"
-                                                        type="button" :id="user.name"
-                                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                                    Secondary
-                                                </button>
-                                                <div class="dropdown-menu" :aria-labelledby="user.name">
-                                                    <a class="dropdown-item" href="#">Option 1</a>
-                                                    <a class="dropdown-item" href="#">Option 2</a>
-                                                    <a class="dropdown-item" href="#">Option 3</a>
-                                                </div>
-                                            </div>-->
+
 
                                                 <div class="demo-inline-spacing">
-                                                    <button @click="showQuotation(qut.id)"  type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                    <button @click="showQuotation(qut.id, 'invoice')" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                        <Icon title="book" />
+                                                    </button>
+                                                    <button @click="showQuotation(qut.id, 'show')"  type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
                                                     </button>
                                                     <button @click="deleteItemModal(qut.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
@@ -154,21 +146,23 @@
     import axios from "axios";
 
     export default {
-        // props: [
-        //   'url',
-        // ],
-        // methods:{
-        //     showQuotation(id){
-        //         axios.get(route('quotations.show')).then(function (data) {
-        //             document.getElementById('showQuotation').$vb.modal.show();
-        //             console.log(data);
-        //         }).catch(function (err) {
-        //         })
-        //     }
-        // },
-        // setup(props){
-        //     console.log(props.url);
-        // }
+        props: [
+          'url',
+        ],
+        methods:{
+            showQuotation(id){
+                axios.get().then(function (data) {
+                    document.getElementById('showQuotation').$vb.modal.show();
+                    console.log(data);
+                }).catch(function (err) {
+
+                })
+            }
+        },
+
+        setup(props){
+            console.log(props.url);
+        }
     }
 
 </script>
@@ -229,18 +223,15 @@
     }
 
 
-    let showQuotation = (id) => {
-        Inertia.get(props.url+"/"+id, "",{
-            onStart: () =>{ createForm.processing = true},
-            onFinish: (data) =>{
-                createForm.processing = false;
-                document.getElementById('showQuotation').$vb.modal.show();
-            },
-            onSuccess: (data) =>{
-                document.getElementById('showQuotation').$vb.modal.show();
-            }
+    let showQuotation = (id, page) => {
+        Inertia.get(props.url+"/"+id, {page:page},{
+            preserveState: true,
+            replace:true,
         });
+    }
 
+    let createInvoice = (id) => {
+        Inertia.get(props.url+"/invoice/"+id);
     }
 
 

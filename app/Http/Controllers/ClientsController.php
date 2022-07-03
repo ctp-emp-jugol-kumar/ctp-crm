@@ -6,6 +6,8 @@ use App\Http\Requests\ClientRequest;
 use App\Models\Client;
 use App\Models\User;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 use Inertia\Response;
 use mysql_xdevapi\Exception;
 
@@ -37,6 +39,7 @@ class ClientsController extends Controller
                     'address' => $client->address,
                     'note' => $client->note,
                     'created_at' => $client->created_at->format('d M Y'),
+                    'show_url' => URL::route('clients.show', $client->id),
                 ]),
             'users' => User::all(),
             'filters' => Request::only(['search','perPage'])
@@ -73,7 +76,7 @@ class ClientsController extends Controller
      */
     public function show($id)
     {
-        //
+        return Client::findOrFail($id);
     }
 
     /**

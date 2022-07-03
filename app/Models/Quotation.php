@@ -99,16 +99,14 @@ class Quotation extends Model
 
         foreach ($this->quotationItems as $quotationItem) {
             $f_total += ($quotationItem->cost * $quotationItem->quantity);
-//            $f_total += $quotationItem->cost;
         }
 
         foreach ($this->works as $work) {
             $w_total += $work->price;
         }
 
-        $without_additional_total = $f_total + $w_total + $other_total;
-
-        $total = $without_additional_total + $additional_total - $this->discount;
+//        $without_additional_total = $f_total + $w_total + $other_total;
+//        $total = $without_additional_total + $additional_total - $this->discount;
 
         return $total;
     }

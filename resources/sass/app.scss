@@ -5,6 +5,9 @@
 @import './base/core/menu/menu-types/vertical-menu.scss';
 @import './base/themes/dark-layout.scss';
 @import './base/plugins/tables/datatables';
+@import './base/pages/app-ecommerce';
+@import './base/pages/app-ecommerce-details';
+
 
 
 .select-search-area label {
@@ -26,4 +29,9 @@
     margin-left: 0.75rem;
     width: auto;
     display: inline-block;
+}
+
+.main-menu .main-menu-content, .vertical-overlay-menu.menu-hide .main-menu .main-menu-content{
+    height: calc(100vh - 4.45rem) !important;
+    overflow-x: scroll !important;
 }

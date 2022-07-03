@@ -92,9 +92,10 @@
                                             <td>{{ user.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                    <button type="button" @click="showModal(user.show_url)" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
                                                     </button>
+
                                                     <button @click="deleteItemModal(user.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
                                                         <Icon title="trash" />
                                                     </button>
@@ -202,6 +203,14 @@
 
 
 
+    <Modal id="showClient" title="Show Client" v-vb-is:modal :size="{defalut:'lg'}">
+        <form @submit.prevent="createClientForm">
+            <div class="modal-body">
+                <h1>Hello </h1>
+            </div>
+        </form>
+    </Modal>
+
 </template>
 <script>
 
@@ -215,6 +224,7 @@
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
+    import axios from 'axios';
 
 
     let props = defineProps({
@@ -225,6 +235,8 @@
         notification:Object,
         errors:Object,
     });
+
+    let showData = ref([]);
 
     let createForm = useForm({
         name:"",
@@ -291,16 +303,23 @@
         })
     }
 
+    let showModal = (url) =>{
+        axios.get(url).then(res =>{
+            showData.value = res.data;
+            document.getElementById('showClient').$vb.modal.show();
+        }).catch(err =>{
+            console.log(err);
+        });
+    }
+
+
+
     let search = ref(props.filters.search);
     let perPage = ref(props.filters.perPage);
 
     watch([search, perPage], debounce(function ([val, val2]) {
         Inertia.get('/users', { search: val, perPage: val2 }, { preserveState: true, replace: true });
     }, 300));
-
-
-
-
 
 </script>
 

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
+use function GuzzleHttp\Promise\all;
 use function PHPUnit\Framework\isEmpty;
 
 class QuotationController extends Controller
@@ -154,21 +155,43 @@ class QuotationController extends Controller
      * @param Quotation $quotation
      * @return \Inertia\Response
      */
-    public function show(Quotation $quotation)
+    public function show($id)
     {
-        return Inertia::render('Modules/Quotation/Show', [
-            'quotation' => $quotation->with(['client', 'domain', 'hosting', 'quotationItems', 'works'])->first(),
+        $quotation = Quotation::with(['client', 'domain', 'hosting', 'quotationItems', 'works'])->findOrFail($id);
+        $sumItemsPrice = $quotation->quotationItems()->sum('cost');
+        $sumWorksPrice = $quotation->works()->sum('price');
+        $domain = $quotation->domain_id ? $quotation->domain->price : 0;
+        $hosting = $quotation->hosting_id ? $quotation->hosting->price : 0;
+        $total = $sumWorksPrice + $sumItemsPrice + $domain + $hosting;
+
+        $allItems = array();
+
+        array_push($allItems, $quotation->domain, $quotation->hosting);
+
+        array_push($allItems, ['quantity' => 1]);
+
+
+        foreach ($quotation->quotationItems as $key => $quotationItem) {
+            array_push($allItems, $quotationItem);
+        }
+        foreach ($quotation->works as $work) {
+            array_push($allItems, $work);
+        }
+
+
+        return Inertia::render(Request::input("page") == 'show' ? 'Modules/Quotation/Show' : 'Modules/Quotation/Invoice', [
+            'quotation' => $quotation,
             'others_info' => [
                 'quot_id' =>$quotation->created_at->format('Ymd').$quotation->id,
                 'creator' => $quotation->user,
                 "created" => $quotation->created_at->format('D, d F, Y'),
                 "validated" => $quotation->valid_until->format('D, d F, Y'),
-//                "content " => {!! nl2br($data->additional) !!}
+                "qut_items_price" => $quotation->quotationItems()->sum('cost'),
+                "works_price" => $quotation->works()->sum('price'),
+                "total_price" => $total,
+                'all_items' => $allItems
             ]
         ]);
-
-        //
-
     }
 
     /**
@@ -193,4 +216,7 @@ class QuotationController extends Controller
     {
         //
     }
+
+
+
 }

@@ -56,8 +56,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-md-8 mx-auto">
+                        <dvi class="col-md-12 mx-auto">
                             <div class="row">
                                 <div class="col">
                                     <div class="card">
@@ -67,9 +66,7 @@
                                         <div class="card-body">
                                             <table class="table table-striped table-bordered">
                                                 <tbody>
-                                                <tr>
-                                                    <td>Client Name: {{ props.quotation.client.name }}</td>
-                                                </tr>
+                                                <h3 class="text-capitalize">Client Name: {{ props.quotation.client.name }}</h3>
                                                 <tr>
                                                     <td>Client Email: {{ props.quotation.client.email }}</td>
                                                 </tr>
@@ -97,7 +94,7 @@
                                         <div class="card-body">
                                             <table class="table table-striped table-bordered">
                                                 <tbody>
-                                                <h2>Quotation Id: CTP-{{ props.others_info.quot_id }}</h2>
+                                                <h3>Quotation Id: CTP-{{ props.others_info.quot_id }}</h3>
                                                 <tr>
                                                     <td>Quotation Validate: {{ props.others_info.created }}</td>
                                                 </tr>
@@ -116,6 +113,9 @@
                                     </div>
                                 </div>
                             </div>
+                        </dvi>
+
+                        <div class="col-md-8 mx-auto">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="card">
@@ -123,78 +123,60 @@
                                             <h2>Subject:</h2>
                                         </div>
                                         <div class="card-body">
-                                            <table class="table">
+                                            <table class="table table-borderless table-striped">
                                                 <thead>
-                                                <tr>
-                                                    <th class="text-left bg-success">Description</th>
-                                                    <th class="text-right bg-success">Price</th>
-                                                </tr>
+                                                    <tr>
+                                                        <th class="text-left bg-primary text-white">Description</th>
+                                                        <th class="text-right bg-primary text-white">Price</th>
+                                                    </tr>
                                                 </thead>
 
                                                 <tbody>
-
-                                                <tr v-if="props.quotation.works.length > 0 ">
-                                                    <td class="text-left">
-                                                        <span  v-for="work in props.quotation.works" :key="work.id">
-                                                            {{ work.name }}<br>
-                                                        </span>
-                                                    </td>
-                                                    <td class="text-right">
-                                                        <p>price</p>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td class="text-left">{{ props.quotation.domain.name }}</td>
-                                                    <td class="text-right">
-                                                        <p> price {{  props.quotation.domain.price }}</p>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-left">{{ props.quotation.hosting.name }}</td>
-                                                    <td class="text-right">
-                                                        <p>{{ props.quotation.hosting.price }}</p>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td class="text-left">Content Development for
-                                                    </td>
-                                                    <td class="text-right">
-                                                        <p> price 55</p>
-                                                    </td>
-                                                </tr>
-
-                                                <tr v-if="props.quotation.quotation_items.length > 0">
-                                                    <td class="text-left">
-                                                        <span v-for="qit in props.quotation.quotation_items" :key="qit.id">{{ qit.name }}</span>
-                                                    </td>
-                                                    <td class="text-right">
-                                                        <p>works total</p>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td class="text-left">aditional requirement</td>
-                                                    <td class="text-right">
-                                                        <p>price 400</p>
-                                                    </td>
-                                                </tr>
-
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <td class="text-right">Sub Total =</td>
-                                                        <td class="text-right"><strong> sub total 5412</strong></td>
+                                                    <tr v-if="props.quotation.works.length > 0 ">
+                                                        <td class="">
+                                                            <span  v-for="work in props.quotation.works" :key="work.id">
+                                                                {{ work.name }}<br>
+                                                            </span>
+                                                        </td>
+                                                        <td class="text-end">
+                                                            <p>{{ props.others_info.works_price }} Tk</p>
+                                                        </td>
                                                     </tr>
+
                                                     <tr>
-                                                        <td class="text-right">Discount =</td>
-                                                        <td class="text-right"><strong>discount 6541</strong>
+                                                        <td class="text-left">{{ props.quotation.domain.name }}</td>
+                                                        <td class="text-end">
+                                                            <p>{{  props.quotation.domain.price }} Tk</p>
                                                         </td>
                                                     </tr>
                                                     <tr>
+                                                        <td class="text-left">{{ props.quotation.hosting.name }}</td>
+                                                        <td class="text-end">
+                                                            <p>{{ props.quotation.hosting.price }} Tk</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr v-if="props.quotation.quotation_items.length > 0">
+                                                        <td class="text-left">
+                                                            <span v-for="qit in props.quotation.quotation_items" :key="qit.id">{{ qit.itemname }}<br></span>
+                                                        </td>
+                                                        <td class="text-end">
+                                                            <p>{{ props.others_info.qut_items_price}} Tk</p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot class="table_bottom_border">
+                                                    <tr class="text-end">
+                                                        <td class="text-right">Sub Total =</td>
+                                                        <td class="text-right"><strong>{{ props.others_info.total_price }} Tk </strong></td>
+                                                    </tr>
+                                                    <tr class="text-end">
+                                                        <td class="text-right">Discount =</td>
+                                                        <td class="text-right"><strong>0 Tk</strong>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="text-end">
                                                         <td class="text-right">Grand Total =</td>
-                                                        <td class="text-right"><strong>grand total 5566</strong></td>
+                                                        <td class="text-right"><strong>{{ props.others_info.total_price }} Tk</strong></td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -228,5 +210,7 @@
 </script>
 
 <style scoped>
-
+    .table_bottom_border{
+        border-top: 1px solid darkblue;
+    }
 </style>
