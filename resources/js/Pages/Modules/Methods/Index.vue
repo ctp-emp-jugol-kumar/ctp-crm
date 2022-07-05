@@ -66,25 +66,22 @@
                                         <tr class="">
                                             <th class="sorting">#id</th>
                                             <th class="sorting">Name</th>
-                                            <th class="sorting">Price</th>
-                                            <th class="sorting">Description</th>
                                             <th class="sorting">Created At</th>
                                             <th class="sorting">Actions</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr v-for="user in users.data" :key="user.id">
-                                            <td>{{ user.id }}</td>
-                                            <td>{{ user.name }}</td>
-                                            <td>{{ user.price }} </td>
-                                            <td>{{ user.description }} </td>
-                                            <td>{{ user.created_at }}</td>
+                                        <tr v-for="hosting in moethods.data" :key="hosting.id">
+                                            <td>{{ hosting.id }}</td>
+                                            <td>{{ hosting.name }}</td>
+                                            <td>{{ hosting.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
-                                                        <Icon title="eye" />
+                                                    <button type="button" @click="editItem(hosting.show_url)"
+                                                            class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                        <Icon title="eye"/>
                                                     </button>
-                                                    <button @click="deleteItemModal(user.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+                                                    <button @click="deleteItemModal(hosting.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
                                                         <Icon title="trash" />
                                                     </button>
                                                 </div>
@@ -93,7 +90,7 @@
                                         </tbody>
                                     </table>
 
-                                    <Pagination :links="users.links" :from="users.from" :to="users.to" :total="users.total" />
+                                    <Pagination :links="moethods.links" :from="moethods.from" :to="moethods.to" :total="moethods.total" />
                                 </div>
                             </div>
                         </div>
@@ -130,12 +127,35 @@
     </Modal>
 
 
+    <Modal id="editData" title="Edit Hostings" v-vb-is:modal :size="{defalut:'lg'}">
+        <form @submit.prevent="updateData(editData.id)">
+            <div class="modal-body">
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Method Name: <Required/></label>
+                        <div class="">
+                            <input v-model="updateForm.name" type="text" placeholder="Method Name" class="form-control">
+                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button :disabled="createForm.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit</button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel</button>
+            </div>
+        </form>
+    </Modal>
 
 
 </template>
 <script>
 
-</script><script setup>
+</script>
+<script setup>
     import Pagination from "../../../components/Pagination"
     import Icon from '../../../components/Icon'
     import Modal from '../../../components/Modal'
@@ -144,6 +164,7 @@
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
+    import axios from "axios";
 
 
 
@@ -153,7 +174,7 @@
     // });
 
     let props = defineProps({
-        users: Object,
+        moethods: Object,
         filters: Object,
         //   can: Object,
         notification:Object,
@@ -167,6 +188,12 @@
 
         processing:Boolean,
     })
+
+    let updateForm = useForm({
+        name:"",
+    })
+
+    let editData = ref([]);
 
     let deleteItemModal = (id) => {
         Swal.fire({
@@ -215,6 +242,37 @@
         })
     }
 
+
+    let editItem = (url) => {
+        axios.get(url).then(res => {
+            editData.value = res.data;
+            updateForm.name = res.data.name;
+            document.getElementById('editData').$vb.modal.show();
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
+    let updateData = (id) => {
+        Inertia.put('methods/' + id, updateForm, {
+            preserveState: true,
+            onStart: () => {
+                createForm.processing = true
+            },
+            onFinish: () => {
+                createForm.processing = false
+            },
+            onSuccess: () => {
+                document.getElementById('editData').$vb.modal.hide()
+                createForm.reset()
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Updated.',
+                    'success'
+                )
+            },
+        })
+    }
 
     let search = ref(props.filters.search);
     let perPage = ref(props.filters.perPage);

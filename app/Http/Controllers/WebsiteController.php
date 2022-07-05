@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ServicesRequest;
+use App\Http\Requests\WorkRequest;
 use App\Models\Design;
 use App\Models\Website;
 use App\Models\Work;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
 
 
 class WebsiteController extends Controller
@@ -20,18 +24,19 @@ class WebsiteController extends Controller
     {
 
         return inertia('Modules/Services/Index', [
-            'users' => Website::query()
+            'services' => Website::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('email', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
-                ->through(fn($client) => [
-                    'id' => $client->id,
-                    'name' => $client->name,
-                    'price' => $client->price,
-                    'description' => $client->description,
-                    'created_at' => $client->created_at->format('d M Y'),
+                ->through(fn($service) => [
+                    'id' => $service->id,
+                    'name' => $service->name,
+                    'price' => $service->price,
+                    'description' => $service->description,
+                    'created_at' => $service->created_at->format('d M Y'),
+                    'show_url' => URL::route('services.show', $service->id),
                 ]),
             'filters' => Request::only(['search','perPage'])
         ]);
@@ -42,7 +47,7 @@ class WebsiteController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(ServicesRequest $request)
     {
@@ -53,35 +58,36 @@ class WebsiteController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Design  $design
-     * @return \Illuminate\Http\Response
+     * @param Website $website
+     * @return Design|Website
      */
-    public function show(Website $design)
+    public function show($id)
     {
-        //
+        return Website::findOrFail($id);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Design  $design
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Website $website
+     * @return RedirectResponse
      */
-    public function update(Request $request, Website $design)
+    public function update(ServicesRequest $request,  $id)
     {
-        //
+        $website = Website::findOrFail($id);
+        $website->update($request->validated());
+        return redirect()->route('services.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Website $website
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy($id)
     {
-
         Website::findOrFail($id)->delete();
         return redirect()->route('services.index');
     }

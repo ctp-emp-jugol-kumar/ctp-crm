@@ -10,8 +10,6 @@
     @inertiaHead
   </head>
   <body>
-
-{{--     @inertia--}}
      <div id="app" class="h-100" data-page="{{ json_encode($page) }}"></div>
   </body>
 </html>

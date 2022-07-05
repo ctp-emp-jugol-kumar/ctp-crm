@@ -6,6 +6,7 @@ use App\Http\Requests\PlatformRequest;
 use App\Models\Design;
 use App\Models\Platform;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
 
 
 class PlatformController extends Controller
@@ -19,18 +20,19 @@ class PlatformController extends Controller
     {
 
         return inertia('Modules/Platforms/Index', [
-            'users' => Platform::query()
+            'platforms' => Platform::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('email', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
-                ->through(fn($client) => [
-                    'id' => $client->id,
-                    'name' => $client->name,
-                    'price' => $client->price,
-                    'description' => $client->description,
-                    'created_at' => $client->created_at->format('d M Y'),
+                ->through(fn($platform) => [
+                    'id' => $platform->id,
+                    'name' => $platform->name,
+                    'price' => $platform->price,
+                    'description' => $platform->description,
+                    'created_at' => $platform->created_at->format('d M Y'),
+                    'show_url' => URL::route('platforms.show', $platform->id),
                 ]),
             'filters' => Request::only(['search','perPage'])
         ]);
@@ -53,11 +55,11 @@ class PlatformController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Platform  $platform
-     * @return \Illuminate\Http\Response
+     * @return Platform
      */
     public function show(Platform $platform)
     {
-        //
+        return $platform;
     }
 
     /**
@@ -65,11 +67,13 @@ class PlatformController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Platform  $platform
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Platform $platform)
+    public function update(PlatformRequest $request, Platform $platform)
     {
-        //
+        $platform->update($request->validated());
+        return redirect()->route('platforms.index');
+
     }
 
     /**

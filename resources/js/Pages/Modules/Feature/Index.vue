@@ -62,7 +62,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <table class="user-list-table table">
+                                    <table class="feature-list-table table">
                                         <thead class="table-light">
                                         <tr class="">
                                             <th class="sorting">#id</th>
@@ -74,18 +74,18 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr v-for="user in users.data" :key="user.id">
-                                            <td>{{ user.id }}</td>
-                                            <td>{{ user.name }}</td>
-                                            <td>{{ user.price }} </td>
-                                            <td>{{ user.description }} </td>
-                                            <td>{{ user.created_at }}</td>
+                                        <tr v-for="feature in features.data" :key="feature.id">
+                                            <td>{{ feature.id }}</td>
+                                            <td>{{ feature.name }}</td>
+                                            <td>{{ feature.price }} </td>
+                                            <td>{{ feature.description }} </td>
+                                            <td>{{ feature.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                    <button @click="editItem(feature.show_url)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
                                                     </button>
-                                                    <button @click="deleteItemModal(user.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+                                                    <button @click="deleteItemModal(feature.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
                                                         <Icon title="trash" />
                                                     </button>
                                                 </div>
@@ -94,7 +94,7 @@
                                         </tbody>
                                     </table>
 
-                                    <Pagination :links="users.links" :from="users.from" :to="users.to" :total="users.total" />
+                                    <Pagination :links="features.links" :from="features.from" :to="features.to" :total="features.total" />
                                 </div>
                             </div>
                         </div>
@@ -148,6 +148,45 @@
     </Modal>
 
 
+    <Modal id="editData" title="Edit Feature" v-vb-is:modal :size="{defalut:'lg'}">
+        <form @submit.prevent="updateData(editData.id)">
+            <div class="modal-body">
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Platform: <Required/></label>
+                        <select class="form-control" v-model="updateForm.platform_id">
+                            <option v-for="optoin in platforms" :value="optoin.id" :selected="optoin.id === 0">{{ optoin.name }}</option>
+                        </select>
+                        <span v-if="errors.platform_id" class="error text-sm text-danger">{{ errors.platform_id }}</span>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Feature Name: <Required/></label>
+                        <div class="">
+                            <input v-model="updateForm.name" type="text" placeholder="Feature Name" class="form-control">
+                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <label>Price: <Required/></label>
+                        <div class="">
+                            <input v-model="updateForm.price" type="number" placeholder="Feature Price" class="form-control">
+                            <span v-if="errors.price" class="error text-sm text-danger">{{ errors.price }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button :disabled="updateForm.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit</button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel</button>
+            </div>
+        </form>
+    </Modal>
+
 
 
 </template>
@@ -162,16 +201,10 @@
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
-
-
-
-    // defineProps({
-    //     users:Array,
-    //     notification:Array,
-    // });
+    import axios from "axios";
 
     let props = defineProps({
-        users: Object,
+        features: Object,
         filters: Object,
         //   can: Object,
         notification:Object,
@@ -187,6 +220,14 @@
 
         processing:Boolean,
     })
+
+    let updateForm = useForm({
+        name:"",
+        price:"",
+        platform_id:"",
+    });
+
+    let editData = ref([]);
 
     let deleteItemModal = (id) => {
         Swal.fire({
@@ -235,12 +276,47 @@
         })
     }
 
+    let editItem = (url) => {
+        axios.get(url).then(res => {
+
+            editData.value = res.data;
+
+            updateForm.name = res.data.name;
+            updateForm.price = res.data.price;
+            updateForm.platform_id = res.data.platform_id;
+
+            document.getElementById('editData').$vb.modal.show();
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
+    let updateData = (id) => {
+        Inertia.put('features/' + id, updateForm, {
+            preserveState: true,
+            onStart: () => {
+                createForm.processing = true
+            },
+            onFinish: () => {
+                createForm.processing = false
+            },
+            onSuccess: () => {
+                document.getElementById('editData').$vb.modal.hide()
+                createForm.reset()
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Updated.',
+                    'success'
+                )
+            },
+        })
+    }
 
     let search = ref(props.filters.search);
     let perPage = ref(props.filters.perPage);
 
     watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get('/users', { search: val, perPage: val2 }, { preserveState: true, replace: true });
+        Inertia.get('/features', { search: val, perPage: val2 }, { preserveState: true, replace: true });
     }, 300));
 
 

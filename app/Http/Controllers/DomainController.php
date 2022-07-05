@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DomainRequest;
+use App\Http\Requests\UpdateDomain;
 use App\Models\Domain;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
 
 
 class DomainController extends Controller
@@ -18,18 +21,19 @@ class DomainController extends Controller
     {
 
         return inertia('Modules/Domains/Index', [
-            'users' => Domain::query()
+            'domains' => Domain::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('email', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
-                ->through(fn($client) => [
-                    'id' => $client->id,
-                    'name' => $client->name,
-                    'price' => $client->price,
-                    'description' => $client->description,
-                    'created_at' => $client->created_at->format('d M Y'),
+                ->through(fn($domain) => [
+                    'id' => $domain->id,
+                    'name' => $domain->name,
+                    'price' => $domain->price,
+                    'description' => $domain->description,
+                    'created_at' => $domain->created_at->format('d M Y'),
+                    'show_url' => URL::route('domains.show', $domain->id),
                 ]),
             'filters' => Request::only(['search','perPage'])
         ]);
@@ -38,8 +42,8 @@ class DomainController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param DomainRequest $request
+     * @return RedirectResponse
      */
     public function store(DomainRequest $request)
     {
@@ -55,7 +59,7 @@ class DomainController extends Controller
      */
     public function show(Domain $domain)
     {
-        //
+        return $domain;
     }
 
     /**
@@ -63,18 +67,19 @@ class DomainController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Domain  $domain
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function update(Request $request, Domain $domain)
+    public function update(UpdateDomain $request, Domain $domain)
     {
-        //
+        $domain->update($request->validated());
+        return redirect()->route('domains.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Domain  $domain
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy(Domain $domain)
     {

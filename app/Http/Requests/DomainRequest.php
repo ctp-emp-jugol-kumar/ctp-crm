@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class DomainRequest extends FormRequest
 {
@@ -24,9 +25,16 @@ class DomainRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => ["required", "max:30", "min:3"],
+            "name" => ["required", "max:30", "min:3",  Rule::unique('domains', 'name')],
             "price" => ["required", "numeric"],
             "description" => ["nullable","string"],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+          "name.unique" => "This Name Already Exist!"
         ];
     }
 }

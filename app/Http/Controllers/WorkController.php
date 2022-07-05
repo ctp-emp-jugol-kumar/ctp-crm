@@ -5,31 +5,36 @@ namespace App\Http\Controllers;
 use App\Http\Requests\WorkRequest;
 use App\Models\Website;
 use App\Models\Work;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class WorkController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @return Response|ResponseFactory
      */
     public function index()
     {
 
         return inertia('Modules/Works/Index', [
-            'users' => Work::query()
+            'works' => Work::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('email', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
-                ->through(fn($client) => [
-                    'id' => $client->id,
-                    'name' => $client->name,
-                    'price' => $client->price,
-                    'description' => $client->description,
-                    'created_at' => $client->created_at->format('d M Y'),
+                ->through(fn($work) => [
+                    'id' => $work->id,
+                    'name' => $work->name,
+                    'price' => $work->price,
+                    'description' => $work->description,
+                    'created_at' => $work->created_at->format('d M Y'),
+                    'show_url' => URL::route('works.show', $work->id),
                 ]),
             'filters' => Request::only(['search','perPage'])
         ]);
@@ -38,8 +43,8 @@ class WorkController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param WorkRequest $request
+     * @return RedirectResponse
      */
     public function store(WorkRequest $request)
     {
@@ -50,31 +55,33 @@ class WorkController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Work  $work
-     * @return \Illuminate\Http\Response
+     * @param Work $work
+     * @return Work
      */
     public function show(Work $work)
     {
-        //
+        return $work;
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Work  $work
-     * @return \Illuminate\Http\Response
+     * @param WorkRequest $request
+     * @param Work $work
+     * @return RedirectResponse
      */
-    public function update(Request $request, Work $work)
+    public function update(WorkRequest $request, Work $work)
     {
-        //
+        $work->update($request->validated());
+        return redirect()->route('works.index');
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Work  $work
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Work $work
+     * @return RedirectResponse
      */
     public function destroy(Work $work)
     {

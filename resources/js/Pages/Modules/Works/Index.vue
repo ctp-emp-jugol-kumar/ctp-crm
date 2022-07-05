@@ -61,7 +61,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <table class="user-list-table table">
+                                    <table class="work-list-table table">
                                         <thead class="table-light">
                                         <tr class="">
                                             <th class="sorting">#id</th>
@@ -73,18 +73,19 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr v-for="user in users.data" :key="user.id">
-                                            <td>{{ user.id }}</td>
-                                            <td>{{ user.name }}</td>
-                                            <td>{{ user.price }} </td>
-                                            <td>{{ user.description }} </td>
-                                            <td>{{ user.created_at }}</td>
+                                        <tr v-for="work in works.data" :key="work.id">
+                                            <td>{{ work.id }}</td>
+                                            <td>{{ work.name }}</td>
+                                            <td>{{ work.price }} </td>
+                                            <td>{{ work.description }} </td>
+                                            <td>{{ work.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
-                                                        <Icon title="eye" />
+                                                    <button type="button" @click="editItem(work.show_url)"
+                                                            class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                        <Icon title="eye"/>
                                                     </button>
-                                                    <button @click="deleteItemModal(user.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+                                                    <button @click="deleteItemModal(work.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
                                                         <Icon title="trash" />
                                                     </button>
                                                 </div>
@@ -93,7 +94,7 @@
                                         </tbody>
                                     </table>
 
-                                    <Pagination :links="users.links" :from="users.from" :to="users.to" :total="users.total" />
+                                    <Pagination :links="works.links" :from="works.from" :to="works.to" :total="works.total" />
                                 </div>
                             </div>
                         </div>
@@ -141,6 +142,37 @@
     </Modal>
 
 
+    <Modal id="editData" title="Edit Domains" v-vb-is:modal :size="{defalut:'lg'}">
+        <form @submit.prevent="updateData(editData.id)">
+            <div class="modal-body">
+                <div class="row mb-1">
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Work Name: <Required/></label>
+                        <div class="">
+                            <input v-model="updateForm.name" type="text" placeholder="Work Name" class="form-control">
+                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <label>Price: <Required/></label>
+                        <div class="">
+                            <input v-model="updateForm.price" type="number" placeholder="Work Price" class="form-control">
+                            <span v-if="errors.price" class="error text-sm text-danger">{{ errors.price }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button :disabled="createForm.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit</button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel</button>
+            </div>
+        </form>
+    </Modal>
 
 
 </template>
@@ -155,16 +187,11 @@
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
+    import axios from "axios";
 
-
-
-    // defineProps({
-    //     users:Array,
-    //     notification:Array,
-    // });
 
     let props = defineProps({
-        users: Object,
+        works: Object,
         filters: Object,
         //   can: Object,
         notification:Object,
@@ -176,11 +203,16 @@
     let createForm = useForm({
         name:"",
         price:"",
-        platform_id:"",
 
         processing:Boolean,
     })
+    let updateForm = useForm({
+        name:"",
+        price:"",
+        platform_id:"",
+    })
 
+    let editData = ref([]);
     let deleteItemModal = (id) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -210,7 +242,6 @@
         })
     };
 
-
     let createWork = ( )=>{
         Inertia.post('works', createForm, {
             preserveState: true,
@@ -228,16 +259,47 @@
         })
     }
 
+    let editItem = (url) => {
+        axios.get(url).then(res => {
+
+            editData.value = res.data;
+
+            updateForm.name = res.data.name;
+            updateForm.price = res.data.price;
+
+            document.getElementById('editData').$vb.modal.show();
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
+    let updateData = (id) => {
+        Inertia.put('works/' + id, updateForm, {
+            preserveState: true,
+            onStart: () => {
+                createForm.processing = true
+            },
+            onFinish: () => {
+                createForm.processing = false
+            },
+            onSuccess: () => {
+                document.getElementById('editData').$vb.modal.hide()
+                createForm.reset()
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Updated.',
+                    'success'
+                )
+            },
+        })
+    }
 
     let search = ref(props.filters.search);
     let perPage = ref(props.filters.perPage);
 
     watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get('/users', { search: val, perPage: val2 }, { preserveState: true, replace: true });
+        Inertia.get('/works', { search: val, perPage: val2 }, { preserveState: true, replace: true });
     }, 300));
-
-
-
 
 
 </script>

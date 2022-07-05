@@ -6,6 +6,7 @@ use App\Http\Requests\FeatureRequest;
 use App\Models\Feature;
 use App\Models\Platform;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
 
 
 class FeatureController extends Controller
@@ -18,18 +19,19 @@ class FeatureController extends Controller
     public function index()
     {
         return inertia('Modules/Feature/Index', [
-            'users' => Feature::query()
+            'features' => Feature::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('email', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
-                ->through(fn($client) => [
-                    'id' => $client->id,
-                    'name' => $client->name,
-                    'price' => $client->price,
-                    'description' => $client->description,
-                    'created_at' => $client->created_at->format('d M Y'),
+                ->through(fn($feature) => [
+                    'id' => $feature->id,
+                    'name' => $feature->name,
+                    'price' => $feature->price,
+                    'description' => $feature->description,
+                    'created_at' => $feature->created_at->format('d M Y'),
+                    'show_url' => URL::route('features.show', $feature->id),
                 ]),
             'filters' => Request::only(['search','perPage']),
             'platforms' => Platform::all(),
@@ -52,11 +54,11 @@ class FeatureController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Feature  $feature
-     * @return \Illuminate\Http\Response
+     * @return Feature
      */
     public function show(Feature $feature)
     {
-        //
+        return $feature;
     }
 
     /**
@@ -64,11 +66,12 @@ class FeatureController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Feature  $feature
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Feature $feature)
+    public function update(FeatureRequest $request, Feature $feature)
     {
-        //
+        $feature->update($request->validated());
+        return redirect()->route('features.index');
     }
 
     /**

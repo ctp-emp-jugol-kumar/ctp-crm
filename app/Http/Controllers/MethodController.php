@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MethodRequest;
 use App\Models\Method;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
 
 class MethodController extends Controller
 {
@@ -17,18 +18,17 @@ class MethodController extends Controller
     {
 
         return inertia('Modules/Methods/Index', [
-            'users' => Method::query()
+            'moethods' => Method::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('email', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
-                ->through(fn($client) => [
-                    'id' => $client->id,
-                    'name' => $client->name,
-                    'price' => $client->price,
-                    'description' => $client->description,
-                    'created_at' => $client->created_at->format('d M Y'),
+                ->through(fn($method) => [
+                    'id' => $method->id,
+                    'name' => $method->name,
+                    'created_at' => $method->created_at->format('d M Y'),
+                    'show_url' => URL::route('methods.show', $method->id),
                 ]),
             'filters' => Request::only(['search','perPage'])
         ]);
@@ -50,11 +50,11 @@ class MethodController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Method  $method
-     * @return \Illuminate\Http\Response
+     * @return Method
      */
     public function show(Method $method)
     {
-        //
+        return $method;
     }
 
     /**
@@ -62,11 +62,12 @@ class MethodController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Method  $method
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Method $method)
+    public function update(MethodRequest $request, Method $method)
     {
-        //
+        $method->update($request->validated());
+        return redirect()->route('methods.index');
     }
 
     /**

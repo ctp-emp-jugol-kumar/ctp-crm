@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ClientRequest extends FormRequest
+class UpdateClient extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class ClientRequest extends FormRequest
     {
         return [
             "name" => ['required', 'max:30','string'],
-            "email" => ['required', 'email', Rule::unique('clients', 'email')],
+            "email" => ['required', 'email', Rule::unique('clients')->ignore($this->client)],
             "secondary_email" => ['nullable','email'],
             "phone" => ['required', 'regex:/(^([+]{1}[8]{2}|0088)?(01){1}[3-9]{1}\d{8})$/'],
             "secondary_phone" => ['nullable','regex:/(^([+]{1}[8]{2}|0088)?(01){1}[3-9]{1}\d{8})$/'],

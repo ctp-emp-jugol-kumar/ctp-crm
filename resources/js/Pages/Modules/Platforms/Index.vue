@@ -61,7 +61,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <table class="user-list-table table">
+                                    <table class="platform-list-table table">
                                         <thead class="table-light">
                                         <tr class="">
                                             <th class="sorting">#id</th>
@@ -73,18 +73,19 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr v-for="user in users.data" :key="user.id">
-                                            <td>{{ user.id }}</td>
-                                            <td>{{ user.name }}</td>
-                                            <td>{{ user.price }} </td>
-                                            <td>{{ user.description }} </td>
-                                            <td>{{ user.created_at }}</td>
+                                        <tr v-for="platform in platforms.data" :key="platform.id">
+                                            <td>{{ platform.id }}</td>
+                                            <td>{{ platform.name }}</td>
+                                            <td>{{ platform.price }} </td>
+                                            <td>{{ platform.description }} </td>
+                                            <td>{{ platform.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
-                                                        <Icon title="eye" />
+                                                    <button type="button" @click="editItem(platform.show_url)"
+                                                            class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                        <Icon title="eye"/>
                                                     </button>
-                                                    <button @click="deleteItemModal(user.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+                                                    <button @click="deleteItemModal(platform.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
                                                         <Icon title="trash" />
                                                     </button>
                                                 </div>
@@ -93,7 +94,7 @@
                                         </tbody>
                                     </table>
 
-                                    <Pagination :links="users.links" :from="users.from" :to="users.to" :total="users.total" />
+                                    <Pagination :links="platforms.links" :from="platforms.from" :to="platforms.to" :total="platforms.total" />
                                 </div>
                             </div>
                         </div>
@@ -146,6 +147,44 @@
         </form>
     </Modal>
 
+    <Modal id="editData" title="Add New Client" v-vb-is:modal :size="{defalut:'lg'}">
+        <form @submit.prevent="updateData(editData.id)">
+            <div class="modal-body">
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Package Name: <Required/></label>
+                        <div class="">
+                            <input v-model="updateForm.name" type="text" placeholder="Package Name" class="form-control">
+                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <label>Price: <Required/></label>
+                        <div class="">
+                            <input v-model="updateForm.price" type="number" placeholder="Package Price" class="form-control">
+                            <span v-if="errors.price" class="error text-sm text-danger">{{ errors.price }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Address: </label>
+                        <textarea v-model="updateForm.description" type="text" placeholder="address" rows="5" class="form-control"></textarea>
+                        <span v-if="errors.description" class="error text-sm text-danger">{{ errors.description }}</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button :disabled="createForm.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit</button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel</button>
+            </div>
+        </form>
+    </Modal>
 
 
 </template>
@@ -161,16 +200,12 @@
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
+    import axios from "axios";
 
 
-
-    // defineProps({
-    //     users:Array,
-    //     notification:Array,
-    // });
 
     let props = defineProps({
-        users: Object,
+        platforms: Object,
         filters: Object,
         //   can: Object,
         notification:Object,
@@ -186,6 +221,16 @@
 
         processing:Boolean,
     })
+
+    let updateForm = useForm({
+        name:"",
+        price:"",
+        description:"",
+
+        processing:Boolean,
+    })
+
+    let editData = ref([]);
 
     let deleteItemModal = (id) => {
         Swal.fire({
@@ -234,12 +279,45 @@
         })
     }
 
+    let editItem = (url) => {
+        axios.get(url).then(res => {
+            editData.value = res.data;
+            updateForm.name = res.data.name;
+            updateForm.price = res.data.price;
+            updateForm.description = res.data.description;
+
+            document.getElementById('editData').$vb.modal.show();
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
+    let updateData = (id) => {
+        Inertia.put('platforms/' + id, updateForm, {
+            preserveState: true,
+            onStart: () => {
+                createForm.processing = true
+            },
+            onFinish: () => {
+                createForm.processing = false
+            },
+            onSuccess: () => {
+                document.getElementById('editData').$vb.modal.hide()
+                createForm.reset()
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Updated.',
+                    'success'
+                )
+            },
+        })
+    }
 
     let search = ref(props.filters.search);
     let perPage = ref(props.filters.perPage);
 
     watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get('/users', { search: val, perPage: val2 }, { preserveState: true, replace: true });
+        Inertia.get('/platforms', { search: val, perPage: val2 }, { preserveState: true, replace: true });
     }, 300));
 
 

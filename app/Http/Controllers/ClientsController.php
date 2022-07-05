@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ClientRequest;
+use App\Http\Requests\UpdateClient;
 use App\Models\Client;
 use App\Models\User;
 use Illuminate\Support\Facades\Request;
@@ -82,13 +83,14 @@ class ClientsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param ClientRequest $request
+     * @param Client $client
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateClient $request, Client $client)
     {
-        //
+        $client->update($request->validated());
+        return redirect()->route('clients.index');
     }
 
     /**

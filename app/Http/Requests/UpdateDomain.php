@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class DesignRequest extends FormRequest
+class UpdateDomain extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,7 @@ class DesignRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => ["required", "max:30", "min:3"],
+            "name" => ["required", "max:30", "min:3", Rule::unique('domains')->ignore($this->domain)],
             "price" => ["required", "numeric"],
             "description" => ["nullable","string"],
         ];

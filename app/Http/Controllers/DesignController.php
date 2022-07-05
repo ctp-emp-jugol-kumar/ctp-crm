@@ -6,6 +6,7 @@ use App\Http\Requests\DesignRequest;
 use App\Models\Client;
 use App\Models\Design;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
 
 
 class DesignController extends Controller
@@ -19,18 +20,19 @@ class DesignController extends Controller
     {
 
         return inertia('Modules/Package/Index', [
-            'users' => Design::query()
+            'packages' => Design::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('email', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
-                ->through(fn($client) => [
-                    'id' => $client->id,
-                    'name' => $client->name,
-                    'price' => $client->price,
-                    'description' => $client->description,
-                    'created_at' => $client->created_at->format('d M Y'),
+                ->through(fn($package) => [
+                    'id' => $package->id,
+                    'name' => $package->name,
+                    'price' => $package->price,
+                    'description' => $package->description,
+                    'created_at' => $package->created_at->format('d M Y'),
+                    'show_url' => URL::route('designs.show', $package->id),
                 ]),
             'filters' => Request::only(['search','perPage'])
         ]);
@@ -57,7 +59,7 @@ class DesignController extends Controller
      */
     public function show(Design $design)
     {
-        //
+        return $design;
     }
 
     /**
@@ -65,11 +67,12 @@ class DesignController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Design  $design
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Design $design)
+    public function update(DesignRequest $request, Design $design)
     {
-        //
+        $design->update($request->validated());
+        return redirect()->route('designs.index');
     }
 
     /**
