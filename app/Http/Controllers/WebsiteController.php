@@ -26,7 +26,7 @@ class WebsiteController extends Controller
         return inertia('Modules/Services/Index', [
             'services' => Website::query()
                 ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('email', 'like', "%{$search}%");
+                    $query->where('name', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
@@ -38,7 +38,8 @@ class WebsiteController extends Controller
                     'created_at' => $service->created_at->format('d M Y'),
                     'show_url' => URL::route('services.show', $service->id),
                 ]),
-            'filters' => Request::only(['search','perPage'])
+            'filters' => Request::only(['search','perPage']),
+            'main_url' => URL::route('services.index'),
         ]);
 
     }

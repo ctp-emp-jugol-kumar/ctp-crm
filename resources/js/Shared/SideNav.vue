@@ -54,7 +54,7 @@
                         </Link>
                     </li>
 
-
+<!--
                     <li class=" nav-item has-sub" :class="{'open' : clickMenu === 1}"  @click="toggleSubMenu(1)">
                         <Link preserve-scroll class="d-flex align-items-center" href="#">
                             <vue-feather type="file-text" />
@@ -141,6 +141,9 @@
                             </li>
                         </ul>
                     </li>
+
+                    -->
+
 
                     <li class=" nav-item has-sub" :class="{'open' : clickMenu === 4}"  @click="toggleSubMenu(4)">
                         <Link preserve-scroll class="d-flex align-items-center" href="#">
@@ -246,38 +249,6 @@
                             <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
                         </Link>
                     </li>
-
-
-                    <li class=" nav-item">
-                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/purposes">
-                            <vue-feather type="message-square" />
-                            <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
-                        </Link>
-                    </li>
-
-
-                    <li class=" nav-item">
-                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/purposes">
-                            <vue-feather type="message-square" />
-                            <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
-                        </Link>
-                    </li>
-
-                    <li class=" nav-item">
-                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/purposes">
-                            <vue-feather type="message-square" />
-                            <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
-                        </Link>
-                    </li>
-
-
-                    <li class=" nav-item">
-                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/purposes">
-                            <vue-feather type="message-square" />
-                            <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
-                        </Link>
-                    </li>
-
                 </ul>
             </div>
         </perfect-scrollbar>

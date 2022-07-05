@@ -7,10 +7,7 @@ use App\Http\Requests\UpdateClient;
 use App\Models\Client;
 use App\Models\User;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
-use Inertia\Response;
-use mysql_xdevapi\Exception;
 
 
 class ClientsController extends Controller
@@ -23,6 +20,7 @@ class ClientsController extends Controller
     public function index()
     {
         return inertia('Modules/Clients/Index', [
+            $search = Request::input('search'),
             'clients' => Client::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('email', 'like', "%{$search}%");
@@ -43,7 +41,8 @@ class ClientsController extends Controller
                     'show_url' => URL::route('clients.show', $client->id),
                 ]),
             'users' => User::all(),
-            'filters' => Request::only(['search','perPage'])
+            'filters' => Request::only(['search','perPage']),
+            "main_url" => Url::route('clients.index'),
         ]);
 
 

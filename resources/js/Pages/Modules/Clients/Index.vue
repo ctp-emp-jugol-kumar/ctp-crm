@@ -105,8 +105,7 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>{{ user.phone }} <span
-                                                v-if="user.secondary_phone">/ {{ user.secondary_phone }}</span></td>
+                                            <td>{{ user.phone }} <span v-if="user.secondary_phone">/ {{ user.secondary_phone }}</span></td>
                                             <td>{{ user.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
@@ -125,8 +124,7 @@
                                         </tbody>
                                     </table>
 
-                                    <Pagination :links="users.links" :from="users.from" :to="users.to"
-                                                :total="users.total"/>
+                                    <Pagination :links="clients.links" :from="clients.from" :to="clients.to" :total="clients.total"/>
                                 </div>
                             </div>
                         </div>
@@ -359,6 +357,7 @@
         //   can: Object,
         notification: Object,
         errors: Object,
+        main_url: "",
     });
 
 
@@ -496,7 +495,7 @@
     let perPage = ref(props.filters.perPage);
 
     watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get('/users', {search: val, perPage: val2}, {preserveState: true, replace: true});
+        Inertia.get(props.main_url, {search: val, perPage: val2}, {preserveState: true, replace: true});
     }, 300));
 
 </script>

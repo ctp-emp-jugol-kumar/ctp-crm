@@ -203,18 +203,13 @@
     import axios from "axios";
 
 
-
-    // defineProps({
-    //     services:Array,
-    //     notification:Array,
-    // });
-
     let props = defineProps({
         services: Object,
         filters: Object,
         //   can: Object,
         notification:Object,
         errors:Object,
+        main_url: String,
     });
 
 
@@ -321,7 +316,7 @@
     let perPage = ref(props.filters.perPage);
 
     watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get('/services', { search: val, perPage: val2 }, { preserveState: true, replace: true });
+        Inertia.get(props.main_url, { search: val, perPage: val2 }, { preserveState: true, replace: true });
     }, 300));
 
 

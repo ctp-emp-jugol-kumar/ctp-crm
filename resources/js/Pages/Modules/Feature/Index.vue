@@ -68,7 +68,6 @@
                                             <th class="sorting">#id</th>
                                             <th class="sorting">Name</th>
                                             <th class="sorting">Price</th>
-                                            <th class="sorting">Description</th>
                                             <th class="sorting">Created At</th>
                                             <th class="sorting">Actions</th>
                                         </tr>
@@ -78,7 +77,6 @@
                                             <td>{{ feature.id }}</td>
                                             <td>{{ feature.name }}</td>
                                             <td>{{ feature.price }} </td>
-                                            <td>{{ feature.description }} </td>
                                             <td>{{ feature.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
@@ -210,6 +208,7 @@
         notification:Object,
         errors:Object,
         platforms:Object,
+        main_url:"",
     });
 
 
@@ -316,7 +315,7 @@
     let perPage = ref(props.filters.perPage);
 
     watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get('/features', { search: val, perPage: val2 }, { preserveState: true, replace: true });
+        Inertia.get(props.main_url, { search: val, perPage: val2 }, { preserveState: true, replace: true });
     }, 300));
 
 

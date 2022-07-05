@@ -60,11 +60,12 @@
                                         <div class="modal-body">
                                                 <div class="row mb-1">
                                                     <div class="col-md">
-                                                        <label for="select2-basic">Client : <Required/></label>
+                                                        <label>Client : <Required/></label>
                                                         <div class="">
-                                                            <select class="select2 form-select" id="select2-basic" v-model="data.client_id">
-                                                                <option v-for="option in clients" :value="option.id">{{ option.name }}</option>
-                                                            </select>
+                                                            <select2 :options="clients" :reduce="client => client.id"  label="name"> </select2>
+<!--                                                            <select class="select2 form-select" id="select2-basic" v-model="data.client_id">-->
+<!--                                                                <option v-for="option in clients" :value="option.id">{{ option.name }}</option>-->
+<!--                                                            </select>-->
                                                             <span  class="error text-sm text-danger" v-if="errors.client_id">{{ errors.client_id}}</span>
                                                         </div>
                                                     </div>
@@ -79,9 +80,9 @@
 
                                                 <div class="row mb-1">
                                                     <div class="col-md">
-                                                        <label for="select2-basic">Date : <Required/></label>
+                                                        <label >Date : <Required/></label>
                                                         <div class="">
-                                                            <input type="date" class="form-control" v-model="data.date">
+                                                            <Datepicker v-model="data.date" :monthChangeOnScroll="false"  placeholder="Select Date" autoApply></Datepicker>
                                                             <span  class="error text-sm text-danger" v-if="errors.date">{{ errors.date }}</span>
                                                         </div>
                                                     </div>
@@ -102,7 +103,7 @@
                                         <div class="modal-body">
                                             <div class="row mb-1">
                                                 <div class="col-md">
-                                                    <label for="select2-basic">Total page : <Required/></label>
+                                                    <label >Total page : <Required/></label>
                                                     <div class="">
                                                         <input  type="text" placeholder="Subjects" v-model="data.page" class="form-control">
                                                         <span  class="error text-sm text-danger"></span>
@@ -125,7 +126,7 @@
                                         <div class="modal-body">
                                             <div class="row mb-1">
                                                 <div class="col-md">
-                                                    <label for="select2-basic">Content Of Page : <Required/></label>
+                                                    <label >Content Of Page : <Required/></label>
                                                     <div class="">
                                                         <input  type="text" placeholder="Subjects" v-model="data.content_page" class="form-control">
                                                         <span  class="error text-sm text-danger"></span>
@@ -232,7 +233,7 @@
                                         <div class="modal-body">
                                             <div class="row mb-1">
                                                 <div class="col-md">
-                                                    <label for="select2-basic">Payment Policy : <Required/></label>
+                                                    <label >Payment Policy : <Required/></label>
                                                     <div class="">
                                                         <textarea  type="text" placeholder="Subjects" v-model="data.payment_policy" class="form-control"></textarea>
 
@@ -424,7 +425,9 @@
 
 <script>
     export default {
+
         el: '.container',
+
         data() {
             return {
                 data:{
@@ -453,10 +456,13 @@
                     woarks:[],
                     status:"",
 
-
                     // processing:Boolean,
-
-                }
+                    options: [
+                        'foo',
+                        'bar',
+                        'baz'
+                    ]
+                },
             }
         },
 

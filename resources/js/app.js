@@ -7,8 +7,12 @@ import Layout from "./Shared/Layout";
 import store from './Store'
 import { createVbPlugin } from 'vue3-plugin-bootstrap5'
 import { Alert, Button, Carousel, Collapse, Dropdown, Modal, Offcanvas, Popover, ScrollSpy, Tab, Toast, Tooltip } from 'bootstrap'
-
 let vbPlugin = createVbPlugin({ Alert, Button, Carousel, Collapse, Dropdown, Modal, Offcanvas, Popover, ScrollSpy, Tab, Toast, Tooltip  })
+import 'vue-select/dist/vue-select.css';
+import vSelect from 'vue-select'
+
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 createInertiaApp({
   resolve: name => {
@@ -29,6 +33,8 @@ createInertiaApp({
       .component("Head", Head)
       .component(VueFeather.name, VueFeather)
       .component("Required", Required)
+      .component("select2", vSelect)
+      .component("Datepicker", Datepicker)
       .mount(el);
   },
 

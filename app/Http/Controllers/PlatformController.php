@@ -22,7 +22,7 @@ class PlatformController extends Controller
         return inertia('Modules/Platforms/Index', [
             'platforms' => Platform::query()
                 ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('email', 'like', "%{$search}%");
+                    $query->where('name', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
@@ -34,7 +34,8 @@ class PlatformController extends Controller
                     'created_at' => $platform->created_at->format('d M Y'),
                     'show_url' => URL::route('platforms.show', $platform->id),
                 ]),
-            'filters' => Request::only(['search','perPage'])
+            'filters' => Request::only(['search','perPage']),
+            'main_url' => URL::route('platforms.index'),
         ]);
 
     }

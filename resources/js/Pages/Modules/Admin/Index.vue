@@ -125,13 +125,6 @@
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
 
-
-
-    // defineProps({
-    //     users:Array,
-    //     notification:Array,
-    // });
-
     let props = defineProps({
         users: Object,
         filters: Object,

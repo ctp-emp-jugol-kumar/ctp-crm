@@ -44,6 +44,7 @@ Route::prefix('admin')->group(function(){
         // user management
         Route::resource('users', AdminController::class);
         // clients management
+        Route::get('clients', [ClientsController::class, 'index']);
         Route::resource('clients', ClientsController::class);
         // designs management
         Route::resource('designs', DesignController::class);

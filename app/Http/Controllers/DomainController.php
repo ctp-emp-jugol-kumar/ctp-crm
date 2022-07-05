@@ -19,11 +19,10 @@ class DomainController extends Controller
      */
     public function index()
     {
-
         return inertia('Modules/Domains/Index', [
             'domains' => Domain::query()
                 ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('email', 'like', "%{$search}%");
+                    $query->where('name', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
@@ -35,7 +34,8 @@ class DomainController extends Controller
                     'created_at' => $domain->created_at->format('d M Y'),
                     'show_url' => URL::route('domains.show', $domain->id),
                 ]),
-            'filters' => Request::only(['search','perPage'])
+            'filters' => Request::only(['search','perPage']),
+            'main_url' => URL::route('domains.index'),
         ]);
     }
 

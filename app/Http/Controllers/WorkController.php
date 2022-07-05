@@ -24,7 +24,7 @@ class WorkController extends Controller
         return inertia('Modules/Works/Index', [
             'works' => Work::query()
                 ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('email', 'like', "%{$search}%");
+                    $query->where('name', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
@@ -36,7 +36,8 @@ class WorkController extends Controller
                     'created_at' => $work->created_at->format('d M Y'),
                     'show_url' => URL::route('works.show', $work->id),
                 ]),
-            'filters' => Request::only(['search','perPage'])
+            'filters' => Request::only(['search','perPage']),
+            'main_url' =>  URL::route('works.index'),
         ]);
     }
 

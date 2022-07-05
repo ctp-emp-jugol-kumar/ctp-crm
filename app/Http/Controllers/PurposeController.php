@@ -19,7 +19,7 @@ class PurposeController extends Controller
         return inertia('Modules/Purpose/Index', [
             'purposes' => Purpose::query()
                 ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('email', 'like', "%{$search}%");
+                    $query->where('name', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
@@ -31,7 +31,8 @@ class PurposeController extends Controller
                     'created_at' => $purpose->created_at->format('d M Y'),
                     'show_url' => URL::route('purposes.show', $purpose->id),
                 ]),
-            'filters' => Request::only(['search','perPage'])
+            'filters' => Request::only(['search','perPage']),
+            'main_url' => URL::route('purposes.index'),
         ]);
     }
 
@@ -51,7 +52,7 @@ class PurposeController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Purpose  $purpose
-     * @return \Illuminate\Http\Response
+     * @return Purpose
      */
     public function show(Purpose $purpose)
     {

@@ -197,6 +197,8 @@
         notification:Object,
         errors:Object,
         platforms:Object,
+
+        main_url:String,
     });
 
 
@@ -298,7 +300,7 @@
     let perPage = ref(props.filters.perPage);
 
     watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get('/works', { search: val, perPage: val2 }, { preserveState: true, replace: true });
+        Inertia.get(props.main_url, { search: val, perPage: val2 }, { preserveState: true, replace: true });
     }, 300));
 
 

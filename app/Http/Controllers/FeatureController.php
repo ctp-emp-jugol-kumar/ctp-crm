@@ -21,7 +21,7 @@ class FeatureController extends Controller
         return inertia('Modules/Feature/Index', [
             'features' => Feature::query()
                 ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('email', 'like', "%{$search}%");
+                    $query->where('name', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
@@ -35,6 +35,7 @@ class FeatureController extends Controller
                 ]),
             'filters' => Request::only(['search','perPage']),
             'platforms' => Platform::all(),
+            'main_url' =>  URL::route('features.index'),
         ]);
     }
 

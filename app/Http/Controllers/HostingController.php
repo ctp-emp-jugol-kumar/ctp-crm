@@ -20,7 +20,7 @@ class HostingController extends Controller
         return inertia('Modules/Hostings/Index', [
             'hostings' => Hosting::query()
                 ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('email', 'like', "%{$search}%");
+                    $query->where('name', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
@@ -32,7 +32,8 @@ class HostingController extends Controller
                     'created_at' => $hosting->created_at->format('d M Y'),
                     'show_url' => URL::route('hostings.show', $hosting->id),
                 ]),
-            'filters' => Request::only(['search','perPage'])
+            'filters' => Request::only(['search','perPage']),
+            'main_url' => URL::route('hostings.index'),
         ]);
     }
 

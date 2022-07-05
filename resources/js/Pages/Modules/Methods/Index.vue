@@ -166,13 +166,6 @@
     import {useForm} from "@inertiajs/inertia-vue3";
     import axios from "axios";
 
-
-
-    // defineProps({
-    //     users:Array,
-    //     notification:Array,
-    // });
-
     let props = defineProps({
         moethods: Object,
         filters: Object,
@@ -180,6 +173,7 @@
         notification:Object,
         errors:Object,
         platforms:Object,
+        main_url: String,
     });
 
 
@@ -278,7 +272,7 @@
     let perPage = ref(props.filters.perPage);
 
     watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get('/users', { search: val, perPage: val2 }, { preserveState: true, replace: true });
+        Inertia.get(props.main_url, { search: val, perPage: val2 }, { preserveState: true, replace: true });
     }, 300));
 
 
