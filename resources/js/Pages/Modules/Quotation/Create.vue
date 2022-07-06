@@ -21,7 +21,9 @@
                 <div class="content-header-right text-md-end col-md-3 col-12 d-md-block d-none">
                     <div class="mb-1 breadcrumb-right">
                         <div class="dropdown">
-                            <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="grid"></i></button>
+                            <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                data-feather="grid"></i></button>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="app-todo.html">
                                     <i class="me-1" data-feather="check-square"></i>
@@ -48,7 +50,9 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Quotations Information's </h4>
-                                    <Link href="/admin/quotations" class="dt-button add-new btn btn-primary">Manage Quotations</Link>
+                                    <Link href="/admin/quotations" class="dt-button add-new btn btn-primary">Manage
+                                        Quotations
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -58,194 +62,74 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="modal-body">
-                                                <div class="row mb-1">
-                                                    <div class="col-md">
-                                                        <label>Client : <Required/></label>
-                                                        <div class="">
-                                                            <select2 :options="clients" :reduce="client => client.id"  label="name"> </select2>
-<!--                                                            <select class="select2 form-select" id="select2-basic" v-model="data.client_id">-->
-<!--                                                                <option v-for="option in clients" :value="option.id">{{ option.name }}</option>-->
-<!--                                                            </select>-->
-                                                            <span  class="error text-sm text-danger" v-if="errors.client_id">{{ errors.client_id}}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md">
-                                                        <label>Subject : </label>
-                                                        <div class="">
-                                                            <input  type="text" placeholder="Subjects" v-model="data.subject" class="form-control">
-                                                            <span  class="error text-sm text-danger"></span>
-                                                        </div>
+                                            <div class="row mb-1">
+                                                <div class="col-md">
+                                                    <label>Client :
+                                                        <Required/>
+                                                    </label>
+                                                    <div class="">
+                                                        <select2 :options="clients" :reduce="client => client.id"
+                                                                 label="name" placeholder="Select Client"></select2>
                                                     </div>
                                                 </div>
-
-                                                <div class="row mb-1">
-                                                    <div class="col-md">
-                                                        <label >Date : <Required/></label>
-                                                        <div class="">
-                                                            <Datepicker v-model="data.date" :monthChangeOnScroll="false"  placeholder="Select Date" autoApply></Datepicker>
-                                                            <span  class="error text-sm text-danger" v-if="errors.date">{{ errors.date }}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md">
-                                                        <label>Valid until : <Required/></label>
-                                                        <div class="">
-                                                            <input type="date" class="form-control" v-model="data.valid_until">
-                                                            <span  class="error text-sm text-danger" v-if="errors.valid_until">{{ errors.valid_until }}</span>
-                                                        </div>
+                                                <div class="col-md">
+                                                    <label>Subject : </label>
+                                                    <div class="">
+                                                        <input type="text" placeholder="Subjects" v-model="data.subject"
+                                                               class="form-control">
+                                                        <span class="error text-sm text-danger"></span>
+                                                        <InputFieldError :errors="errors.subject"/>
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="row mb-1">
+                                                <div class="col-md">
+                                                    <label>Date :
+                                                        <Required/>
+                                                    </label>
+                                                    <div class="">
+                                                        <Datepicker v-model="data.date" :monthChangeOnScroll="false"
+                                                                    placeholder="Select Date" autoApply></Datepicker>
+                                                        <InputFieldError :errors="errors.date"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md">
+                                                    <label>Valid until :
+                                                        <Required/>
+                                                    </label>
+
+                                                    <div class="">
+                                                        <Datepicker v-model="data.valid_until" :monthChangeOnScroll="false"
+                                                                    placeholder="Select Date" autoApply></Datepicker>
+                                                        <InputFieldError :errors="errors.valid_until"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-<!--
+                                <ServiceCard :cardTitle="worksTitle" :items="works"/>
+                                <ServiceCard :cardTitle="domainTitle" :items="domains"/>
+                                <ServiceCard :cardTitle="hostingTitle" :items="hostings"/>
+                                <ServiceCard :cardTitle="packageTitle" :items="packages"/>
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="modal-body">
                                             <div class="row mb-1">
                                                 <div class="col-md">
-                                                    <label >Total page : <Required/></label>
+                                                    <label>Payment Policy :
+                                                        <Required/>
+                                                    </label>
                                                     <div class="">
-                                                        <input  type="text" placeholder="Subjects" v-model="data.page" class="form-control">
-                                                        <span  class="error text-sm text-danger"></span>
+                                                        <TextEditor></TextEditor>
                                                     </div>
-                                                </div>
-                                                <div class="col-md">
-                                                    <label>Price Parpage : </label>
-                                                    <div class="">
-                                                        <input  type="text" placeholder="Subjects" v-model="data.page_price" class="form-control">
-                                                        <span  class="error text-sm text-danger"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="modal-body">
-                                            <div class="row mb-1">
-                                                <div class="col-md">
-                                                    <label >Content Of Page : <Required/></label>
-                                                    <div class="">
-                                                        <input  type="text" placeholder="Subjects" v-model="data.content_page" class="form-control">
-                                                        <span  class="error text-sm text-danger"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md">
-                                                    <label>Content Page Price : </label>
-                                                    <div class="">
-                                                        <input  type="text" placeholder="Subjects" v-model="data.content_price" class="form-control">
-                                                        <span  class="error text-sm text-danger"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Select Service</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="demo-inline-spacing">
-                                            <div class="form-check form-check-primary" v-for="(option , index) in works" :key="index">
-                                                <input type="checkbox" class="form-check-input" v-model="data.woarks" :id="option.name" :value="option.id" :checked="index === 0">
-                                                <label class="form-check-label" :for="option.name">{{ option.name }}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Select Domain</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="demo-inline-spacing">
-                                            <div class="form-check form-check-primary" v-for="(option , index) in domains" :key="index">
-                                                <input type="radio" v-model="data.domain_id" :id="option.name" :value="option.id" class="form-check-input" :checked="index===0">
-                                                <label class="form-check-label" :for="option.name">{{ option.name }}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Select Hostings</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="demo-inline-spacing">
-                                            <div class="form-check form-check-primary" v-for="(option , index) in hostings" :key="index">
-                                                <input type="radio" v-model="data.hosting_id" :id="option.name" :value="option.id" class="form-check-input" :checked="index===0">
-                                                <label class="form-check-label" :for="option.name">{{ option.name }}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Select a Package</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="demo-inline-spacing">
-                                            <div class="form-check form-check-primary" v-for="(option , index) in packages" :key="index">
-                                                <input type="radio" v-model="data.design_id" :id="option.name" :value="option.id"  class="form-check-input" :checked="index===0">
-                                                <label class="form-check-label" :for="option.name">{{ option.name }}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                   <!--             <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Select a platform</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="demo-inline-spacing">
-                                            <div class="form-check form-check-primary" v-for="(option , index) in platforms" :key="index">
-                                                <input type="radio"  v-model="data.platform_id" :id="option.name" :value="option.id" class="form-check-input" :checked="index===0">
-                                                <label class="form-check-label" :for="option.name">{{ option.name }}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Works</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="demo-inline-spacing">
-                                            <div class="form-check form-check-primary" v-for="(option , index) in works" :key="index">
-                                                <input type="checkbox" class="form-check-input" v-model="data.woarks" :id="option.name" :value="option.id" :checked="index === 0">
-                                                <label class="form-check-label" :for="option.name">{{ option.name }}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
-
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="modal-body">
-                                            <div class="row mb-1">
-                                                <div class="col-md">
-                                                    <label >Payment Policy : <Required/></label>
-                                                    <div class="">
-                                                        <textarea  type="text" placeholder="Subjects" v-model="data.payment_policy" class="form-control"></textarea>
-
-                                                        <span  class="error text-sm text-danger"></span>
-                                                    </div>
-
                                                 </div>
                                                 <div class="col-md">
                                                     <label>terms_of_service : </label>
                                                     <div class="">
-                                                        <textarea  type="text" placeholder="Subjects" v-model="data.terms_of_service" class="form-control"></textarea>
-                                                        <span  class="error text-sm text-danger"></span>
+                                                        <TextEditor></TextEditor>
                                                     </div>
                                                 </div>
                                             </div>
@@ -254,74 +138,70 @@
                                 </div>
 
 
-
-                                <div class="card" >
-                                    <div class="card-body">
-                                        <div data-repeater-item v-for="(item, index) in data.quatations">
-                                            <h4 class="card-title">Test form - {{index + 1}}</h4>
-                                            <div class="row d-flex align-items-center">
-                                                <div class="col-md-4 col-12">
-                                                    <div class="mb-1">
-                                                        <label class="form-label" for="quatitiontitle">Item Name</label>
-                                                        <textarea type="text" id="quatitiontitle" class="form-control" rows="4" v-model="data.quatations[index].itemname"  aria-describedby="itemname" placeholder="Vuexy Admin Template" />
+                                <div class="row">
+                                    <div class="col-md-4" data-repeater-item v-for="(item, index) in data.quatations">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title">index: {{ index }} total: {{ data.quatations.length - 1}}</h4>
+                                                <div class="row d-flex align-items-center">
+                                                    <div class="col-12">
+                                                        <div class="mb-1">
+                                                            <TextEditor v-model="data.quatations[index].itemname" placeholder="Item Details"/>
+                                                        </div>
+                                                        <div class="input-group border-0 d-flex">
+                                                            <QtyButton/>
+                                                            <input type="number" class="form-control rounded-start" placeholder="Price">
+                                                            <input type="number" class="form-control" placeholder="Discount">
+                                                        </div>
                                                     </div>
                                                 </div>
-
-                                                <div class="col-md-2 col-12">
-                                                    <div class="mb-1">
-                                                        <label class="form-label" for="itemcost">Cost</label>
-                                                        <input type="text" id="itemcost" class="form-control" v-model="data.quatations[index].cost" aria-describedby="itemcost" placeholder="32" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-2 col-12">
-                                                    <div class="mb-1">
-                                                        <label class="form-label" for="itemquantity">Quantity</label>
-                                                        <input type="text" id="itemquantity" class="form-control" v-model="data.quatations[index].quantity" aria-describedby="itemquantity" placeholder="1" />
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-2 col-12">
-                                                    <div class="mb-1">
-                                                        <label class="form-label" for="itemdiscount">Discount</label>
-                                                        <input type="text" id="itemdiscount" class="form-control" v-model="data.quatations[index].discount" aria-describedby="itemquantity" placeholder="1" />
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="col-md-2 col-12" v-if="index != 0">
-                                                    <button class="btn btn-outline-danger text-nowrap px-1" @click="deleteRow(index)" data-repeater-delete type="button">
-                                                        <i data-feather="x" class="me-25"></i>
-                                                        <span>Delete</span>
-                                                    </button>
-                                                </div>
+                                                <button
+                                                    v-if="index === data.quatations.length - 1"
+                                                    class="btn btn-primary btn-sm float-end mt-25"
+                                                    type="button"
+                                                    name="button"
+                                                    @click="addRow">
+                                                    <vue-feather type="plus" />
+                                                </button>
+                                                <button
+                                                    v-else
+                                                    class="btn btn-danger btn-sm float-end mt-25"
+                                                    @click="deleteRow(index)"
+                                                    data-repeater-delete
+                                                    type="button">
+                                                    <vue-feather type="trash" />
+                                                </button>
                                             </div>
-                                            <hr />
                                         </div>
-                                        <button class="btn btn-primary" type="button" name="button" @click="addRow">Add form fields</button>
                                     </div>
                                 </div>
 
-
-                                <div class="card" >
+                                <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex align-item-center justify-content-between">
                                             <div class="d-flex flex-column">
-                                                <label class="form-check-label mb-50" for="customSwitch10">Primary</label>
+                                                <label class="form-check-label mb-50"
+                                                       for="customSwitch10">Primary</label>
                                                 <div class="form-check form-switch form-check-primary">
-                                                    <input type="checkbox" class="form-check-input" v-model="data.status" id="customSwitch10" checked />
+                                                    <input type="checkbox" class="form-check-input"
+                                                           v-model="data.status" id="customSwitch10" checked/>
                                                     <label class="form-check-label" for="customSwitch10">
-                                                        <span class="switch-icon-left"><i data-feather="check"></i></span>
+                                                        <span class="switch-icon-left"><i
+                                                            data-feather="check"></i></span>
                                                         <span class="switch-icon-right"><i data-feather="x"></i></span>
                                                     </label>
                                                 </div>
                                             </div>
 
                                             <div>
-                                                <button  type="submit"
-                                                         class="btn btn-primary waves-effect waves-float waves-light me-2">Submit</button>
-                                                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                                                        aria-label="Close">Cancel</button>
+                                                <button type="submit"
+                                                        class="btn btn-primary waves-effect waves-float waves-light me-2">
+                                                    Submit
+                                                </button>
+                                                <button type="reset" class="btn btn-outline-secondary"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close">Cancel
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -341,7 +221,6 @@
 </template>
 
 
-
 <script setup>
     import Pagination from "../../../components/Pagination"
     import Icon from '../../../components/Icon'
@@ -351,9 +230,12 @@
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
-
-
-
+    import TextEditor from "../../../components/TextEditor";
+    import QuantityButton from "../../../components/QuantityButton";
+    import ServiceItem from "../../../components/ServiceItem";
+    import ServiceCard from "../../../components/ServiceCard";
+    import InputFieldError from "../../../components/InputFieldError";
+    import QtyButton from "../../../components/QtyButton";
 
     let props = defineProps({
         clients: Object,
@@ -363,17 +245,16 @@
         works: Object,
         filters: Object,
         domains: Object,
-        hostings:Object,
-        //   can: Object,
-        notification:Object,
-        errors:Object,
+        hostings: Object,
+        notification: Object,
+        errors: Object,
     })
 
 
-    // let createForm = useForm({
-    //     processing:Boolean,
-    // })
-
+    let worksTitle = "Select work services"
+    let domainTitle = "Select domains"
+    let hostingTitle = "Select hosting"
+    let packageTitle = "Select packages"
 
 
     let deleteItemModal = (id) => {
@@ -387,7 +268,8 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Inertia.delete(adminPath.value + '/users/' + id, { preserveState: true, replace: true, onSuccess: page => {
+                Inertia.delete(adminPath.value + '/users/' + id, {
+                    preserveState: true, replace: true, onSuccess: page => {
                         Swal.fire(
                             'Deleted!',
                             'Your file has been deleted.',
@@ -400,103 +282,83 @@
                             'Something went wrong!',
                             'error'
                         )
-                    }})
+                    }
+                })
             }
         })
     };
-
-    // let createQutation = ( )=>{
-    // }
-
-
-    //
-    // let search = ref(props.filters.search);
-    // let perPage = ref(props.filters.perPage);
-    //
-    // watch([search, perPage], debounce(function ([val, val2]) {
-    //     Inertia.get('/users', { search: val, perPage: val2 }, { preserveState: true, replace: true });
-    // }, 300));
-    //
-
 
 
 
 </script>
 
 <script>
-    export default {
+export default {
 
-        el: '.container',
+    el: '.container',
 
-        data() {
-            return {
-                data:{
-                    quatations: [
-                        {
-                            itemname: '',
-                            cost: '',
-                            quantity: ''
-                        }
-                    ],
-                    client_id:"",
-                    subject:"",
-                    valid_until:"",
-                    website_id:"",
-                    platform_id:"",
-                    design_id:"",
-                    domain_id:"",
-                    hosting_id:"",
-                    page:"",
-                    page_price:"",
-                    content_page:"",
-                    content_price:"",
-                    payment_policy:"",
-                    terms_of_service:"",
-                    date:"",
-                    woarks:[],
-                    status:"",
+    data() {
+        return {
+            data: {
+                quatations: [
+                    {
+                        itemname: '',
+                        cost: '',
+                        quantity: ''
+                    }
+                ],
+                client_id: "",
+                subject: "",
+                valid_until: "",
+                website_id: "",
+                platform_id: "",
+                design_id: "",
+                domain_id: "",
+                hosting_id: "",
+                page: "",
+                page_price: "",
+                content_page: "",
+                content_price: "",
+                payment_policy: "",
+                terms_of_service: "",
+                date: "",
+                woarks: [],
+                status: "",
+            },
+        }
+    },
 
-                    // processing:Boolean,
-                    options: [
-                        'foo',
-                        'bar',
-                        'baz'
-                    ]
-                },
-            }
+    methods: {
+        addRow() {
+            this.data.quatations.push({
+                itemname: '',
+                cost: '',
+                quantity: ''
+            })
         },
-
-        methods: {
-            addRow () {
-                this.data.quatations.push({
-                    itemname: '',
-                    cost: '',
-                    quantity: ''
-                })
-            },
-            deleteRow (index) {
-                this.data.quatations.splice(index, 1)
-            },
-            createQutation(){
-                Inertia.post('/admin/quotations', this.data, {
-                    preserveState: true,
-                    // onStart: () =>{ data.processing = true},
-                    // onFinish: () => { data.processing = false},
-                    onSuccess: ()=> {
-                        // document.getElementById('createDomains').$vb.modal.hide()
-                        this.data.quatations.reset()
-                        Swal.fire(
-                            'Saved!',
-                            'Your file has been Saved.',
-                            'success'
-                        )
-                    },
-                })
-            }
+        deleteRow(index) {
+            this.data.quatations.splice(index, 1)
+        },
+        createQutation() {
+            Inertia.post('/admin/quotations', this.data, {
+                preserveState: true,
+                // onStart: () =>{ data.processing = true},
+                // onFinish: () => { data.processing = false},
+                onSuccess: () => {
+                    // document.getElementById('createDomains').$vb.modal.hide()
+                    this.data.quatations.reset()
+                    Swal.fire(
+                        'Saved!',
+                        'Your file has been Saved.',
+                        'success'
+                    )
+                },
+            })
         }
     }
+}
 </script>
 
 <style lang="scss">
-    /*@import "../../../../sass/base/plugins/tables/datatables";*/
+/*@import "../../../../sass/base/plugins/tables/datatables";*/
 </style>

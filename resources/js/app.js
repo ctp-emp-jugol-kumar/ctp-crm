@@ -6,6 +6,7 @@ import Required from './components/RequiredBatch'
 import Layout from "./Shared/Layout";
 import store from './Store'
 import { createVbPlugin } from 'vue3-plugin-bootstrap5'
+import CKEditor from '@ckeditor/ckeditor5-vue'
 import { Alert, Button, Carousel, Collapse, Dropdown, Modal, Offcanvas, Popover, ScrollSpy, Tab, Toast, Tooltip } from 'bootstrap'
 let vbPlugin = createVbPlugin({ Alert, Button, Carousel, Collapse, Dropdown, Modal, Offcanvas, Popover, ScrollSpy, Tab, Toast, Tooltip  })
 import 'vue-select/dist/vue-select.css';
@@ -29,6 +30,7 @@ createInertiaApp({
       .use(plugin)
       .use(vbPlugin)
       .use(store)
+      .use(CKEditor)
       .component("Link", Link)
       .component("Head", Head)
       .component(VueFeather.name, VueFeather)
