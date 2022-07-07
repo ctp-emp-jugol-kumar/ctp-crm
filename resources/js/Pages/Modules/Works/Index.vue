@@ -67,7 +67,6 @@
                                             <th class="sorting">#id</th>
                                             <th class="sorting">Name</th>
                                             <th class="sorting">Price</th>
-                                            <th class="sorting">Description</th>
                                             <th class="sorting">Created At</th>
                                             <th class="sorting">Actions</th>
                                         </tr>
@@ -77,7 +76,6 @@
                                             <td>{{ work.id }}</td>
                                             <td>{{ work.name }}</td>
                                             <td>{{ work.price }} </td>
-                                            <td>{{ work.description }} </td>
                                             <td>{{ work.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">

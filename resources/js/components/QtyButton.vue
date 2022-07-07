@@ -3,7 +3,7 @@
         <span
             class="input-group-btn bootstrap-touchspin-injected">
             <button @click="decrement()"
-                    class="btn btn-primary bootstrap-touchspin-down"
+                    class="btn bg-light-primary bootstrap-touchspin-down"
                     type="button">
                 <svg xmlns="http://www.w3.org/2000/svg"
                      width="24" height="24" viewBox="0 0 24 24"
@@ -20,7 +20,7 @@
 
         <span class="input-group-btn bootstrap-touchspin-injected">
             <button @click="increment()"
-                    class="btn btn-primary bootstrap-touchspin-up"
+                    class="btn bg-light-primary bootstrap-touchspin-up"
                     type="button">
                 <svg xmlns="http://www.w3.org/2000/svg"
                      width="24" height="24" viewBox="0 0 24 24"
@@ -41,7 +41,7 @@ import {useForm} from "@inertiajs/inertia-vue3";
 
     let formData = useForm({
         qty:1,
-    })
+    });
 
     let increment = () =>{
         formData.qty++

@@ -49,7 +49,7 @@
                     </li>
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="app-chat.html">
-                            <vue-feather type="message-square" />
+                            <vue-feather type="message-circle" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Chat</span>
                         </Link>
                     </li>
@@ -169,83 +169,83 @@
 
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/clients">
-                            <vue-feather type="message-square" />
+                            <vue-feather type="radio" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Clients</span>
                         </Link>
                     </li>
 
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/designs" >
-                            <vue-feather type="message-square" />
+                            <vue-feather type="package" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Package</span>
                         </Link>
                     </li>
 
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/services">
-                            <vue-feather type="message-square" />
+                            <vue-feather type="repeat" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Services</span>
                         </Link>
                     </li>
 
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/platforms">
-                            <vue-feather type="message-square" />
+                            <vue-feather type="rss" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Platforms</span>
                         </Link>
                     </li>
 
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/features">
-                            <vue-feather type="message-square" />
+                            <vue-feather type="sunrise" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Feature</span>
                         </Link>
                     </li>
 
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/works">
-                            <vue-feather type="message-square" />
+                            <vue-feather type="check-circle" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Works</span>
                         </Link>
                     </li>
 
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/domains">
-                            <vue-feather type="message-square" />
+                            <vue-feather type="link" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Domains</span>
                         </Link>
                     </li>
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/hostings">
-                            <vue-feather type="message-square" />
+                            <vue-feather type="cloud-snow" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Hostings</span>
                         </Link>
                     </li>
 
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/quotations">
-                            <vue-feather type="message-square" />
+                            <vue-feather type="aperture" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Quotations</span>
                         </Link>
                     </li>
 
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/invoices">
-                            <vue-feather type="message-square" />
+                            <vue-feather type="archive" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Invoice</span>
                         </Link>
                     </li>
 
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/methods">
-                            <vue-feather type="message-square" />
+                            <vue-feather type="dollar-sign" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Methods</span>
                         </Link>
                     </li>
 
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/purposes">
-                            <vue-feather type="message-square" />
+                            <vue-feather type="trending-up" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
                         </Link>
                     </li>

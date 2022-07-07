@@ -1,5 +1,5 @@
 <template>
-    <span>{{ name }}</span>
+    <span>{{ data.name }} <strong>({{ data.price }} Tk)</strong></span>
     <div class="border-1 border-light rounded-3 p-25">
         <div class="input-group border-0">
             <div class="input-group-text border-0">
@@ -18,7 +18,10 @@
     import QuantityButton from "./QuantityButton";
     import QtyButton from "./QtyButton";
     let props = defineProps({
-        name:String,
+        data:{
+            name:String,
+            price:String,
+        }
     })
 </script>
 

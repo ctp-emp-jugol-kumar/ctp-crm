@@ -30,7 +30,7 @@ class DesignController extends Controller
                     'id' => $package->id,
                     'name' => $package->name,
                     'price' => $package->price,
-                    'description' => $package->description,
+                    'description' => nl2br($package->description) ,
                     'created_at' => $package->created_at->format('d M Y'),
                     'show_url' => URL::route('designs.show', $package->id),
                 ]),

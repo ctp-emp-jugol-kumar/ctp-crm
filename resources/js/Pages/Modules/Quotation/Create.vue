@@ -101,7 +101,8 @@
                                                     </label>
 
                                                     <div class="">
-                                                        <Datepicker v-model="data.valid_until" :monthChangeOnScroll="false"
+                                                        <Datepicker v-model="data.valid_until"
+                                                                    :monthChangeOnScroll="false"
                                                                     placeholder="Select Date" autoApply></Datepicker>
                                                         <InputFieldError :errors="errors.valid_until"/>
                                                     </div>
@@ -139,19 +140,23 @@
 
 
                                 <div class="row">
-                                    <div class="col-md-4" data-repeater-item v-for="(item, index) in data.quatations">
+                                    <div class="col-md-6" data-repeater-item v-for="(item, index) in data.quatations">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h4 class="card-title">index: {{ index }} total: {{ data.quatations.length - 1}}</h4>
+                                                <h4 class="card-title">index: {{ index }} total:
+                                                    {{ data.quatations.length - 1 }}</h4>
                                                 <div class="row d-flex align-items-center">
                                                     <div class="col-12">
                                                         <div class="mb-1">
-                                                            <TextEditor v-model="data.quatations[index].itemname" placeholder="Item Details"/>
+                                                            <TextEditor v-model="data.quatations[index].itemname"
+                                                                        placeholder="Item Details"/>
                                                         </div>
                                                         <div class="input-group border-0 d-flex">
                                                             <QtyButton/>
-                                                            <input type="number" class="form-control rounded-start" placeholder="Price">
-                                                            <input type="number" class="form-control" placeholder="Discount">
+                                                            <input type="number" class="form-control rounded-start"
+                                                                   placeholder="Price">
+                                                            <input type="number" class="form-control"
+                                                                   placeholder="Discount">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -161,7 +166,7 @@
                                                     type="button"
                                                     name="button"
                                                     @click="addRow">
-                                                    <vue-feather type="plus" />
+                                                    <vue-feather type="plus"/>
                                                 </button>
                                                 <button
                                                     v-else
@@ -169,7 +174,7 @@
                                                     @click="deleteRow(index)"
                                                     data-repeater-delete
                                                     type="button">
-                                                    <vue-feather type="trash" />
+                                                    <vue-feather type="trash"/>
                                                 </button>
                                             </div>
                                         </div>
@@ -222,72 +227,71 @@
 
 
 <script setup>
-    import Pagination from "../../../components/Pagination"
-    import Icon from '../../../components/Icon'
-    import Modal from '../../../components/Modal'
-    import {ref, watch} from "vue";
-    import debounce from "lodash/debounce";
-    import {Inertia} from "@inertiajs/inertia";
-    import Swal from 'sweetalert2'
-    import {useForm} from "@inertiajs/inertia-vue3";
-    import TextEditor from "../../../components/TextEditor";
-    import QuantityButton from "../../../components/QuantityButton";
-    import ServiceItem from "../../../components/ServiceItem";
-    import ServiceCard from "../../../components/ServiceCard";
-    import InputFieldError from "../../../components/InputFieldError";
-    import QtyButton from "../../../components/QtyButton";
+import Pagination from "../../../components/Pagination"
+import Icon from '../../../components/Icon'
+import Modal from '../../../components/Modal'
+import {ref, watch} from "vue";
+import debounce from "lodash/debounce";
+import {Inertia} from "@inertiajs/inertia";
+import Swal from 'sweetalert2'
+import {useForm} from "@inertiajs/inertia-vue3";
+import TextEditor from "../../../components/TextEditor";
+import QuantityButton from "../../../components/QuantityButton";
+import ServiceItem from "../../../components/ServiceItem";
+import ServiceCard from "../../../components/ServiceCard";
+import InputFieldError from "../../../components/InputFieldError";
+import QtyButton from "../../../components/QtyButton";
 
-    let props = defineProps({
-        clients: Object,
-        services: Object,
-        packages: Object,
-        platforms: Object,
-        works: Object,
-        filters: Object,
-        domains: Object,
-        hostings: Object,
-        notification: Object,
-        errors: Object,
+let props = defineProps({
+    clients: Object,
+    services: Object,
+    packages: Object,
+    platforms: Object,
+    works: Object,
+    filters: Object,
+    domains: Object,
+    hostings: Object,
+    notification: Object,
+    errors: Object,
+})
+
+
+let worksTitle = "Select work services"
+let domainTitle = "Select domains"
+let hostingTitle = "Select hosting"
+let packageTitle = "Select packages"
+
+
+let deleteItemModal = (id) => {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Inertia.delete(adminPath.value + '/users/' + id, {
+                preserveState: true, replace: true, onSuccess: page => {
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                },
+                onError: errors => {
+                    Swal.fire(
+                        'Oops...',
+                        'Something went wrong!',
+                        'error'
+                    )
+                }
+            })
+        }
     })
-
-
-    let worksTitle = "Select work services"
-    let domainTitle = "Select domains"
-    let hostingTitle = "Select hosting"
-    let packageTitle = "Select packages"
-
-
-    let deleteItemModal = (id) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Inertia.delete(adminPath.value + '/users/' + id, {
-                    preserveState: true, replace: true, onSuccess: page => {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
-                        )
-                    },
-                    onError: errors => {
-                        Swal.fire(
-                            'Oops...',
-                            'Something went wrong!',
-                            'error'
-                        )
-                    }
-                })
-            }
-        })
-    };
-
+};
 
 
 </script>

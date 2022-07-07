@@ -77,7 +77,7 @@
                                             <td>{{ item.id }}</td>
                                             <td>{{ item.name }}</td>
                                             <td>{{ item.price }} </td>
-                                            <td>{{ item.description }} </td>
+                                            <td v-html="item.description"></td>
                                             <td>{{ item.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
