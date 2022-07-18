@@ -74,7 +74,7 @@ class QuotationController extends Controller
      * @return \Inertia\Response
      */
     public function create(){
-        return Inertia::render('Modules/Quotation/Create', [
+        return Inertia::render('Modules/Quotation/NewCreate', [
             "clients"   => Client::all(['id','name']),
             "services"  => Website::all(['id','name', 'price']),
             "packages"  => Design::all(['id','name', 'price']),
@@ -92,12 +92,19 @@ class QuotationController extends Controller
      */
     public function store(Request $request)
     {
+        return Request::all();
+
+    }
+
+    public function oldStoreMethod(){
+
+
 
 //        return Request::all();
         Request::validate([
-           'client_id' => "required",
-           'valid_until' => "required",
-           'date' => "required",
+            'client_id' => "required",
+            'valid_until' => "required",
+            'date' => "required",
         ]);
 
 
@@ -144,10 +151,11 @@ class QuotationController extends Controller
             ];
         }
 //        if (!isEmpty($quatationsOptoin)){
-            $quotation->quotationItems()->createMany($quatationsOptoin);
+        $quotation->quotationItems()->createMany($quatationsOptoin);
 //        }
         return redirect()->route('quotations.index');
     }
+
 
     /**
      * Display the specified resource.

@@ -4,12 +4,14 @@
         <div class="input-group border-0">
             <div class="input-group-text border-0">
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox"
+                    <input class="form-check-input" @change="check($event)" v-model="item_id" :value="data.id" type="checkbox"
                            id="inputCheckbox">
                 </div>
             </div>
+
             <QtyButton/>
-            <input type="number" class="form-control border-0" placeholder="Discount">
+
+            <input type="number" class="form-control border-0" v-model="discount" @input="modalValue" placeholder="Discount">
         </div>
     </div>
 </template>
@@ -18,12 +20,41 @@
     import QuantityButton from "./QuantityButton";
     import QtyButton from "./QtyButton";
     let props = defineProps({
+        discount:String,
+
         data:{
             name:String,
             price:String,
-        }
+            id:String,
+        },
     })
+
+    const emit = defineEmits(['update:modelValue'])
+
+    const updateValue = (event) => {
+        emit('update:modelValue', event.target.value)
+    }
+
+
 </script>
+
+<script>
+    export default {
+
+        methods:{
+            check (e) {
+                this.$nextTick(() => {
+                    console.log(e.target.value)
+                })
+            }
+        }
+
+
+    }
+
+</script>
+
+
 
 <style scoped>
 

@@ -1,0 +1,324 @@
+<template>
+
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper container-xxl p-0">
+            <div class="content-header row">
+                <div class="content-header-left col-md-9 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <h2 class="content-header-title float-start mb-0">Invoice Form</h2>
+                            <div class="breadcrumb-wrapper">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                                    <li class="breadcrumb-item active">Invoice</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-header-right text-md-end col-md-3 col-12 d-md-block d-none">
+                    <div class="mb-1 breadcrumb-right">
+                        <div class="dropdown">
+                            <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                data-feather="grid"></i></button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="app-todo.html">
+                                    <i class="me-1" data-feather="check-square"></i>
+                                    <span class="align-middle">Todo</span></a>
+                                <a class="dropdown-item" href="app-chat.html">
+                                    <i class="me-1" data-feather="message-square"></i>
+                                    <span class="align-middle">Chat</span></a>
+                                <a class="dropdown-item" href="app-email.html">
+                                    <i class="me-1" data-feather="mail"></i>
+                                    <span class="align-middle">Email</span></a>
+                                <a class="dropdown-item" href="app-calendar.html">
+                                    <i class="me-1" data-feather="calendar"></i>
+                                    <span class="align-middle">Calendar</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- Advanced Search -->
+                <section id="advanced-search-datatable">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header border-bottom d-flex justify-content-between">
+                                    <h4 class="card-title">Invoice Information's </h4>
+                                    <Link href="/admin/Invoice" class="dt-button add-new btn btn-primary">Manage
+                                        Invoice
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-11 mx-auto">
+                            <form @submit.prevent="createQutation">
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="modal-body">
+                                            <div class="row mb-1">
+                                                <div class="col-md">
+                                                    <label>Client :
+<!--                                                        <Required/>-->
+                                                    </label>
+                                                    <div class="">
+                                                        <select2 v-model="formData.client_id" :options="clients" :reduce="client => client.id"
+                                                                 label="name" placeholder="Select Client"></select2>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md">
+                                                    <label>Subject : </label>
+                                                    <div class="">
+                                                        <input type="text" placeholder="Subjects" v-model="formData.subject"
+                                                               class="form-control">
+                                                        <span class="error text-sm text-danger"></span>
+<!--                                                        <InputFieldError :errors="errors.subject"/>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-1">
+                                                <div class="col-md">
+                                                    <label>Date :
+<!--                                                        <Required/>-->
+                                                    </label>
+                                                    <div class="">
+                                                        <Datepicker v-model="formData.date" :monthChangeOnScroll="false"
+                                                                    placeholder="Select Date" autoApply></Datepicker>
+<!--                                                        <InputFieldError :errors="errors.date"/>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="modal-body">
+                                            <div class="row mb-1">
+                                                <div class="col-md">
+                                                    <label>Payment Policy :
+<!--                                                        <Required/>-->
+                                                    </label>
+                                                    <div class="">
+                                                        <TextEditor v-model="formData.payment_policy"></TextEditor>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md">
+                                                    <label>Terms Of Service : </label>
+                                                    <div class="">
+                                                        <TextEditor v-model="formData.trams_and_condition"></TextEditor>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6" data-repeater-item
+                                         v-for="(item, index) in formData.quatations">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title">Item: {{ index + 1 }} </h4>
+                                                <div class="row d-flex align-items-center">
+                                                    <div class="col-12">
+                                                        <div class="mb-1">
+                                                            <TextEditor v-model="formData.quatations[index].itemname"
+                                                                        placeholder="Item Details"/>
+                                                        </div>
+                                                        <div class="input-group border-0 d-flex">
+
+<!--                                                            <QtyButton/>-->
+
+                                                            <input type="number" class="form-control rounded-start"
+                                                                   placeholder="Price" v-model="formData.quatations[index].price">
+
+                                                            <input type="number" class="form-control"
+                                                                   placeholder="Discount" v-model="formData.quatations[index].discount" >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    v-if="index === formData.quatations.length - 1"
+                                                    class="btn btn-primary btn-sm float-end mt-25"
+                                                    type="button"
+                                                    name="button"
+                                                    @click="addRow">
+                                                    <vue-feather type="plus"/>
+                                                </button>
+                                                <button
+                                                    v-else
+                                                    class="btn btn-danger btn-sm float-end mt-25"
+                                                    @click="deleteRow(index)"
+                                                    data-repeater-delete
+                                                    type="button">
+                                                    <vue-feather type="trash"/>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-item-center justify-content-between">
+                                            <div class="d-flex flex-column">
+                                                <label class="form-check-label mb-50"
+                                                       for="customSwitch10">Primary</label>
+                                                <div class="form-check form-switch form-check-primary">
+                                                    <input type="checkbox" class="form-check-input"
+                                                           v-model="formData.status" id="customSwitch10" checked/>
+                                                    <label class="form-check-label" for="customSwitch10">
+                                                        <span class="switch-icon-left"><i
+                                                            data-feather="check"></i></span>
+                                                        <span class="switch-icon-right"><i data-feather="x"></i></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <button type="submit"
+                                                        class="btn btn-primary waves-effect waves-float waves-light me-2">
+                                                    Submit
+                                                </button>
+                                                <button type="reset" class="btn btn-outline-secondary"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close">Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+                <!--/ Advanced Search -->
+                <!--/ Multilingual -->
+            </div>
+        </div>
+    </div>
+
+
+</template>
+
+
+<script setup>
+    import Pagination from "../../../components/Pagination"
+    import Icon from '../../../components/Icon'
+    import Modal from '../../../components/Modal'
+    import {ref, watch} from "vue";
+    import debounce from "lodash/debounce";
+    import {Inertia} from "@inertiajs/inertia";
+    import Swal from 'sweetalert2'
+    import {useForm} from "@inertiajs/inertia-vue3";
+    import TextEditor from "../../../components/TextEditor";
+    import TextArea from "../../../components/Textarea";
+    import QuantityButton from "../../../components/QuantityButton";
+    import ServiceItem from "../../../components/ServiceItem";
+    import ServiceCard from "../../../components/ServiceCard";
+    import InputFieldError from "../../../components/InputFieldError";
+    import QtyButton from "../../../components/QtyButton";
+
+    let props = defineProps({
+        clients: Object,
+    })
+
+    let formData = useForm({
+        quatations: [
+            {
+                itemname: '',
+                price: '',
+                quantity: '',
+                discount: ''
+            }
+        ],
+        status:'',
+        subject:'',
+        client_id:'',
+        date:'',
+        payment_policy:'',
+        trams_and_condition:'',
+
+    });
+
+    let worksTitle = "Select work services"
+    let domainTitle = "Select domains"
+    let hostingTitle = "Select hosting"
+    let packageTitle = "Select packages"
+
+
+    let deleteItemModal = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Inertia.delete(adminPath.value + '/users/' + id, {
+                    preserveState: true, replace: true, onSuccess: page => {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )
+                    },
+                    onError: errors => {
+                        Swal.fire(
+                            'Oops...',
+                            'Something went wrong!',
+                            'error'
+                        )
+                    }
+                })
+            }
+        })
+    };
+
+
+    let createQutation = () => {
+        Inertia.post('/admin/invoices', formData,{
+           onSuccess: () =>{
+               formData.reset()
+               Swal.fire(
+                   'Saved!',
+                   'Your file has been Saved.',
+                   'success'
+               )
+           }
+        });
+    }
+
+    let addRow = () => {
+        formData.quatations.push({
+            itemname: '',
+            price: '',
+            quantity: '',
+            discount: '',
+        })
+    }
+
+    let deleteRow = (index) => {
+        formData.quatations.splice(index, 1)
+    }
+
+
+</script>
+
+
+<style lang="scss">
+    /*@import "../../../../sass/base/plugins/tables/datatables";*/
+</style>

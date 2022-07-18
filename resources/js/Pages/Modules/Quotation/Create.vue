@@ -111,10 +111,12 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <ServiceCard :cardTitle="worksTitle" :items="works"/>
                                 <ServiceCard :cardTitle="domainTitle" :items="domains"/>
                                 <ServiceCard :cardTitle="hostingTitle" :items="hostings"/>
                                 <ServiceCard :cardTitle="packageTitle" :items="packages"/>
+
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="modal-body">
@@ -124,13 +126,13 @@
                                                         <Required/>
                                                     </label>
                                                     <div class="">
-                                                        <TextEditor></TextEditor>
+                                                        <TextEditor v-model="formData.payment_policy"></TextEditor>
                                                     </div>
                                                 </div>
                                                 <div class="col-md">
-                                                    <label>terms_of_service : </label>
+                                                    <label>Terms Of Service : </label>
                                                     <div class="">
-                                                        <TextEditor></TextEditor>
+                                                        <TextEditor v-model="formData.payment_policy"></TextEditor>
                                                     </div>
                                                 </div>
                                             </div>
@@ -213,7 +215,6 @@
                                 </div>
                             </form>
                         </div>
-
                     </div>
                 </section>
                 <!--/ Advanced Search -->
@@ -236,6 +237,7 @@ import {Inertia} from "@inertiajs/inertia";
 import Swal from 'sweetalert2'
 import {useForm} from "@inertiajs/inertia-vue3";
 import TextEditor from "../../../components/TextEditor";
+import TextArea from "../../../components/Textarea";
 import QuantityButton from "../../../components/QuantityButton";
 import ServiceItem from "../../../components/ServiceItem";
 import ServiceCard from "../../../components/ServiceCard";
@@ -255,6 +257,14 @@ let props = defineProps({
     errors: Object,
 })
 
+
+let formData = useForm({
+    payment_policy:"",
+    Trams_Services:"",
+    is_checked:"",
+    discount:""
+
+});
 
 let worksTitle = "Select work services"
 let domainTitle = "Select domains"
@@ -292,6 +302,12 @@ let deleteItemModal = (id) => {
         }
     })
 };
+
+
+let createQutation = () =>{
+    console.log(formData);
+}
+
 
 
 </script>

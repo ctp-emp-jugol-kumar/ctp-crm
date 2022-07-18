@@ -6,7 +6,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4 mb-1" v-for="(option , index) in items" :key="index">
-                    <ServiceItem :data="{name:option.name, price:option.price}"/>
+                    <ServiceItem :data="{name:option.name, price:option.price, id:option.id}" @itemData="itemData"/>
                 </div>
             </div>
         </div>
@@ -19,6 +19,11 @@
         cardTitle:String,
         items:Object,
     })
+
+    let itemData = (data) =>{
+
+    }
+
 
 </script>
 

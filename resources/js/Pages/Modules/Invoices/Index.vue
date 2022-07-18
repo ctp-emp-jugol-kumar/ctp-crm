@@ -35,9 +35,7 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Invoices Information's </h4>
-                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#createNewCategory"
-                                    >Add Invoices</button>
+                                    <a class="dt-button add-new btn btn-primary" href="invoices/create">Add Invoices</a>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -84,9 +82,13 @@
                                                     <button type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
                                                     </button>
+                                                    <a :href="user.invice_url" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                        <Icon title="download" />
+                                                    </a>
                                                     <button @click="deleteItemModal(user.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
                                                         <Icon title="trash" />
                                                     </button>
+
                                                 </div>
                                             </td>
                                         </tr>

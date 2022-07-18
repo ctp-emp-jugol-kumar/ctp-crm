@@ -16,7 +16,7 @@
             </button>
         </span>
 
-        <input type="number" class="touchspin form-control" v-model="formData.qty">
+        <input type="number" class="touchspin form-control" v-model="formData.qty" @input="udpateModal">
 
         <span class="input-group-btn bootstrap-touchspin-injected">
             <button @click="increment()"
@@ -49,6 +49,11 @@ import {useForm} from "@inertiajs/inertia-vue3";
     let decrement = () =>{
         formData.qty > 1 ? formData.qty-- : alert("minimum qty is 1"), formData.qty = 1
     }
+    let emit = defineEmits(['getqty']);
+    let updateModal = (value) =>{
+        emit('getqty', value)
+    }
+
 
 </script>
 
