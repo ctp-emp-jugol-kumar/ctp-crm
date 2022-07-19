@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('quotation_id')->nullable();
             $table->string('itemname')->nullable();
-            $table->float('cost')->nullable();
+            $table->float('price')->nullable();
             $table->integer('discount')->nullable();
             $table->integer('quantity')->nullable();
             $table->timestamps();

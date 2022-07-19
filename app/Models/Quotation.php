@@ -65,57 +65,84 @@ class Quotation extends Model
     }
 
 
-    public function getTotalAmountAttribute()
-    {
-        // return $this->quotation->user ? $this->quotation->user->name : '-';
-
-        $total = 0;
-        $f_total = 0;
-        $w_total = 0;
-        $other_total = 0;
-        $additional_total = 0;
-//        {"quatations":[{"itemname":"need seo","cost":"10","quantity":"1"},{"itemname":"support","cost":"15","quantity":"1","discount":"5"}],"client_id":3,"subject":"first qutation","valid_until":"2022-06-28","website_id":null,"platform_id":null,"design_id":6,"domain_id":5,"hosting_id":5,"page":null,"page_price":null,"content_page":null,"content_price":null,"payment_policy":"ddd","terms_of_service":"ddd","date":"2022-06-28","woarks":[6,7],"status":true}
-//        $other_total += $this->works();
-
-        $other_total += $this->website_id ? $this->website->price : 0;
-        $other_total += $this->platform_id ? $this->platform->price : 0;
-        $other_total += $this->design_id ? $this->design->price : 0;
-        $other_total += $this->domain_id ? $this->domain->price : 0;
-        $other_total += $this->hosting_id ? $this->hosting->price : 0;
-
-//        return $this->works;
-
-
-//        $other_total += $this->page && $this->page_price ? $this->page * $this->page_price : 0;
-//        $other_total += $this->content_page && $this->content_price ? $this->content_page * $this->content_price : 0;
+//    public function getTotalAmountAttribute()
+//    {
+//        // return $this->quotation->user ? $this->quotation->user->name : '-';
 //
-//        $additional_total += $this->additional ? $this->additional_price : 0;
-//        $additional_total += $this->additional2 ? $this->additional2_price : 0;
-//        $additional_total += $this->additional3 ? $this->additional3_price : 0;
+//        $total = 0;
+//        $f_total = 0;
+//        $w_total = 0;
+//        $other_total = 0;
+//        $additional_total = 0;
+////        {"quatations":[{"itemname":"need seo","cost":"10","quantity":"1"},{"itemname":"support","cost":"15","quantity":"1","discount":"5"}],"client_id":3,"subject":"first qutation","valid_until":"2022-06-28","website_id":null,"platform_id":null,"design_id":6,"domain_id":5,"hosting_id":5,"page":null,"page_price":null,"content_page":null,"content_price":null,"payment_policy":"ddd","terms_of_service":"ddd","date":"2022-06-28","woarks":[6,7],"status":true}
+////        $other_total += $this->works();
 //
-//        foreach ($this->features as $feature) {
-//            $f_total += $feature->price;
+//        $other_total += $this->website_id ? $this->website->price : 0;
+//        $other_total += $this->platform_id ? $this->platform->price : 0;
+//        $other_total += $this->design_id ? $this->design->price : 0;
+//        $other_total += $this->domain_id ? $this->domain->price : 0;
+////        $other_total += $this->hosting_id ? $this->hosting->price : 0;
+//
+////        return $this->works;
+//
+//
+////        $other_total += $this->page && $this->page_price ? $this->page * $this->page_price : 0;
+////        $other_total += $this->content_page && $this->content_price ? $this->content_page * $this->content_price : 0;
+////
+////        $additional_total += $this->additional ? $this->additional_price : 0;
+////        $additional_total += $this->additional2 ? $this->additional2_price : 0;
+////        $additional_total += $this->additional3 ? $this->additional3_price : 0;
+////
+////        foreach ($this->features as $feature) {
+////            $f_total += $feature->price;
+////        }
+//
+//        foreach ($this->quotationItems as $quotationItem) {
+//            $f_total += ($quotationItem->cost * $quotationItem->quantity);
 //        }
-
-        foreach ($this->quotationItems as $quotationItem) {
-            $f_total += ($quotationItem->cost * $quotationItem->quantity);
-        }
-
-        foreach ($this->works as $work) {
-            $w_total += $work->price;
-        }
-
-//        $without_additional_total = $f_total + $w_total + $other_total;
-//        $total = $without_additional_total + $additional_total - $this->discount;
-
-        return $total;
-    }
+//
+//        foreach ($this->works as $work) {
+//            $w_total += $work->price;
+//        }
+//
+////        $without_additional_total = $f_total + $w_total + $other_total;
+////        $total = $without_additional_total + $additional_total - $this->discount;
+//
+//        return $total;
+//    }
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+
+
+
+    public function hostings(){
+        return $this->belongsToMany(Hosting::class, 'hosting_quotation')
+            ->withPivot(['price', 'quantity', 'discount'])->withTimestamps();
+    }
+
+    public function domains(){
+        return $this->belongsToMany(Domain::class, 'domain_quotation')
+            ->withPivot(['price', 'quantity', 'discount'])->withTimestamps();
+    }
+
+    public function works()
+    {
+        return $this->belongsToMany(Work::class, 'quotation_work')
+            ->withPivot(['price', 'quantity', 'discount'])->withTimestamps();
+    }
+
+
+    public function packages()
+    {
+        return $this->belongsToMany(Design::class, 'package_quotation')
+            ->withPivot(['price', 'quantity', 'discount'])->withTimestamps();
+    }
+
+
 
     public function quotationItems(){
         return $this->hasMany(QuotationItem::class, 'quotation_id');
@@ -141,22 +168,12 @@ class Quotation extends Model
     {
         return $this->belongsTo('App\Models\Design');
     }
-    public function domain()
-    {
-        return $this->belongsTo('App\Models\Domain');
-    }
-    public function hosting()
-    {
-        return $this->belongsTo('App\Models\Hosting');
-    }
+
+
 
     public function features()
     {
         return $this->belongsToMany('App\Models\Feature', 'feature_quotation');
-    }
-    public function works()
-    {
-        return $this->belongsToMany('App\Models\Work', 'quotation_work');
     }
 
     public function invoice()

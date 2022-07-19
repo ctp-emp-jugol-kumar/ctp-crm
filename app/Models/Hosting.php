@@ -28,6 +28,15 @@ class Hosting extends Model
     |--------------------------------------------------------------------------
     */
 
+
+    public function quotations(){
+        return $this->belongsToMany(Quotation::class, 'hosting_quotation')
+            ->withPivot(['price', 'quantity', 'discount'])
+            ->withTimestamps();
+    }
+
+
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

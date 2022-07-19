@@ -67,9 +67,9 @@
                                             <th class="sorting">Client</th>
                                             <th class="sorting">Created by</th>
                                             <th class="sorting">Status</th>
-                                            <th class="sorting">Total</th>
-                                            <th class="sorting">Domain</th>
-                                            <th class="sorting">Hosting</th>
+<!--                                            <th class="sorting">Total</th>-->
+<!--                                            <th class="sorting">Domain</th>-->
+<!--                                            <th class="sorting">Hosting</th>-->
                                             <th class="sorting">Actions</th>
                                         </tr>
                                         </thead>
@@ -83,9 +83,9 @@
                                                 <span v-if="qut.status" class="badge badge-light-success">Success</span>
                                                 <span v-else class="badge badge-light-warning">Pending</span>
                                             </td>
-                                            <td>{{ qut.totalPrice }} TK</td>
-                                            <td>{{ qut.domain ?? " "}}</td>
-                                            <td>{{ qut.hosting ?? " " }}</td>
+<!--                                            <td>{{ qut.totalPrice }} TK</td>-->
+<!--                                            <td>{{ qut.domain ?? " "}}</td>-->
+<!--                                            <td>{{ qut.hosting ?? " " }}</td>-->
                                             <td>
 
 

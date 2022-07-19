@@ -68,14 +68,16 @@
                                                         <Required/>
                                                     </label>
                                                     <div class="">
-                                                        <select2 :options="clients" :reduce="client => client.id"
-                                                                 label="name" placeholder="Select Client"></select2>
+                                                        <select2 v-model="formData.client_id" :options="clients"
+                                                                 :reduce="client => client.id" label="name"
+                                                                 placeholder="Select Client"></select2>
                                                     </div>
                                                 </div>
                                                 <div class="col-md">
                                                     <label>Subject : </label>
                                                     <div class="">
-                                                        <input type="text" placeholder="Subjects" v-model="data.subject"
+                                                        <input type="text" placeholder="Subjects"
+                                                               v-model="formData.subject"
                                                                class="form-control">
                                                         <span class="error text-sm text-danger"></span>
                                                         <InputFieldError :errors="errors.subject"/>
@@ -89,7 +91,7 @@
                                                         <Required/>
                                                     </label>
                                                     <div class="">
-                                                        <Datepicker v-model="data.date" :monthChangeOnScroll="false"
+                                                        <Datepicker v-model="formData.date" :monthChangeOnScroll="false"
                                                                     placeholder="Select Date" autoApply></Datepicker>
                                                         <InputFieldError :errors="errors.date"/>
                                                     </div>
@@ -101,7 +103,7 @@
                                                     </label>
 
                                                     <div class="">
-                                                        <Datepicker v-model="data.valid_until"
+                                                        <Datepicker v-model="formData.valid_until"
                                                                     :monthChangeOnScroll="false"
                                                                     placeholder="Select Date" autoApply></Datepicker>
                                                         <InputFieldError :errors="errors.valid_until"/>
@@ -112,10 +114,121 @@
                                     </div>
                                 </div>
 
-                                <ServiceCard :cardTitle="worksTitle" :items="works"/>
-                                <ServiceCard :cardTitle="domainTitle" :items="domains"/>
-                                <ServiceCard :cardTitle="hostingTitle" :items="hostings"/>
-                                <ServiceCard :cardTitle="packageTitle" :items="packages"/>
+
+                                <!--works sections-->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.works"
+                                                 :key="index">
+                                                <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
+                                                <div class="border-1 border-light rounded-3 p-25">
+                                                    <div class="input-group border-0">
+                                                        <div class="input-group-text border-0">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" v-model="option.p"
+                                                                       type="checkbox">
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" v-model="option.price">
+                                                        <input type="hidden" v-model="option.id">
+                                                        <input type="number" class="form-control border-0"
+                                                               v-model="option.quantity" placeholder="quantity">
+                                                        <input type="number" class="form-control border-0"
+                                                               v-model="option.discount" placeholder="Discount">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!--domain sections-->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.domains"
+                                                 :key="index">
+                                                <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
+                                                <div class="border-1 border-light rounded-3 p-25">
+                                                    <div class="input-group border-0">
+                                                        <div class="input-group-text border-0">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" v-model="option.p"
+                                                                       type="checkbox">
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" v-model="option.price">
+                                                        <input type="hidden" v-model="option.id">
+                                                        <input type="number" class="form-control border-0"
+                                                               v-model="option.quantity" placeholder="quantity">
+                                                        <input type="number" class="form-control border-0"
+                                                               v-model="option.discount" placeholder="Discount">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--hosting sections-->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.hostings"
+                                                 :key="index">
+                                                <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
+                                                <div class="border-1 border-light rounded-3 p-25">
+                                                    <div class="input-group border-0">
+                                                        <div class="input-group-text border-0">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" v-model="option.p"
+                                                                       type="checkbox">
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" v-model="option.price">
+                                                        <input type="hidden" v-model="option.id">
+                                                        <input type="number" class="form-control border-0"
+                                                               v-model="option.quantity" placeholder="quantity">
+                                                        <input type="number" class="form-control border-0"
+                                                               v-model="option.discount" placeholder="Discount">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!--package sections-->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.packages"
+                                                 :key="index">
+                                                <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
+                                                <div class="border-1 border-light rounded-3 p-25">
+                                                    <div class="input-group border-0">
+                                                        <div class="input-group-text border-0">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" v-model="option.p"
+                                                                       type="checkbox">
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" v-model="option.price">
+                                                        <input type="hidden" v-model="option.id">
+                                                        <input type="number" class="form-control border-0"
+                                                               v-model="option.quantity" placeholder="quantity">
+                                                        <input type="number" class="form-control border-0"
+                                                               v-model="option.discount" placeholder="Discount">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                                 <div class="card">
                                     <div class="card-body">
@@ -132,7 +245,7 @@
                                                 <div class="col-md">
                                                     <label>Terms Of Service : </label>
                                                     <div class="">
-                                                        <TextEditor v-model="formData.payment_policy"></TextEditor>
+                                                        <TextEditor v-model="formData.Trams_Services"></TextEditor>
                                                     </div>
                                                 </div>
                                             </div>
@@ -142,28 +255,34 @@
 
 
                                 <div class="row">
-                                    <div class="col-md-6" data-repeater-item v-for="(item, index) in data.quatations">
+                                    <div class="col-md-6" data-repeater-item
+                                         v-for="(item, index) in formData.quatations">
                                         <div class="card">
                                             <div class="card-body">
                                                 <h4 class="card-title">index: {{ index }} total:
-                                                    {{ data.quatations.length - 1 }}</h4>
+                                                    {{ formData.quatations.length - 1 }}</h4>
                                                 <div class="row d-flex align-items-center">
                                                     <div class="col-12">
                                                         <div class="mb-1">
-                                                            <TextEditor v-model="data.quatations[index].itemname"
+                                                            <TextEditor v-model="item.itemname"
                                                                         placeholder="Item Details"/>
                                                         </div>
                                                         <div class="input-group border-0 d-flex">
-                                                            <QtyButton/>
+                                                            <!-- <QtyButton/>-->
+
                                                             <input type="number" class="form-control rounded-start"
-                                                                   placeholder="Price">
+                                                                   placeholder="quantity" v-model="item.quantity">
+
+                                                            <input type="number" class="form-control rounded-start"
+                                                                   placeholder="Price" v-model="item.price">
+
                                                             <input type="number" class="form-control"
-                                                                   placeholder="Discount">
+                                                                   placeholder="Discount" v-model="item.discount">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <button
-                                                    v-if="index === data.quatations.length - 1"
+                                                    v-if="index === formData.quatations.length - 1"
                                                     class="btn btn-primary btn-sm float-end mt-25"
                                                     type="button"
                                                     name="button"
@@ -191,7 +310,7 @@
                                                        for="customSwitch10">Primary</label>
                                                 <div class="form-check form-switch form-check-primary">
                                                     <input type="checkbox" class="form-check-input"
-                                                           v-model="data.status" id="customSwitch10" checked/>
+                                                           v-model="formData.status" id="customSwitch10" checked/>
                                                     <label class="form-check-label" for="customSwitch10">
                                                         <span class="switch-icon-left"><i
                                                             data-feather="check"></i></span>
@@ -228,157 +347,199 @@
 
 
 <script setup>
-import Pagination from "../../../components/Pagination"
-import Icon from '../../../components/Icon'
-import Modal from '../../../components/Modal'
-import {ref, watch} from "vue";
-import debounce from "lodash/debounce";
-import {Inertia} from "@inertiajs/inertia";
-import Swal from 'sweetalert2'
-import {useForm} from "@inertiajs/inertia-vue3";
-import TextEditor from "../../../components/TextEditor";
-import TextArea from "../../../components/Textarea";
-import QuantityButton from "../../../components/QuantityButton";
-import ServiceItem from "../../../components/ServiceItem";
-import ServiceCard from "../../../components/ServiceCard";
-import InputFieldError from "../../../components/InputFieldError";
-import QtyButton from "../../../components/QtyButton";
+    import Pagination from "../../../components/Pagination"
+    import Icon from '../../../components/Icon'
+    import Modal from '../../../components/Modal'
+    import {ref, watch} from "vue";
+    import debounce from "lodash/debounce";
+    import {Inertia} from "@inertiajs/inertia";
+    import Swal from 'sweetalert2'
+    import {useForm} from "@inertiajs/inertia-vue3";
+    import TextEditor from "../../../components/TextEditor";
+    import TextArea from "../../../components/Textarea";
+    import QuantityButton from "../../../components/QuantityButton";
+    import ServiceItem from "../../../components/ServiceItem";
+    import ServiceCard from "../../../components/ServiceCard";
+    import InputFieldError from "../../../components/InputFieldError";
+    import QtyButton from "../../../components/QtyButton";
 
-let props = defineProps({
-    clients: Object,
-    services: Object,
-    packages: Object,
-    platforms: Object,
-    works: Object,
-    filters: Object,
-    domains: Object,
-    hostings: Object,
-    notification: Object,
-    errors: Object,
-})
-
-
-let formData = useForm({
-    payment_policy:"",
-    Trams_Services:"",
-    is_checked:"",
-    discount:""
-
-});
-
-let worksTitle = "Select work services"
-let domainTitle = "Select domains"
-let hostingTitle = "Select hosting"
-let packageTitle = "Select packages"
-
-
-let deleteItemModal = (id) => {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Inertia.delete(adminPath.value + '/users/' + id, {
-                preserveState: true, replace: true, onSuccess: page => {
-                    Swal.fire(
-                        'Deleted!',
-                        'Your file has been deleted.',
-                        'success'
-                    )
-                },
-                onError: errors => {
-                    Swal.fire(
-                        'Oops...',
-                        'Something went wrong!',
-                        'error'
-                    )
-                }
-            })
-        }
+    let props = defineProps({
+        clients: Object,
+        services: Object,
+        packages: Object,
+        platforms: Object,
+        works: Object,
+        filters: Object,
+        domains: Object,
+        hostings: Object,
+        notification: Object,
+        errors: Object,
     })
-};
 
 
-let createQutation = () =>{
-    console.log(formData);
-}
+    let formData = useForm({
+        client_id: "",
+        subject: "",
+        date: "",
+        valid_until: "",
+        payment_policy: "",
+        Trams_Services: "",
+        status: "",
 
 
+        hostings: props.hostings,
+        domains: props.domains,
+        works: props.works,
+        packages: props.packages,
+
+        quatations: [
+            {
+                itemname: '',
+                price: '',
+                quantity: ''
+            }
+        ],
+
+
+    });
+
+    let worksTitle = "Select work services"
+    let domainTitle = "Select domains"
+    let hostingTitle = "Select hosting"
+    let packageTitle = "Select packages"
+
+
+    let deleteItemModal = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Inertia.delete(adminPath.value + '/users/' + id, {
+                    preserveState: true, replace: true, onSuccess: page => {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )
+                    },
+                    onError: errors => {
+                        Swal.fire(
+                            'Oops...',
+                            'Something went wrong!',
+                            'error'
+                        )
+                    }
+                })
+            }
+        })
+    };
+
+
+    let createQutation = () => {
+        console.log(formData)
+        Inertia.post('/admin/quotations', formData, {
+            preserveState: true,
+            // onStart: () =>{ data.processing = true},
+            // onFinish: () => { data.processing = false},
+            onSuccess: () => {
+                this.data.quatations.reset()
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Saved.',
+                    'success'
+                )
+            },
+        })
+    }
+
+
+    let addRow = () => {
+        formData.quatations.push({
+            itemname: '',
+            price: '',
+            quantity: ''
+        })
+    }
+
+    let deleteRow = (index) => {
+        formData.quatations.splice(index, 1)
+    }
 
 </script>
 
 <script>
-export default {
+    /*export default {
 
-    el: '.container',
+        el: '.container',
 
-    data() {
-        return {
-            data: {
-                quatations: [
-                    {
-                        itemname: '',
-                        cost: '',
-                        quantity: ''
-                    }
-                ],
-                client_id: "",
-                subject: "",
-                valid_until: "",
-                website_id: "",
-                platform_id: "",
-                design_id: "",
-                domain_id: "",
-                hosting_id: "",
-                page: "",
-                page_price: "",
-                content_page: "",
-                content_price: "",
-                payment_policy: "",
-                terms_of_service: "",
-                date: "",
-                woarks: [],
-                status: "",
-            },
-        }
-    },
-
-    methods: {
-        addRow() {
-            this.data.quatations.push({
-                itemname: '',
-                cost: '',
-                quantity: ''
-            })
-        },
-        deleteRow(index) {
-            this.data.quatations.splice(index, 1)
-        },
-        createQutation() {
-            Inertia.post('/admin/quotations', this.data, {
-                preserveState: true,
-                // onStart: () =>{ data.processing = true},
-                // onFinish: () => { data.processing = false},
-                onSuccess: () => {
-                    // document.getElementById('createDomains').$vb.modal.hide()
-                    this.data.quatations.reset()
-                    Swal.fire(
-                        'Saved!',
-                        'Your file has been Saved.',
-                        'success'
-                    )
+        data() {
+            return {
+                data: {
+                    quatations: [
+                        {
+                            itemname: '',
+                            cost: '',
+                            quantity: ''
+                        }
+                    ],
+                    client_id: "",
+                    subject: "",
+                    valid_until: "",
+                    website_id: "",
+                    platform_id: "",
+                    design_id: "",
+                    domain_id: "",
+                    hosting_id: "",
+                    page: "",
+                    page_price: "",
+                    content_page: "",
+                    content_price: "",
+                    payment_policy: "",
+                    terms_of_service: "",
+                    date: "",
+                    woarks: [],
+                    status: "",
                 },
-            })
+            }
+        },
+
+        methods: {
+            addRow() {
+                this.data.quatations.push({
+                    itemname: '',
+                    cost: '',
+                    quantity: ''
+                })
+            },
+            deleteRow(index) {
+                this.data.quatations.splice(index, 1)
+            },
+            createQutation() {
+                Inertia.post('/admin/quotations', this.data, {
+                    preserveState: true,
+                    // onStart: () =>{ data.processing = true},
+                    // onFinish: () => { data.processing = false},
+                    onSuccess: () => {
+                        // document.getElementById('createDomains').$vb.modal.hide()
+                        this.data.quatations.reset()
+                        Swal.fire(
+                            'Saved!',
+                            'Your file has been Saved.',
+                            'success'
+                        )
+                    },
+                })
+            }
         }
-    }
-}
+    }*/
 </script>
 
 <style lang="scss">
-/*@import "../../../../sass/base/plugins/tables/datatables";*/
+    /*@import "../../../../sass/base/plugins/tables/datatables";*/
 </style>

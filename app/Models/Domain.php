@@ -28,6 +28,12 @@ class Domain extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function quotations(){
+        return $this->belongsToMany(Quotation::class, 'domain_quotation')
+            ->withPivot(['price', 'quantity', 'discount'])
+            ->withTimestamps();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

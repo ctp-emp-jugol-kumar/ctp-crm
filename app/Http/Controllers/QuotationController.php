@@ -35,7 +35,7 @@ class QuotationController extends Controller
     public function index()
     {
         $quotation  = Quotation::query()
-        ->with(["client:id,name", "design:id,name,price", "domain:id,name,price", "hosting:id,name,price", "user:id,name", "works", "quotationItems"])
+        ->with(["client:id,name", "user:id,name", "quotationItems"])
         ->when(Request::input('search'), function ($query, $search) {
             $query->where('email', 'like', "%{$search}%");
         })
@@ -43,14 +43,10 @@ class QuotationController extends Controller
         ->withQueryString()
         ->through(fn($qot) => [
             "id"         => $qot->id,
-            "totalPrice" => $qot->getTotalAmountAttribute(),
             "subject" => $qot->subject,
             "status" => $qot->status,
             "date" => $qot->date,
             "client_name" => $qot->client->name,
-            "design" => $qot->design->name,
-            "domain" => $qot->domain->name,
-            "hosting" => $qot->hosting->name,
             "user_name" => $qot->user->name,
         ]);
 
@@ -74,7 +70,7 @@ class QuotationController extends Controller
      * @return \Inertia\Response
      */
     public function create(){
-        return Inertia::render('Modules/Quotation/NewCreate', [
+        return Inertia::render('Modules/Quotation/Create', [
             "clients"   => Client::all(['id','name']),
             "services"  => Website::all(['id','name', 'price']),
             "packages"  => Design::all(['id','name', 'price']),
@@ -86,17 +82,87 @@ class QuotationController extends Controller
     }
 
 
+    public function createArrayGroups($items)
+    {
+        $added = array();
+        foreach($items as $item){
+
+//            if ($is_true){
+                $id = $item['id'];
+                $added[$id] = [
+                    'price' => $item['price'],
+                    'quantity' => $item["quantity"],
+                    'discount' => $item["discount"],
+                ];
+//            }
+        }
+        return $added;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      */
     public function store(Request $request)
     {
-        return Request::all();
+        $quotation = Quotation::create([
+            'user_id' => Auth::id(),
+           'client_id' => Request::input('client_id'),
+            'subject' => Request::input('subject'),
+            'date'   => Request::input('date'),
+            'valid_until' => Request::input('valid_until'),
+            'payment_policy' => Request::input('payment_policy'),
+            'terms_of_service' => Request::input('Trams_Services'),
+            'status' => filled(Request::input('status')),
+        ]);
+
+        $quotationDomains  = Request::input('domains');
+        $quotationHostings = Request::input('hostings');
+        $quotationWorks    = Request::input('works');
+        $quotationPackages    = Request::input('packages');
+
+        if (count($quotationDomains)) {
+            $quotation->domains()->sync($this->createArrayGroups($quotationDomains));
+        }
+
+        if (count($quotationHostings)) {
+            $quotation->hostings()->sync($this->createArrayGroups($quotationHostings));
+        }
+
+        if (count($quotationWorks)) {
+            $quotation->works()->sync($this->createArrayGroups($quotationWorks));
+        }
+
+        if (count($quotationPackages)) {
+            $quotation->packages()->sync($this->createArrayGroups($quotationPackages));
+        }
+
+
+        $quotations = Request::input('quatations');
+        $quatationsOptoin = [];
+        foreach ($quotations as $option) {
+            $quatationsOptoin[] = [
+                'quotation_id' => $quotation->id,
+                'itemname' => $option['itemname'],
+                'price' => $option['price'],
+                'quantity' => $option['quantity']
+            ];
+        }
+        $quotation->quotationItems()->createMany($quatationsOptoin);
+
+
+
+        return "submited";
+
 
     }
 
+
     public function oldStoreMethod(){
+
+
+
+
 
 
 
@@ -128,6 +194,10 @@ class QuotationController extends Controller
             'status'           => filled(Request::input('status')),
         ]);
 
+
+
+
+
         $works = Request::input('woarks');
         $workdata = [];
         if ($works != null) {
@@ -150,7 +220,6 @@ class QuotationController extends Controller
                 'quantity' => $option['quantity']
             ];
         }
-//        if (!isEmpty($quatationsOptoin)){
         $quotation->quotationItems()->createMany($quatationsOptoin);
 //        }
         return redirect()->route('quotations.index');

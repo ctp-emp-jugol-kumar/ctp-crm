@@ -29,6 +29,11 @@ class Design extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function quotations(){
+        return $this->belongsToMany(Quotation::class, 'package_quotation')
+            ->withPivot(['price', 'quantity', 'discount'])
+            ->withTimestamps();
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
