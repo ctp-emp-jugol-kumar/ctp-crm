@@ -179,24 +179,24 @@
                 @endforeach
                 <tr>
                     <td class="text-right border" colspan="3">Sub Total</td>
-                    <td class="text-right border"><strong>{{ $subTotal }}</strong></td>
+                    <td class="text-right border"><strong>{{ $subTotal }} Tk</strong></td>
                 </tr>
                 <tr>
                     <td class="text-right border" colspan="3">Discount</td>
-                    <td class="text-right border"><strong>{{ $discount }}</strong></td>
+                    <td class="text-right border"><strong> -{{ $discount }} Tk</strong></td>
                 </tr>
                 <tr>
                     <td class="text-right border" colspan="3">Grand Total</td>
-                    <td class="text-right border"><strong>{{ $subTotal - $discount }}</strong></td>
+                    <td class="text-right border"><strong>{{ $subTotal - $discount }} Tk</strong></td>
                 </tr>
-                <tr>
+            {{--    <tr>
                     <td class="text-right border" colspan="3">Amount Paid</td>
                     <td class="text-right border"><strong>{{ isset($paid) }}</strong></td>
                 </tr>
                 <tr>
                     <td class="text-right border" colspan="3">Total Due</td>
                     <td class="text-right border"><strong>{{ $grandTotal - isset($paid) }}</strong></td>
-                </tr>
+                </tr>--}}
                 </tbody>
             </table>
         </div>
@@ -212,7 +212,7 @@
             <p id="inword"><strong>Inword:</strong> {{ $numberTransformer->toWords($grandTotal - isset($paid)) }} Taka Only.</p>
         </div>
     </div>
-    <div class="row">
+  {{--  <div class="row">
         <div class="col-3">
             <h3>Note:</h3>
             <span id="mb-20">
@@ -222,7 +222,7 @@
             <br>
             <br>
         </div>
-    </div>
+    </div>--}}
 
     <div class="row mt-3">
         <div class="col-3">
@@ -278,22 +278,22 @@
                 <li>Now enter your bKash Mobile Menu PIN to Confirm!</li>
                 <li>Done! You will receive a confirmation message from bKash*</li>
             </ul>
-            <h3>Direct Payment Bill Online at <a href="https://creativetechpark.com/pay">https://creativetechpark.com/pay</a></h3>
+            <h3>Direct Payment Bill Online at <a href="https://creativetechpark.com/pay" target="_blank">https://creativetechpark.com/pay</a></h3>
         </div>
     </div>
-    @if ($data['invoice']['payment_policy'])
+    @if ($data['invoice']['privicy_and_policy'])
         <div class="row">
             <div class="col-3">
                 <h3>Payment Policy:</h3>
-                {!! nl2br($data['invoice']['payment_policy']) !!}
+                {!! nl2br($data['invoice']['privicy_and_policy']) !!}
             </div>
         </div>
     @endif
-    @if ($data['invoice']['terms_of_service'])
+    @if ($data['invoice']['trams_and_condition'])
         <div class="row mb-50">
             <div class="col-3">
                 <h3>Terms of Service:</h3>
-                {!! nl2br($data['invoice']['terms_of_service']) !!}
+                {!! nl2br($data['invoice']['trams_and_condition']) !!}
             </div>
         </div>
     @endif

@@ -50,19 +50,17 @@
                             <div class="card-header border-bottom d-flex justify-content-between">
                                 <h4 class="card-title">Invoices Information's </h4>
                                 <div>
-                                    <a class="dt-button add-new btn btn-primary me-75" :href="info.download_url">Download Invoices</a>
                                     <a class="dt-button add-new btn btn-primary" href="/admin/invoices">Manage Invoices</a>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Invoice -->
-                        <div class="col-xl-9 col-md-9 col-12 mx-auto">
+                        <div class="col-xl-9 col-md-9 col-12">
                             <div class="card invoice-preview-card">
                                 <div class="card-body invoice-padding pb-0">
                                     <!-- Header starts -->
-                                    <div
-                                        class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
+                                    <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
                                         <div>
                                             <div class="logo-wrapper">
                                                 <svg viewBox="0 0 139 95" version="1.1"
@@ -310,6 +308,113 @@
                         </div>
                         <!-- /Invoice -->
 
+
+
+                        <!-- Invoice Actions -->
+                        <div class="col-xl-3 col-md-4 col-12 invoice-actions mt-md-0 mt-2">
+                            <div class="card">
+                                <div class="card-body">
+<!--                                    <button class="btn btn-primary w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">-->
+<!--                                        Send Invoice-->
+<!--                                    </button>-->
+                                    <a :href="info.download_url" class="btn btn-outline-secondary w-100 btn-download-invoice mb-75">Download</a>
+<!--                                    <a class="btn btn-outline-secondary w-100 mb-75" href="./app-invoice-print.html" target="_blank"> Print </a>-->
+<!--                                    <a class="btn btn-outline-secondary w-100 mb-75" href="./app-invoice-edit.html"> Edit </a>-->
+<!--                                    <button class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#add-payment-sidebar">Add Payment</button>-->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Invoice Actions -->
+
+
+                        <!-- Add Payment Sidebar -->
+                        <div class="modal modal-slide-in fade" id="add-payment-sidebar" aria-hidden="true">
+                            <div class="modal-dialog sidebar-lg">
+                                <div class="modal-content p-0">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
+                                    <div class="modal-header mb-1">
+                                        <h5 class="modal-title">
+                                            <span class="align-middle">Add Payment</span>
+                                        </h5>
+                                    </div>
+                                    <div class="modal-body flex-grow-1">
+                                        <form>
+                                            <div class="mb-1">
+                                                <input id="balance" class="form-control" type="text" value="Invoice Balance: 5000.00" disabled />
+                                            </div>
+                                            <div class="mb-1">
+                                                <label class="form-label" for="amount">Payment Amount</label>
+                                                <input id="amount" class="form-control" type="number" placeholder="$1000" />
+                                            </div>
+
+                                            <div class="mb-1">
+                                                <label class="form-label" for="payment-note">Internal Payment Note</label>
+                                                <textarea class="form-control" id="payment-note" rows="5" placeholder="Internal Payment Note"></textarea>
+                                            </div>
+
+                                            <div class="d-flex flex-wrap mb-0">
+                                                <button type="button" class="btn btn-primary me-1" data-bs-dismiss="modal">Send</button>
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Add Payment Sidebar -->
+
+
+                        <!-- Send Invoice Sidebar -->
+                        <div class="modal modal-slide-in fade" id="send-invoice-sidebar" aria-hidden="true">
+                            <div class="modal-dialog sidebar-lg">
+                                <div class="modal-content p-0">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
+                                    <div class="modal-header mb-1">
+                                        <h5 class="modal-title">
+                                            <span class="align-middle">Send Invoice</span>
+                                        </h5>
+                                    </div>
+                                    <div class="modal-body flex-grow-1">
+                                        <form>
+                                            <div class="mb-1">
+                                                <label for="invoice-from" class="form-label">From</label>
+                                                <input type="text" class="form-control" id="invoice-from" value="shelbyComapny@email.com" placeholder="company@email.com" />
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="invoice-to" class="form-label">To</label>
+                                                <input type="text" class="form-control" id="invoice-to" value="qConsolidated@email.com" placeholder="company@email.com" />
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="invoice-subject" class="form-label">Subject</label>
+                                                <input type="text" class="form-control" id="invoice-subject" value="Invoice of purchased Admin Templates" placeholder="Invoice regarding goods" />
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="invoice-message" class="form-label">Message</label>
+                                                <textarea class="form-control" name="invoice-message" id="invoice-message" cols="3" rows="11" placeholder="Message...">
+Dear Queen Consolidated,
+
+Thank you for your business, always a pleasure to work with you!
+
+We have generated a new invoice in the amount of $95.59
+
+We would appreciate payment of this invoice by 05/11/2019</textarea>
+                                            </div>
+                                            <div class="mb-1">
+                                        <span class="badge badge-light-primary">
+                                            <i data-feather="link" class="me-25"></i>
+                                            <span class="align-middle">Invoice Attached</span>
+                                        </span>
+                                            </div>
+                                            <div class="mb-1 d-flex flex-wrap mt-2">
+                                                <button type="button" class="btn btn-primary me-1" data-bs-dismiss="modal">Send</button>
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Send Invoice Sidebar -->
 
                     </div>
                 </section>
