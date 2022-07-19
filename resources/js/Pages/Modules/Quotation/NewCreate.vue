@@ -207,6 +207,36 @@
                                         </div>
                                     </div>
                                 </div>
+
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">{{ packageTitle }}</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in packages"
+                                                 :key="index">
+                                                <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
+                                                <div class="border-1 border-light rounded-3 p-25">
+                                                    <div class="input-group border-0">
+                                                        <div class="input-group-text border-0">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox">
+                                                            </div>
+                                                        </div>
+
+                                                        <QtyButton @getqty="getqty"/>
+
+                                                        <input type="number" class="form-control border-0"
+                                                               placeholder="Discount">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <!--
                                                                 <ServiceCard :cardTitle="domainTitle" :items="domains"/>
 
