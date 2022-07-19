@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('hosting_id')->constrained('hostings');
             $table->foreignId('quotation_id')->constrained('quotations');
-            $table->integer('price');
-            $table->integer('quantity');
-            $table->integer('discount');
+            $table->integer('price')->default(0);
+            $table->integer('quantity')->default(1);
+            $table->integer('discount')->default(0);
             $table->timestamps();
         });
     }

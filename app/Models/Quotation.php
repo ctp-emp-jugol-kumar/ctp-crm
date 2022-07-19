@@ -119,34 +119,31 @@ class Quotation extends Model
 
 
 
-    public function hostings(){
-        return $this->belongsToMany(Hosting::class, 'hosting_quotation')
-            ->withPivot(['price', 'quantity', 'discount'])->withTimestamps();
-    }
-
     public function domains(){
         return $this->belongsToMany(Domain::class, 'domain_quotation')
             ->withPivot(['price', 'quantity', 'discount'])->withTimestamps();
     }
-
+    public function hostings(){
+        return $this->belongsToMany(Hosting::class, 'hosting_quotation')
+            ->withPivot(['price', 'quantity', 'discount'])->withTimestamps();
+    }
     public function works()
     {
         return $this->belongsToMany(Work::class, 'quotation_work')
             ->withPivot(['price', 'quantity', 'discount'])->withTimestamps();
     }
-
-
     public function packages()
     {
         return $this->belongsToMany(Design::class, 'package_quotation')
             ->withPivot(['price', 'quantity', 'discount'])->withTimestamps();
     }
-
-
-
     public function quotationItems(){
         return $this->hasMany(QuotationItem::class, 'quotation_id');
     }
+
+
+
+
 
     public function user()
     {
@@ -156,6 +153,9 @@ class Quotation extends Model
     {
         return $this->belongsTo('App\Models\Client');
     }
+
+
+
     public function website()
     {
         return $this->belongsTo('App\Models\Website');

@@ -62,6 +62,8 @@ Route::prefix('admin')->group(function(){
         Route::resource('hostings', HostingController::class);
         // quotations management
         Route::resource('quotations', QuotationController::class);
+        Route::get('download/quotation-invoice/{id}', [QuotationController::class, 'createInvoice'])
+            ->name('quotation.download');
         // invoices management
         Route::resource('invoices', InvoiceController::class);
         Route::get('download-invoice/{id}', [InvoiceController::class, 'generateInvoicePDFFile'])
@@ -76,5 +78,5 @@ Route::prefix('admin')->group(function(){
 });
 
 
-Route::view('invoice-show', 'invoice.invoice');
+Route::get('invoice-show/{id}',  [QuotationController::class, 'createInvoice']);
 

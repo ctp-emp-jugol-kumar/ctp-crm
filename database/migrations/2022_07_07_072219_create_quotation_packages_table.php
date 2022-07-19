@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('quotation_id')->nullable();
             $table->unsignedBigInteger('package_id')->nullable();
-            $table->integer('price');
-            $table->integer('quantity');
-            $table->integer('discount');
+            $table->integer('price')->default(0);
+            $table->integer('quantity')->default(1);
+            $table->integer('discount')->default(0);
             $table->timestamps();
         });
     }
