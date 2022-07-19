@@ -49,7 +49,10 @@
                         <div class="card">
                             <div class="card-header border-bottom d-flex justify-content-between">
                                 <h4 class="card-title">Invoices Information's </h4>
-                                <a class="dt-button add-new btn btn-primary" href="invoices/create">Add Invoices</a>
+                                <div>
+                                    <a class="dt-button add-new btn btn-primary me-75" :href="info.download_url">Download Invoices</a>
+                                    <a class="dt-button add-new btn btn-primary" href="/admin/invoices">Manage Invoices</a>
+                                </div>
                             </div>
                         </div>
 

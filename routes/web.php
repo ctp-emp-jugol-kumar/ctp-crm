@@ -64,6 +64,7 @@ Route::prefix('admin')->group(function(){
         Route::resource('quotations', QuotationController::class);
         // invoices management
         Route::resource('invoices', InvoiceController::class);
+        Route::get('download-invoice/{id}', [InvoiceController::class, 'generateInvoicePDFFile'])->name('invoices.generateInvoicePDFFile');
         // invoices management
         Route::resource('methods', MethodController::class);
         // invoices management
@@ -72,4 +73,7 @@ Route::prefix('admin')->group(function(){
 
     Route::post('logout', [LoginController::class, 'destroy'])->middleware('auth');
 });
+
+
+Route::view('invoice-show', 'invoice.invoice');
 

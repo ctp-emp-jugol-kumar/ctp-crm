@@ -8,6 +8,8 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Quotation;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
@@ -100,13 +102,38 @@ class InvoiceController extends Controller
                 "client"        => $invoice->client,
                 "invoice_item"  => InvoiceItem::find($invoice->id)->get(),
 
-
                 'invoice_id' =>$invoice->created_at->format('Ymd').$invoice->id,
                 'creator' => $invoice->user,
                 "created" => $invoice->created_at->format('D, d F, Y'),
+                'download_url' => URL::route('invoices.generateInvoicePDFFile', $invoice->id),
             ]
         ]);
 
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Invoice  $invoice
+     * @return \Illuminate\Http\Response
+     */
+    public function generateInvoicePDFFile($id){
+        $invoice = CustomInvoice::findOrFail($id);
+
+        $data = [
+            "invoice"       => $invoice,
+            "client"        => $invoice->client,
+            "invoice_item"  => InvoiceItem::find($invoice->id)->get(),
+
+            'invoice_id' =>$invoice->created_at->format('Ymd').$invoice->id,
+            'creator' => $invoice->user,
+            "created" => $invoice->created_at->format('D, d F, Y'),
+            'download_url' => URL::route('invoices.generateInvoicePDFFile', $invoice->id),
+        ];
+
+        $pdf = Pdf::loadView('invoice.invoice', compact("data"));
+        return $pdf->download('invoice.pdf');
     }
 
     /**

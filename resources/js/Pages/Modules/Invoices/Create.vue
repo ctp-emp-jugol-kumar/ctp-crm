@@ -50,7 +50,7 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Invoice Information's </h4>
-                                    <Link href="/admin/Invoice" class="dt-button add-new btn btn-primary">Manage
+                                    <Link href="/admin/invoices" class="dt-button add-new btn btn-primary">Manage
                                         Invoice
                                     </Link>
                                 </div>
@@ -248,7 +248,6 @@
         date:'',
         payment_policy:'',
         trams_and_condition:'',
-
     });
 
     let worksTitle = "Select work services"
