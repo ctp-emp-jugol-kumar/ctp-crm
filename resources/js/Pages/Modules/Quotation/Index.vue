@@ -70,6 +70,9 @@
 <!--                                                    <button @click="showQuotation(qut.id, 'invoice')" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
                                                         <Icon title="book" />
                                                     </button>-->
+                                                    <a :href="qut.edit_url" class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
+                                                        <Icon title="eye" />
+                                                    </a>
                                                     <a :href="qut.show_url" class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
                                                     </a>

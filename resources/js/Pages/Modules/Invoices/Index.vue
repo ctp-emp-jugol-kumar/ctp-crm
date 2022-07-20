@@ -47,21 +47,29 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr v-for="user in users.data" :key="user.id">
-                                            <td>{{ user.id }}</td>
-                                            <td>{{ user.name }}</td>
-                                            <td>{{ user.price }} </td>
-                                            <td>{{ user.description }} </td>
-                                            <td>{{ user.created_at }}</td>
+                                        <tr v-for="invoice in users.data" :key="invoice.id">
+                                            <td>{{ invoice.id }}</td>
+                                            <td>{{ invoice.name }}</td>
+                                            <td>{{ invoice.price }} </td>
+                                            <td>{{ invoice.description }} </td>
+                                            <td>{{ invoice.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                    <a :href="invoice.invice_url"
+                                                       class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
-                                                    </button>
-                                                    <a :href="user.invice_url" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
-                                                        <Icon title="download" />
                                                     </a>
-                                                    <button @click="deleteItemModal(user.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+
+
+                                                    <a :href="invoice.edit_url"
+                                                       class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
+                                                        <Icon title="eye" />
+                                                    </a>
+
+
+                                                    <button @click="deleteItemModal(invoice.id)"
+                                                            type="button"
+                                                            class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash" />
                                                     </button>
 
@@ -188,7 +196,6 @@
     let props = defineProps({
         users: Object,
         filters: Object,
-        //   can: Object,
         notification:Object,
     });
 
@@ -227,6 +234,9 @@
         })
     };
 
+    let editITem = (id) =>{
+        Inertia.get('invoices/'+id)
+    }
 
 
 

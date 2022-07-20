@@ -50,7 +50,8 @@ class QuotationController extends Controller
             "date"         => $qot->date->format('M-d-Y'),
             "client_name"  => $qot->client->name,
             "user_name"    => $qot->user->name,
-            "show_url"     => URL::route('quotations.show', $qot->id)
+            "show_url"     => URL::route('quotations.show', $qot->id),
+            "edit_url"     => URL::route('quotations.edit', $qot->id)
         ]);
 
         return inertia('Modules/Quotation/Index', [
@@ -396,7 +397,32 @@ class QuotationController extends Controller
 
 
 
+    public function editQuotation($id){
 
+        $quot = Quotation::findOrFail($id);
+        return Inertia::render('Modules/Quotation/Edit', [
+            "clients"   => Client::all(['id','name']),
+            "services"  => Website::all(['id','name', 'price']),
+            "packages"  => Design::all(['id','name', 'price']),
+            "platforms" => Platform::all(['id','name', 'price']),
+            "domains"   => Domain::all(['id','name', 'price']),
+            "hostings"  => Hosting::all(['id','name', 'price']),
+            "works"     => Work::all(['id','name', 'price']),
+
+            "edit_quot" => [
+                "quot"      => $quot,
+                "domains"   => $quot->domains,
+                "hostings"  => $quot->hostings,
+                "works"     => $quot->works,
+                "packages"  => $quot->packages,
+                "quotItems" => $quot->quotationItems,
+                "update_url"=> URL::route('quotations.update', $id),
+            ]
+
+        ]);
+
+
+    }
 
 
     /**
@@ -408,7 +434,18 @@ class QuotationController extends Controller
      */
     public function update(Request $request, Quotation $quotation)
     {
-        //
+        $quotation->update([
+            'user_id'            => Auth::id(),
+            'client_id'          => Request::input('client_id'),
+            'subject'            => Request::input('subject'),
+            'date'               => Request::input('date'),
+            'valid_until'        => Request::input('valid_until'),
+            'payment_policy'     => Request::input('payment_policy'),
+            'terms_of_service'   => Request::input('Trams_Services'),
+            'status'             => filled(Request::input('status')),
+        ]);
+
+        return "updated";
     }
 
     /**
