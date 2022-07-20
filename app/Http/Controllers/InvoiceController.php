@@ -124,7 +124,7 @@ class InvoiceController extends Controller
         $data = [
             "invoice"       => $invoice,
             "client"        => $invoice->client,
-            "invoice_item"  => InvoiceItem::find($invoice->id)->get(),
+            "invoice_item"  => $invoice->invoiceItems,
 
             'invoice_id' =>$invoice->created_at->format('Ymd').$invoice->id,
             'creator' => $invoice->user,

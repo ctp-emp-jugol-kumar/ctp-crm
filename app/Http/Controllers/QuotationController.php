@@ -2,27 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ServicesRequest;
 use App\Models\Client;
 use App\Models\Design;
 use App\Models\Domain;
 use App\Models\Hosting;
 use App\Models\Platform;
 use App\Models\Quotation;
-use App\Models\QuotationItem;
 use App\Models\Website;
 use App\Models\Work;
 
 use Barryvdh\DomPDF\Facade\Pdf;
-use http\Env\Response;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
-use function GuzzleHttp\Promise\all;
-use function PHPUnit\Framework\isEmpty;
 
 class QuotationController extends Controller
 {
@@ -304,7 +297,7 @@ class QuotationController extends Controller
                     "works"          => $quotation->works,
                     "packages"       => $quotation->packages,
                     "items"          => $quotation->quotationItems,
-                    "create_invoice" => URL::route('quotation.download', $quotation->id)
+                    'download_url'   => URL::route('quotations.generateQuotationPDFFile', $quotation->id),
                 ],
 
                 'quotation_owner'    => [
@@ -317,9 +310,8 @@ class QuotationController extends Controller
 
     }
 
-    public function createInvoice($id){
+    public function generateQuotationPDFFile($id){
         $quotation = Quotation::findOrFail($id);
-
 
         $mainarray = array();
 
@@ -370,11 +362,6 @@ class QuotationController extends Controller
             'quotation'          => $quotation,
             'others_info'        => [
                   "items"          => $mainarray,
-//                "domains"        => $quotation->domains,
-//                "hosgings"       => $quotation->hostings,
-//                "works"          => $quotation->works,
-//                "packages"       => $quotation->packages,
-//                "items"          => $quotation->quotationItems,
                 "create_invoice" => URL::route('quotation.download', $quotation->id)
             ],
 
@@ -384,14 +371,8 @@ class QuotationController extends Controller
             ]
         ];
 
-//        return view('invoice.quotation', compact('data'));
-//        exit();
-
         $pdf = Pdf::loadView('invoice.quotation', compact('data'));
-
         return $pdf->download('quotation.pdf');
-
-
     }
 
 

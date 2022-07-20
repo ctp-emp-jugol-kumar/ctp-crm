@@ -277,7 +277,7 @@ return array(
          * @deprecated This feature is now always on in dompdf 2.x
          * @var bool
          */
-        "enable_html5_parser" => true,
+        "enable_html5_parser" => false,
     ),
 
 

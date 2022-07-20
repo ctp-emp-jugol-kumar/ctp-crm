@@ -12,6 +12,7 @@ use App\Http\Controllers\MethodController;
 use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\PurposeController;
 use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\QuotationInvoice;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\WorkController;
@@ -62,12 +63,14 @@ Route::prefix('admin')->group(function(){
         Route::resource('hostings', HostingController::class);
         // quotations management
         Route::resource('quotations', QuotationController::class);
-        Route::get('download/quotation-invoice/{id}', [QuotationController::class, 'createInvoice'])
-            ->name('quotation.download');
+        Route::get('download-quotation/{id}', [QuotationController::class, 'generateQuotationPDFFile'])
+            ->name('quotations.generateQuotationPDFFile');
+
         // invoices management
         Route::resource('invoices', InvoiceController::class);
         Route::get('download-invoice/{id}', [InvoiceController::class, 'generateInvoicePDFFile'])
             ->name('invoices.generateInvoicePDFFile');
+
         // invoices management
         Route::resource('methods', MethodController::class);
         // invoices management

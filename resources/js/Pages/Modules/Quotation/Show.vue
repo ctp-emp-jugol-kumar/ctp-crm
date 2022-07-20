@@ -14,7 +14,7 @@
                                     <h4 class="card-title">Quotations Information's </h4>
                                     <div>
 
-                                        <Link :href="info.others_info.create_invoice" class="dt-button add-new btn btn-primary me-2">Download Quotation
+                                        <Link :href="info.others_info.download_url" class="dt-button add-new btn btn-primary me-2">Download Quotation
                                         </Link>
 
                                         <Link href="/admin/quotations" class="dt-button add-new btn btn-primary">Manage

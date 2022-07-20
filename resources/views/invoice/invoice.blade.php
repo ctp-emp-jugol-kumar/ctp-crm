@@ -16,9 +16,9 @@
             margin: 4px 0;
             font-size: 18px;
         }
-        .container {
-            box-sizing: border-box;
-        }
+        /*.container {*/
+        /*    box-sizing: border-box;*/
+        /*}*/
         .row {
             width: 100%;
             display: flex;
