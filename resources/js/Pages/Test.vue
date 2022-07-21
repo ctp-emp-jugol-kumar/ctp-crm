@@ -108,6 +108,72 @@
                 <!--/ Statistics Card -->
             </div>
         </section>
+
+        <section>
+            <div class="row">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h3 class="fw-bolder mb-75">1255</h3>
+                                <span>Wishlists Courses</span>
+                            </div>
+                            <div class="avatar bg-light-warning p-50">
+                            <span class="avatar-content">
+                                <vue-feather type="users"/>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h3 class="fw-bolder mb-75">5547</h3>
+                                <span>My Courses</span>
+                            </div>
+                            <div class="avatar bg-light-primary p-50">
+                            <span class="avatar-content">
+                                <vue-feather type="users"/>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h3 class="fw-bolder mb-75">5541</h3>
+                                <span>Total Subscriptions</span>
+                            </div>
+                            <div class="avatar bg-light-success p-50">
+                            <span class="avatar-content">
+                                <vue-feather type="users"/>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h3 class="fw-bolder mb-75">9985</h3>
+                                <span>Total Perches</span>
+                            </div>
+                            <div class="avatar bg-light-danger p-50">
+                            <span class="avatar-content">
+                                <vue-feather type="users"/>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </div>
     <!-- Dashboard Ecommerce ends -->
 </template>
