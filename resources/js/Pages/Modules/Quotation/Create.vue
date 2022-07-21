@@ -4,44 +4,6 @@
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper container-xxl p-0">
-            <div class="content-header row">
-                <div class="content-header-left col-md-9 col-12 mb-2">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">Quotations Form</h2>
-                            <div class="breadcrumb-wrapper">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-                                    <li class="breadcrumb-item active">Quotations</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="content-header-right text-md-end col-md-3 col-12 d-md-block d-none">
-                    <div class="mb-1 breadcrumb-right">
-                        <div class="dropdown">
-                            <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                                data-feather="grid"></i></button>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="app-todo.html">
-                                    <i class="me-1" data-feather="check-square"></i>
-                                    <span class="align-middle">Todo</span></a>
-                                <a class="dropdown-item" href="app-chat.html">
-                                    <i class="me-1" data-feather="message-square"></i>
-                                    <span class="align-middle">Chat</span></a>
-                                <a class="dropdown-item" href="app-email.html">
-                                    <i class="me-1" data-feather="mail"></i>
-                                    <span class="align-middle">Email</span></a>
-                                <a class="dropdown-item" href="app-calendar.html">
-                                    <i class="me-1" data-feather="calendar"></i>
-                                    <span class="align-middle">Calendar</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="content-body">
                 <!-- Advanced Search -->
                 <section id="advanced-search-datatable">
@@ -71,10 +33,13 @@
                                                         <select2 v-model="formData.client_id" :options="clients"
                                                                  :reduce="client => client.id" label="name"
                                                                  placeholder="Select Client"></select2>
+                                                        <InputFieldError :errors="errors.client_id"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md">
-                                                    <label>Subject : </label>
+                                                    <label>Subject :
+                                                        <Required/>
+                                                    </label>
                                                     <div class="">
                                                         <input type="text" placeholder="Subjects"
                                                                v-model="formData.subject"
@@ -117,6 +82,9 @@
 
                                 <!--works sections-->
                                 <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">{{ worksTitle }}</h4>
+                                    </div>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-4 mb-1" v-for="(option , index) in formData.works"
@@ -146,6 +114,9 @@
 
                                 <!--domain sections-->
                                 <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">{{ domainTitle }}</h4>
+                                    </div>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-4 mb-1" v-for="(option , index) in formData.domains"
@@ -174,6 +145,9 @@
 
                                 <!--hosting sections-->
                                 <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">{{ HostingTitle }}</h4>
+                                    </div>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-4 mb-1" v-for="(option , index) in formData.hostings"
@@ -203,6 +177,9 @@
 
                                 <!--package sections-->
                                 <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">{{ packageTitle }}</h4>
+                                    </div>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-4 mb-1" v-for="(option , index) in formData.packages"
@@ -364,38 +341,39 @@
     import QtyButton from "../../../components/QtyButton";
 
     let props = defineProps({
-        clients: Object,
-        services: Object,
-        packages: Object,
-        platforms: Object,
-        works: Object,
-        filters: Object,
-        domains: Object,
-        hostings: Object,
-        notification: Object,
-        errors: Object,
+        clients      : Object,
+        services     : Object,
+        packages     : Object,
+        platforms    : Object,
+        works        : Object,
+        filters      : Object,
+        domains      : Object,
+        hostings     : Object,
+        notification : Object,
+        errors       : Object,
     })
 
 
     let formData = useForm({
-        client_id: "",
-        subject: "",
-        date: "",
-        valid_until: "",
+        client_id     : "",
+        subject       : "",
+        date          : "",
+        valid_until   : "",
         payment_policy: "",
         Trams_Services: "",
-        status: "",
+        status        : "",
 
 
-        hostings: props.hostings,
-        domains: props.domains,
-        works: props.works,
-        packages: props.packages,
+        hostings      : props.hostings,
+        domains       : props.domains,
+        works         : props.works,
+        packages      : props.packages,
 
         quatations: [
             {
                 itemname: '',
                 price: '',
+                discount: '',
                 quantity: ''
             }
         ],
@@ -403,8 +381,8 @@
 
     });
 
-    let worksTitle = "Select work services"
-    let domainTitle = "Select domains"
+    let worksTitle   = "Select work services"
+    let domainTitle  = "Select domains"
     let hostingTitle = "Select hosting"
     let packageTitle = "Select packages"
 
@@ -463,6 +441,7 @@
         formData.quatations.push({
             itemname: '',
             price: '',
+            discount: '',
             quantity: ''
         })
     }

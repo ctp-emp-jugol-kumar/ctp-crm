@@ -4,44 +4,6 @@
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper container-xxl p-0">
-            <div class="content-header row">
-                <div class="content-header-left col-md-9 col-12 mb-2">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">Quotations Form</h2>
-                            <div class="breadcrumb-wrapper">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-                                    <li class="breadcrumb-item active">Quotations</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="content-header-right text-md-end col-md-3 col-12 d-md-block d-none">
-                    <div class="mb-1 breadcrumb-right">
-                        <div class="dropdown">
-                            <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                                data-feather="grid"></i></button>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="app-todo.html">
-                                    <i class="me-1" data-feather="check-square"></i>
-                                    <span class="align-middle">Todo</span></a>
-                                <a class="dropdown-item" href="app-chat.html">
-                                    <i class="me-1" data-feather="message-square"></i>
-                                    <span class="align-middle">Chat</span></a>
-                                <a class="dropdown-item" href="app-email.html">
-                                    <i class="me-1" data-feather="mail"></i>
-                                    <span class="align-middle">Email</span></a>
-                                <a class="dropdown-item" href="app-calendar.html">
-                                    <i class="me-1" data-feather="calendar"></i>
-                                    <span class="align-middle">Calendar</span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="content-body">
                 <!-- Advanced Search -->
                 <section id="advanced-search-datatable">
@@ -50,9 +12,15 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Quotations Information's </h4>
-                                    <Link href="/admin/quotations" class="dt-button add-new btn btn-primary">Manage
-                                        Quotations
-                                    </Link>
+                                    <div>
+
+                                        <Link :href="info.others_info.create_invoice" class="dt-button add-new btn btn-primary me-2">Download Quotation
+                                        </Link>
+
+                                        <Link href="/admin/quotations" class="dt-button add-new btn btn-primary">Manage
+                                            Quotations
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -66,20 +34,20 @@
                                         <div class="card-body">
                                             <table class="table table-striped table-bordered">
                                                 <tbody>
-                                                <h3 class="text-capitalize">Client Name: {{ props.quotation.client.name }}</h3>
+                                                <h3 class="text-capitalize">Client Name: {{ props.info.quotation_owner.client.name }}</h3>
                                                 <tr>
-                                                    <td>Client Email: {{ props.quotation.client.email }}</td>
+                                                    <td>Client Email: {{ props.info.quotation_owner.client.email }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Client Phone: {{ props.quotation.client.phone }}</td>
+                                                    <td>Client Phone: {{ props.info.quotation_owner.client.phone }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Client Secondery Phone: {{
-                                                        props.quotation.client.secondary_phone }}
+                                                        props.info.quotation_owner.client.secondary_phone }}
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Client Phone: {{ props.quotation.client.address }}</td>
+                                                    <td>Client Phone: {{ props.info.quotation_owner.client.address }}</td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -94,18 +62,18 @@
                                         <div class="card-body">
                                             <table class="table table-striped table-bordered">
                                                 <tbody>
-                                                <h3>Quotation Id: CTP-{{ props.others_info.quot_id }}</h3>
+                                                <h3>Quotation Id: CTP-{{ props.info.quotation.id }}</h3>
                                                 <tr>
-                                                    <td>Quotation Validate: {{ props.others_info.created }}</td>
+                                                    <td>Quotation Validate: {{  props.info.dates.date}}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Quotation Validate: {{ props.others_info.validated }}</td>
+                                                    <td>Quotation Validate: {{ props.info.dates.valid_until }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Quotation Creator: {{ props.others_info.creator.name }}</td>
+                                                    <td>Quotation Creator: {{ props.info.quotation_owner.creator.name }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Creator Email: {{ props.others_info.creator.email }}</td>
+                                                    <td>Creator Email: {{ props.info.quotation_owner.creator.email }}</td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -114,7 +82,6 @@
                                 </div>
                             </div>
                         </dvi>
-
                         <div class="col-md-8 mx-auto">
                             <div class="row">
                                 <div class="col-md-12">
@@ -128,55 +95,47 @@
                                                     <tr>
                                                         <th class="text-left bg-primary text-white">Description</th>
                                                         <th class="text-right bg-primary text-white">Price</th>
+                                                        <th class="text-right bg-primary text-white">Discount</th>
+                                                        <th class="text-right bg-primary text-white">Total</th>
                                                     </tr>
                                                 </thead>
 
                                                 <tbody>
-                                                    <tr v-if="props.quotation.works.length > 0 ">
+                                                    <tr v-for="(item, index) in allData" :key="item.id">
                                                         <td class="">
-                                                            <span  v-for="work in props.quotation.works" :key="work.id">
-                                                                {{ work.name }}<br>
-                                                            </span>
+                                                            <p v-html="item.name"></p>
                                                         </td>
                                                         <td class="text-end">
-                                                            <p>{{ props.others_info.works_price }} Tk</p>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td class="text-left">{{ props.quotation.domain.name }}</td>
-                                                        <td class="text-end">
-                                                            <p>{{  props.quotation.domain.price }} Tk</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-left">{{ props.quotation.hosting.name }}</td>
-                                                        <td class="text-end">
-                                                            <p>{{ props.quotation.hosting.price }} Tk</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr v-if="props.quotation.quotation_items.length > 0">
-                                                        <td class="text-left">
-                                                            <span v-for="qit in props.quotation.quotation_items" :key="qit.id">{{ qit.itemname }}<br></span>
+                                                            <p>{{ item.price }} * {{ item.quantity }} = {{ item.sumItem }} Tk</p>
                                                         </td>
                                                         <td class="text-end">
-                                                            <p>{{ props.others_info.qut_items_price}} Tk</p>
+                                                            <p>{{ item.discount }} Tk</p>
+                                                        </td>
+                                                        <td class="text-end">
+                                                            <p>{{ item.total }} Tk</p>
                                                         </td>
                                                     </tr>
                                                 </tbody>
+
                                                 <tfoot class="table_bottom_border">
                                                     <tr class="text-end">
+                                                        <td></td>
+                                                        <td></td>
                                                         <td class="text-right">Sub Total =</td>
-                                                        <td class="text-right"><strong>{{ props.others_info.total_price }} Tk </strong></td>
+                                                        <td class="text-right"><strong> Tk </strong></td>
                                                     </tr>
                                                     <tr class="text-end">
+                                                        <td></td>
+                                                        <td></td>
                                                         <td class="text-right">Discount =</td>
                                                         <td class="text-right"><strong>0 Tk</strong>
                                                         </td>
                                                     </tr>
                                                     <tr class="text-end">
+                                                        <td></td>
+                                                        <td></td>
                                                         <td class="text-right">Grand Total =</td>
-                                                        <td class="text-right"><strong>{{ props.others_info.total_price }} Tk</strong></td>
+                                                        <td class="text-right"><strong> Tk</strong></td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -197,14 +156,30 @@
 
 <script setup>
 
-
-    import {defineProps} from "@vue/runtime-core";
+    import { computed } from "vue";
 
     let props = defineProps({
-        quotation: Object,
-        others_info: Object,
+        info:Object,
     })
 
+    let allData = computed(() =>{
+        return [...props.info.others_info.domains, ...props.info.others_info.hosgings,
+            ...props.info.others_info.works, ...props.info.others_info.packages,
+            ...props.info.others_info.items].map(item => {
+                return {
+                    name     : item.name     ?? item.itemname,
+                    quantity : item.quantity,
+                    price    : item.price ,
+                    sumItem  : item.price * item.quantity > 0 ? item.quantity : 1,
+                    discount : item.discount ?? 0,
+                    total    : item.price||0-item.discount||0
+                }
+        });
+    })
+
+    let subTotal = computed(() =>{
+        return allData.total
+    })
 
 </script>
 
