@@ -363,7 +363,7 @@
         valid_until   : props.edit_quot.quot.valid_until,
         payment_policy: props.edit_quot.quot.payment_policy,
         Trams_Services: props.edit_quot.quot.terms_of_service,
-        status        : props.edit_quot.quot.status ===1 ? true : false,
+        status        : props.edit_quot.quot.status,
 
 
         hostings      : props.hostings,
@@ -372,8 +372,6 @@
         packages      : props.packages,
 
         quatations: props.edit_quot.quotItems,
-
-
     });
 
     let worksTitle   = "Select work services"

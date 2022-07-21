@@ -430,7 +430,7 @@ class QuotationController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Quotation  $quotation
-     * @return \Illuminate\Http\Response
+     * @return string
      */
     public function update(Request $request, Quotation $quotation)
     {
@@ -452,11 +452,12 @@ class QuotationController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Quotation  $quotation
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Quotation $quotation)
     {
-        //
+        $quotation->delete();
+        return back();
     }
 
 

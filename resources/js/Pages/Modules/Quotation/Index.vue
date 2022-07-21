@@ -67,16 +67,15 @@
 
 
                                                 <div class="demo-inline-spacing">
-<!--                                                    <button @click="showQuotation(qut.id, 'invoice')" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
-                                                        <Icon title="book" />
-                                                    </button>-->
-                                                    <a :href="qut.edit_url" class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
-                                                        <Icon title="eye" />
+                                                    <a :href="qut.edit_url" class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
+                                                       <Icon title="pencil"/>
                                                     </a>
                                                     <a :href="qut.show_url" class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
                                                     </a>
-                                                    <button @click="deleteItemModal(qut.id)" type="button" class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
+                                                    <button @click="deleteItemModal(qut.id)"
+                                                            type="button"
+                                                            class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash" />
                                                     </button>
                                                 </div>
@@ -135,7 +134,7 @@
                     document.getElementById('showQuotation').$vb.modal.show();
                     console.log(data);
                 }).catch(function (err) {
-
+                    //
                 })
             }
         },
@@ -179,17 +178,20 @@
             text: "You won't be able to revert this!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#662cb8',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Inertia.delete(adminPath.value + '/users/' + id, { preserveState: true, replace: true, onSuccess: page => {
-                    Swal.fire(
-                        'Deleted!',
-                        'Your file has been deleted.',
-                        'success'
-                    )
+                Inertia.delete('/admin/quotations/' + id, {
+                    preserveState: true,
+                    replace: true,
+                    onSuccess: page => {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )
                 },
                 onError: errors => {
                     Swal.fire(
