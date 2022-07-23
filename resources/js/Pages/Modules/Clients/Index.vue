@@ -11,10 +11,14 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Clients Information's </h4>
-                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#createNewCategory"
-                                    >Add Client
+<!--                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal" data-bs-target="#createNewCategory">Add Client</button>-->
+                                    <button
+                                        class="dt-button add-new btn btn-primary"
+                                        tabindex="1"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#createNewCategory">
+                                        Add Client
                                     </button>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
@@ -75,12 +79,12 @@
                                             <td>
                                                 <div class="demo-inline-spacing">
                                                     <button type="button" @click="editClient(user.show_url)"
-                                                            class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                            class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="eye"/>
                                                     </button>
 
                                                     <button @click="deleteItemModal(user.id)" type="button"
-                                                            class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+                                                            class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash"/>
                                                     </button>
                                                 </div>
@@ -102,7 +106,7 @@
     </div>
 
 
-    <Modal id="createNewCategory" title="Add New Client" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="createNewCategory" title="Add New Client" v-vb-is:modal size="lg">
         <form @submit.prevent="createClientForm">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -183,7 +187,7 @@
                     </div>
                     <div class="col-md">
                         <label>Assign Agent: </label>
-                        <select class="form-control" v-model="createForm.agents" multiple>
+                        <select class="form-control" v-model="createForm.agents" multiple name="agents[]">
                             <option v-for="user in users" :value="user.id">{{ user.name }}</option>
                         </select>
                     </div>
@@ -202,7 +206,7 @@
     </Modal>
 
 
-    <Modal id="editClient" title="Show Client" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="editClient" title="Show Client" v-vb-is:modal size="lg">
         <form @submit.prevent="updateClientForm(editData.id)">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -339,7 +343,7 @@
         address: "",
         note: "",
         status: "",
-        agents: Object,
+        agents: [null],
 
         processing: Boolean,
     })
@@ -354,9 +358,8 @@
         address: "",
         note: "",
         status: "",
-        agents: Object,
+        agents: null,
     })
-
 
     let status = [
         'New Lead', 'Contacted', 'Proposal Sent', 'Quote Sent', 'Qualified', 'Disqualified', 'Convarted To Customer'
@@ -405,11 +408,11 @@
             onSuccess: () => {
                 document.getElementById('createNewCategory').$vb.modal.hide()
                 createForm.reset()
-                Swal.fire(
-                    'Saved!',
-                    'Your file has been Saved.',
-                    'success'
-                )
+                // Swal.fire(
+                //     'Saved!',
+                //     'Your file has been Saved.',
+                //     'success'
+                // )
             },
         })
     }

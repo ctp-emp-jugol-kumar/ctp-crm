@@ -14,8 +14,8 @@
                                     <h4 class="card-title">Quotations Information's </h4>
                                     <div>
 
-                                        <Link :href="info.others_info.create_invoice" class="dt-button add-new btn btn-primary me-2">Download Quotation
-                                        </Link>
+                                        <a :href="info.others_info.create_invoice" class="dt-button add-new btn btn-primary me-2">Download Quotation
+                                        </a>
 
                                         <Link href="/admin/quotations" class="dt-button add-new btn btn-primary">Manage
                                             Quotations
@@ -24,7 +24,7 @@
                                 </div>
                             </div>
                         </div>
-                        <dvi class="col-md-12 mx-auto">
+                        <div class="col-md-12 mx-auto">
                             <div class="row">
                                 <div class="col">
                                     <div class="card">
@@ -81,7 +81,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </dvi>
+                        </div>
                         <div class="col-md-8 mx-auto">
                             <div class="row">
                                 <div class="col-md-12">
@@ -106,13 +106,13 @@
                                                             <p v-html="item.name"></p>
                                                         </td>
                                                         <td class="text-end">
-                                                            <p>{{ item.price }} * {{ item.quantity }} = {{ item.sumItem }} Tk</p>
+                                                            <p>{{ item.price }} * {{ item.quantity }} = {{ item.qtyprice }} Tk</p>
                                                         </td>
                                                         <td class="text-end">
                                                             <p>{{ item.discount }} Tk</p>
                                                         </td>
                                                         <td class="text-end">
-                                                            <p>{{ item.total }} Tk</p>
+                                                            <p>{{ item.subTotal }} Tk</p>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -122,7 +122,7 @@
                                                         <td></td>
                                                         <td></td>
                                                         <td class="text-right">Sub Total =</td>
-                                                        <td class="text-right"><strong> Tk </strong></td>
+                                                        <td class="text-right"><strong> {{ subTotal}} Tk </strong></td>
                                                     </tr>
                                                     <tr class="text-end">
                                                         <td></td>
@@ -135,7 +135,7 @@
                                                         <td></td>
                                                         <td></td>
                                                         <td class="text-right">Grand Total =</td>
-                                                        <td class="text-right"><strong> Tk</strong></td>
+                                                        <td class="text-right"><strong>{{ subTotal }} Tk</strong></td>
                                                     </tr>
                                                 </tfoot>
                                             </table>
@@ -163,22 +163,22 @@
     })
 
     let allData = computed(() =>{
-        return [...props.info.others_info.domains, ...props.info.others_info.hosgings,
-            ...props.info.others_info.works, ...props.info.others_info.packages,
-            ...props.info.others_info.items].map(item => {
-                return {
-                    name     : item.name     ?? item.itemname,
-                    quantity : item.quantity,
-                    price    : item.price ,
-                    sumItem  : item.price * item.quantity > 0 ? item.quantity : 1,
-                    discount : item.discount ?? 0,
-                    total    : item.price||0-item.discount||0
-                }
+        return [...props.info.others_info.items].map(item => {
+            return {
+                name     : item.name ?? item.itemname,
+                price    : parseInt(item.price) ?? 0,
+                quantity : parseInt(item.quantity) ?? 1,
+                discount : parseInt(item.discount) ?? 0,
+                qtyprice : (parseInt(item.price) ?? 0) * (parseInt(item.quantity) ?? 1),
+                subTotal : ((parseInt(item.price) ?? 0) * (parseInt(item.quantity) ?? 1)) - parseInt(item.discount) ?? 0,
+            }
         });
     })
 
     let subTotal = computed(() =>{
-        return allData.total
+            let sum = 0;
+         [...props.info.others_info.items].map(item => sum = sum + ((parseInt(item.price) ?? 0) * (parseInt(item.quantity) ?? 1)) - parseInt(item.discount) ?? 0)
+        return sum;
     })
 
 </script>

@@ -87,7 +87,7 @@
 
 
 
-    <Modal id="createPackage" title="Add New Client" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="createPackage" title="Add New Client" v-vb-is:modal size="lg">
         <form @submit.prevent="createPackage">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -126,7 +126,7 @@
         </form>
     </Modal>
 
-    <Modal id="editData" title="Add New Client" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="editData" title="Add New Client" v-vb-is:modal size="lg">
         <form @submit.prevent="updateData(editData.id)">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -255,11 +255,11 @@
             onSuccess: ()=> {
                 document.getElementById('createPackage').$vb.modal.hide()
                 createForm.reset()
-                Swal.fire(
-                    'Saved!',
-                    'Your file has been Saved.',
-                    'success'
-                )
+                // Swal.fire(
+                //     'Saved!',
+                //     'Your file has been Saved.',
+                //     'success'
+                // )
             },
         })
     }
