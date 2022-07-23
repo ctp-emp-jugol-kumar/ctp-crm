@@ -101,3 +101,15 @@ Route::get('/test', [\App\Http\Controllers\TestController::class, 'index'])->nam
 Route::post('/test/create', [\App\Http\Controllers\TestController::class, 'create'])->name('test.create');
 Route::get('/test/edit/{id}', [\App\Http\Controllers\TestController::class, 'edit'])->name('test.edit');
 Route::put('/test/update/{id}', [\App\Http\Controllers\TestController::class, 'update'])->name('test.update');
+
+
+Route::fallback(function() {
+    return \Inertia\Inertia::render('Pages/Errors/404',[
+        "info" =>[
+            'data' => 'somting want wrong...',
+            'code' => 404
+        ]
+    ]);
+
+
+});

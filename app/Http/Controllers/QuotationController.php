@@ -2,20 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ServicesRequest;
 use App\Models\Client;
 use App\Models\Design;
 use App\Models\Domain;
 use App\Models\Hosting;
 use App\Models\Platform;
 use App\Models\Quotation;
+use App\Models\QuotationItem;
 use App\Models\Website;
 use App\Models\Work;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use http\Env\Response;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
+use function GuzzleHttp\Promise\all;
+use function PHPUnit\Framework\isEmpty;
 
 class QuotationController extends Controller
 {
@@ -29,23 +36,23 @@ class QuotationController extends Controller
     public function index()
     {
         $quotation  = Quotation::query()
-        ->with([
-            "client:id,name", "user:id,name"])
-        ->when(Request::input('search'), function ($query, $search) {
-            $query->where('email', 'like', "%{$search}%");
-        })
-        ->paginate(Request::input('perPage') ?? 10)
-        ->withQueryString()
-        ->through(fn($qot) => [
-            "id"           => $qot->id,
-            "subject"      => $qot->subject,
-            "status"       => $qot->status,
-            "date"         => $qot->date->format('M-d-Y'),
-            "client_name"  => $qot->client->name,
-            "user_name"    => $qot->user->name,
-            "show_url"     => URL::route('quotations.show', $qot->id),
-            "edit_url"     => URL::route('quotations.edit', $qot->id)
-        ]);
+            ->with([
+                "client:id,name", "user:id,name"])
+            ->when(Request::input('search'), function ($query, $search) {
+                $query->where('email', 'like', "%{$search}%");
+            })
+            ->paginate(Request::input('perPage') ?? 10)
+            ->withQueryString()
+            ->through(fn($qot) => [
+                "id"           => $qot->id,
+                "subject"      => $qot->subject,
+                "status"       => $qot->status,
+                "date"         => $qot->date->format('M-d-Y'),
+                "client_name"  => $qot->client->name,
+                "user_name"    => $qot->user->name,
+                "show_url"     => URL::route('quotations.show', $qot->id),
+                "edit_url"     => URL::route('quotations.edit', $qot->id)
+            ]);
 
         return inertia('Modules/Quotation/Index', [
             'quotations'  => $quotation,
@@ -110,8 +117,8 @@ class QuotationController extends Controller
         ]);
 
         $quotation = Quotation::create([
-           'user_id'             => Auth::id(),
-           'client_id'           => Request::input('client_id'),
+            'user_id'             => Auth::id(),
+            'client_id'           => Request::input('client_id'),
             'subject'            => Request::input('subject'),
             'date'               => Request::input('date'),
             'valid_until'        => Request::input('valid_until'),
@@ -238,117 +245,104 @@ class QuotationController extends Controller
      * @param Quotation $quotation
      * @return \Inertia\Response
      */
-   /* public function show($id)
-    {
-        $quotation = Quotation::with(['client', 'domain', 'hosting', 'quotationItems', 'works'])->findOrFail($id);
-        $sumItemsPrice = $quotation->quotationItems()->sum('cost');
-        $sumWorksPrice = $quotation->works()->sum('price');
-        $domain = $quotation->domain_id ? $quotation->domain->price : 0;
-        $hosting = $quotation->hosting_id ? $quotation->hosting->price : 0;
-        $total = $sumWorksPrice + $sumItemsPrice + $domain + $hosting;
+    /* public function show($id)
+     {
+         $quotation = Quotation::with(['client', 'domain', 'hosting', 'quotationItems', 'works'])->findOrFail($id);
+         $sumItemsPrice = $quotation->quotationItems()->sum('cost');
+         $sumWorksPrice = $quotation->works()->sum('price');
+         $domain = $quotation->domain_id ? $quotation->domain->price : 0;
+         $hosting = $quotation->hosting_id ? $quotation->hosting->price : 0;
+         $total = $sumWorksPrice + $sumItemsPrice + $domain + $hosting;
 
-        $allItems = array();
+         $allItems = array();
 
-        array_push($allItems, $quotation->domain, $quotation->hosting);
+         array_push($allItems, $quotation->domain, $quotation->hosting);
 
-        array_push($allItems, ['quantity' => 1]);
-
-
-        foreach ($quotation->quotationItems as $key => $quotationItem) {
-            array_push($allItems, $quotationItem);
-        }
-        foreach ($quotation->works as $work) {
-            array_push($allItems, $work);
-        }
+         array_push($allItems, ['quantity' => 1]);
 
 
-        return Inertia::render(Request::input("page") == 'show' ? 'Modules/Quotation/Show' : 'Modules/Quotation/Invoice', [
-            'quotation' => $quotation,
-            'others_info' => [
-                'quot_id' =>$quotation->created_at->format('Ymd').$quotation->id,
-                'creator' => $quotation->user,
-                "created" => $quotation->created_at->format('D, d F, Y'),
-                "validated" => $quotation->valid_until->format('D, d F, Y'),
-                "qut_items_price" => $quotation->quotationItems()->sum('cost'),
-                "works_price" => $quotation->works()->sum('price'),
-                "total_price" => $total,
-                'all_items' => $allItems
-            ]
-        ]);
-    }*/
+         foreach ($quotation->quotationItems as $key => $quotationItem) {
+             array_push($allItems, $quotationItem);
+         }
+         foreach ($quotation->works as $work) {
+             array_push($allItems, $work);
+         }
+
+
+         return Inertia::render(Request::input("page") == 'show' ? 'Modules/Quotation/Show' : 'Modules/Quotation/Invoice', [
+             'quotation' => $quotation,
+             'others_info' => [
+                 'quot_id' =>$quotation->created_at->format('Ymd').$quotation->id,
+                 'creator' => $quotation->user,
+                 "created" => $quotation->created_at->format('D, d F, Y'),
+                 "validated" => $quotation->valid_until->format('D, d F, Y'),
+                 "qut_items_price" => $quotation->quotationItems()->sum('cost'),
+                 "works_price" => $quotation->works()->sum('price'),
+                 "total_price" => $total,
+                 'all_items' => $allItems
+             ]
+         ]);
+     }*/
 
 
 
 
 
     public function show(Quotation $quotation){
-
         $mainarray = array();
         foreach ($quotation->domains as $item){
-
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price ?? 0,
-                'discount' => $item->pivot->discount ?? 0,
-                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+                'price' => $item->price,
+                'discount' => $item->pivot->discount,
+                'quantity' => $item->pivot->quantity
             ];
         }
 
         foreach ($quotation->hostings as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price ?? 0,
-                'discount' => $item->pivot->discount ?? 0,
-                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+                'price' => $item->price,
+                'discount' => $item->pivot->discount,
+                'quantity' => $item->pivot->quantitiy
             ];
         }
         foreach ($quotation->works as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price ?? 0,
-                'discount' => $item->pivot->discount ?? 0,
-                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+                'price' => $item->price,
+                'discount' => $item->pivot->discount,
+                'quantity' => $item->pivot->quantitiy
             ];
         }
         foreach ($quotation->packages as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price ?? 0,
-                'discount' => $item->pivot->discount ?? 0,
-                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+                'price' => $item->price,
+                'discount' => $item->pivot->discount,
+                'quantity' => $item->pivot->quantitiy
             ];
         }
-
         foreach ($quotation->quotationItems as $item){
             $mainarray [] =[
                 'name' => $item->name ?? $item->itemname,
-                'price' => $item->price ?? 0,
-                'discount' => $item->discount ?? 0,
-                'quantity' => $item->quantity > 0 ? $item->quantity  : 1,
+                'price' => $item->price,
+                'discount' => $item->discount,
+                'quantity' => $item->quantity
             ];
         }
 
 
-
         return Inertia::render('Modules/Quotation/Show', [
-            'info' =>[
+            "info" => [
                 'quotation'          => $quotation,
                 'dates'              => [
                     'date'           => $quotation->date->format('M-d-Y'),
                     'valid_until'    => $quotation->valid_until->format('M-d-Y'),
                 ],
                 'others_info'        => [
-<<<<<<< HEAD
-                    "domains"        => $quotation->domains,
-                    "hosgings"       => $quotation->hostings,
-                    "works"          => $quotation->works,
-                    "packages"       => $quotation->packages,
-                    "items"          => $quotation->quotationItems,
-                    'download_url'   => URL::route('quotations.generateQuotationPDFFile', $quotation->id),
-=======
-                    "items"            => $mainarray,
+                    "items"          => $mainarray,
                     "create_invoice" => URL::route('quotation.download', $quotation->id)
->>>>>>> acf747be5f78bea16958732d4fe9455b54a82f8a
                 ],
 
                 'quotation_owner'    => [
@@ -361,60 +355,51 @@ class QuotationController extends Controller
 
     }
 
-<<<<<<< HEAD
-    public function generateQuotationPDFFile($id){
-        $quotation = Quotation::findOrFail($id);
-
-=======
-
-
-
-
     public function createInvoice($id){
         $quotation = Quotation::findOrFail($id);
->>>>>>> acf747be5f78bea16958732d4fe9455b54a82f8a
-        $mainarray = array();
-        foreach ($quotation->domains as $item){
 
+
+        $mainarray = array();
+
+        foreach ($quotation->domains as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price ?? 0,
-                'discount' => $item->pivot->discount ?? 0,
-                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+                'price' => $item->price,
+                'discount' => $item->pivot->discount,
+                'quantity' => $item->pivot->quantity
             ];
         }
 
         foreach ($quotation->hostings as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price ?? 0,
-                'discount' => $item->pivot->discount ?? 0,
-                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+                'price' => $item->price,
+                'discount' => $item->pivot->discount,
+                'quantity' => $item->pivot->quantitiy
             ];
         }
         foreach ($quotation->works as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price ?? 0,
-                'discount' => $item->pivot->discount ?? 0,
-                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+                'price' => $item->price,
+                'discount' => $item->pivot->discount,
+                'quantity' => $item->pivot->quantitiy
             ];
         }
         foreach ($quotation->packages as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price ?? 0,
-                'discount' => $item->pivot->discount ?? 0,
-                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+                'price' => $item->price,
+                'discount' => $item->pivot->discount,
+                'quantity' => $item->pivot->quantitiy
             ];
         }
-
         foreach ($quotation->quotationItems as $item){
             $mainarray [] =[
                 'name' => $item->name ?? $item->itemname,
-                'price' => $item->price ?? 0,
-                'discount' => $item->discount ?? 0,
-                'quantity' => $item->quantity > 0 ? $item->quantity  : 1,
+                'price' => $item->price,
+                'discount' => $item->discount,
+                'quantity' => $item->quantity
             ];
         }
 
@@ -422,11 +407,7 @@ class QuotationController extends Controller
         $data =[
             'quotation'          => $quotation,
             'others_info'        => [
-<<<<<<< HEAD
-                  "items"          => $mainarray,
-=======
                 "items"          => $mainarray,
->>>>>>> acf747be5f78bea16958732d4fe9455b54a82f8a
                 "create_invoice" => URL::route('quotation.download', $quotation->id)
             ],
 
@@ -436,15 +417,11 @@ class QuotationController extends Controller
             ]
         ];
 
-<<<<<<< HEAD
         $pdf = Pdf::loadView('invoice.quotation', compact('data'));
-        return $pdf->download('quotation.pdf');
-=======
 
-        $pdf = Pdf::loadView('invoice.quotation', compact('data'));
         return $pdf->download('quotation.pdf');
 
->>>>>>> acf747be5f78bea16958732d4fe9455b54a82f8a
+
     }
 
 

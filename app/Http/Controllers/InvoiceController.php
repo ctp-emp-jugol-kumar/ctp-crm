@@ -101,7 +101,6 @@ class InvoiceController extends Controller
                 "invoice"       => $invoice,
                 "client"        => $invoice->client,
                 "invoice_item"  => InvoiceItem::find($invoice->id)->get(),
-
                 'invoice_id' =>$invoice->created_at->format('Ymd').$invoice->id,
                 'creator' => $invoice->user,
                 "created" => $invoice->created_at->format('D, d F, Y'),
@@ -125,7 +124,6 @@ class InvoiceController extends Controller
             "invoice"       => $invoice,
             "client"        => $invoice->client,
             "invoice_item"  => $invoice->invoiceItems,
-
             'invoice_id' =>$invoice->created_at->format('Ymd').$invoice->id,
             'creator' => $invoice->user,
             "created" => $invoice->created_at->format('D, d F, Y'),

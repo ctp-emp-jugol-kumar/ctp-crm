@@ -13,14 +13,10 @@
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Quotations Information's </h4>
                                     <div>
-
-<<<<<<< HEAD
                                         <Link :href="info.others_info.download_url" class="dt-button add-new btn btn-primary me-2">Download Quotation
                                         </Link>
-=======
                                         <a :href="info.others_info.create_invoice" class="dt-button add-new btn btn-primary me-2">Download Quotation
                                         </a>
->>>>>>> acf747be5f78bea16958732d4fe9455b54a82f8a
 
                                         <Link href="/admin/quotations" class="dt-button add-new btn btn-primary">Manage
                                             Quotations
@@ -87,6 +83,7 @@
                                 </div>
                             </div>
                         </div>
+                        {{ allData }}
                         <div class="col-md-8 mx-auto">
                             <div class="row">
                                 <div class="col-md-12">
