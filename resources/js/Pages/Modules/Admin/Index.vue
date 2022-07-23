@@ -114,9 +114,8 @@
         </div>
     </div>
 </template>
-<script>
 
-</script>
+
 <script setup>
     import Pagination from "../../../components/Pagination"
     import Icon from '../../../components/Icon'

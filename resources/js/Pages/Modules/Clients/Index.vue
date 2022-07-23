@@ -129,9 +129,7 @@
                         <label>Secondary Email: </label>
                         <input v-model="createForm.secondary_email" type="email" placeholder="second.eg@ctpbd.com"
                                class="form-control">
-                        <span v-if="errors.secondary_email" class="error text-sm text-danger">{{
-                                errors.secondary_email
-                            }}</span>
+                        <span v-if="errors.secondary_email" class="error text-sm text-danger">{{errors.secondary_email}}</span>
                     </div>
                     <div class="col-md">
                         <label>Phone: <span class="text-danger">*</span></label>
@@ -142,30 +140,24 @@
                 <div class="row mb-1">
                     <div class="col-md">
                         <label>Secondary Phone: </label>
-                        <input v-model="createForm.secondary_phone" type="text" placeholder="+88017********"
-                               class="form-control">
-                        <span v-if="errors.secondary_phone" class="error text-sm text-danger">{{
-                                errors.secondary_phone
-                            }}</span>
+                        <input v-model="createForm.secondary_phone" type="text" placeholder="+88017********" class="form-control">
+                        <span v-if="errors.secondary_phone" class="error text-sm text-danger">{{errors.secondary_phone}}</span>
                     </div>
                     <div class="col-md">
                         <label>Company: </label>
-                        <input v-model="createForm.company" type="text" placeholder="Enter Company Name"
-                               class="form-control">
+                        <input v-model="createForm.company" type="text" placeholder="Enter Company Name" class="form-control">
                         <span v-if="errors.company" class="error text-sm text-danger">{{ errors.company }}</span>
                     </div>
                 </div>
                 <div class="row mb-1">
                     <div class="col-md">
                         <label>Address: </label>
-                        <textarea v-model="createForm.address" type="text" placeholder="Enter Full Address" rows="5"
-                                  class="form-control"></textarea>
+                        <textarea v-model="createForm.address" type="text" placeholder="Enter Full Address" rows="5" class="form-control"></textarea>
                         <span v-if="errors.name" class="error text-sm text-danger">{{ errors.address }}</span>
                     </div>
                     <div class="col-md">
                         <label>Nots: </label>
-                        <textarea v-model="createForm.note" type="text" placeholder="Enter note messages" rows="5"
-                                  class="form-control"></textarea>
+                        <textarea v-model="createForm.note" type="text" placeholder="Enter note messages" rows="5" class="form-control"></textarea>
                         <span v-if="errors.note" class="error text-sm text-danger">{{ errors.note }}</span>
                     </div>
                 </div>
@@ -174,9 +166,8 @@
                     <div class="col-md">
                         <label>Assign Agent: </label>
                         <select class="form-control" v-model="createForm.status">
-                            <option v-for="optoin in status" :value="optoin" :selected="optoin === 'New Lead'">{{
-                                    optoin
-                                }}
+                            <option v-for="optoin in status" :value="optoin" :selected="optoin === 'New Lead'">
+                                {{optoin }}
                             </option>
                         </select>
 
@@ -319,7 +310,6 @@
         clients: Object,
         users: Object,
         filters: Object,
-        //   can: Object,
         notification: Object,
         errors: Object,
         main_url: "",

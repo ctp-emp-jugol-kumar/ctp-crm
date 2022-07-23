@@ -63,13 +63,25 @@ Route::prefix('admin')->group(function(){
         Route::resource('hostings', HostingController::class);
         // quotations management
         Route::resource('quotations', QuotationController::class);
+
         Route::get('download-quotation/{id}', [QuotationController::class, 'generateQuotationPDFFile'])
             ->name('quotations.generateQuotationPDFFile');
 
+        Route::get('download/quotation-invoice/{id}', [QuotationController::class, 'createInvoice'])
+            ->name('quotation.download');
+        Route::get('edit/quotation/{id}', [QuotationController::class, 'editQuotation'])->name('quotations.edit');
+
+
         // invoices management
         Route::resource('invoices', InvoiceController::class);
+        Route::get('edit/invoice/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
         Route::get('download-invoice/{id}', [InvoiceController::class, 'generateInvoicePDFFile'])
             ->name('invoices.generateInvoicePDFFile');
+
+
+
+        Route::patch('update/invoice/{id}',[InvoiceController::class, 'updateInvoice'])->name('updateInvoices');
+
 
         // invoices management
         Route::resource('methods', MethodController::class);
