@@ -283,6 +283,51 @@ class QuotationController extends Controller
 
     public function show(Quotation $quotation){
 
+        $mainarray = array();
+        foreach ($quotation->domains as $item){
+
+            $mainarray [] =[
+                'name' => $item->name,
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+            ];
+        }
+
+        foreach ($quotation->hostings as $item){
+            $mainarray [] =[
+                'name' => $item->name,
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+            ];
+        }
+        foreach ($quotation->works as $item){
+            $mainarray [] =[
+                'name' => $item->name,
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+            ];
+        }
+        foreach ($quotation->packages as $item){
+            $mainarray [] =[
+                'name' => $item->name,
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+            ];
+        }
+
+        foreach ($quotation->quotationItems as $item){
+            $mainarray [] =[
+                'name' => $item->name ?? $item->itemname,
+                'price' => $item->price ?? 0,
+                'discount' => $item->discount ?? 0,
+                'quantity' => $item->quantity > 0 ? $item->quantity  : 1,
+            ];
+        }
+
 
 
         return Inertia::render('Modules/Quotation/Show', [
@@ -293,12 +338,17 @@ class QuotationController extends Controller
                     'valid_until'    => $quotation->valid_until->format('M-d-Y'),
                 ],
                 'others_info'        => [
+<<<<<<< HEAD
                     "domains"        => $quotation->domains,
                     "hosgings"       => $quotation->hostings,
                     "works"          => $quotation->works,
                     "packages"       => $quotation->packages,
                     "items"          => $quotation->quotationItems,
                     'download_url'   => URL::route('quotations.generateQuotationPDFFile', $quotation->id),
+=======
+                    "items"            => $mainarray,
+                    "create_invoice" => URL::route('quotation.download', $quotation->id)
+>>>>>>> acf747be5f78bea16958732d4fe9455b54a82f8a
                 ],
 
                 'quotation_owner'    => [
@@ -311,50 +361,60 @@ class QuotationController extends Controller
 
     }
 
+<<<<<<< HEAD
     public function generateQuotationPDFFile($id){
         $quotation = Quotation::findOrFail($id);
 
-        $mainarray = array();
+=======
 
+
+
+
+    public function createInvoice($id){
+        $quotation = Quotation::findOrFail($id);
+>>>>>>> acf747be5f78bea16958732d4fe9455b54a82f8a
+        $mainarray = array();
         foreach ($quotation->domains as $item){
+
             $mainarray [] =[
-              'name' => $item->name,
-              'price' => $item->price,
-              'discount' => $item->pivot->discount,
-              'quantity' => $item->pivot->quantity
+                'name' => $item->name,
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
 
         foreach ($quotation->hostings as $item){
             $mainarray [] =[
-              'name' => $item->name,
-              'price' => $item->price,
-              'discount' => $item->pivot->discount,
-              'quantity' => $item->pivot->quantitiy
+                'name' => $item->name,
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
         foreach ($quotation->works as $item){
             $mainarray [] =[
-              'name' => $item->name,
-              'price' => $item->price,
-              'discount' => $item->pivot->discount,
-              'quantity' => $item->pivot->quantitiy
+                'name' => $item->name,
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
         foreach ($quotation->packages as $item){
             $mainarray [] =[
-              'name' => $item->name,
-              'price' => $item->price,
-              'discount' => $item->pivot->discount,
-              'quantity' => $item->pivot->quantitiy
+                'name' => $item->name,
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
+
         foreach ($quotation->quotationItems as $item){
             $mainarray [] =[
-              'name' => $item->name ?? $item->itemname,
-              'price' => $item->price,
-              'discount' => $item->discount,
-              'quantity' => $item->quantity
+                'name' => $item->name ?? $item->itemname,
+                'price' => $item->price ?? 0,
+                'discount' => $item->discount ?? 0,
+                'quantity' => $item->quantity > 0 ? $item->quantity  : 1,
             ];
         }
 
@@ -362,7 +422,11 @@ class QuotationController extends Controller
         $data =[
             'quotation'          => $quotation,
             'others_info'        => [
+<<<<<<< HEAD
                   "items"          => $mainarray,
+=======
+                "items"          => $mainarray,
+>>>>>>> acf747be5f78bea16958732d4fe9455b54a82f8a
                 "create_invoice" => URL::route('quotation.download', $quotation->id)
             ],
 
@@ -372,8 +436,15 @@ class QuotationController extends Controller
             ]
         ];
 
+<<<<<<< HEAD
         $pdf = Pdf::loadView('invoice.quotation', compact('data'));
         return $pdf->download('quotation.pdf');
+=======
+
+        $pdf = Pdf::loadView('invoice.quotation', compact('data'));
+        return $pdf->download('quotation.pdf');
+
+>>>>>>> acf747be5f78bea16958732d4fe9455b54a82f8a
     }
 
 

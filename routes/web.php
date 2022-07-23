@@ -95,3 +95,9 @@ Route::prefix('admin')->group(function(){
 
 Route::get('invoice-show/{id}',  [QuotationController::class, 'createInvoice']);
 
+
+
+Route::get('/test', [\App\Http\Controllers\TestController::class, 'index'])->name('test.index');
+Route::post('/test/create', [\App\Http\Controllers\TestController::class, 'create'])->name('test.create');
+Route::get('/test/edit/{id}', [\App\Http\Controllers\TestController::class, 'edit'])->name('test.edit');
+Route::put('/test/update/{id}', [\App\Http\Controllers\TestController::class, 'update'])->name('test.update');
