@@ -28,21 +28,23 @@ class InvoiceController extends Controller
     {
 
         return inertia('Modules/Invoices/Index', [
-            'users' => CustomInvoice::query()
+            'invoices' => CustomInvoice::query()
                 ->when(\Illuminate\Support\Facades\Request::input('search'), function ($query, $search) {
-                    $query->where('id', 'like', "%{$search}%");
+                    $query->where('subject', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
                 ->through(fn($invoice) => [
                     'id' => $invoice->id,
+                    'invoice' => $invoice,
                     'name' =>  $invoice->client->name,
                     'created_at' => $invoice->created_at->format('d M Y'),
                     'invice_url' => URL::route('invoices.show', $invoice->id),
                     "edit_url" => URL::route('invoices.edit', $invoice->id),
 
                 ]),
-            'filters' => Request::only(['search','perPage'])
+            'filters' => Request::only(['search','perPage']),
+            'main_url' => URL::route('invoices.index'),
         ]);
     }
 

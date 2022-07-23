@@ -11,13 +11,11 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Clients Information's </h4>
-<!--                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal" data-bs-target="#createNewCategory">Add Client</button>-->
+<!--                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal" data-bs-target="#addItemModal">Add Client</button>-->
                                     <button
                                         class="dt-button add-new btn btn-primary"
-                                        tabindex="1"
-                                        type="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#createNewCategory">
+                                        @click="addDataModal"
+                                    >
                                         Add Client
                                     </button>
                                 </div>
@@ -80,7 +78,7 @@
                                                 <div class="demo-inline-spacing">
                                                     <button type="button" @click="editClient(user.show_url)"
                                                             class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
-                                                        <Icon title="eye"/>
+                                                        <Icon title="pencil"/>
                                                     </button>
 
                                                     <button @click="deleteItemModal(user.id)" type="button"
@@ -106,7 +104,7 @@
     </div>
 
 
-    <Modal id="createNewCategory" title="Add New Client" v-vb-is:modal size="lg">
+    <Modal id="addItemModal" title="Add New Client" v-vb-is:modal size="lg">
         <form @submit.prevent="createClientForm">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -386,6 +384,9 @@
         })
     };
 
+    let addDataModal = () => {
+        document.getElementById('addItemModal').$vb.modal.show()
+    }
     let createClientForm = () => {
         Inertia.post('clients', createForm, {
             preserveState: true,
@@ -396,13 +397,13 @@
                 createForm.processing = false
             },
             onSuccess: () => {
-                document.getElementById('createNewCategory').$vb.modal.hide()
+                document.getElementById('addItemModal').$vb.modal.hide()
                 createForm.reset()
-                // Swal.fire(
-                //     'Saved!',
-                //     'Your file has been Saved.',
-                //     'success'
-                // )
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Saved.',
+                    'success'
+                )
             },
         })
     }

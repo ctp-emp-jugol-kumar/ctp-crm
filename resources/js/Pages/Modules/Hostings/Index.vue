@@ -11,9 +11,12 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Hostings Information's </h4>
-                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#createHostings"
-                                    >Add Hosting</button>
+                                    <button
+                                        class="dt-button add-new btn btn-primary"
+                                        @click="addDataModal"
+                                    >
+                                        Add Hosting
+                                    </button>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -58,10 +61,10 @@
                                             <td>
                                                 <div class="demo-inline-spacing">
                                                     <button type="button" @click="editItem(hosting.show_url)"
-                                                            class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                            class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="eye"/>
                                                     </button>
-                                                    <button @click="deleteItemModal(hosting.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+                                                    <button @click="deleteItemModal(hosting.id)" type="button" class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash" />
                                                     </button>
                                                 </div>
@@ -86,7 +89,7 @@
 
 
 
-    <Modal id="createHostings" title="Add New Hostings" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="createHostings" title="Add New Hostings" v-vb-is:modal size="lg">
         <form @submit.prevent="createHostings">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -125,7 +128,7 @@
         </form>
     </Modal>
 
-    <Modal id="editData" title="Edit Hostings" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="editData" title="Edit Hostings" v-vb-is:modal size="lg">
         <form @submit.prevent="updateData(editData.id)">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -214,8 +217,8 @@
             text: "You won't be able to revert this!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#7d30d6',
+            cancelButtonColor: '#ea5455',
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -237,6 +240,10 @@
         })
     };
 
+
+    let addDataModal = () => {
+        document.getElementById('createHostings').$vb.modal.show()
+    }
 
     let createHostings = ( )=>{
         Inertia.post('hostings', createForm, {

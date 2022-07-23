@@ -30,7 +30,7 @@ use App\Http\Controllers\Auth\LoginController;
 |
 */
 
-Route::get('/', [LoginController::class, 'login']);
+Route::get('/', [LoginController::class, 'login'])->name('login');
 
 Route::prefix('admin')->group(function(){
 
@@ -89,7 +89,7 @@ Route::prefix('admin')->group(function(){
         Route::resource('purposes', PurposeController::class);
     });
 
-    Route::post('logout', [LoginController::class, 'destroy'])->middleware('auth');
+    Route::post('/logout', [LoginController::class, 'destroy']);
 });
 
 
@@ -102,14 +102,14 @@ Route::post('/test/create', [\App\Http\Controllers\TestController::class, 'creat
 Route::get('/test/edit/{id}', [\App\Http\Controllers\TestController::class, 'edit'])->name('test.edit');
 Route::put('/test/update/{id}', [\App\Http\Controllers\TestController::class, 'update'])->name('test.update');
 
-
-Route::fallback(function() {
-    return \Inertia\Inertia::render('Pages/Errors/404',[
-        "info" =>[
-            'data' => 'somting want wrong...',
-            'code' => 404
-        ]
-    ]);
-
-
-});
+//
+//Route::fallback(function() {
+//    return \Inertia\Inertia::render('Pages/Errors/404',[
+//        "info" =>[
+//            'data' => 'somting want wrong...',
+//            'code' => 404
+//        ]
+//    ]);
+//
+//
+//});

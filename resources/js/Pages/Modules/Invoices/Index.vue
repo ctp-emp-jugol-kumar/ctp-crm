@@ -40,46 +40,41 @@
                                         <tr class="">
                                             <th class="sorting">#id</th>
                                             <th class="sorting">Name</th>
-                                            <th class="sorting">Price</th>
+                                            <th class="sorting">Subject</th>
                                             <th class="sorting">Description</th>
                                             <th class="sorting">Created At</th>
                                             <th class="sorting">Actions</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr v-for="invoice in users.data" :key="invoice.id">
+                                        <tr v-for="invoice in invoices.data" :key="invoice.id">
                                             <td>{{ invoice.id }}</td>
                                             <td>{{ invoice.name }}</td>
-                                            <td>{{ invoice.price }} </td>
+                                            <td>{{ invoice.invoice.subject }} </td>
                                             <td>{{ invoice.description }} </td>
                                             <td>{{ invoice.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <a :href="invoice.invice_url"
+                                                    <a :href="invoice.edit_url"
                                                        class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="pencil" />
                                                     </a>
-
-
-                                                    <a :href="invoice.edit_url"
+                                                    <a :href="invoice.invice_url"
                                                        class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
                                                     </a>
-
-
                                                     <button @click="deleteItemModal(invoice.id)"
                                                             type="button"
                                                             class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash" />
                                                     </button>
-
                                                 </div>
                                             </td>
                                         </tr>
                                         </tbody>
                                     </table>
 
-                                    <Pagination :links="users.links" :from="users.from" :to="users.to" :total="users.total" />
+                                    <Pagination :links="invoices.links" :from="invoices.from" :to="invoices.to" :total="invoices.total" />
                                 </div>
                             </div>
                         </div>
@@ -90,87 +85,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-    <Modal id="createNewCategory" title="Add New Client" v-vb-is:modal :size="{defalut:'lg'}">
-        <form @submit.prevent="createNewCategory">
-            <div class="modal-body">
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Name: </label>
-                        <div class="">
-                            <input v-model="createForm.name" type="text" placeholder="Name" class="form-control">
-                            <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <label>Email: </label>
-                        <div class="">
-                            <input v-model="createForm.name" type="text" placeholder="Email" class="form-control">
-                            <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Secondary Email: </label>
-                        <input v-model="createForm.name" type="text" placeholder="Secondary Email" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Phone: </label>
-                        <input v-model="createForm.name" type="text" placeholder="Phone" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Secondary Phone: </label>
-                        <input v-model="createForm.name" type="text" placeholder="Secondary Phone" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Company: </label>
-                        <input v-model="createForm.name" type="text" placeholder="company" class="form-control">
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Address: </label>
-                        <textarea v-model="createForm.name" type="text" placeholder="address" rows="5" class="form-control"></textarea>
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Nots: </label>
-                        <textarea v-model="createForm.name" type="text" placeholder="note" rows="5" class="form-control"></textarea>
-                        <span v-if="createForm.errors.name" class="error">{{ createForm.errors.name }}</span>
-                    </div>
-                </div>
-                <div class="mb-1">
-                    <label>Status: </label>
-                    <select class="form-control" name="options">
-                        <option value="">One</option>
-                        <option value="">One</option>
-                        <option value="">One</option>
-                        <option value="">One</option>
-                        <option value="">One</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button :disabled="createForm.processing" type="submit"
-                        class="btn btn-primary waves-effect waves-float waves-light">Submit</button>
-                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                        aria-label="Close">Cancel</button>
-            </div>
-        </form>
-    </Modal>
-
-
 
 </template>
 <script>
@@ -194,9 +108,11 @@
     // });
 
     let props = defineProps({
-        users: Object,
+        invoices: Object,
         filters: Object,
         notification:Object,
+        main_url: '',
+
     });
 
     let createForm = useForm({
@@ -211,8 +127,8 @@
             text: "You won't be able to revert this!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#7d30d6',
+            cancelButtonColor: '#ea5455',
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -245,7 +161,7 @@
     let perPage = ref(props.filters.perPage);
 
     watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get('/users', { search: val, perPage: val2 }, { preserveState: true, replace: true });
+        Inertia.get(props.main_url, { search: val, perPage: val2 }, { preserveState: true, replace: true });
     }, 300));
 
 

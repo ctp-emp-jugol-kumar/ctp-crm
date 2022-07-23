@@ -12,9 +12,12 @@
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Domains Information's </h4>
 
-                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#createDomains"
-                                    >Add Domains</button>
+                                    <button
+                                        class="dt-button add-new btn btn-primary"
+                                        @click="addDataModal"
+                                    >
+                                        Add Domain
+                                    </button>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -59,10 +62,11 @@
                                             <td>
                                                 <div class="demo-inline-spacing">
                                                     <button type="button" @click="editItem(domain.show_url)"
-                                                            class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
-                                                        <Icon title="eye"/>
+                                                            class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
+                                                        <Icon title="pencil"/>
                                                     </button>
-                                                    <button @click="deleteItemModal(domain.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+                                                    <button @click="deleteItemModal(domain.id)" type="button"
+                                                            class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash" />
                                                     </button>
                                                 </div>
@@ -86,7 +90,7 @@
 
 
 
-    <Modal id="createDomains" title="Add New Domains" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="createDomains" title="Add New Domains" v-vb-is:modal size="lg">
         <form @submit.prevent="createDomains">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -125,7 +129,7 @@
         </form>
     </Modal>
 
-    <Modal id="editData" title="Edit Domains" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="editData" title="Edit Domains" v-vb-is:modal size="lg">
         <form @submit.prevent="updateData(editData.id)">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -211,8 +215,8 @@
             text: "You won't be able to revert this!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#7d30d6',
+            cancelButtonColor: '#ea5455',
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -233,6 +237,9 @@
             }
         })
     };
+    let addDataModal = () => {
+        document.getElementById('createDomains').$vb.modal.show()
+    }
 
     let createDomains = ( )=>{
         Inertia.post('domains', createForm, {

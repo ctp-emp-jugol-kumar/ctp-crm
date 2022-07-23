@@ -289,59 +289,63 @@ class QuotationController extends Controller
 
 
     public function show(Quotation $quotation){
+
         $mainarray = array();
         foreach ($quotation->domains as $item){
+
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price,
-                'discount' => $item->pivot->discount,
-                'quantity' => $item->pivot->quantity
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
 
         foreach ($quotation->hostings as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price,
-                'discount' => $item->pivot->discount,
-                'quantity' => $item->pivot->quantitiy
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
         foreach ($quotation->works as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price,
-                'discount' => $item->pivot->discount,
-                'quantity' => $item->pivot->quantitiy
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
         foreach ($quotation->packages as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price,
-                'discount' => $item->pivot->discount,
-                'quantity' => $item->pivot->quantitiy
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
+
         foreach ($quotation->quotationItems as $item){
             $mainarray [] =[
                 'name' => $item->name ?? $item->itemname,
-                'price' => $item->price,
-                'discount' => $item->discount,
-                'quantity' => $item->quantity
+                'price' => $item->price ?? 0,
+                'discount' => $item->discount ?? 0,
+                'quantity' => $item->quantity > 0 ? $item->quantity  : 1,
             ];
         }
 
 
+
         return Inertia::render('Modules/Quotation/Show', [
-            "info" => [
+            'info' =>[
                 'quotation'          => $quotation,
                 'dates'              => [
                     'date'           => $quotation->date->format('M-d-Y'),
                     'valid_until'    => $quotation->valid_until->format('M-d-Y'),
                 ],
                 'others_info'        => [
-                    "items"          => $mainarray,
+                    "items"            => $mainarray,
                     "create_invoice" => URL::route('quotation.download', $quotation->id)
                 ],
 
@@ -355,51 +359,54 @@ class QuotationController extends Controller
 
     }
 
+
+
+
+
     public function createInvoice($id){
         $quotation = Quotation::findOrFail($id);
-
-
         $mainarray = array();
-
         foreach ($quotation->domains as $item){
+
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price,
-                'discount' => $item->pivot->discount,
-                'quantity' => $item->pivot->quantity
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
 
         foreach ($quotation->hostings as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price,
-                'discount' => $item->pivot->discount,
-                'quantity' => $item->pivot->quantitiy
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
         foreach ($quotation->works as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price,
-                'discount' => $item->pivot->discount,
-                'quantity' => $item->pivot->quantitiy
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
         foreach ($quotation->packages as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price,
-                'discount' => $item->pivot->discount,
-                'quantity' => $item->pivot->quantitiy
+                'price' => $item->price ?? 0,
+                'discount' => $item->pivot->discount ?? 0,
+                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
+
         foreach ($quotation->quotationItems as $item){
             $mainarray [] =[
                 'name' => $item->name ?? $item->itemname,
-                'price' => $item->price,
-                'discount' => $item->discount,
-                'quantity' => $item->quantity
+                'price' => $item->price ?? 0,
+                'discount' => $item->discount ?? 0,
+                'quantity' => $item->quantity > 0 ? $item->quantity  : 1,
             ];
         }
 
@@ -417,10 +424,9 @@ class QuotationController extends Controller
             ]
         ];
 
+
         $pdf = Pdf::loadView('invoice.quotation', compact('data'));
-
         return $pdf->download('quotation.pdf');
-
 
     }
 
