@@ -28,9 +28,10 @@ class InvoiceController extends Controller
     {
 
         return inertia('Modules/Invoices/Index', [
-            'invoices' => CustomInvoice::query()
-                ->when(\Illuminate\Support\Facades\Request::input('search'), function ($query, $search) {
-                    $query->where('subject', 'like', "%{$search}%");
+            'invoices' => CustomInvoice::query()->with('client')
+                ->when(Request::input('search'), function ($query, $search) {
+                    $query->where('subject', 'like', "%{$search}%")
+                        ->orWhere('client_id', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
