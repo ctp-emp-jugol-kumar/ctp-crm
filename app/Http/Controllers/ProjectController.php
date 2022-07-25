@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Models\CustomInvoice;
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
 
@@ -20,28 +21,35 @@ class ProjectController extends Controller
     {
 
         return inertia('Modules/Projects/Index', [
-            'projects' => Project::query()
+            'projects' => Project::query()->with(['client', 'client:id,name,phone,email', 'users', 'users:id,name'])
                 ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('name', 'like', "%{$search}%")
-//                        ->orWhereHas('client', function ($client) use($search){
-//                            $client->where('name', 'like', "%{$search}%");
-//                        })
-//                        ->orWhereHas('user', function ($user) use($search){
-//                            $user->where('name', 'like', "%{$search}%");
-//                        })
-//                        ->orWhereHas('invoiceItems', function ($projectItem) use($search){
-//                            $projectItem->where('item_name', 'like', "%{$search}%");
-//                        })
-                    ;
+                    $query
+                    ->where('name', 'like', "%{$search}%")
+                        ->orWhere('status', 'like', "%{$search}%")
+                    ->orWhereHas('client', function ($client) use($search){
+                        $client
+                            ->where('name',    'like', "%{$search}%")
+                            ->orWhere('phone', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%")
+                        ;
+                    })
+                    ->orWhereHas('user', function ($user) use($search){
+                        $user->where('name', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('users', function ($developer) use($search){
+                        $developer->where('name', 'like', "%{$search}%");
+                    });
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
                 ->through(fn($project) => [
                     'id'            => $project->id,
+                    'project'       => $project,
                     'creator'       => $project->user->name,
                     'project_date'  => $project->date->format('d M Y'),
-                    'start_date'    => $project->start->format('d M Y'),
+                    'start_date'    => $project->start->format('d M'),
                     'end_date'      => $project->end->format('d M Y'),
+                    'create_at'     => $project->created_at->format('d M Y'),
                     "edit_url"      => URL::route('projects.edit', $project->id),
                 ]),
             'clients'  => Client::all(['id','name']),
@@ -65,11 +73,51 @@ class ProjectController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return array
      */
+
+    public function createArrayGroups($items)
+    {
+        $added = array();
+        foreach($items as $key=> $item){
+            $added[$key] = [
+                "user_id" => $item
+            ];
+        }
+        return $added;
+    }
+
     public function store(Request $request)
     {
-        //
+        $filePath = "";
+
+        if (Request::hasFile('files')) {
+            $filePath = Request::file('files')->store('image', 'public');
+        }
+
+        $project = Project::create([
+            "name"        => Request::input('name'),
+            "user_id"     => Auth::id(),
+            "client_id"   => Request::input('client_id'),
+            "date"        => Request::input('date'),
+            "start"       => Request::input('start_date'),
+            "end"         => Request::input('end_date'),
+            "description" => Request::input('project_details'),
+            "credential"  => Request::input('credintials'),
+            "status"      => Request::input('status'),
+            "files"       => $filePath,
+        ]);
+
+
+        $project->clients()->sync(Request::all('client_id'));
+        $agents            = Request::input('agents');
+        if (count($agents)) {
+            $project->users()->sync($this->createArrayGroups($agents));
+        }
+
+
+        return "saved";
+
     }
 
     /**

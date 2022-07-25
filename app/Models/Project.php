@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 
 class Project extends Model
@@ -23,6 +25,7 @@ class Project extends Model
     protected $fillable = [
         'name',
         'user_id',
+        'client_id',
         'date',
         'start',
         'end',
@@ -30,6 +33,7 @@ class Project extends Model
         'credential',
         'status',
         'progress',
+        'files',
     ];
     protected $hidden = ['credential'];
     protected $dates = [
@@ -37,6 +41,14 @@ class Project extends Model
         'start',
         'end',
     ];
+
+    protected function files(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? Storage::url($value) : '/images/creativeTechPark.png'
+//            set: fn ($value) => $value->store('image', 'public'),
+        );
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -56,11 +68,15 @@ class Project extends Model
 
     public function users()
     {
-        return $this->belongsToMany('App\Models\User', 'project_user');
+        return $this->belongsToMany(User::class, 'project_user', 'project_id', 'user_id')->withTimestamps();
     }
 
     public function clients(){
-        return $this->belongsToMany(Client::class, 'client_project');
+        return $this->belongsToMany(Client::class, 'client_project', 'project_id', 'client_id')->withTimestamps();
+    }
+
+    public function client(){
+        return $this->belongsTo(Client::class, 'client_id');
     }
 
     /*

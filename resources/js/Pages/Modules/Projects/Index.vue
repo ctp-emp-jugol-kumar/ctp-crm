@@ -10,13 +10,13 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
-                                    <h4 class="card-title">Clients Information's </h4>
+                                    <h4 class="card-title">Project Information's </h4>
 <!--                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal" data-bs-target="#addItemModal">Add Client</button>-->
                                     <button
                                         class="dt-button add-new btn btn-primary"
                                         @click="addDataModal"
                                     >
-                                        Add Client
+                                        Add Project
                                     </button>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
@@ -44,42 +44,90 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <table class="user-list-table table">
+                                    <table class="user-list-table table table-striped">
                                         <thead class="table-light">
                                         <tr class="">
                                             <th class="sorting">Client</th>
-                                            <th class="sorting">Phone</th>
+                                            <th class="sorting">Project Name</th>
+                                            <th class="sorting">Delivery Date</th>
+                                            <th class="sorting">Developers</th>
+                                            <th class="sorting">Project Status</th>
+                                            <th class="sorting">Project Progress</th>
                                             <th class="sorting">Created At</th>
                                             <th class="sorting">Actions</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr v-for="projects in projects.data" :key="user.id">
+                                        <tr v-for="projects in projects.data" :key="projects.id">
                                             <td>
                                                 <div class="d-flex justify-content-left align-items-center">
-                                                    <div class="avatar-wrapper">
-                                                        <div class="avatar  me-1">
-                                                            <img
-                                                                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d"
-                                                                alt="{{ projects }}" height="32" width="32">
-                                                        </div>
-                                                    </div>
                                                     <div class="d-flex flex-column">
                                                         <div class="user_name text-truncate text-body">
-                                                            <span class="fw-bolder">{{ projects }}</span>
+                                                            <span class="fw-bolder">{{ projects.project.client.name }}</span>
                                                         </div>
-                                                        <small class="emp_post text-muted">{{ projects.date }}</small>
+                                                        <small class="emp_post text-muted">{{ projects.project.client.phone }}</small>
+                                                        <small class="emp_post text-muted">{{ projects.project.client.email }}</small>
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td>{{ projects.project.name  }}</td>
+
+                                            <td>{{ projects.start_date + " - " + projects.end_date }} </td>
+                                            <th>
+                                                <div class="avatar-group mt-50">
+                                                    <div data-bs-toggle="tooltip"
+                                                         data-popup="tooltip-custom"
+                                                         data-bs-placement="bottom"
+                                                         title=""
+                                                         class="avatar pull-up"
+                                                         data-bs-original-title="Elicia Rieske"
+                                                         v-for="(developer, index) in projects.project.users" :key="developer.id">
+                                                        <img :src="projects.project.files" alt="Avatar" height="30" width="30">
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <td>
+                                                <span
+                                                    class="badge"
+                                                    :class="{
+                                                    'badge-light-primary'   : projects.project.status === 'New Project',
+                                                    'badge-light-warning'   : projects.project.status === 'Testing',
+                                                    'badge-light-success'   : projects.project.status === 'Complete',
+                                                    'badge-light-secandery' : projects.project.status === 'Revision',
+                                                    'badge-light-danger'    : projects.project.status === 'Canceled',
+                                                }">
+                                                    {{ projects.project.status }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="height: 7px;">
+                                                    <div role="progressbar"
+                                                         aria-valuemin="0"
+                                                         aria-valuemax="100"
+                                                         aria-valuenow="50"
+                                                         class="progress-bar progress-bar-striped"
+                                                         :class="{
+                                                                'bg-primary'   : projects.project.status === 'New Project',
+                                                                'bg-warning'   : projects.project.status === 'Testing',
+                                                                'bg-success'   : projects.project.status === 'Complete',
+                                                                'bg-secandery' : projects.project.status === 'Revision',
+                                                                'bg-danger'    : projects.project.status === 'Canceled',
+                                                            }"
+                                                         :style="{ width: `${projects.project.progress}px`}">
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td>{{ projects.create_at }}</td>
+
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <button type="button" @click="editClient(user.show_url)"
+                                                    <button type="button" @click="editClient(projects.edit_url)"
                                                             class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="pencil"/>
                                                     </button>
 
-                                                    <button @click="deleteItemModal(user.id)" type="button"
+                                                    <button @click="deleteItemModal(projects.id)" type="button"
                                                             class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash"/>
                                                     </button>
@@ -116,7 +164,7 @@
                         </div>
                     </div>
                     <div class="col-md">
-                        <label>Email: <span class="text-danger">*</span></label>
+                        <label>Client: <span class="text-danger">*</span></label>
                         <div class="">
                             <select2 v-model="createForm.client_id" :options="clients"
                                      :reduce="client => client.id" label="name"
@@ -168,15 +216,15 @@
 
                 <div class="row mb-1">
                     <div class="col-md-12">
-                        <label>Payment Policy :
+                        <label>Project Description  :
                             <Required/>
                         </label>
                         <div class="">
                             <TextEditor v-model="createForm.credintials"></TextEditor>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <label>Terms Of Service : </label>
+                    <div class="col-md-12 mt-2">
+                        <label>Project Credential's : </label>
                         <div class="">
                             <TextEditor v-model="createForm.project_details"></TextEditor>
                         </div>
@@ -186,14 +234,20 @@
 
                 <div class="row mb-1">
                     <div class="col-md">
+                        <label>Upload Files</label>
+                        <ImageUploader v-model="createForm.files" label="Project Files" />
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
                         <label>Project Status: </label>
                         <select class="form-control" v-model="createForm.status">
                             <option v-for="optoin in status" :value="optoin" :selected="optoin === 'New Lead'">
                                 {{optoin }}
                             </option>
                         </select>
-
                     </div>
+
                     <div class="col-md">
                         <label>Assign Developers: </label>
                         <select class="form-control" v-model="createForm.agents" multiple name="agents[]">
@@ -201,7 +255,17 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-12 mt-2">
+                        <label>Nots : </label>
+                        <div class="">
+                            <TextEditor v-model="createForm.note"></TextEditor>
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
             <div class="modal-footer">
                 <button :disabled="createForm.processing" type="submit"
@@ -214,7 +278,7 @@
         </form>
     </Modal>
 
-
+<!--
     <Modal id="editClient" title="Show Client" v-vb-is:modal size="lg">
         <form @submit.prevent="updateClientForm(editData.id)">
             <div class="modal-body">
@@ -310,7 +374,7 @@
                 </button>
             </div>
         </form>
-    </Modal>
+    </Modal>-->
 
 </template>
 
@@ -322,6 +386,7 @@
     import Modal from '../../../components/Modal'
     import InputFieldError from "../../../components/InputFieldError";
     import TextEditor from "../../../components/TextEditor";
+    import ImageUploader from "../../../components/ImageUploader"
     import {ref, watch} from "vue";
     import debounce from "lodash/debounce";
     import {Inertia} from "@inertiajs/inertia";
@@ -335,6 +400,7 @@
         filters: Object,
         errors: Object,
         clients:Object,
+        main_url:"",
 
         users:Object,
     });
@@ -352,31 +418,35 @@
         end_date:'',
         agents: [null],
         client_id:"",
+        descriptions:"",
         credintials:'',
         project_details:'',
+
+        files:null,
 
         processing: Boolean,
     })
 
-    let updateForm = useForm({
-        name: "",
-        email: "",
-        secondary_email: "",
-        phone: "",
-        secondary_phone: "",
-        company: "",
-        address: "",
-        note: "",
-        status: "",
-        agents: null,
-    })
+    // let updateForm = useForm({
+    //     name: "",
+    //     email: "",
+    //     secondary_email: "",
+    //     phone: "",
+    //     secondary_phone: "",
+    //     company: "",
+    //     address: "",
+    //     note: "",
+    //     status: "",
+    //     agents: null,
+    // })
 
     let status = [
         'New Project',
         'In Process',
         'Testing',
         'Revision',
-        'Complete'
+        'Complete',
+        'Canceled'
     ]
 
     let deleteItemModal = (id) => {
@@ -385,7 +455,7 @@
             text: "You won't be able to revert this!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
+            confirmButtonColor: '#6418b1',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
@@ -485,8 +555,8 @@
 
 </script>
 
-<style lang="css" scoped>
-    .ck-rounded-corners .ck.ck-editor__main>.ck-editor__editable, .ck.ck-editor__main>.ck-editor__editable.ck-rounded-corners{
-        min-height: 15rem;
+<style scoped>
+    .ck.ck-editor__main>.ck-editor__editable.ck-rounded-corners{
+        min-height: 15rem !important;
     }
 </style>
