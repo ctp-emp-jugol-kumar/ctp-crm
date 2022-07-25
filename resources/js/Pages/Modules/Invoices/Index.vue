@@ -40,8 +40,8 @@
                                         <tr class="">
                                             <th class="sorting">#id</th>
                                             <th class="sorting">Name</th>
+                                            <th class="sorting">Creator</th>
                                             <th class="sorting">Subject</th>
-                                            <th class="sorting">Description</th>
                                             <th class="sorting">Created At</th>
                                             <th class="sorting">Actions</th>
                                         </tr>
@@ -50,8 +50,8 @@
                                         <tr v-for="invoice in invoices.data" :key="invoice.id">
                                             <td>{{ invoice.id }}</td>
                                             <td>{{ invoice.name }}</td>
+                                            <td>{{ invoice.creator }}</td>
                                             <td>{{ invoice.invoice.subject }} </td>
-                                            <td>{{ invoice.description }} </td>
                                             <td>{{ invoice.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">

@@ -249,6 +249,13 @@
                             <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
                         </Link>
                     </li>
+
+                    <li class=" nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/projects">
+                            <vue-feather type="package" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
+                        </Link>
+                    </li>
                 </ul>
             </div>
         </perfect-scrollbar>

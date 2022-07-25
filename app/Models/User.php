@@ -59,6 +59,10 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\Client', 'client_user');
     }
 
+    public function invoices(){
+        return $this->hasMany(User::class, 'user_id');
+    }
+
     public function projects()
     {
         return $this->belongsToMany('App\Models\Project', 'project_user');

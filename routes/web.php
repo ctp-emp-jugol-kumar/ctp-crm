@@ -10,6 +10,7 @@ use App\Http\Controllers\HostingController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MethodController;
 use App\Http\Controllers\PlatformController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PurposeController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\QuotationInvoice;
@@ -87,6 +88,9 @@ Route::prefix('admin')->group(function(){
         Route::resource('methods', MethodController::class);
         // invoices management
         Route::resource('purposes', PurposeController::class);
+        // projects management
+        Route::resource('projects', ProjectController::class);
+
     });
 
     Route::post('/logout', [LoginController::class, 'destroy']);

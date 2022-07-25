@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('custom_invoices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('client_id')->nullable();
-            $table->unsignedBigInteger('creator_id')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->string('subject')->nullable();
             $table->date('date')->default(now());
             $table->integer('total_price')->nullable();

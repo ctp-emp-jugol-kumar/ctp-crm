@@ -58,10 +58,7 @@ class Client extends Model
     |--------------------------------------------------------------------------
     */
 
-    // public function user()
-    // {
-    //     return $this->belongsTo('App\Models\User');
-    // }
+
     public function quotations()
     {
         return $this->hasMany('App\Models\Quotation');
@@ -71,6 +68,12 @@ class Client extends Model
     {
         return $this->belongsToMany('App\Models\User', 'client_user');
     }
+
+    public function projects(){
+        return $this->belongsToMany(Project::class, 'client_project');
+    }
+
+
 
     /*
     |--------------------------------------------------------------------------

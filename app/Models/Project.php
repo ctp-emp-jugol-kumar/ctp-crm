@@ -43,20 +43,6 @@ class Project extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
-    public function getTimelineAttribute()
-    {
-        $start = empty($this->start) ? '' : \Carbon\Carbon::parse($this->start)
-        ->locale(App::getLocale())
-        ->isoFormat($column['format'] ?? config('backpack.base.default_date_format'));
-
-        $end = empty($this->end) ? '' : \Carbon\Carbon::parse($this->end)
-        ->locale(App::getLocale())
-        ->isoFormat($column['format'] ?? config('backpack.base.default_date_format'));
-
-        return $start .' - '. $end;
-    }
-
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -71,6 +57,10 @@ class Project extends Model
     public function users()
     {
         return $this->belongsToMany('App\Models\User', 'project_user');
+    }
+
+    public function clients(){
+        return $this->belongsToMany(Client::class, 'client_project');
     }
 
     /*

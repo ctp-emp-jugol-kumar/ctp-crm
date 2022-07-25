@@ -26,12 +26,20 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-
         return inertia('Modules/Invoices/Index', [
-            'invoices' => CustomInvoice::query()->with('client')
+            'invoices' => CustomInvoice::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('subject', 'like', "%{$search}%")
-                        ->orWhere('client_id', 'like', "%{$search}%");
+                        ->orWhereHas('client', function ($client) use($search){
+                            $client->where('name', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('user', function ($user) use($search){
+                            $user->where('name', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('invoiceItems', function ($invoiceItem) use($search){
+                            $invoiceItem->where('item_name', 'like', "%{$search}%");
+                        })
+                    ;
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
@@ -39,10 +47,10 @@ class InvoiceController extends Controller
                     'id' => $invoice->id,
                     'invoice' => $invoice,
                     'name' =>  $invoice->client->name,
+                    'creator' => $invoice->user->name,
                     'created_at' => $invoice->created_at->format('d M Y'),
                     'invice_url' => URL::route('invoices.show', $invoice->id),
                     "edit_url" => URL::route('invoices.edit', $invoice->id),
-
                 ]),
             'filters' => Request::only(['search','perPage']),
             'main_url' => URL::route('invoices.index'),
@@ -69,7 +77,7 @@ class InvoiceController extends Controller
 //        ]);
 
         $quotation = CustomInvoice::create([
-            'creator_id'       => Auth::id(),
+            'user_id'       => Auth::id(),
             'client_id'        => Request::input('client_id'),
             'subject'          => Request::input('subject'),
 //            'date'             => Request::input('date')->format('d-y-m'),
@@ -103,7 +111,7 @@ class InvoiceController extends Controller
             "info" => [
                 "invoice"       => $invoice,
                 "client"        => $invoice->client,
-                "invoice_item"  => InvoiceItem::find($invoice->id)->get(),
+                "invoice_item"  => $invoice->invoiceItems,
                 'invoice_id' =>$invoice->created_at->format('Ymd').$invoice->id,
                 'creator' => $invoice->user,
                 "created" => $invoice->created_at->format('D, d F, Y'),
@@ -157,7 +165,7 @@ class InvoiceController extends Controller
 
         $invoice = CustomInvoice::findOrFail($id);
         $invoice->update([
-            'creator_id'       => Auth::id(),
+            'user_id'       => Auth::id(),
             'client_id'        => Request::input('client_id'),
             'subject'          => Request::input('subject'),
             'status'           => filled(Request::input('status')),
