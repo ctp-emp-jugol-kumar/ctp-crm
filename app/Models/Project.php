@@ -35,7 +35,8 @@ class Project extends Model
         'progress',
         'files',
     ];
-    protected $hidden = ['credential'];
+
+//    protected $hidden = ['credential'];
     protected $dates = [
         'date',
         'start',

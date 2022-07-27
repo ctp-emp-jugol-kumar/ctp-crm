@@ -148,7 +148,8 @@
                     <li class=" nav-item has-sub" :class="{'open' : clickMenu === 4}"  @click="toggleSubMenu(4)">
                         <Link preserve-scroll class="d-flex align-items-center" href="#">
                             <vue-feather type="users" />
-                            <span class="menu-title text-truncate" data-i18n="Authentication">User Management</span>
+                            <span class="menu-title text-truncate"
+                                  data-i18n="Authentication">User Management</span>
                         </Link>
                         <ul class="menu-content">
                             <li>

@@ -113,7 +113,7 @@
                                                                 'bg-secandery' : projects.project.status === 'Revision',
                                                                 'bg-danger'    : projects.project.status === 'Canceled',
                                                             }"
-                                                         :style="{ width: `${projects.project.progress}px`}">
+                                                         :style="{ width: `${projects.project.progress}%`}">
                                                     </div>
                                                 </div>
                                             </td>
@@ -122,6 +122,11 @@
 
                                             <td>
                                                 <div class="demo-inline-spacing">
+                                                    <a :href="projects.show_url"
+                                                            class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
+                                                        <Icon title="eye"/>
+                                                    </a>
+
                                                     <button type="button" @click="editClient(projects.edit_url)"
                                                             class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="pencil"/>
@@ -545,6 +550,11 @@
         });
     }
 
+    // let showProject = (url) =>{
+    //     Inertia.get(url, {
+    //
+    //     })
+    // }
 
     let search = ref(props.filters.search);
     let perPage = ref(props.filters.perPage);

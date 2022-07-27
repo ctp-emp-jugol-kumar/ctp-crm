@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
@@ -51,6 +52,7 @@ class ProjectController extends Controller
                     'end_date'      => $project->end->format('d M Y'),
                     'create_at'     => $project->created_at->format('d M Y'),
                     "edit_url"      => URL::route('projects.edit', $project->id),
+                    "show_url"      => URL::route('projects.show', $project->id),
                 ]),
             'clients'  => Client::all(['id','name']),
             'users'    => User::all(['id','name']),
@@ -124,11 +126,22 @@ class ProjectController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
     public function show($id)
     {
-        //
+
+        $project = Project::with(['user', 'users', 'clients', 'client'])->findOrFail($id);
+
+
+        return inertia('Modules/Projects/Show', [
+            "info" =>  $project,
+            "dates" =>[
+                "end_date" => $project->end->format("d M, y"),
+                "start_date" => $project->start->format("d M, y"),
+                "created_at" => $project->created_at->diffForHumans(),
+            ]
+        ]);
     }
 
     /**
