@@ -180,24 +180,28 @@
                 @php
                     $subTotal = 0;
                     $discount = 0;
+                    $total = 0;
                 @endphp
                 @foreach ($data['others_info']['items'] as $item)
-                    @php
-                        $subTotal += $item['price'];
-                    @endphp
                     <tr>
                         <td class="border text-left">
                             {!! $item['name'] !!}
                         </td>
                         <td class="border text-center">
+                            @php
+                                $subTotal += $item['price'] * $item['quantity'] ?? 1
+                            @endphp
                             <strong>{{ $item['price']}} * {{ $item['quantity'] ?? 1 }}
                                 = {{  $item['price'] * $item['quantity'] ??1 }}Tk</strong>
                         </td>
                         <td class="border text-right">
+                            @php
+                                $discount += $item['discount'] ?? 0
+                            @endphp
                             <strong>{{ $item['discount'] ?? 0 }} Tk</strong>
                         </td>
                         @php
-                            $total = ($item['price'] * $item['quantity'] ??1) - $item['discount'] ?? 0
+                            $total += ($item['price'] * $item['quantity'] ??1) - $item['discount'] ?? 0
                         @endphp
                         <td class="border text-right">
                             <strong>{{ $total }} Tk</strong>
@@ -210,20 +214,20 @@
                 </tr>
                 <tr>
                     <td class="text-right border" colspan="3">Discount</td>
-                    <td class="text-right border"><strong> - 0 Tk</strong></td>
+                    <td class="text-right border"><strong> - {{ $discount }} Tk</strong></td>
                 </tr>
                 <tr>
                     <td class="text-right border" colspan="3">Grand Total</td>
-                    <td class="text-right border"><strong>{{ $subTotal }} Tk</strong></td>
+                    <td class="text-right border"><strong>{{ $total }} Tk</strong></td>
                 </tr>
-                {{--    <tr>
-                        <td class="text-right border" colspan="3">Amount Paid</td>
-                        <td class="text-right border"><strong>{{ isset($paid) }}</strong></td>
-                    </tr>
-                    <tr>
-                        <td class="text-right border" colspan="3">Total Due</td>
-                        <td class="text-right border"><strong>{{ $grandTotal - isset($paid) }}</strong></td>
-                    </tr>--}}
+                <tr>
+                    <td class="text-right border" colspan="3">Amount Paid</td>
+                    <td class="text-right border"><strong>- {{ $data['total_pay']  }} Tk</strong></td>
+                </tr>
+                <tr>
+                    <td class="text-right border" colspan="3">Total Due</td>
+                    <td class="text-right border"><strong>{{ $total - $data['total_pay'] }} Tk</strong></td>
+                </tr>
                 </tbody>
             </table>
         </div>

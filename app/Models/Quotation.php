@@ -5,6 +5,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static findOrFail(array|string|null $input)
+ */
 class Quotation extends Model
 {
 
@@ -181,6 +184,10 @@ class Quotation extends Model
         return $this->hasOne('App\Models\Invoice');
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'quotation_id');
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

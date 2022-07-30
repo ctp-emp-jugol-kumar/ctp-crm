@@ -146,7 +146,7 @@
                                     <span class="badge rounded-pill badge-light-primary">Design</span>
                                 </div>
                                 <h5 class="apply-job-title">Porject Nots:</h5>
-                                <p>Lorem ip deleniti fuga necessitatibus numquam sint.</p>
+                                <p>Lorem ip deleniti fuga necessitatibus numquam sint. lorem</p>
                                 <p class="card-text mb-2" v-if="info.nots" v-html="info.nots"></p>
                                 <div class="d-grid">
                                     <button type="button" class="btn bg-light-primary">Goto User Profile</button>
@@ -195,7 +195,7 @@
                                 <div class="d-flex justify-content-around my-2 pt-75">
                                     <div class="d-flex align-items-start me-2">
                                             <span class="badge bg-light-warning p-75 rounded">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell-off"><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M18.63 13A17.89 17.89 0 0 1 18 8"></path><path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"></path><path d="M18 8a6 6 0 0 0-9.33-5"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                                                <Icon type="edit"/>
                                             </span>
                                         <div class="ms-75">
                                             <h4 class="mb-0">1.23k</h4>
@@ -204,7 +204,7 @@
                                     </div>
                                     <div class="d-flex align-items-start">
                                             <span class="badge bg-light-primary p-75 rounded">
-                                                 <vue-feather type="alert-circle" size="50"/>
+                                                <Icon type="edit" width="21" height="21"/>
                                             </span>
                                         <div class="ms-75">
                                             <h4 class="mb-0">568</h4>

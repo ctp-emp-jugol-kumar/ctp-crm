@@ -12,9 +12,15 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Works Information's </h4>
-                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#createWork"
-                                    >Add Work</button>
+
+                                    <button
+                                        class="dt-button add-new btn btn-primary"
+                                        @click="addDataModal"
+                                    >
+                                        Add Work
+                                    </button>
+
+
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -84,7 +90,7 @@
 
 
 
-    <Modal id="createWork" title="Add New Work" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="createWork" title="Add New Work" v-vb-is:modal size="lg">
         <form @submit.prevent="createWork">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -117,7 +123,7 @@
     </Modal>
 
 
-    <Modal id="editData" title="Edit Domains" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="editData" title="Edit Domains" v-vb-is:modal size="lg">
         <form @submit.prevent="updateData(editData.id)">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -219,6 +225,9 @@
         })
     };
 
+    let addDataModal = () => {
+        document.getElementById('createWork').$vb.modal.show()
+    }
     let createWork = ( )=>{
         Inertia.post('works', createForm, {
             preserveState: true,

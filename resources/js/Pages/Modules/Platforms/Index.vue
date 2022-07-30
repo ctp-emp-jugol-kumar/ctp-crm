@@ -12,9 +12,14 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Platforms Information's </h4>
-                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#createPlatforms"
-                                    >Add Platforms</button>
+
+                                    <button
+                                        class="dt-button add-new btn btn-primary"
+                                        @click="addDataModal"
+                                    >
+                                        Add Package
+                                    </button>
+
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -85,7 +90,7 @@
 
 
 
-    <Modal id="createPlatforms" title="Add New Platforms" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="createPlatforms" title="Add New Platforms" v-vb-is:modal size="lg">
         <form @submit.prevent="createPlatforms">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -238,6 +243,10 @@
             }
         })
     };
+
+    let addDataModal = () => {
+        document.getElementById('createPlatforms').$vb.modal.show()
+    }
 
 
     let createPlatforms = ( )=>{

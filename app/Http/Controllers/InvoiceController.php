@@ -6,12 +6,15 @@ use App\Models\Client;
 use App\Models\CustomInvoice;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Models\Method;
 use App\Models\Quotation;
 use App\Models\QuotationItem;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
+use FontLib\Table\Type\kern;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
@@ -107,15 +110,45 @@ class InvoiceController extends Controller
      */
     public function show(CustomInvoice $invoice)
     {
+        $transactions = [];
+        foreach($invoice->transactions as $item){
+            $transactions[] = [
+                "amount"     => $item->amount ?? 0,
+                "user"       => $item->user,
+                "method"     => $item->method->name,
+
+                "pay_amount" => $item->pay_amount ?? 0,
+                "discount"   => $item->discount ?? 0,
+                "total_due"  => $item->total_due ?? 0,
+                "old_total_pay" => $item->old_total_pay ?? 0,
+                "date"       => $item->date->format('d M,y'),
+                "note"       => $item->note,
+            ];
+        }
+
+         $totalPay = $invoice->transactions->sum('pay_amount') + $invoice->transactions->sum('discount');
+
+        $invoiceLastTransaction = $invoice->transactions->last() ?? [
+            'pay_amount' => 0,
+            'discount' => 0
+            ];
+
+
         return Inertia::render('Modules/Invoices/Show', [
+
             "info" => [
-                "invoice"       => $invoice,
-                "client"        => $invoice->client,
-                "invoice_item"  => $invoice->invoiceItems,
-                'invoice_id' =>$invoice->created_at->format('Ymd').$invoice->id,
-                'creator' => $invoice->user,
-                "created" => $invoice->created_at->format('D, d F, Y'),
-                'download_url' => URL::route('invoices.generateInvoicePDFFile', $invoice->id),
+                "invoice"         => $invoice,
+                "client"          => $invoice->client,
+                "invoice_item"    => $invoice->invoiceItems,
+                'transactions'    => $transactions,
+                "total_pay"       => $totalPay,
+                "last_payment"    => $invoiceLastTransaction,
+                'invoice_id'      => $invoice->created_at->format('Ymd').$invoice->id,
+                'creator'         => $invoice->user,
+                'payment_methods' => Method::all(),
+                "created"         => $invoice->created_at->format('D, d F, Y'),
+                'download_url'    => URL::route('invoices.generateInvoicePDFFile', $invoice->id),
+                'payment_url'     => URL::route('transaction.index'),
             ]
         ]);
 
@@ -126,20 +159,54 @@ class InvoiceController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function generateInvoicePDFFile($id){
         $invoice = CustomInvoice::findOrFail($id);
+
+
+
+        $transactions = [];
+        foreach($invoice->transactions as $item){
+            $transactions[] = [
+                "amount"     => $item->amount ?? 0,
+                "user"       => $item->user,
+                "method"     => $item->method->name,
+
+                "pay_amount" => $item->pay_amount ?? 0,
+                "discount"   => $item->discount ?? 0,
+                "total_due"  => $item->total_due ?? 0,
+                "old_total_pay" => $item->old_total_pay ?? 0,
+                "date"       => $item->date->format('d M,y'),
+                "note"       => $item->note,
+            ];
+        }
+
+        $totalPay = $invoice->transactions->sum('pay_amount') + $invoice->transactions->sum('discount');
+
+        $invoiceLastTransaction = $invoice->transactions->last() ?? [
+                'pay_amount' => 0,
+                'discount' => 0
+            ];
+
+
+
+
 
         $data = [
             "invoice"       => $invoice,
             "client"        => $invoice->client,
             "invoice_item"  => $invoice->invoiceItems,
+            'transactions'    => $transactions,
+            "total_pay"       => $totalPay,
+            "last_payment"    => $invoiceLastTransaction,
             'invoice_id' =>$invoice->created_at->format('Ymd').$invoice->id,
             'creator' => $invoice->user,
             "created" => $invoice->created_at->format('D, d F, Y'),
             'download_url' => URL::route('invoices.generateInvoicePDFFile', $invoice->id),
         ];
+
+//        return view('invoice.invoice', compact("data"));
 
         $pdf = Pdf::loadView('invoice.invoice', compact("data"));
         return $pdf->download('invoice.pdf');
@@ -174,21 +241,19 @@ class InvoiceController extends Controller
         ]);
 
 
+
 //        $invoice->invoiceItems->createMany(Request::input('quatations'));
 
+        foreach (Request::input('quatations') as $item){
+            InvoiceItem::updateOrcreate([
+                'invoice_id' => $invoice->id,
+                'item_name'  => $item['item_name'],
+                'price'      => $item['price'],
+                'discount'   => $item['discount'],
+            ]);
+        }
 
-
-//        foreach ( Request::input('quatations') as $item){
-//            $invoiceItem = QuotationItem::find('id', $item["id"]);
-//            $invoiceItem->updateOrCreate([
-//                'invoice_id' => $invoice->id,
-//                'item_name'  => $item['item_name'],
-//                'price'      => $item['price'],
-//                'discount'   => $item['discount'],
-//            ]);
-//        }
-
-
+        return Redirect::route('invoices.index');
     }
 
 

@@ -23,7 +23,7 @@ class CreateProjectsTable extends Migration
             $table->longText('description')->nullable();
             $table->longText('credential')->nullable();
             $table->string('status')->default('New');
-            $table->unsignedInteger('progress')->default(0);
+            $table->unsignedInteger('progress')->default(10);
             $table->string('files')->nullable();
             $table->timestamps();
         });
