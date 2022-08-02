@@ -46,7 +46,7 @@ class ProjectController extends Controller
                 ->through(fn($project) => [
                     'id'            => $project->id,
                     'project'       => $project,
-                    'creator'       => $project->user->name,
+                    'creator'       => $project->user ? $project->user->name : "asdfasdf",
                     'project_date'  => $project->date->format('d M Y'),
                     'start_date'    => $project->start->format('d M'),
                     'end_date'      => $project->end->format('d M Y'),

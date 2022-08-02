@@ -24,7 +24,7 @@ class HostingsRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => ["required", "max:30", "min:3"],
+            "name" => ["required", "min:3"],
             "price" => ["required", "numeric"],
             "description" => ["nullable","string"],
         ];

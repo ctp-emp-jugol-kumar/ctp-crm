@@ -49,8 +49,8 @@ class InvoiceController extends Controller
                 ->through(fn($invoice) => [
                     'id' => $invoice->id,
                     'invoice' => $invoice,
-                    'name' =>  $invoice->client->name,
-                    'creator' => $invoice->user->name,
+                    'name' =>  $invoice->client ? $invoice->client->name : 'unknown',
+                    'creator' => $invoice->user ? $invoice->user->name : 'unknown',
                     'created_at' => $invoice->created_at->format('d M Y'),
                     'invice_url' => URL::route('invoices.show', $invoice->id),
                     "edit_url" => URL::route('invoices.edit', $invoice->id),
@@ -90,7 +90,11 @@ class InvoiceController extends Controller
         ]);
 
 
+        $totalPrice = 0;
+        $totalDiscount = 0;
         foreach (Request::input('quatations') as $item){
+            $totalPrice += $item['price'];
+            $totalDiscount += $item['discount'];
             InvoiceItem::create([
                 'invoice_id' => $quotation->id,
                 'item_name'  => $item['itemname'],
@@ -98,6 +102,11 @@ class InvoiceController extends Controller
                 'discount'   => $item['discount'],
             ]);
         }
+
+        $quotation->total_price =  $totalPrice ?? 0;
+        $quotation->discount = $totalDiscount ?? 0;
+        $quotation->save();
+
 
         return redirect()->route('invoices.index');
     }
@@ -159,12 +168,10 @@ class InvoiceController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return \Illuminate\Http\Response
      */
     public function generateInvoicePDFFile($id){
         $invoice = CustomInvoice::findOrFail($id);
-
-
 
         $transactions = [];
         foreach($invoice->transactions as $item){
@@ -206,6 +213,7 @@ class InvoiceController extends Controller
             'download_url' => URL::route('invoices.generateInvoicePDFFile', $invoice->id),
         ];
 
+
 //        return view('invoice.invoice', compact("data"));
 
         $pdf = Pdf::loadView('invoice.invoice', compact("data"));
@@ -221,7 +229,7 @@ class InvoiceController extends Controller
             "clients"   => Client::all(['id','name']),
             "info" => [
                 "invoice"       => $invoice,
-                "invoice_item"  => InvoiceItem::find($invoice->id)->get(),
+                "invoice_item"  => $invoice->invoiceItems,
                 "update_url"    => URL::route('updateInvoices', $invoice->id),
             ]
         ]);

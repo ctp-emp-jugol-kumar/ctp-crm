@@ -45,25 +45,25 @@
                                         </div>
                                     </div>
                                 </div>
-                                <h3>{{ info.client.name ?? " "}}</h3>
-                                <h6 class="text-muted">{{ info.client.email }}</h6>
+                                <h3 v-if="info.client">{{ info.client.name ?? " "}}</h3>
+                                <h6 class="text-muted" v-if="info.client">{{ info.client.email }}</h6>
                                 <span class="badge badge-light-primary profile-badge">Client</span>
 
                                 <table class="table table-borderless table-striped">
                                     <tbody>
-                                        <tr v-if="info.client.phone">
+                                        <tr v-if="info.client">
                                             <th>Phone</th>
                                             <td>{{ info.client.phone }}</td>
                                         </tr>
-                                        <tr v-if="info.client.secondary_phone">
+                                        <tr v-if="info.client">
                                             <th>Secondary Phone</th>
                                             <td>{{ info.client.secondary_phone }}</td>
                                         </tr>
-                                        <tr v-if="info.client.secondary_email">
+                                        <tr v-if="info.client">
                                             <th>Email</th>
                                             <td>{{ info.client.secondary_email }}</td>
                                         </tr>
-                                        <tr v-if="info.client.company">
+                                        <tr v-if="info.client">
                                             <th>Email</th>
                                             <td>{{ info.client.company }}</td>
                                         </tr>
@@ -71,8 +71,8 @@
                                 </table>
 
                                 <div class="text-start mt-2">
-                                    <h5 class="border-bottom-primary d-inline">Address:</h5>
-                                    <p>{{ info.client.address }}</p>
+                                    <h5 class="border-bottom-primary d-inline" >Address:</h5>
+                                    <p v-if="info.client">{{ info.client.address }}</p>
                                 </div>
                                 <hr class="mb-2" />
                                 <Link class="btn bg-light-primary">Go To Client Profile</Link>
@@ -139,7 +139,7 @@
                                             <img src="../../../app-assets/images/portrait/small/avatar-s-20.jpg" alt="Avatar" width="42" height="42" />
                                         </div>
                                         <div class="user-info">
-                                            <h5 class="mb-0">{{ info.user.name }}</h5>
+                                            <h5 class="mb-0" v-if="info.user">{{ info.user.name }}</h5>
                                             <small class="text-muted">Created {{ dates.created_at }}</small>
                                         </div>
                                     </div>

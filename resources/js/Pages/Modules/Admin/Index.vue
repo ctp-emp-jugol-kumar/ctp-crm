@@ -35,8 +35,12 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Advanced Search</h4>
-                                    <a class="btn btn-primary btn-sm"> Add User</a>
-                                </div>
+                                    <button
+                                        class="dt-button add-new btn btn-primary"
+                                        @click="addDataModal"
+                                    >
+                                        Add Client
+                                    </button>                                </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
                                         <div class="col-sm-12 col-lg-4 d-flex justify-content-center justify-content-lg-start">
@@ -113,25 +117,137 @@
             </div>
         </div>
     </div>
+
+
+
+    <Modal id="addItemModal" title="Add New User" v-vb-is:modal size="lg">
+        <form @submit.prevent="createUserForm">
+            <div class="modal-body">
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Name:
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <input v-model="createForm.name" type="text" placeholder="Name" class="form-control">
+                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <label>Email: <span class="text-danger">*</span></label>
+                        <div class="">
+                            <input v-model="createForm.email" type="email" placeholder="eg.example@creativetechpark.com"
+                                   class="form-control">
+                            <span v-if="errors.email" class="error text-sm text-danger">{{ errors.email }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Secondary Email: </label>
+                        <input v-model="createForm.secondary_email" type="email" placeholder="second.eg@ctpbd.com"
+                               class="form-control">
+                        <span v-if="errors.secondary_email" class="error text-sm text-danger">{{errors.secondary_email}}</span>
+                    </div>
+                    <div class="col-md">
+                        <label>Phone: <span class="text-danger">*</span></label>
+                        <input v-model="createForm.phone" type="text" placeholder="+88017********" class="form-control">
+                        <span v-if="errors.phone" class="error text-sm text-danger">{{ errors.phone }}</span>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Secondary Phone: </label>
+                        <input v-model="createForm.secondary_phone" type="text" placeholder="+88017********" class="form-control">
+                        <span v-if="errors.secondary_phone" class="error text-sm text-danger">{{errors.secondary_phone}}</span>
+                    </div>
+                    <div class="col-md">
+                        <label>Company: </label>
+                        <input v-model="createForm.company" type="text" placeholder="Enter Company Name" class="form-control">
+                        <span v-if="errors.company" class="error text-sm text-danger">{{ errors.company }}</span>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <Image />
+                    <div class="col-md">
+                        <label>Address: </label>
+                        <textarea v-model="createForm.address" type="text" placeholder="Enter Full Address" rows="5" class="form-control"></textarea>
+                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.address }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button :disabled="createForm.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit
+                </button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel
+                </button>
+            </div>
+        </form>
+    </Modal>
+
+
+
 </template>
 
 
 <script setup>
     import Pagination from "../../../components/Pagination"
     import Icon from '../../../components/Icon'
+    import Modal from '../../../components/Modal'
     import {ref, watch} from "vue";
     import debounce from "lodash/debounce";
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
+    import {useForm} from "@inertiajs/inertia-vue3";
 
     let props = defineProps({
         users: Object,
         filters: Object,
         //   can: Object,
         notification:Object,
+        errors: Object,
     });
 
+    let createForm = useForm({
+        name: "",
+        email: "",
+        secondary_email: "",
+        phone: "",
+        secondary_phone: "",
+        company: "",
+        address: "",
+        note: "",
+        status: "",
+        agents: [null],
 
+        processing: Boolean,
+    })
+    let addDataModal = () => {
+        document.getElementById('addItemModal').$vb.modal.show()
+    }
+    let createUserForm = () => {
+        Inertia.post('clients', createForm, {
+            preserveState: true,
+            onStart: () => {
+                createForm.processing = true
+            },
+            onFinish: () => {
+                createForm.processing = false
+            },
+            onSuccess: () => {
+                document.getElementById('addItemModal').$vb.modal.hide()
+                createForm.reset()
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Saved.',
+                    'success'
+                )
+            },
+        })
+    }
     let deleteItemModal = (id) => {
         Swal.fire({
             title: 'Are you sure?',

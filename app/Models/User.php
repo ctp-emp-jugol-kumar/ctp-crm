@@ -15,9 +15,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
     use  HasRoles;
-
-    protected $guard_name = 'backpack';
-
     /**
      * The attributes that are mass assignable.
      *

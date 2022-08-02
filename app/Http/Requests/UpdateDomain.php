@@ -25,7 +25,7 @@ class UpdateDomain extends FormRequest
     public function rules()
     {
         return [
-            "name" => ["required", "max:30", "min:3", Rule::unique('domains')->ignore($this->domain)],
+            "name" => ["required", "min:3", Rule::unique('domains')->ignore($this->domain)],
             "price" => ["required", "numeric"],
             "description" => ["nullable","string"],
         ];

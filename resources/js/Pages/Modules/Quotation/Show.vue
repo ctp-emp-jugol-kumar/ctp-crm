@@ -30,20 +30,20 @@
                                         <div class="card-body">
                                             <table class="table table-striped table-bordered">
                                                 <tbody>
-                                                <h3 class="text-capitalize">Client Name: {{ props.info.quotation_owner.client.name }}</h3>
+                                                <h3 class="text-capitalize" v-if="props.info">Client Name: {{ props.info.quotation_owner.client.name }}</h3>
                                                 <tr>
-                                                    <td>Client Email: {{ props.info.quotation_owner.client.email }}</td>
+                                                    <td v-if="props.info">Client Email: {{ props.info.quotation_owner.client.email }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Client Phone: {{ props.info.quotation_owner.client.phone }}</td>
+                                                    <td v-if="props.info">Client Phone: {{ props.info.quotation_owner.client.phone }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Client Secondery Phone: {{
+                                                    <td v-if="props.info">Client Secondery Phone: {{
                                                         props.info.quotation_owner.client.secondary_phone }}
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Client Phone: {{ props.info.quotation_owner.client.address }}</td>
+                                                    <td v-if="props.info">Client Phone: {{ props.info.quotation_owner.client.address }}</td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -66,10 +66,10 @@
                                                     <td>Quotation Validate: {{ props.info.dates.valid_until }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Quotation Creator: {{ props.info.quotation_owner.creator.name }}</td>
+                                                    <td v-if="props.info.quotation_owner">Quotation Creator: {{ props.info.quotation_owner.creator.name }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Creator Email: {{ props.info.quotation_owner.creator.email }}</td>
+                                                    <td v-if="props.info.quotation_owner">Creator Email: {{ props.info.quotation_owner.creator.email }}</td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -80,7 +80,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <div class="card">
                                     <div class="card-header">
                                         <h2>Subject:</h2>
@@ -153,7 +153,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-4 col-md-4 col-12 invoice-actions mt-md-0 mt-2">
+                            <div class="col-xl-3 col-md-4 col-12 invoice-actions mt-md-0 mt-2">
                                 <div class="card">
                                     <div class="card-body">
                                         <a :href="info.others_info.create_invoice" class="btn btn-outline-secondary w-100 btn-download-invoice mb-75">Download</a>
@@ -238,7 +238,7 @@
                             </div>
                             <div class="modal-body pb-5 px-sm-5 pt-50">
                                 <div class="text-center mb-2">
-                                    <h1 class="mb-1">{{ info.quotation_owner.client.name }}</h1>
+                                    <h1 class="mb-1" v-if="info">{{ info.quotation_owner.client.name }}</h1>
                                     <p>All Payment lists</p>
                                 </div>
 

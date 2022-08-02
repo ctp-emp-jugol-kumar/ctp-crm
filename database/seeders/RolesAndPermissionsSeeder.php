@@ -17,43 +17,48 @@ class RolesAndPermissionsSeeder extends Seeder
     public function run()
     {
         $all = [
-            'list feature', 'create feature', 'update feature', 'delete feature',
-            'list platform', 'create platform', 'update platform', 'delete platform',
-            'list work', 'create work', 'update work', 'delete work',
-            'list client', 'create client', 'update client', 'delete client',
-            'list design', 'create design', 'update design', 'delete design',
-            'list website', 'create website', 'update website', 'delete website',
-            'list hosting', 'create hosting', 'update hosting', 'delete hosting',
-            'list domain', 'create domain', 'update domain', 'delete domain',
-            'list quotation', 'create quotation', 'update quotation', 'delete quotation',
-            'list invoice', 'create invoice', 'update invoice', 'delete invoice',
-            'list method', 'create method', 'update method', 'delete method',
-            'list purpose', 'create purpose', 'update purpose', 'delete purpose',
-            'list transaction', 'create transaction', 'update transaction', 'delete transaction',
-            'list project', 'create project', 'update project', 'delete project', 'progress project',
-            'list note', 'create note', 'update note', 'delete note',
-            'view all client', 'view all transaction', 'view all invoice', 'view all quotation', 'assign user',
-            'statement transaction', 'view all project', 'manage project description', 'manage project credential',
-            'bulk assign agent', 'manage project progress', 'assign project user', 'bulk status client',
-            'statement transaction', 'due report', 'sell report'
+            'list_feature', 'create_feature', 'update_feature', 'delete_feature',
+            'list_platform', 'create_platform', 'update_platform', 'delete_platform',
+            'list_work', 'create_work', 'update_work', 'delete_work',
+            'list_client', 'create_client', 'update_client', 'delete_client',
+            'list_design', 'create_design', 'update_design', 'delete_design',
+            'list_website', 'create_website', 'update_website', 'delete_website',
+            'list_hosting', 'create_hosting', 'update_hosting', 'delete_hosting',
+            'list_domain', 'create_domain', 'update_domain', 'delete_domain',
+            'list_quotation', 'create_quotation', 'update_quotation', 'delete_quotation',
+            'list_invoice', 'create_invoice', 'update_invoice', 'delete_invoice',
+            'list_method', 'create_method', 'update_method', 'delete_method',
+            'list_purpose', 'create_purpose', 'update_purpose', 'delete_purpose',
+            'list_transaction', 'create_transaction', 'update_transaction', 'delete_transaction',
+            'list_project', 'create_project', 'update_project', 'delete_project', 'progress project',
+            'list_note', 'create_note', 'update_note', 'delete_note','Website_coordinate',
         ];
-//        foreach ($all as $item) {
-//            Permission::create([
-//                'name' => $item,
-//                'guard_name' => 'backpack'
-//            ]);
-//        };
-        $role = Role::create([
-            'name' => 'Administrator',
-            'guard_name' => 'backpack'
-        ]);
-//        foreach ($all as $item) {
-//            $role->givePermissionTo( $item );
-//        };
+
+        foreach ($all as $item) {
+            Permission::create(['name' => $item]);
+        };
+
+        $role = Role::create(['name' => 'Administrator']);
+        $developer = Role::create(['name' => 'Developer']);
+
+        foreach ($all as $item) {
+            $developer->givePermissionTo( $item );
+        };
+
         $user = User::create([
-            'name' => 'Creative Tech Park',
-            'email' => 'info@creativetechpark.com',
-            'password' => bcrypt('creativetechpark'),
-        ])->assignRole('Administrator');
+            'name' => 'Jugol Kumar',
+            'email' => 'jugol@creativetechpark.com',
+            'password' => bcrypt(12345678),
+        ]);
+
+        $user->givePermissionTo('Website_coordinate');
+        $user->assignRole('Developer');
+
+//
+////        $user = User::create([
+////            'name' => 'Creative Tech Park',
+////            'email' => 'info@creativetechpark.com',
+////            'password' => bcrypt('creativetechpark'),
+////        ])->assignRole('Administrator');
     }
 }

@@ -29,11 +29,14 @@ class AdminController extends Controller
                     'email' => $user->email,
                     'active_on' => $user->created_at->format('d M Y'),
                 ]),
-
             'filters' => Request::only(['search','perPage'])
         ]);
 
 
+    }
+
+    public function create(){
+        //
     }
 
     /**
