@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Design;
 use App\Models\Domain;
 use App\Models\Hosting;
+use App\Models\Method;
 use App\Models\Platform;
 use App\Models\Quotation;
 use App\Models\QuotationItem;
@@ -336,6 +337,32 @@ class QuotationController extends Controller
         }
 
 
+        $transactions = [];
+        foreach($quotation->transactions as $item){
+            $transactions[] = [
+                "amount"     => $item->amount ?? 0,
+                "user"       => $item->user,
+                "method"     => $item->method->name,
+
+                "pay_amount" => $item->pay_amount ?? 0,
+                "discount"   => $item->discount ?? 0,
+                "total_due"  => $item->total_due ?? 0,
+                "old_total_pay" => $item->old_total_pay ?? 0,
+                "date"       => $item->date->format('d M,y'),
+                "note"       => $item->note,
+            ];
+        }
+
+        $totalPay = $quotation->transactions->sum('pay_amount') + $quotation->transactions->sum('discount');
+
+        $quotationLastTransaction = $quotation->transactions->last() ?? [
+                'pay_amount' => 0,
+                'discount' => 0
+            ];
+
+
+
+
 
         return Inertia::render('Modules/Quotation/Show', [
             'info' =>[
@@ -344,15 +371,22 @@ class QuotationController extends Controller
                     'date'           => $quotation->date->format('M-d-Y'),
                     'valid_until'    => $quotation->valid_until->format('M-d-Y'),
                 ],
+
                 'others_info'        => [
-                    "items"            => $mainarray,
+                    "items"          => $mainarray,
                     "create_invoice" => URL::route('quotation.download', $quotation->id)
                 ],
 
                 'quotation_owner'    => [
                     'creator'        => $quotation->user,
                     'client'         => $quotation->client,
-                ]
+                ],
+                'total_pay'          => $totalPay,
+                'last_payment'       => $quotationLastTransaction,
+                'transactions'       => $transactions,
+
+                'payment_methods'    => Method::all(),
+                'payment_url'        => URL::route('saveQuotationTransaction'),
             ]
         ]);
 
@@ -365,6 +399,7 @@ class QuotationController extends Controller
 
     public function createInvoice($id){
         $quotation = Quotation::findOrFail($id);
+
         $mainarray = array();
         foreach ($quotation->domains as $item){
 
@@ -375,7 +410,6 @@ class QuotationController extends Controller
                 'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
-
         foreach ($quotation->hostings as $item){
             $mainarray [] =[
                 'name' => $item->name,
@@ -400,7 +434,6 @@ class QuotationController extends Controller
                 'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
             ];
         }
-
         foreach ($quotation->quotationItems as $item){
             $mainarray [] =[
                 'name' => $item->name ?? $item->itemname,
@@ -410,6 +443,29 @@ class QuotationController extends Controller
             ];
         }
 
+
+        $transactions = [];
+        foreach($quotation->transactions as $item){
+            $transactions[] = [
+                "amount"     => $item->amount ?? 0,
+                "user"       => $item->user,
+                "method"     => $item->method->name,
+
+                "pay_amount" => $item->pay_amount ?? 0,
+                "discount"   => $item->discount ?? 0,
+                "total_due"  => $item->total_due ?? 0,
+                "old_total_pay" => $item->old_total_pay ?? 0,
+                "date"       => $item->date->format('d M,y'),
+                "note"       => $item->note,
+            ];
+        }
+
+        $totalPay = $quotation->transactions->sum('pay_amount') + $quotation->transactions->sum('discount');
+
+        $quotationLastTransaction = $quotation->transactions->last() ?? [
+                'pay_amount' => 0,
+                'discount' => 0
+            ];
 
         $data =[
             'quotation'          => $quotation,
@@ -421,9 +477,11 @@ class QuotationController extends Controller
             'quotation_owner'    => [
                 'creator'        => $quotation->user,
                 'client'         => $quotation->client,
-            ]
+            ],
+            'transactions'    => $transactions,
+            "total_pay"       => $totalPay,
+            "last_payment"    => $quotationLastTransaction,
         ];
-
 
         $pdf = Pdf::loadView('invoice.quotation', compact('data'));
         return $pdf->download('quotation.pdf');

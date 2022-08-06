@@ -183,20 +183,20 @@
                 </tr>
                 <tr>
                     <td class="text-right border" colspan="3">Discount</td>
-                    <td class="text-right border"><strong> -{{ $discount }} Tk</strong></td>
+                    <td class="text-right border"><strong> - {{ $discount }} Tk</strong></td>
                 </tr>
                 <tr>
                     <td class="text-right border" colspan="3">Grand Total</td>
                     <td class="text-right border"><strong>{{ $subTotal - $discount }} Tk</strong></td>
                 </tr>
-            {{--    <tr>
+                 <tr>
                     <td class="text-right border" colspan="3">Amount Paid</td>
-                    <td class="text-right border"><strong>{{ isset($paid) }}</strong></td>
+                    <td class="text-right border"><strong>- {{ $data['total_pay']  }} Tk</strong></td>
                 </tr>
                 <tr>
                     <td class="text-right border" colspan="3">Total Due</td>
-                    <td class="text-right border"><strong>{{ $grandTotal - isset($paid) }}</strong></td>
-                </tr>--}}
+                    <td class="text-right border"><strong>{{ $grandTotal - $data['total_pay'] }} Tk</strong></td>
+                </tr>
                 </tbody>
             </table>
         </div>

@@ -12,9 +12,14 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Services Information's </h4>
-                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#createServices"
-                                    >Add Service</button>
+
+                                    <button
+                                        class="dt-button add-new btn btn-primary"
+                                        @click="addDataModal"
+                                    >
+                                        Add Package
+                                    </button>
+
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -85,7 +90,7 @@
 
 
 
-    <Modal id="createServices" title="Add New Services" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="createServices" title="Add New Services" v-vb-is:modal size="lg">
         <form @submit.prevent="createServices">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -125,7 +130,7 @@
     </Modal>
 
 
-    <Modal id="editData" title="Edit Domains" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="editData" title="Edit Domains" v-vb-is:modal size="lg">
         <form @submit.prevent="updateData(editData.id)">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -236,6 +241,9 @@
         })
     };
 
+    let addDataModal = () => {
+        document.getElementById('createServices').$vb.modal.show()
+    }
 
     let createServices = ( )=>{
         Inertia.post('services', createForm, {

@@ -118,8 +118,7 @@
                                                     <vue-feather type="plus"/>
                                                 </button>
                                                 <button
-                                                    v-else
-                                                    class="btn btn-danger btn-sm float-end mt-25"
+                                                    class="btn btn-danger btn-sm float-end mt-25 me-1"
                                                     @click="deleteRow(index)"
                                                     data-repeater-delete
                                                     type="button">

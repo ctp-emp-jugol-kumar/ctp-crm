@@ -14,6 +14,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PurposeController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\QuotationInvoice;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\WorkController;
@@ -90,6 +91,9 @@ Route::prefix('admin')->group(function(){
         Route::resource('purposes', PurposeController::class);
         // projects management
         Route::resource('projects', ProjectController::class);
+        // transaction management
+        Route::resource('transaction', TransactionController::class);
+        Route::post('quotation/transaction', [TransactionController::class, 'saveQuotationTransaction'])->name('saveQuotationTransaction');
 
     });
 

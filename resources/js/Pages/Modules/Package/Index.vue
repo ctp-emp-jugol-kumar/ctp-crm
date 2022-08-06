@@ -12,9 +12,13 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Package Information's </h4>
-                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#createPackage"
-                                    >Add Package</button>
+                                    <button
+                                        class="dt-button add-new btn btn-primary"
+                                        @click="addDataModal"
+                                    >
+                                        Add Package
+                                    </button>
+
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -87,7 +91,7 @@
 
 
 
-    <Modal id="createPackage" title="Add New Client" v-vb-is:modal size="lg">
+    <Modal id="createPackage" title="Add New Package" v-vb-is:modal size="lg">
         <form @submit.prevent="createPackage">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -109,7 +113,7 @@
 
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Address: </label>
+                        <label>Details: </label>
                         <textarea v-model="createForm.description" type="text" placeholder="address" rows="5" class="form-control"></textarea>
                         <span v-if="errors.description" class="error text-sm text-danger">{{ errors.description }}</span>
                     </div>
@@ -126,7 +130,7 @@
         </form>
     </Modal>
 
-    <Modal id="editData" title="Add New Client" v-vb-is:modal size="lg">
+    <Modal id="editData" title="Edit Package" v-vb-is:modal size="lg">
         <form @submit.prevent="updateData(editData.id)">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -148,7 +152,7 @@
 
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Address: </label>
+                        <label>Details: </label>
                         <textarea v-model="updateForm.description" type="text" placeholder="address" rows="5" class="form-control"></textarea>
                         <span v-if="errors.description" class="error text-sm text-danger">{{ errors.description }}</span>
                     </div>
@@ -197,7 +201,9 @@
         errors:Object,
         main_url: String,
     });
-
+    let addDataModal = () => {
+        document.getElementById('createPackage').$vb.modal.show()
+    }
 
     let createForm = useForm({
         name:"",
@@ -255,11 +261,11 @@
             onSuccess: ()=> {
                 document.getElementById('createPackage').$vb.modal.hide()
                 createForm.reset()
-                // Swal.fire(
-                //     'Saved!',
-                //     'Your file has been Saved.',
-                //     'success'
-                // )
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Saved.',
+                    'success'
+                )
             },
         })
     }
