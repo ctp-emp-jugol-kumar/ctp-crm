@@ -49,8 +49,8 @@ class QuotationController extends Controller
                 "subject"      => $qot->subject,
                 "status"       => $qot->status,
                 "date"         => $qot->date->format('M-d-Y'),
-                "client_name"  => $qot->client->name,
-                "user_name"    => $qot->user->name,
+                "client_name"  => $qot->client->name ?? null,
+                "user_name"    => $qot->user ? $qot->user->name : "unknown",
                 "show_url"     => URL::route('quotations.show', $qot->id),
                 "edit_url"     => URL::route('quotations.edit', $qot->id)
             ]);
@@ -235,7 +235,6 @@ class QuotationController extends Controller
             ];
         }
         $quotation->quotationItems()->createMany($quatationsOptoin);
-//        }
         return redirect()->route('quotations.index');
     }
 
@@ -359,10 +358,6 @@ class QuotationController extends Controller
                 'pay_amount' => 0,
                 'discount' => 0
             ];
-
-
-
-
 
         return Inertia::render('Modules/Quotation/Show', [
             'info' =>[

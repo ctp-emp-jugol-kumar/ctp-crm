@@ -37,10 +37,22 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = Auth::user();
+        if (Auth::check() && $user){
+            $roles_permissions = array_map(function ($item){
+                return $item['name'];
+            }, $user->getPermissionsViaRoles()->toArray());
+
+            $can = array_diff($roles_permissions, $user->getRoleNames()->toArray());
+        }
+
+
         return array_merge(parent::share($request), [
-            'auth' => Auth::user() ? [
+            'auth' =>  $user ? [
                 'user' => [
-                    'username' => Auth::user()->name
+                    'username' => $user->name,
+                    'role' => $user->getRoleNames(),
+                    'can' => $can
                 ],
                 'ADMIN_URL' => 'http://127.0.0.1:8000/admin',
             ] : null

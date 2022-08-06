@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Module;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -17,40 +19,207 @@ class RolesAndPermissionsSeeder extends Seeder
     public function run()
     {
         $all = [
-            'list feature', 'create feature', 'update feature', 'delete feature',
-            'list platform', 'create platform', 'update platform', 'delete platform',
-            'list work', 'create work', 'update work', 'delete work',
-            'list client', 'create client', 'update client', 'delete client',
-            'list design', 'create design', 'update design', 'delete design',
-            'list website', 'create website', 'update website', 'delete website',
-            'list hosting', 'create hosting', 'update hosting', 'delete hosting',
-            'list domain', 'create domain', 'update domain', 'delete domain',
-            'list quotation', 'create quotation', 'update quotation', 'delete quotation',
-            'list invoice', 'create invoice', 'update invoice', 'delete invoice',
-            'list method', 'create method', 'update method', 'delete method',
-            'list purpose', 'create purpose', 'update purpose', 'delete purpose',
-            'list transaction', 'create transaction', 'update transaction', 'delete transaction',
-            'list project', 'create project', 'update project', 'delete project', 'progress project',
-            'list note', 'create note', 'update note', 'delete note',
-            'view all client', 'view all transaction', 'view all invoice', 'view all quotation', 'assign user',
-            'statement transaction', 'view all project', 'manage project description', 'manage project credential',
-            'bulk assign agent', 'manage project progress', 'assign project user', 'bulk status client',
-            'statement transaction', 'due report', 'sell report'
+            [
+                'module' => "Dashboard",
+                'permissions' => [
+                    'dashboard.show',
+                    'dashboard.edit',
+                ]
+            ],
+            [
+                'module' => "User",
+                'permissions' => [
+                    'user.show',
+                    'user.index',
+                    'user.create',
+                    'user.edit',
+                    'user.delete'
+                ]
+            ],
+            [
+                'module' => "Client",
+                'permissions' => [
+                    'client.show',
+                    'client.index',
+                    'client.create',
+                    'client.edit',
+                    'client.delete'
+                ]
+            ],
+            [
+                'module' => "Feature",
+                'permissions' => [
+                    'feature.show',
+                    'feature.index',
+                    'feature.create',
+                    'feature.edit',
+                    'feature.delete'
+                ]
+            ],
+            [
+                'module' => "Platform",
+                'permissions' => [
+                    'platform.show',
+                    'platform.index',
+                    'platform.create',
+                    'platform.edit',
+                    'platform.delete'
+                ]
+            ],
+            [
+                'module' => "Work",
+                'permissions' => [
+                    'work.show',
+                    'work.index',
+                    'work.create',
+                    'work.edit',
+                    'work.delete'
+                ]
+            ],
+            [
+                'module' => "Design",
+                'permissions' => [
+                    'design.show',
+                    'design.index',
+                    'design.create',
+                    'design.edit',
+                    'design.delete'
+                ]
+            ],
+            [
+                'module' => "Website",
+                'permissions' => [
+                    'website.show',
+                    'website.index',
+                    'website.create',
+                    'website.edit',
+                    'website.delete'
+                ]
+            ],
+            [
+                'module' => "Hosting",
+                'permissions' => [
+                    'hosting.show',
+                    'hosting.index',
+                    'hosting.create',
+                    'hosting.edit',
+                    'hosting.delete'
+                ]
+            ],
+            [
+                'module' => "Domain",
+                'permissions' => [
+                    'domain.show',
+                    'domain.index',
+                    'domain.create',
+                    'domain.edit',
+                    'domain.delete'
+                ]
+            ],
+            [
+                'module' => "Quotation",
+                'permissions' => [
+                    'quotation.show',
+                    'quotation.index',
+                    'quotation.create',
+                    'quotation.edit',
+                    'quotation.delete'
+                ]
+            ],
+            [
+                'module' => "Invoice",
+                'permissions' => [
+                    'invoice.show',
+                    'invoice.index',
+                    'invoice.create',
+                    'invoice.edit',
+                    'invoice.delete'
+                ]
+            ],
+            [
+                'module' => "Method",
+                'permissions' => [
+                    'method.show',
+                    'method.index',
+                    'method.create',
+                    'method.edit',
+                    'method.delete'
+                ]
+            ],
+            [
+                'module' => "Purpose",
+                'permissions' => [
+                    'purpose.show',
+                    'purpose.index',
+                    'purpose.create',
+                    'purpose.edit',
+                    'purpose.delete'
+                ]
+            ],
+            [
+                'module' => "Transaction",
+                'permissions' => [
+                    'transaction.show',
+                    'transaction.index',
+                    'transaction.create',
+                    'transaction.edit',
+                    'transaction.delete'
+                ]
+            ],
+            [
+                'module' => "Project",
+                'permissions' => [
+                    'project.show',
+                    'project.index',
+                    'project.create',
+                    'project.edit',
+                    'project.delete'
+                ]
+            ],
+            [
+                'module' => "Note",
+                'permissions' => [
+                    'note.show',
+                    'note.index',
+                    'note.create',
+                    'note.edit',
+                    'note.delete'
+                ]
+            ],
         ];
-//        foreach ($all as $item) {
-//            Permission::create([
-//                'name' => $item,
-//                'guard_name' => 'backpack'
-//            ]);
-//        };
-        $role = Role::create([
-            'name' => 'Administrator',
-            'guard_name' => 'backpack'
-        ]);
-//        foreach ($all as $item) {
-//            $role->givePermissionTo( $item );
-//        };
-        $user = User::create([
+
+        foreach ($all as $item) {
+            $module = Module::updateOrCreate([
+                'module_name' => $item['module'],
+                'slug' => Str::slug($item['module']),
+            ]);
+
+            foreach ($item['permissions'] as $permission){
+                Permission::updateOrCreate([
+                    'name' => $permission,
+                    'module_name' => $item['module'],
+                    'module_id' => $module->id,
+                ]);
+            }
+
+        };
+
+        Role::updateOrCreate(['name' => 'Administrator']);
+        $developer = Role::updateOrCreate(['name' => 'Developer']);
+
+        foreach ($all as $item) {
+            foreach ($item['permissions'] as $permission) {
+                $developer->givePermissionTo( $permission );
+            }
+        };
+
+        User::updateOrCreate([
+            'name' => 'Jugol Kumar',
+            'email' => 'jugol@creativetechpark.com',
+            'password' => bcrypt(12345678),
+        ])->assignRole('Developer');
+
+        User::updateOrCreate([
             'name' => 'Creative Tech Park',
             'email' => 'info@creativetechpark.com',
             'password' => bcrypt('creativetechpark'),

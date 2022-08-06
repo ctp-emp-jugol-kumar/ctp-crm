@@ -6,6 +6,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 //use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
@@ -22,7 +23,6 @@ class UserController extends Controller
     public function index()
     {
 
-
         return inertia('Modules/Users/Index', [
             'users' => User::query()
                 ->when(Request::input('search'), function ($query, $search) {
@@ -34,7 +34,9 @@ class UserController extends Controller
                     'id' => $user->id,
                     'name' => $user->username,
                     'email' => $user->email,
-                    'active_on' => $user->created_at->format('d M Y'),
+                    'photo' => $user->photo,
+                    'active_on' => $user ? $user->created_at ? $user->created_at->format('d M Y') : '' : "",
+                    'role' => $user->getRoleNames(),
                 ]),
 
             'filters' => Request::only(['search','perPage'])
@@ -70,7 +72,6 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-
         $user = User::create($request->validated());
 
         return Inertia::render('Modules/Users/Create', [

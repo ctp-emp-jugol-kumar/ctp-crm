@@ -6,7 +6,6 @@
     </Head>
 
 
-
     <!-- Dashboard Ecommerce Starts -->
     <div class="app-content content ">
         <div class="content-overlay"></div>
@@ -17,9 +16,9 @@
                     <div class="card card-statistics">
                         <div class="card-header">
                             <h4 class="card-title">Statistics</h4>
-<!--                            <div class="d-flex align-items-center">-->
-<!--                                <p class="card-text font-small-2 me-25 mb-0">Updated 1 month ago</p>-->
-<!--                            </div>-->
+                            <!--                            <div class="d-flex align-items-center">-->
+                            <!--                                <p class="card-text font-small-2 me-25 mb-0">Updated 1 month ago</p>-->
+                            <!--                            </div>-->
                         </div>
                         <div class="card-body statistics-body">
                             <div class="row">
@@ -31,8 +30,8 @@
                                             </div>
                                         </div>
                                         <div class="my-auto">
-                                            <h4 class="fw-bolder mb-0">230k</h4>
-                                            <p class="card-text font-small-3 mb-0">Sales</p>
+                                            <h4 class="fw-bolder mb-0">{{ props.data.clients }}</h4>
+                                            <p class="card-text font-small-3 mb-0">Clients</p>
                                         </div>
                                     </div>
                                 </div>
@@ -44,8 +43,8 @@
                                             </div>
                                         </div>
                                         <div class="my-auto">
-                                            <h4 class="fw-bolder mb-0">8.549k</h4>
-                                            <p class="card-text font-small-3 mb-0">Customers</p>
+                                            <h4 class="fw-bolder mb-0">{{ props.data.users }}</h4>
+                                            <p class="card-text font-small-3 mb-0">Users</p>
                                         </div>
                                     </div>
                                 </div>
@@ -57,8 +56,8 @@
                                             </div>
                                         </div>
                                         <div class="my-auto">
-                                            <h4 class="fw-bolder mb-0">1.423k</h4>
-                                            <p class="card-text font-small-3 mb-0">Products</p>
+                                            <h4 class="fw-bolder mb-0">{{ props.data.website }}</h4>
+                                            <p class="card-text font-small-3 mb-0">Websits</p>
                                         </div>
                                     </div>
                                 </div>
@@ -70,8 +69,8 @@
                                             </div>
                                         </div>
                                         <div class="my-auto">
-                                            <h4 class="fw-bolder mb-0">$9745</h4>
-                                            <p class="card-text font-small-3 mb-0">Revenue</p>
+                                            <h4 class="fw-bolder mb-0">{{ props.data.work }}</h4>
+                                            <p class="card-text font-small-3 mb-0">Work</p>
                                         </div>
                                     </div>
                                 </div>
@@ -83,8 +82,8 @@
                                             </div>
                                         </div>
                                         <div class="my-auto">
-                                            <h4 class="fw-bolder mb-0">$9745</h4>
-                                            <p class="card-text font-small-3 mb-0">Revenue</p>
+                                            <h4 class="fw-bolder mb-0">{{ props.data.platforms }}</h4>
+                                            <p class="card-text font-small-3 mb-0">Platforms</p>
                                         </div>
                                     </div>
                                 </div>
@@ -96,8 +95,8 @@
                                             </div>
                                         </div>
                                         <div class="my-auto">
-                                            <h4 class="fw-bolder mb-0">$9745</h4>
-                                            <p class="card-text font-small-3 mb-0">Revenue</p>
+                                            <h4 class="fw-bolder mb-0">{{ props.data.packages }}</h4>
+                                            <p class="card-text font-small-3 mb-0">Packages</p>
                                         </div>
                                     </div>
                                 </div>
@@ -120,7 +119,13 @@
                             </div>
                             <div class="avatar bg-light-primary p-50">
                                         <span class="avatar-content">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user font-medium-4"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round"
+                                                 class="feather feather-user font-medium-4"><path
+                                                d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12"
+                                                                                                             cy="7"
+                                                                                                             r="4"></circle></svg>
                                         </span>
                             </div>
                         </div>
@@ -135,7 +140,15 @@
                             </div>
                             <div class="avatar bg-light-danger p-50">
                                         <span class="avatar-content">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus font-medium-4"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round"
+                                                 class="feather feather-user-plus font-medium-4"><path
+                                                d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5"
+                                                                                                             cy="7"
+                                                                                                             r="4"></circle><line
+                                                x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17"
+                                                                                            y2="11"></line></svg>
                                         </span>
                             </div>
                         </div>
@@ -150,7 +163,14 @@
                             </div>
                             <div class="avatar bg-light-success p-50">
                                         <span class="avatar-content">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-check font-medium-4"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round"
+                                                 class="feather feather-user-check font-medium-4"><path
+                                                d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5"
+                                                                                                             cy="7"
+                                                                                                             r="4"></circle><polyline
+                                                points="17 11 19 13 23 9"></polyline></svg>
                                         </span>
                             </div>
                         </div>
@@ -165,7 +185,15 @@
                             </div>
                             <div class="avatar bg-light-warning p-50">
                                         <span class="avatar-content">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-x font-medium-4"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round"
+                                                 class="feather feather-user-x font-medium-4"><path
+                                                d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5"
+                                                                                                             cy="7"
+                                                                                                             r="4"></circle><line
+                                                x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18"
+                                                                                            y2="13"></line></svg>
                                         </span>
                             </div>
                         </div>
@@ -178,3 +206,13 @@
     </div>
     <!-- Dashboard Ecommerce ends -->
 </template>
+
+
+<script setup>
+
+let props = defineProps({
+    data: Object,
+})
+
+
+</script>
