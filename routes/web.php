@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AutorizaitonController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignController;
@@ -46,6 +47,8 @@ Route::prefix('admin')->group(function(){
         Route::get('dashboard', DashboardController::class);
         // user management
         Route::resource('users', AdminController::class);
+        // user authorizations
+        Route::resource('authorizations', AutorizaitonController::class);
         // clients management
         Route::get('clients', [ClientsController::class, 'index']);
         Route::resource('clients', ClientsController::class);

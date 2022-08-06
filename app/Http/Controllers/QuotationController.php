@@ -289,7 +289,7 @@ class QuotationController extends Controller
 
 
     public function show(Quotation $quotation){
-        
+
         $mainarray = array();
         foreach ($quotation->domains as $item){
 

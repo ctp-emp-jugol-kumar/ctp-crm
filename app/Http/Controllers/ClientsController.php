@@ -23,7 +23,13 @@ class ClientsController extends Controller
             $search = Request::input('search'),
             'clients' => Client::query()
                 ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('email', 'like', "%{$search}%");
+                    $query->where('email', 'like', "%{$search}%")
+                          ->orWhere('name', 'like', "%{$search}%")
+                          ->orWhere('company', 'like', "%{$search}%")
+                          ->orWhere('secondary_email', 'like', "%{$search}%")
+                          ->orWhere('secondary_phone', 'like', "%{$search}%")
+                          ->orWhere('address', 'like', "%{$search}%")
+                          ->orWhere('phone', 'like', "%{$search}%");
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()

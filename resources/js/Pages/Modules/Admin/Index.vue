@@ -39,7 +39,7 @@
                                         class="dt-button add-new btn btn-primary"
                                         @click="addDataModal"
                                     >
-                                        Add Client
+                                        Add User
                                     </button>                                </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -78,7 +78,7 @@
                                                 <div class="d-flex justify-content-left align-items-center">
                                                     <div class="avatar-wrapper">
                                                         <div class="avatar  me-1">
-                                                            <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d"
+                                                            <img :src="user.photo"
                                                                  alt="{{ user.username }}" height="32" width="32">
                                                         </div>
                                                     </div>
@@ -90,14 +90,26 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>{{ user.username }}</td>
+
+                                            <td>
+                                                <span v-for="role in user.roles" class="badge bg-primary" style="margin-right: 3px">{{ role }} </span>
+                                            </td>
                                             <td>{{ user.is_active }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                    <Link :href="user.show_url"
+                                                        type="button"
+                                                        class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
+                                                    </Link>
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
+                                                        <Icon title="pencil" />
                                                     </button>
-                                                    <button @click="deleteItemModal(user.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+                                                    <button @click="deleteItemModal(user.id)"
+                                                            type="button"
+                                                            class="btn btn-icon btn-icon rounded-circle aves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash" />
                                                     </button>
                                                 </div>
@@ -144,12 +156,6 @@
                 </div>
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Secondary Email: </label>
-                        <input v-model="createForm.secondary_email" type="email" placeholder="second.eg@ctpbd.com"
-                               class="form-control">
-                        <span v-if="errors.secondary_email" class="error text-sm text-danger">{{errors.secondary_email}}</span>
-                    </div>
-                    <div class="col-md">
                         <label>Phone: <span class="text-danger">*</span></label>
                         <input v-model="createForm.phone" type="text" placeholder="+88017********" class="form-control">
                         <span v-if="errors.phone" class="error text-sm text-danger">{{ errors.phone }}</span>
@@ -157,18 +163,29 @@
                 </div>
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Secondary Phone: </label>
-                        <input v-model="createForm.secondary_phone" type="text" placeholder="+88017********" class="form-control">
-                        <span v-if="errors.secondary_phone" class="error text-sm text-danger">{{errors.secondary_phone}}</span>
+                        <label>Password: </label>
+                        <input v-model="createForm.password" type="text" placeholder="********" class="form-control">
+                        <span v-if="errors.password" class="error text-sm text-danger">{{errors.password}}</span>
                     </div>
                     <div class="col-md">
-                        <label>Company: </label>
-                        <input v-model="createForm.company" type="text" placeholder="Enter Company Name" class="form-control">
-                        <span v-if="errors.company" class="error text-sm text-danger">{{ errors.company }}</span>
+                        <label>Conform Password: </label>
+                        <input v-model="createForm.password_confirmation" type="text" placeholder="********" class="form-control">
+                        <span v-if="errors.password_confirmation" class="error text-sm text-danger">{{ errors.password_confirmation }}</span>
                     </div>
                 </div>
                 <div class="row mb-1">
-                    <Image />
+                    <div class="col-md">
+                        <Image  label="Profile Picture" v-model="createForm.photo"/>
+                    </div>
+                    <div class="col-md">
+                        <select class="form-control" multiple v-model="createForm.roles_name"
+                                 placeholder="Assign User">
+                            <option disabled selected> ~~ Assign User Roles ~~</option>
+                            <option v-for="role in roles" :value="role.name">{{ role.name }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-1">
                     <div class="col-md">
                         <label>Address: </label>
                         <textarea v-model="createForm.address" type="text" placeholder="Enter Full Address" rows="5" class="form-control"></textarea>
@@ -197,6 +214,7 @@
     import Pagination from "../../../components/Pagination"
     import Icon from '../../../components/Icon'
     import Modal from '../../../components/Modal'
+    import Image from '../../../components/ImageUploader'
     import {ref, watch} from "vue";
     import debounce from "lodash/debounce";
     import {Inertia} from "@inertiajs/inertia";
@@ -209,19 +227,18 @@
         //   can: Object,
         notification:Object,
         errors: Object,
+        roles:Object,
     });
 
     let createForm = useForm({
         name: "",
         email: "",
-        secondary_email: "",
         phone: "",
-        secondary_phone: "",
-        company: "",
         address: "",
-        note: "",
-        status: "",
-        agents: [null],
+        photo:"",
+        password:"",
+        password_confirmation:"",
+        roles_name:[],
 
         processing: Boolean,
     })
@@ -229,7 +246,7 @@
         document.getElementById('addItemModal').$vb.modal.show()
     }
     let createUserForm = () => {
-        Inertia.post('clients', createForm, {
+        Inertia.post('users', createForm, {
             preserveState: true,
             onStart: () => {
                 createForm.processing = true

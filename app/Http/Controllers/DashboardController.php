@@ -16,6 +16,7 @@ use App\Models\Work;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
 {
@@ -30,6 +31,8 @@ class DashboardController extends Controller
 
 //        Auth::user()->
 //        return "ok";
+
+//        return Auth::user()->getPermissionsViaRoles();
 
 
         return Inertia::render('Test', [

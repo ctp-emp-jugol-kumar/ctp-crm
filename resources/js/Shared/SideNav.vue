@@ -153,6 +153,12 @@
                         </Link>
                         <ul class="menu-content">
                             <li>
+                                <Link preserve-scroll class="d-flex align-items-center" href="/admin/authorizations">
+                                    <vue-feather type="circle" />
+                                    <span class="menu-item text-truncate" data-i18n="Login">Role & Permissions</span>
+                                </Link>
+                            </li>
+                            <li>
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/users/create">
                                     <vue-feather type="circle" />
                                     <span class="menu-item text-truncate" data-i18n="Login">Create user</span>

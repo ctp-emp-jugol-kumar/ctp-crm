@@ -50,8 +50,8 @@
                 <li class="nav-item dropdown dropdown-user">
                     <a class="nav-link dropdown-toggle dropdown-user-link" id="dropdown-user" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="user-nav d-sm-flex d-none">
-                            <span class="user-name fw-bolder">John Doe</span>
-                            <span class="user-status">Admin</span>
+                            <span class="user-name fw-bolder">{{ this.$page.props.auth.user.username }}</span>
+                            <span class="user-status">{{ this.$page.props.auth.user.role[0]  }}</span>
                         </div>
                         <span class="avatar">
                             <img class="round" src="https://images.unsplash.com/photo-1633332755192-727a05c4013d" alt="avatar" height="40" width="40">
