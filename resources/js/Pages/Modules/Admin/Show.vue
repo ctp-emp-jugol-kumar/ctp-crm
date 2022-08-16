@@ -9,262 +9,161 @@
             <div class="content-header row">
             </div>
             <div class="content-body">
-                <section class="app-user-view-account">
-                    <div class="row match-height">
-                        <!-- User Sidebar -->
-                        <div class="col-xl-8 col-lg-5 col-md-5 order-1 order-md-0">
-                            <!-- User Card -->
-                            <div class="card">
-                                <div class="card-body d-flex">
-                                    <div class="user-avatar-section">
-                                        <div class="d-flex align-items-center">
-                                            <img class="img-fluid rounded" src="../../../app-assets/images/portrait/small/avatar-s-2.jpg" height="110" width="110" alt="User avatar" />
-                                            <div class="user-info text-center">
-                                                <h4>Gertrude Barton</h4>
-                                                <span class="badge bg-light-secondary">Author</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex justify-content-around my-2 pt-75">
-                                            <div class="d-flex align-items-start me-2">
-                                            <span class="badge bg-light-primary p-75 rounded">
-                                                 <vue-feather type="home" />
+                <div class="row match-height">
+                    <div class="col-md-7 col-lg-8 col-xl-9 col-12">
+                        <div class="card">
+                            <!---->
+                            <!---->
+                            <div class="card-body">
+                                <!---->
+                                <!---->
+                                <div class="row">
+                                    <div class="d-flex justify-content-between flex-column col-xl-6 col-21">
+                                        <div class="d-flex justify-content-start">
+                                            <span class="b-avatar badge-light-danger rounded">
+                                                <img class="rounded me-2"  style="width: 140px;height: 140px;" src="../../../app-assets/images/avatars/1.png" alt="avatar">
                                             </span>
-                                                <div class="ms-75">
-                                                    <h4 class="mb-0">1.23k</h4>
-                                                    <small>Tasks Done</small>
+                                            <div class="d-flex flex-column ml-1">
+                                                <div class="mb-1">
+                                                    <h4 class="mb-0"> Selina Kyle </h4>
+                                                    <span class="card-text">irena.dubrovna@wayne.com</span>
                                                 </div>
-                                            </div>
-                                            <div class="d-flex align-items-start">
-                                            <span class="badge bg-light-primary p-75 rounded">
-                                                <vue-feather type="home" />
-                                            </span>
-                                                <div class="ms-75">
-                                                    <h4 class="mb-0">568</h4>
-                                                    <small>Projects Done</small>
+                                                <div class="d-flex flex-wrap justify-content-evenly">
+                                                    <a href="#" class="btn btn-primary" target="_self"> Edit </a>
+                                                    <button type="button" class="btn ml-1 btn-outline-danger"> Delete </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <h4 class="fw-bolder border-bottom pb-50 mb-1">Details</h4>
-                                    <div class="info-container">
-                                        <ul class="list-unstyled">
-                                            <li class="mb-75">
-                                                <span class="fw-bolder me-25">Username:</span>
-                                                <span>violet.dev</span>
-                                            </li>
-                                            <li class="mb-75">
-                                                <span class="fw-bolder me-25">Billing Email:</span>
-                                                <span>vafgot@vultukir.org</span>
-                                            </li>
-                                            <li class="mb-75">
-                                                <span class="fw-bolder me-25">Status:</span>
-                                                <span class="badge bg-light-success">Active</span>
-                                            </li>
-                                            <li class="mb-75">
-                                                <span class="fw-bolder me-25">Role:</span>
-                                                <span>Author</span>
-                                            </li>
-                                            <li class="mb-75">
-                                                <span class="fw-bolder me-25">Tax ID:</span>
-                                                <span>Tax-8965</span>
-                                            </li>
-                                            <li class="mb-75">
-                                                <span class="fw-bolder me-25">Contact:</span>
-                                                <span>+1 (609) 933-44-22</span>
-                                            </li>
-                                            <li class="mb-75">
-                                                <span class="fw-bolder me-25">Language:</span>
-                                                <span>English</span>
-                                            </li>
-                                            <li class="mb-75">
-                                                <span class="fw-bolder me-25">Country:</span>
-                                                <span>Wake Island</span>
-                                            </li>
-                                        </ul>
-                                        <div class="d-flex justify-content-center pt-2">
-                                            <a href="javascript:;" class="btn btn-primary me-1" data-bs-target="#editUser" data-bs-toggle="modal">
-                                                Edit
-                                            </a>
-                                            <a href="javascript:;" class="btn btn-outline-danger suspend-user">Suspended</a>
-                                        </div>
+                                    <div class="col-xl-6 col-12">
+                                        <table class="mt-2 mt-xl-0 w-100">
+                                            <tr>
+                                                <th class="pb-50">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
+                                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                         class="mr-75 feather feather-user">
+                                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                        <circle cx="12" cy="7" r="4"></circle>
+                                                    </svg>
+                                                    <span class="font-weight-bold">Username</span>
+                                                </th>
+                                                <td class="pb-50"> catwomen1940 </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="pb-50">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
+                                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                         class="mr-75 feather feather-check">
+                                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                                    </svg>
+                                                    <span class="font-weight-bold">Status</span>
+                                                </th>
+                                                <td class="pb-50 text-capitalize"> active </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="pb-50">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
+                                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                         class="mr-75 feather feather-star">
+                                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                    </svg>
+                                                    <span class="font-weight-bold">Role</span>
+                                                </th>
+                                                <td class="pb-50 text-capitalize"> admin </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="pb-50">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
+                                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                         class="mr-75 feather feather-flag">
+                                                        <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                                                        <line x1="4" y1="22" x2="4" y2="15"></line>
+                                                    </svg>
+                                                    <span class="font-weight-bold">Country</span>
+                                                </th>
+                                                <td class="pb-50"> USA </td>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
+                                                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                         class="mr-75 feather feather-phone">
+                                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                                    </svg>
+                                                    <span class="font-weight-bold">Contact</span>
+                                                </th>
+                                                <td> (829) 537-0057 </td>
+                                            </tr>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
-                            <!-- /User Card -->
+                            <!---->
+                            <!---->
                         </div>
-                        <div class="col-xl-4 col-lg-5 col-md-5 order-1 order-md-0">
-                            <!-- Plan Card -->
-                            <div class="card border-primary">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <span class="badge bg-light-primary">Standard</span>
-                                        <div class="d-flex justify-content-center">
-                                            <sup class="h5 pricing-currency text-primary mt-1 mb-0">$</sup>
-                                            <span class="fw-bolder display-5 mb-0 text-primary">99</span>
-                                            <sub class="pricing-duration font-small-4 ms-25 mt-auto mb-2">/month</sub>
-                                        </div>
-                                    </div>
-                                    <ul class="ps-1 mb-2">
-                                        <li class="mb-50">10 Users</li>
-                                        <li class="mb-50">Up to 10 GB storage</li>
-                                        <li>Basic Support</li>
-                                    </ul>
-                                    <div class="d-flex justify-content-between align-items-center fw-bolder mb-50">
-                                        <span>Days</span>
-                                        <span>4 of 30 Days</span>
-                                    </div>
-                                    <div class="progress mb-50" style="height: 8px">
-                                        <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="65" aria-valuemax="100" aria-valuemin="80"></div>
-                                    </div>
-                                    <span>4 days remaining</span>
-                                    <div class="d-grid w-100 mt-2">
-                                        <button class="btn btn-primary" data-bs-target="#upgradePlanModal" data-bs-toggle="modal">
-                                            Upgrade Plan
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Plan Card -->
-                        </div>
-                        <!--/ User Sidebar -->
-
-                        <!-- User Content -->
-                        <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
-                            <!-- User Pills -->
-                            <ul class="nav nav-pills mb-2">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="app-user-view-account.html">
-                                        <i data-feather="user" class="font-medium-3 me-50"></i>
-                                        <span class="fw-bold">Account</span></a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="app-user-view-security.html">
-                                        <i data-feather="lock" class="font-medium-3 me-50"></i>
-                                        <span class="fw-bold">Security</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="app-user-view-billing.html">
-                                        <i data-feather="bookmark" class="font-medium-3 me-50"></i>
-                                        <span class="fw-bold">Billing & Plans</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="app-user-view-notifications.html">
-                                        <i data-feather="bell" class="font-medium-3 me-50"></i><span class="fw-bold">Notifications</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="app-user-view-connections.html">
-                                        <i data-feather="link" class="font-medium-3 me-50"></i><span class="fw-bold">Connections</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <!--/ User Pills -->
-
-                            <!-- Project table -->
-                            <div class="card">
-                                <h4 class="card-header">User's Projects List</h4>
-                                <div class="table-responsive">
-                                    <table class="table datatable-project">
-                                        <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Project</th>
-                                            <th class="text-nowrap">Total Task</th>
-                                            <th>Progress</th>
-                                            <th>Hours</th>
-                                        </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </div>
-                            <!-- /Project table -->
-
-                            <!-- Activity Timeline -->
-                            <div class="card">
-                                <h4 class="card-header">User Activity Timeline</h4>
-                                <div class="card-body pt-1">
-                                    <ul class="timeline ms-50">
-                                        <li class="timeline-item">
-                                            <span class="timeline-point timeline-point-indicator"></span>
-                                            <div class="timeline-event">
-                                                <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
-                                                    <h6>User login</h6>
-                                                    <span class="timeline-event-time me-1">12 min ago</span>
-                                                </div>
-                                                <p>User login at 2:12pm</p>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <span class="timeline-point timeline-point-warning timeline-point-indicator"></span>
-                                            <div class="timeline-event">
-                                                <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
-                                                    <h6>Meeting with john</h6>
-                                                    <span class="timeline-event-time me-1">45 min ago</span>
-                                                </div>
-                                                <p>React Project meeting with john @10:15am</p>
-                                                <div class="d-flex flex-row align-items-center mb-50">
-                                                    <div class="avatar me-50">
-                                                        <img src="../../../app-assets/images/portrait/small/avatar-s-7.jpg" alt="Avatar" width="38" height="38" />
-                                                    </div>
-                                                    <div class="user-info">
-                                                        <h6 class="mb-0">Leona Watkins (Client)</h6>
-                                                        <p class="mb-0">CEO of pixinvent</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <span class="timeline-point timeline-point-info timeline-point-indicator"></span>
-                                            <div class="timeline-event">
-                                                <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
-                                                    <h6>Create a new react project for client</h6>
-                                                    <span class="timeline-event-time me-1">2 day ago</span>
-                                                </div>
-                                                <p>Add files to new design folder</p>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <span class="timeline-point timeline-point-danger timeline-point-indicator"></span>
-                                            <div class="timeline-event">
-                                                <div class="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
-                                                    <h6>Create Invoices for client</h6>
-                                                    <span class="timeline-event-time me-1">12 min ago</span>
-                                                </div>
-                                                <p class="mb-0">Create new Invoices and send to Leona Watkins</p>
-                                                <div class="d-flex flex-row align-items-center mt-50">
-                                                    <img class="me-1" src="../../../app-assets/images/icons/pdf.png" alt="data.json" height="25" />
-                                                    <h6 class="mb-0">Invoices.pdf</h6>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- /Activity Timeline -->
-
-                            <!-- Invoice table -->
-                            <div class="card">
-                                <table class="invoice-table table text-nowrap">
-                                    <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>#ID</th>
-                                        <th><i data-feather="trending-up"></i></th>
-                                        <th>TOTAL Paid</th>
-                                        <th class="text-truncate">Issued Date</th>
-                                        <th class="cell-fit">Actions</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                            <!-- /Invoice table -->
-                        </div>
-                        <!--/ User Content -->
                     </div>
-                </section>
+                    <div class="col-md-5 col-lg-4 col-xl-3 col-12">
+                        <div class="card border-primary">
+                            <!---->
+                            <!---->
+                            <div class="card-header d-flex justify-content-between align-items-center pt-75 pb-25">
+                                <h5 class="mb-0"> Current Plan </h5>
+                                <span class="badge badge-light-primary"> Basic </span>
+                                <small class="text-muted w-100">July 22, 2021</small>
+                            </div>
+                            <div class="card-body">
+                                <!---->
+                                <!---->
+                                <ul class="list-unstyled my-1">
+                                    <li>
+                                        <span class="align-middle">5 Users</span>
+                                    </li>
+                                    <li class="my-25">
+                                        <span class="align-middle">10 GB storage</span>
+                                    </li>
+                                    <li>
+                                        <span class="align-middle">Basic Support</span>
+                                    </li>
+                                </ul>
+                                <button type="button" class="btn btn-primary btn-block"> Upgrade Plan </button>
+                            </div>
+                            <!---->
+                            <!---->
+                        </div>
+                    </div>
+                </div>
+                <!-- User Content -->
+                <div class="col-xl-12 col-lg-7 col-md-7 order-0 order-md-1">
+                    <!-- User Pills -->
+                    <ul class="nav nav-pills mb-2">
+                        <li class="nav-item">
+                            <button class="nav-link"
+                               :class="{'active': active === 'Account'}"
+                               @click="active ='Account'">
+                                <i data-feather="bookmark" class="font-medium-3 me-50"></i>
+                                <span class="fw-bold">Accounts</span>
+                            </button>
+                        </li>
+
+                        <li class="nav-item">
+                            <button class="nav-link"
+                               :class="{'active': active === 'Billing'}"
+                               @click="active = 'Billing'"
+                            >
+                                <i data-feather="bookmark" class="font-medium-3 me-50"></i>
+                                <span class="fw-bold">Billing</span>
+                            </button>
+                        </li>
+                    </ul>
+                    <!--/ User Pills -->
+<!--                    <component :is="active"/>-->
+
+<!--                    &lt;!&ndash; Acount section componenets &ndash;&gt;-->
+                        <Account v-if="active === 'Account'"/>
+                        <Billing v-if="active === 'Billing'"/>
+                </div>
+
+
                 <!-- Edit User Modal -->
                 <div class="modal fade" id="editUser" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered modal-edit-user">
@@ -430,10 +329,20 @@
 
 </template>
 
+<script setup>
+    import VueLink from '../../../components/ViewLink'
+    import Account from './Components/Account'
+    import Billing from './Components/Billing'
+</script>
+
 <script>
-export default {
-name: "Show"
-}
+    export default {
+        data(){
+            return {
+                active: 'Account',
+            }
+        }
+    }
 </script>
 
 <style scoped>
