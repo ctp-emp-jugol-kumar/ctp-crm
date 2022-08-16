@@ -8,6 +8,9 @@
 @import './base/pages/app-ecommerce';
 @import './base/pages/app-ecommerce-details';
 
+.scroll-area::-webkit-scrollbar{
+    width: 0 !important;
+}
 
 .select-search-area label {
     margin-top: 1rem;
