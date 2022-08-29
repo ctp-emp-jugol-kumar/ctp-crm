@@ -136,31 +136,25 @@
                 <div class="col-xl-12 col-lg-7 col-md-7 order-0 order-md-1">
                     <!-- User Pills -->
                     <ul class="nav nav-pills mb-2">
-                        <li class="nav-item">
+                        <li class="nav-item" v-for="component in components" :key="component">
                             <button class="nav-link"
-                               :class="{'active': active === 'Account'}"
-                               @click="active ='Account'">
+                               :class="{'active': active === component}"
+                               @click="active =`${component}`">
                                 <i data-feather="bookmark" class="font-medium-3 me-50"></i>
-                                <span class="fw-bold">Accounts</span>
-                            </button>
-                        </li>
-
-                        <li class="nav-item">
-                            <button class="nav-link"
-                               :class="{'active': active === 'Billing'}"
-                               @click="active = 'Billing'"
-                            >
-                                <i data-feather="bookmark" class="font-medium-3 me-50"></i>
-                                <span class="fw-bold">Billing</span>
+                                <span class="fw-bold">{{ component }}</span>
                             </button>
                         </li>
                     </ul>
-                    <!--/ User Pills -->
-<!--                    <component :is="active"/>-->
 
-<!--                    &lt;!&ndash; Acount section componenets &ndash;&gt;-->
-                        <Account v-if="active === 'Account'"/>
-                        <Billing v-if="active === 'Billing'"/>
+                    <!--/ User Pills -->
+<!--                    <Component :is="active"/>-->
+                    <Account v-if="active === 'Account'"/>
+                    <Billing v-if="active === 'Billing'"/>
+                    <Invoice v-if="active === 'Invoice'"/>
+                    <Quotation v-if="active === 'Quotation'"/>
+                    <Project v-if="active === 'Project'"/>
+                    <Domain v-if="active === 'Domain'"/>
+                    <Hosting v-if="active === 'Hosting'"/>
                 </div>
 
 
@@ -333,6 +327,11 @@
     import VueLink from '../../../components/ViewLink'
     import Account from './Components/Account'
     import Billing from './Components/Billing'
+    import Project from './Components/Project'
+    import Quotation from './Components/Quotation'
+    import Invoice from './Components/Invoice'
+    import Domain from './Components/Domain'
+    import Hosting from './Components/Hosting'
 </script>
 
 <script>
@@ -340,10 +339,13 @@
         data(){
             return {
                 active: 'Account',
+                components: ['Account', 'Billing', 'Project', 'Quotation', 'Invoice', 'Domain', 'Hosting']
             }
         }
     }
 </script>
+
+
 
 <style scoped>
 
