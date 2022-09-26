@@ -41,8 +41,8 @@ class HandleInertiaRequests extends Middleware
         if (Auth::check() && $user){
             $roles_permissions = array_map(function ($item){
                 return $item['name'];
-            }, $user->getPermissionsViaRoles()->toArray());
-
+            },
+            $user->getPermissionsViaRoles()->toArray());
             $can = array_diff($roles_permissions, $user->getRoleNames()->toArray());
         }
 

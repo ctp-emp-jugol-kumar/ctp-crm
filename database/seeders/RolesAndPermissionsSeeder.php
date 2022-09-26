@@ -24,6 +24,10 @@ class RolesAndPermissionsSeeder extends Seeder
                 'permissions' => [
                     'dashboard.show',
                     'dashboard.edit',
+                ],
+                'name' => [
+                    'Show Dashboard',
+                    'Edit Dashboard',
                 ]
             ],
             [
@@ -34,6 +38,30 @@ class RolesAndPermissionsSeeder extends Seeder
                     'user.create',
                     'user.edit',
                     'user.delete'
+                ],
+                'name' => [
+                    'Show User',
+                    'Manage User',
+                    'Create User',
+                    'Edit User',
+                    'Delete User'
+                ]
+            ],
+            [
+                'module' => "Authorizations",
+                'permissions' => [
+                    'authorization.show',
+                    'authorization.index',
+                    'authorization.create',
+                    'authorization.edit',
+                    'authorization.delete'
+                ],
+                'name' => [
+                    'Show Authorizations',
+                    'Manage Authorizations',
+                    'Create Authorizations',
+                    'Edit Authorizations',
+                    'Delete Authorizations'
                 ]
             ],
             [
@@ -44,6 +72,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'client.create',
                     'client.edit',
                     'client.delete'
+                ],
+                'name' => [
+                    'Show Client',
+                    'Manage Client',
+                    'Create Client',
+                    'Edit Client',
+                    'Delete Client'
                 ]
             ],
             [
@@ -54,6 +89,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'feature.create',
                     'feature.edit',
                     'feature.delete'
+                ],
+                'name' => [
+                    'Show Feature',
+                    'Manage Feature',
+                    'Create Feature',
+                    'Edit Feature',
+                    'Delete Feature'
                 ]
             ],
             [
@@ -64,6 +106,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'platform.create',
                     'platform.edit',
                     'platform.delete'
+                ],
+                'name' => [
+                    'Show Platform',
+                    'Manage Platform',
+                    'Create Platform',
+                    'Edit Platform',
+                    'Delete Platform'
                 ]
             ],
             [
@@ -74,6 +123,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'work.create',
                     'work.edit',
                     'work.delete'
+                ],
+                'name' => [
+                    'Show Work',
+                    'Manage Work',
+                    'Create Work',
+                    'Edit Work',
+                    'Delete Work'
                 ]
             ],
             [
@@ -84,6 +140,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'design.create',
                     'design.edit',
                     'design.delete'
+                ],
+                'name' => [
+                    'Show Design',
+                    'Manage Design',
+                    'Create Design',
+                    'Edit Design',
+                    'Delete Design'
                 ]
             ],
             [
@@ -94,6 +157,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'website.create',
                     'website.edit',
                     'website.delete'
+                ],
+                'name' => [
+                    'Show Website',
+                    'Manage Website',
+                    'Create Website',
+                    'Edit Website',
+                    'Delete Website'
                 ]
             ],
             [
@@ -104,6 +174,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'hosting.create',
                     'hosting.edit',
                     'hosting.delete'
+                ],
+                'name' => [
+                    'Show Hosting',
+                    'Manage Hosting',
+                    'Create Hosting',
+                    'Edit Hosting',
+                    'Delete Hosting'
                 ]
             ],
             [
@@ -114,6 +191,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'domain.create',
                     'domain.edit',
                     'domain.delete'
+                ],
+                'name' => [
+                    'Show Domain',
+                    'Manage Domain',
+                    'Create Domain',
+                    'Edit Domain',
+                    'Delete Domain'
                 ]
             ],
             [
@@ -124,6 +208,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'quotation.create',
                     'quotation.edit',
                     'quotation.delete'
+                ],
+                'name' => [
+                    'Show Quotation',
+                    'Manage Quotation',
+                    'Create Quotation',
+                    'Edit Quotation',
+                    'Delete Quotation'
                 ]
             ],
             [
@@ -134,6 +225,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'invoice.create',
                     'invoice.edit',
                     'invoice.delete'
+                ],
+                'name' => [
+                    'Show Invoice',
+                    'Manage Invoice',
+                    'Create Invoice',
+                    'Edit Invoice',
+                    'Delete Invoice'
                 ]
             ],
             [
@@ -144,6 +242,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'method.create',
                     'method.edit',
                     'method.delete'
+                ],
+                'name' => [
+                    'Show Method',
+                    'Manage Method',
+                    'Create Method',
+                    'Edit Method',
+                    'Delete Method'
                 ]
             ],
             [
@@ -154,6 +259,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'purpose.create',
                     'purpose.edit',
                     'purpose.delete'
+                ],
+                'name' => [
+                    'Show Purpose',
+                    'Manage Purpose',
+                    'Create Purpose',
+                    'Edit Purpose',
+                    'Delete Purpose'
                 ]
             ],
             [
@@ -164,6 +276,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'transaction.create',
                     'transaction.edit',
                     'transaction.delete'
+                ],
+                'name' => [
+                    'Show Transaction',
+                    'Manage Transaction',
+                    'Create Transaction',
+                    'Edit Transaction',
+                    'Delete Transaction'
                 ]
             ],
             [
@@ -174,6 +293,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'project.create',
                     'project.edit',
                     'project.delete'
+                ],
+                'name' => [
+                    'Show Project',
+                    'Manage Project',
+                    'Create Project',
+                    'Edit Project',
+                    'Delete Project'
                 ]
             ],
             [
@@ -184,6 +310,13 @@ class RolesAndPermissionsSeeder extends Seeder
                     'note.create',
                     'note.edit',
                     'note.delete'
+                ],
+                'name' => [
+                    'Show Note',
+                    'Manage Note',
+                    'Create Note',
+                    'Edit Note',
+                    'Delete Note'
                 ]
             ],
         ];
@@ -194,17 +327,17 @@ class RolesAndPermissionsSeeder extends Seeder
                 'slug' => Str::slug($item['module']),
             ]);
 
-            foreach ($item['permissions'] as $permission){
+            foreach ($item['permissions'] as $key => $permission){
                 Permission::updateOrCreate([
                     'name' => $permission,
+                    'show_name' => $item['name'][$key],
                     'module_name' => $item['module'],
                     'module_id' => $module->id,
                 ]);
             }
-
         };
 
-        Role::updateOrCreate(['name' => 'Administrator']);
+        Role::updateOrCreate(['name' => 'Administrator', 'is_delete' => false]);
         $developer = Role::updateOrCreate(['name' => 'Developer']);
 
         foreach ($all as $item) {

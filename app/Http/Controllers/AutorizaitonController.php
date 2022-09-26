@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Module;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use NumberToWords\Language\Persian\PersianConverter;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -24,6 +27,7 @@ class AutorizaitonController extends Controller
             'all_permissions' => Permission::with("roles", "users")->get(),
             'roles'       => Role::with(["users"])->withCount("users")->get(),
             'can'         => null,
+            'create_url'  => URL::route('authorizations.store')
         ]);
     }
 
@@ -41,11 +45,25 @@ class AutorizaitonController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        Request::validate([
+           'roleName' => 'required|unique:roles,name',
+           'selectedPermissions' => 'required'
+        ]);
+
+        $role = Role::create(['name' => Request::input('roleName')]);
+
+        foreach (Request::input('selectedPermissions') as $permission) {
+            $role->givePermissionTo($permission);
+        };
+
+        return back();
+
+
+
     }
 
     /**

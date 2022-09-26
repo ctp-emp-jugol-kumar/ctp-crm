@@ -69,7 +69,7 @@ class User extends Authenticatable
     }
 
     public function invoices(){
-        return $this->hasMany(User::class, 'user_id');
+        return $this->hasMany(CustomInvoice::class, 'user_id');
     }
 
     public function projects()

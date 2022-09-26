@@ -34,21 +34,21 @@
         <perfect-scrollbar>
             <div class="main-menu-content scroll-area">
                 <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('dashboard.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/dashboard">
                             <vue-feather type="home" />
                             <span class="menu-title text-truncate" data-i18n="Dashboards">Dashboards</span>
                         </Link>
                     </li>
 
-                    <li class=" nav-item">
-                        <Link preserve-scroll class="d-flex align-items-center" href="app-email.html">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('email.show')">
+                        <Link preserve-scroll class="d-flex align-items-center" href="#">
                             <vue-feather type="mail" />
-                            <span class="menu-title text-truncate" data-i18n="Email">Email</span>
+                            <span class="menu-title text-truncate" data-i18n="Email">{{ this.$page }}</span>
                         </Link>
                     </li>
-                    <li class=" nav-item">
-                        <Link preserve-scroll class="d-flex align-items-center" href="app-chat.html">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('chat.show')">
+                        <Link preserve-scroll class="d-flex align-items-center" href="#">
                             <vue-feather type="message-circle" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Chat</span>
                         </Link>
@@ -145,26 +145,26 @@
                     -->
 
 
-                    <li class=" nav-item has-sub" :class="{'open' : clickMenu === 4}"  @click="toggleSubMenu(4)">
+                    <li class=" nav-item has-sub" :class="{'open' : clickMenu === 4}"  @click="toggleSubMenu(4)" v-if="this.$page.props.auth.user.can.includes('user.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="#">
                             <vue-feather type="users" />
                             <span class="menu-title text-truncate"
                                   data-i18n="Authentication">User Management</span>
                         </Link>
                         <ul class="menu-content">
-                            <li>
+                            <li v-if="this.$page.props.auth.user.can.includes('user.create')">
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/authorizations">
                                     <vue-feather type="circle" />
                                     <span class="menu-item text-truncate" data-i18n="Login">Role & Permissions</span>
                                 </Link>
                             </li>
-                            <li>
+                            <li v-if="this.$page.props.auth.user.can.includes('user.create')">
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/users/create">
                                     <vue-feather type="circle" />
                                     <span class="menu-item text-truncate" data-i18n="Login">Create user</span>
                                 </Link>
                             </li>
-                            <li>
+                            <li v-if="this.$page.props.auth.user.can.includes('user.index')">
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/users">
                                     <vue-feather type="circle" />
                                     <span class="menu-item text-truncate" data-i18n="Login">Manage user</span>
@@ -174,90 +174,90 @@
                     </li>
 
 
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('client.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/clients">
                             <vue-feather type="radio" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Clients</span>
                         </Link>
                     </li>
 
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('design.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/designs" >
                             <vue-feather type="package" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Package</span>
                         </Link>
                     </li>
 
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('platform.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/services">
                             <vue-feather type="repeat" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Services</span>
                         </Link>
                     </li>
 
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('platform.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/platforms">
                             <vue-feather type="rss" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Platforms</span>
                         </Link>
                     </li>
 
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('feature.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/features">
                             <vue-feather type="sunrise" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Feature</span>
                         </Link>
                     </li>
 
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('work.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/works">
                             <vue-feather type="check-circle" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Works</span>
                         </Link>
                     </li>
 
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('domain.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/domains">
                             <vue-feather type="link" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Domains</span>
                         </Link>
                     </li>
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('hosting.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/hostings">
                             <vue-feather type="cloud-snow" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Hostings</span>
                         </Link>
                     </li>
 
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('quotation.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/quotations">
                             <vue-feather type="aperture" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Quotations</span>
                         </Link>
                     </li>
 
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('invoice.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/invoices">
                             <vue-feather type="archive" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Invoice</span>
                         </Link>
                     </li>
 
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('method.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/methods">
                             <vue-feather type="dollar-sign" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Methods</span>
                         </Link>
                     </li>
 
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('purpose.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/purposes">
                             <vue-feather type="trending-up" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
                         </Link>
                     </li>
 
-                    <li class=" nav-item">
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('project.show')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/projects">
                             <vue-feather type="package" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Projects</span>

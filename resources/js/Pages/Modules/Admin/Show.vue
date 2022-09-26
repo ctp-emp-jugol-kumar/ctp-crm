@@ -21,12 +21,12 @@
                                     <div class="d-flex justify-content-between flex-column col-xl-6 col-21">
                                         <div class="d-flex justify-content-start">
                                             <span class="b-avatar badge-light-danger rounded">
-                                                <img class="rounded me-2"  style="width: 140px;height: 140px;" src="../../../app-assets/images/avatars/1.png" alt="avatar">
+                                                <img class="rounded me-2"  style="width: 140px;height: 140px;" :src="`${props.user.photo}`" alt="avatar">
                                             </span>
                                             <div class="d-flex flex-column ml-1">
                                                 <div class="mb-1">
-                                                    <h4 class="mb-0"> Selina Kyle </h4>
-                                                    <span class="card-text">irena.dubrovna@wayne.com</span>
+                                                    <h4 class="mb-0"> {{ props.user.name }} </h4>
+                                                    <span class="card-text">{{ props.user.email }}</span>
                                                 </div>
                                                 <div class="d-flex flex-wrap justify-content-evenly">
                                                     <a href="#" class="btn btn-primary" target="_self"> Edit </a>
@@ -41,7 +41,7 @@
                                                 <th class="pb-50">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
                                                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                         class="mr-75 feather feather-user">
+                                                         class="me-75 feather feather-user">
                                                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                                         <circle cx="12" cy="7" r="4"></circle>
                                                     </svg>
@@ -53,7 +53,7 @@
                                                 <th class="pb-50">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
                                                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                         class="mr-75 feather feather-check">
+                                                         class="me-75 feather feather-check">
                                                         <polyline points="20 6 9 17 4 12"></polyline>
                                                     </svg>
                                                     <span class="font-weight-bold">Status</span>
@@ -62,20 +62,23 @@
                                             </tr>
                                             <tr>
                                                 <th class="pb-50">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         width="14px" height="14px" viewBox="0 0 24 24" fill="none"
                                                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                         class="mr-75 feather feather-star">
+                                                         class="me-75 feather feather-star">
                                                         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                                                     </svg>
                                                     <span class="font-weight-bold">Role</span>
                                                 </th>
-                                                <td class="pb-50 text-capitalize"> admin </td>
+                                                <td class="pb-50 text-capitalize">
+                                                    <span class="badge badge-light-primary me-1" v-for="role in props.user.roles">{{ role.name }}</span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th class="pb-50">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
                                                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                         class="mr-75 feather feather-flag">
+                                                         class="me-75 feather feather-flag">
                                                         <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
                                                         <line x1="4" y1="22" x2="4" y2="15"></line>
                                                     </svg>
@@ -87,12 +90,12 @@
                                                 <th>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
                                                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                         class="mr-75 feather feather-phone">
+                                                         class="me-75 feather feather-phone">
                                                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                                                     </svg>
                                                     <span class="font-weight-bold">Contact</span>
                                                 </th>
-                                                <td> (829) 537-0057 </td>
+                                                <td> {{ props.user.phone }} </td>
                                             </tr>
                                         </table>
                                     </div>
@@ -141,20 +144,14 @@
                                :class="{'active': active === component}"
                                @click="active =`${component}`">
                                 <i data-feather="bookmark" class="font-medium-3 me-50"></i>
-                                <span class="fw-bold">{{ component }}</span>
+                                <span class="fw-bold text-capitalize">{{ component }}</span>
                             </button>
                         </li>
                     </ul>
 
                     <!--/ User Pills -->
-<!--                    <Component :is="active"/>-->
-                    <Account v-if="active === 'Account'"/>
-                    <Billing v-if="active === 'Billing'"/>
-                    <Invoice v-if="active === 'Invoice'"/>
-                    <Quotation v-if="active === 'Quotation'"/>
-                    <Project v-if="active === 'Project'"/>
-                    <Domain v-if="active === 'Domain'"/>
-                    <Hosting v-if="active === 'Hosting'"/>
+                    <Component :is="active"/>
+
                 </div>
 
 
@@ -327,19 +324,37 @@
     import VueLink from '../../../components/ViewLink'
     import Account from './Components/Account'
     import Billing from './Components/Billing'
-    import Project from './Components/Project'
     import Quotation from './Components/Quotation'
     import Invoice from './Components/Invoice'
+    import Project from './Components/Project'
     import Domain from './Components/Domain'
     import Hosting from './Components/Hosting'
+
+    let props = defineProps({
+        user:[],
+    })
+
+
 </script>
 
 <script>
     export default {
+        components:{
+            Account, Billing, Quotation, Invoice, Project, Domain, Hosting
+        },
         data(){
             return {
-                active: 'Account',
-                components: ['Account', 'Billing', 'Project', 'Quotation', 'Invoice', 'Domain', 'Hosting']
+                active: 'account',
+                username:'',
+                components: ['account', 'billing', 'project', 'quotation', 'invoice', 'domain', 'hosting']
+            }
+        },
+        methods:{
+            handelevent(text){
+                this.username = text;
+            },
+            handelMyEmit(data){
+                this.username = data.target.value;
             }
         }
     }

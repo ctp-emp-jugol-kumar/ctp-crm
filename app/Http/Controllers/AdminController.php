@@ -77,7 +77,7 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::findOrFail($id)->load('invoices', 'projects', 'roles');
         return inertia('Modules/Admin/Show', [
             "user" => $user,
         ]);
