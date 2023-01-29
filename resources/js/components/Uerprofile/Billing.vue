@@ -29,15 +29,15 @@
         <!-- /Project table -->
     </div>
 </template>
-<script>
-export default {
-    name: "Billing",
-    props:[
-        'transactions',
-    ],
-}
+<script setup>
+    defineProps({
+        transactions:[]
+    })
 </script>
 
 <style scoped>
+
+
+
 
 </style>

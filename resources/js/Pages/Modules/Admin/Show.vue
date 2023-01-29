@@ -1,6 +1,6 @@
 <template>
 
-    <UserProfile :user="props.user"/>
+    <UserProfile :user="props.user" :image="props.image"/>
 
 </template>
 

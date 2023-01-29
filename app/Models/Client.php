@@ -57,7 +57,7 @@ class Client extends Model
     protected function photo(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value ? Storage::url($value) : '/images/avatar.png',
+            get: fn ($value) => $value ? Storage::url($value) : 'images/avatar.png',
         );
     }
 

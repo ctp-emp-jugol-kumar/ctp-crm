@@ -10,7 +10,7 @@
                 </div>
                 <div class="content-body">
                     <div class="row match-height">
-                        <div class="col-md-7 col-lg-8 col-xl-9 col-12">
+                        <div class="col-md-7 col-lg-8 col-xl-12 col-12">
                             <div class="card">
                                 <!---->
                                 <!---->
@@ -21,7 +21,7 @@
                                         <div class="d-flex justify-content-between flex-column col-xl-6 col-21">
                                             <div class="d-flex justify-content-start">
                                             <span class="b-avatar badge-light-danger rounded">
-                                                <img class="rounded me-2"  style="width: 140px;height: 140px;" :src="`${props.user.photo}`" alt="avatar">
+                                                <img class="rounded me-2"  style="width: 140px;height: 140px;" :src="props.image" alt="avatar">
                                             </span>
                                                 <div class="d-flex flex-column ml-1">
                                                     <div class="mb-1">
@@ -47,7 +47,7 @@
                                                         </svg>
                                                         <span class="font-weight-bold">Username</span>
                                                     </th>
-                                                    <td class="pb-50"> catwomen1940 </td>
+                                                    <td class="pb-50">{{ props.user.name }} </td>
                                                 </tr>
                                                 <tr>
                                                     <th class="pb-50">
@@ -58,21 +58,14 @@
                                                         </svg>
                                                         <span class="font-weight-bold">Status</span>
                                                     </th>
-                                                    <td class="pb-50 text-capitalize"> active </td>
+                                                    <td class="pb-50 text-capitalize"> {{ props.user.status }} </td>
                                                 </tr>
                                                 <tr>
                                                     <th class="pb-50">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                             width="14px" height="14px" viewBox="0 0 24 24" fill="none"
-                                                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                             class="me-75 feather feather-star">
-                                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                                        </svg>
-                                                        <span class="font-weight-bold">Role</span>
+                                                        <vue-feather type="clock" size="15" />
+                                                        <span class="font-weight-bold ms-1">Joined At</span>
                                                     </th>
-                                                    <td class="pb-50 text-capitalize">
-                                                        <span class="badge badge-light-primary me-1" v-for="role in props.user.roles">{{ role.name }}</span>
-                                                    </td>
+                                                    <td class="pb-50"> {{ date(props.user.created_at) }} </td>
                                                 </tr>
                                                 <tr>
                                                     <th class="pb-50">
@@ -82,9 +75,9 @@
                                                             <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
                                                             <line x1="4" y1="22" x2="4" y2="15"></line>
                                                         </svg>
-                                                        <span class="font-weight-bold">Country</span>
+                                                        <span class="font-weight-bold">Address</span>
                                                     </th>
-                                                    <td class="pb-50"> USA </td>
+                                                    <td class="pb-50"> {{ props.user.address }} </td>
                                                 </tr>
                                                 <tr>
                                                     <th>
@@ -105,18 +98,17 @@
                                 <!---->
                             </div>
                         </div>
+                        <!--
                         <div class="col-md-5 col-lg-4 col-xl-3 col-12">
                             <div class="card border-primary">
-                                <!---->
-                                <!---->
+
                                 <div class="card-header d-flex justify-content-between align-items-center pt-75 pb-25">
                                     <h5 class="mb-0"> Current Plan </h5>
                                     <span class="badge badge-light-primary"> Basic </span>
                                     <small class="text-muted w-100">July 22, 2021</small>
                                 </div>
                                 <div class="card-body">
-                                    <!---->
-                                    <!---->
+
                                     <ul class="list-unstyled my-1">
                                         <li>
                                             <span class="align-middle">5 Users</span>
@@ -130,10 +122,12 @@
                                     </ul>
                                     <button type="button" class="btn btn-primary btn-block"> Upgrade Plan </button>
                                 </div>
-                                <!---->
-                                <!---->
+
                             </div>
                         </div>
+                        -->
+
+
                     </div>
                     <!-- User Content -->
                     <div class="col-xl-12 col-lg-7 col-md-7 order-0 order-md-1">
@@ -148,9 +142,10 @@
                                 </button>
                             </li>
                         </ul>
-
                         <!--/ User Pills -->
-                        <Component :is="active" :transactions="user.transactions" :project="user.projects"/>
+                        <Component :is="active"
+                                   :transactions="user.transactions"
+                                   :project="user.projects"/>
 
                     </div>
 
@@ -329,10 +324,16 @@ import Invoice from './Uerprofile/Invoice'
 import Project from './Uerprofile/Project'
 import Domain from './Uerprofile/Domain'
 import Hosting from './Uerprofile/Hosting'
+import moment from "moment";
 
 let props = defineProps({
     user:[],
+    image:String,
 })
+
+let date = (date) =>{
+    return moment().format('ll');
+}
 
 
 </script>
