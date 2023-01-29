@@ -35,7 +35,7 @@ createInertiaApp({
       .component("Head", Head)
       .component(VueFeather.name, VueFeather)
       .component("Required", Required)
-      .component("select2", vSelect)
+      .component("v-select", vSelect)
       .component("Datepicker", Datepicker)
       .mount(el);
   },

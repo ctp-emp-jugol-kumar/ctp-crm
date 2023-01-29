@@ -38,7 +38,7 @@
                                                 class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
                                                 <div class="select-search-area">
                                                     <label>Search:<input v-model="search" type="search"
-                                                                         class="form-control" placeholder=""
+                                                                         class="form-control" placeholder=null
                                                                          aria-controls="DataTables_Table_0"></label>
                                                 </div>
                                             </div>
@@ -46,7 +46,7 @@
                                     </div>
                                     <table class="user-list-table table">
                                         <thead class="table-light">
-                                        <tr class="">
+                                        <tr class=null>
                                             <th class="sorting">Client</th>
                                             <th class="sorting">Phone</th>
                                             <th class="sorting">Created At</th>
@@ -76,6 +76,11 @@
                                             <td>{{ user.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
+                                                    <Link :href="user.show_url"
+                                                          type="button"
+                                                          class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
+                                                        <Icon title="eye" />
+                                                    </Link>
                                                     <button type="button" @click="editClient(user.show_url)"
                                                             class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="pencil"/>
@@ -112,14 +117,14 @@
                         <label>Name:
                             <Required/>
                         </label>
-                        <div class="">
+                        <div class=null>
                             <input v-model="createForm.name" type="text" placeholder="Name" class="form-control">
                             <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
                         </div>
                     </div>
                     <div class="col-md">
                         <label>Email: <span class="text-danger">*</span></label>
-                        <div class="">
+                        <div class=null>
                             <input v-model="createForm.email" type="email" placeholder="eg.example@creativetechpark.com"
                                    class="form-control">
                             <span v-if="errors.email" class="error text-sm text-danger">{{ errors.email }}</span>
@@ -163,22 +168,40 @@
                         <span v-if="errors.note" class="error text-sm text-danger">{{ errors.note }}</span>
                     </div>
                 </div>
-
                 <div class="row mb-1">
                     <div class="col-md">
                         <label>Assign Agent: </label>
-                        <select class="form-control" v-model="createForm.status">
-                            <option v-for="optoin in status" :value="optoin" :selected="optoin === 'New Lead'">
-                                {{optoin }}
-                            </option>
-                        </select>
-
+                        <v-select v-model="createForm.status"
+                                  @update:modelValue="subCategorySelected"
+                                  label="name"
+                                  :options="status"
+                                  placeholder="~~Select Sub Category~~"
+                                  :reduce="optoin"></v-select>
                     </div>
                     <div class="col-md">
                         <label>Assign Agent: </label>
-                        <select class="form-control" v-model="createForm.agents" multiple name="agents[]">
-                            <option v-for="user in users" :value="user.id">{{ user.name }}</option>
-                        </select>
+
+                        <v-select
+                            multiple
+                            v-model="createForm.agents"
+                            :options="users"
+                            placeholder="Search Country Name"
+                            :reduce="user => user.id"
+                            label="name">
+                            <template v-slot:option="option">
+                                <li class="d-flex align-items-start py-1">
+                                    <div class="avatar me-75">
+                                        <img :src="`${option.photo}`" alt="" width="38" height="38">
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="me-1 d-flex flex-column">
+                                            <strong class="mb-25">{{ option.name }}</strong>
+                                            <span >{{ option.email }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </template>
+                        </v-select>
                     </div>
                 </div>
             </div>
@@ -203,14 +226,14 @@
                         <label>Name:
                             <Required/>
                         </label>
-                        <div class="">
+                        <div class=null>
                             <input v-model="updateForm.name" type="text" placeholder="Name" class="form-control">
                             <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
                         </div>
                     </div>
                     <div class="col-md">
                         <label>Email: <span class="text-danger">*</span></label>
-                        <div class="">
+                        <div class=null>
                             <input v-model="updateForm.email" type="email" placeholder="eg.example@creativetechpark.com"
                                    class="form-control">
                             <span v-if="errors.email" class="error text-sm text-danger">{{ errors.email }}</span>
@@ -314,7 +337,7 @@
         filters: Object,
         notification: Object,
         errors: Object,
-        main_url: "",
+        main_url: null,
     });
 
 
@@ -322,35 +345,36 @@
 
 
     let createForm = useForm({
-        name: "",
-        email: "",
-        secondary_email: "",
-        phone: "",
-        secondary_phone: "",
-        company: "",
-        address: "",
-        note: "",
-        status: "",
-        agents: [null],
+        name: null,
+        email: null,
+        secondary_email: null,
+        phone: null,
+        secondary_phone: null,
+        company: null,
+        address: null,
+        note: null,
+        status: null,
+        agents: [],
 
         processing: Boolean,
     })
 
     let updateForm = useForm({
-        name: "",
-        email: "",
-        secondary_email: "",
-        phone: "",
-        secondary_phone: "",
-        company: "",
-        address: "",
-        note: "",
-        status: "",
+        name: null,
+        email: null,
+        secondary_email: null,
+        phone: null,
+        secondary_phone: null,
+        company: null,
+        address: null,
+        note: null,
+        status: null,
         agents: null,
     })
 
     let status = [
-        'New Lead', 'Contacted', 'Proposal Sent', 'Quote Sent', 'Qualified', 'Disqualified', 'Convarted To Customer'
+        {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Proposal Sent'},
+        {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Convarted To Customer'}
     ]
 
     let deleteItemModal = (id) => {

@@ -353,9 +353,15 @@ class RolesAndPermissionsSeeder extends Seeder
         ])->assignRole('Developer');
 
         User::updateOrCreate([
-            'name' => 'Creative Tech Park',
+        'name' => 'Creative Tech Park',
             'email' => 'info@creativetechpark.com',
             'password' => bcrypt('creativetechpark'),
+        ])->assignRole('Administrator');
+
+        User::updateOrCreate([
+            'name' => 'admin',
+            'email' => 'admin@admin.com',
+            'password' => bcrypt(12345678),
         ])->assignRole('Administrator');
     }
 }

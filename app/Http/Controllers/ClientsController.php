@@ -41,6 +41,7 @@ class ClientsController extends Controller
                     'email' => $client->email,
                     'secondary_email' => $client->secondary_email,
                     'company' => $client->company,
+                    'photo' => $client->photo,
                     'address' => $client->address,
                     'note' => $client->note,
                     'created_at' => $client->created_at->format('d M Y'),
@@ -78,11 +79,13 @@ class ClientsController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
     public function show($id)
     {
-        return Client::findOrFail($id);
+        return inertia('Modules/Clients/Show', [
+            "user" => Client::findOrFail($id)->load('transactions', 'customeInvoices', 'quotations', 'projects'),
+        ]);
     }
 
     /**

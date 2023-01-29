@@ -3,7 +3,9 @@
 namespace App\Models;
 
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @method static findOrFail(int $id)
@@ -52,6 +54,14 @@ class Client extends Model
         });
     }
 
+    protected function photo(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? Storage::url($value) : '/images/avatar.png',
+        );
+    }
+
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -73,6 +83,13 @@ class Client extends Model
         return $this->belongsToMany(Project::class, 'client_project');
     }
 
+    public function transactions() {
+        return $this->hasMany(Transaction::class, 'client_id');
+    }
+
+    public function customeInvoices(){
+        return $this->hasMany(CustomInvoice::class, 'client_id');
+    }
 
 
     /*

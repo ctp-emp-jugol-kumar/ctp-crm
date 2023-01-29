@@ -124,3 +124,21 @@ Route::put('/test/update/{id}', [\App\Http\Controllers\TestController::class, 'u
 //
 //
 //});
+
+
+Route::get('/check-json', function (){
+    // Read the JSON file
+    $json = file_get_contents("../public/role_permissions.json");
+
+    // Decode the JSON file
+    $json_data = json_decode($json,true);
+
+    // Display data
+    dd($json_data);
+
+});
+
+
+
+
+
