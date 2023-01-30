@@ -82,7 +82,8 @@ class QuotationController extends Controller
             "platforms" => Platform::all(['id','name', 'price']),
             "domains"   => Domain::all(['id','name', 'price']),
             "hostings"  => Hosting::all(['id','name', 'price']),
-            "works"      => Work::all(['id','name', 'price']),
+            "works"     => Work::all(['id','name', 'price']),
+            "methods"   => Method::all(['id', 'name']),
         ]);
     }
 
@@ -176,17 +177,12 @@ class QuotationController extends Controller
 
 
 
-
-
-
-
 //        return Request::all();
         Request::validate([
             'client_id' => "required",
             'valid_until' => "required",
             'date' => "required",
         ]);
-
 
         $quotation = Quotation::create([
             'user_id'          => Auth::id(),
@@ -207,8 +203,6 @@ class QuotationController extends Controller
             'date'             => Request::input('date'),
             'status'           => filled(Request::input('status')),
         ]);
-
-
 
 
 
@@ -489,7 +483,7 @@ class QuotationController extends Controller
 
         $quot = Quotation::findOrFail($id);
         return Inertia::render('Modules/Quotation/Edit', [
-            "clients"   => Client::all(['id','name']),
+            "clients"   => Client::all(['id','name', 'email', 'phone', 'address']),
             "services"  => Website::all(['id','name', 'price']),
             "packages"  => Design::all(['id','name', 'price']),
             "platforms" => Platform::all(['id','name', 'price']),
@@ -498,13 +492,13 @@ class QuotationController extends Controller
             "works"     => Work::all(['id','name', 'price']),
 
             "edit_quot" => [
-                "quot"      => $quot,
-                "domains"   => $quot->domains,
-                "hostings"  => $quot->hostings,
-                "works"     => $quot->works,
-                "packages"  => $quot->packages,
-                "quotItems" => $quot->quotationItems,
-                "update_url"=> URL::route('quotations.update', $id),
+                "quot"       => $quot,
+                "domains"    => $quot->domains,
+                "hostings"   => $quot->hostings,
+                "works"      => $quot->works,
+                "packages"   => $quot->packages,
+                "quotItems"  => $quot->quotationItems,
+                "update_url" => URL::route('quotations.update', $id),
             ]
 
         ]);

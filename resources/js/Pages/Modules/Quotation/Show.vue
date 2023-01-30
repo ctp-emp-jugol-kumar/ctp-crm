@@ -202,12 +202,13 @@
                                     </div>
 
                                     <div class="mb-1">
-                                        <label class="form-label"></label>
-                                        <select2 v-model="createForm.payment_id"
-                                                 :options="props.info.payment_methods"
-                                                 :reduce="payment => payment.id"
-                                                 label="name"  placeholder="Select Payment Method">
-                                        </select2>
+                                        <label class="form-label">Select Payment Methods</label>
+                                        <v-select v-model="createForm.method_id"
+                                                  @update:modelValue="subCategorySelected"
+                                                  label="name"
+                                                  :options="props.info.payment_methods"
+                                                  placeholder="~~Select Payment Method~~"
+                                                  :reduce="optoin => optoin.id"></v-select>
                                     </div>
 
                                     <div class="mb-1">
@@ -263,7 +264,7 @@
                                             </Link>
                                         </td>
                                         <td>
-                                            {{ item.date }}
+                                            {{ formatted(item.date) }}
                                         </td>
                                         <td class="py-1">
                                             <span class="fw-bold">{{ item.amount }} Tk</span>
@@ -278,7 +279,7 @@
                                             <span class="fw-bold">{{ item.old_total_pay }} Tk</span>
                                         </td>
                                         <td class="py-1">
-                                            <span class="fw-bold">{{ grandTotal - item.old_total_pay }} Tk</span>
+                                            <span class="fw-bold">{{ total_due }} Tk</span>
                                         </td>
                                         <td class="py-1">
                                             <span>{{ item.method }}</span>
@@ -292,8 +293,6 @@
                     </div>
                 </div>
                 <!--/ Show Transactions Modal -->
-
-
             </div>
         </div>
     </div>
@@ -305,6 +304,9 @@
     import { computed } from "vue";
     import {useForm} from "@inertiajs/inertia-vue3";
     import {Inertia} from "@inertiajs/inertia";
+    import {useDate} from "../../../composables/useDate";
+
+    let { formatted } = useDate();
 
     let props = defineProps({
         info:Object,
@@ -315,6 +317,7 @@
         pay_amount:'',
         discount:'',
         payment_note:'',
+        method_id:'',
         quotation_id:props.info.quotation.id,
     })
 

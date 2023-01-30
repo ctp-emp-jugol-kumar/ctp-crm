@@ -18,7 +18,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-md-11 mx-auto">
                             <form @submit.prevent="createQutation">
                                 <div class="card">
@@ -351,6 +350,7 @@
         hostings     : Object,
         notification : Object,
         errors       : Object,
+        methods      : Object,
     })
 
 

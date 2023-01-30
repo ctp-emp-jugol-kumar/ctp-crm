@@ -79,7 +79,7 @@ class TransactionController extends Controller
         $discount   = Request::input('discount') ?? 0;
         $payAmount  = Request::input('pay_amount') ?? 0;
         Transaction::create([
-            'method_id'  => Request::input('payment_id'),
+            'method_id'  => Request::input('method_id'),
             'user_id'    => Auth::id(),
             'client_id'  => $quotation->client->id,
             'quotation_id' => $quotation->id ?? Request::input('quotation_id'),

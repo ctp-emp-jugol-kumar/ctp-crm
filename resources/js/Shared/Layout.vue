@@ -52,6 +52,7 @@
     import { useStore } from 'vuex'
     import TopNav from './TopNav'
     import SideNav from './SideNav'
+    import moment from "moment";
 
     const store = useStore()
     const isNavMenuHidden = computed(() => store.state.menuHidden)
@@ -110,5 +111,10 @@
     onUnmounted(() => {
         window.removeEventListener('resize', resizeHandler)
     })
+
+
+    let date = (date) =>{
+        return moment().format('ll');
+    }
 
 </script>

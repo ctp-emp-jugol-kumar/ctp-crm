@@ -83,8 +83,11 @@ class ClientsController extends Controller
      */
     public function show($id)
     {
-        $user = Client::findOrFail($id)->load('transactions', 'customeInvoices', 'quotations', 'projects');
-        $user['photo'] = "/images/avatar.png";
+        $user = Client::findOrFail($id)->load('transactions','transactions.user',
+            'transactions.method','customeInvoices',
+            'quotations','quotations.user', 'projects',
+            'projects.users', 'customeInvoices', 'customeInvoices.user');
+
 
         return inertia('Modules/Clients/Show', [
             "user" => $user,

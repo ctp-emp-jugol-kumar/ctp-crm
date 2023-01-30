@@ -31,8 +31,8 @@
 <!--                                                        <Required/>-->
                                                     </label>
                                                     <div class="">
-                                                        <select2 v-model="formData.client_id" :options="clients" :reduce="client => client.id"
-                                                                 label="name" placeholder="Select Client"></select2>
+                                                        <v-select v-model="formData.client_id" :options="clients" :reduce="client => client.id"
+                                                                 label="name" placeholder="Select Client"></v-select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md">
@@ -198,18 +198,18 @@
     let formData = useForm({
         quatations: [
             {
-                itemname: '',
-                price: '',
-                quantity: '',
-                discount: ''
+                itemname: null,
+                price: null,
+                quantity: null,
+                discount: null
             }
         ],
-        status:'',
-        subject:'',
-        client_id:'',
-        date:'',
-        payment_policy:'',
-        trams_and_condition:'',
+        status:null,
+        subject:null,
+        client_id:null,
+        date:null,
+        payment_policy:null,
+        trams_and_condition:null,
     });
 
     let worksTitle = "Select work services"
@@ -265,10 +265,10 @@
 
     let addRow = () => {
         formData.quatations.push({
-            itemname: '',
-            price: '',
-            quantity: '',
-            discount: '',
+            itemname: null,
+            price: null,
+            quantity: null,
+            discount: null,
         })
     }
 

@@ -65,7 +65,7 @@
                                                         <vue-feather type="clock" size="15" />
                                                         <span class="font-weight-bold ms-1">Joined At</span>
                                                     </th>
-                                                    <td class="pb-50"> {{ date(props.user.created_at) }} </td>
+                                                    <td class="pb-50"> {{ formatted(props.user.created_at) }} </td>
                                                 </tr>
                                                 <tr>
                                                     <th class="pb-50">
@@ -145,7 +145,10 @@
                         <!--/ User Pills -->
                         <Component :is="active"
                                    :transactions="user.transactions"
-                                   :project="user.projects"/>
+                                   :project="user.projects"
+                                   :quotations="user.quotations"
+                                   :invoices="user.custome_invoices"
+                        />
 
                     </div>
 
@@ -324,16 +327,15 @@ import Invoice from './Uerprofile/Invoice'
 import Project from './Uerprofile/Project'
 import Domain from './Uerprofile/Domain'
 import Hosting from './Uerprofile/Hosting'
-import moment from "moment";
+import {useDate} from '../composables/useDate.js'
 
 let props = defineProps({
     user:[],
     image:String,
 })
 
-let date = (date) =>{
-    return moment().format('ll');
-}
+    let {formatted} = useDate();
+
 
 
 </script>
@@ -341,13 +343,13 @@ let date = (date) =>{
 <script>
 export default {
     components:{
-        Account, Billing, Quotation, Invoice, Project, Domain, Hosting
+        Account, Billing, Quotation, Invoice, Project //Domain, Hosting
     },
     data(){
         return {
             active: 'account',
             username:'',
-            components: ['account', 'billing', 'project', 'quotation', 'invoice', 'domain', 'hosting']
+            components: ['account', 'billing', 'project', 'quotation', 'invoice']
         }
     },
     methods:{

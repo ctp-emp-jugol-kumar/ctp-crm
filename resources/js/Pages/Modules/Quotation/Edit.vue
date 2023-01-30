@@ -30,14 +30,29 @@
                                                         <Required/>
                                                     </label>
                                                     <div class="">
-                                                        <select2 v-model="formData.client_id" :options="clients"
-                                                                 :reduce="client => client.id" label="name"
-                                                                 placeholder="Select Client"></select2>
-                                                        <InputFieldError :errors="errors.client_id"/>
+                                                        <v-select
+                                                            v-model="formData.client_id"
+                                                            :options="clients"
+                                                            placeholder="Search Country Name"
+                                                            :reduce="client => client.id"
+                                                            label="name">
+                                                            <template v-slot:option="option">
+                                                                <li class="d-flex align-items-start py-1">
+                                                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                                                        <div class="me-1 d-flex flex-column">
+                                                                            <strong class="mb-25">{{ option.name }}</strong>
+                                                                            <span>{{ option.email }}</span>
+                                                                            <span class="text-warning">{{ option.phone }}</span>
+                                                                            <small class="text-danger">{{ option.address }}</small>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </template>
+                                                        </v-select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md">
-                                                    <label>Subject :
+                                                    <label>Subject hrere:
                                                         <Required/>
                                                     </label>
                                                     <div class="">
@@ -87,7 +102,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.works"
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in filterWOrk[0]"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
@@ -95,13 +110,13 @@
                                                         <div class="input-group-text border-0">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" v-model="option.p"
-                                                                       type="checkbox">
+                                                                       type="checkbox" :checked="option.is_show">
                                                             </div>
                                                         </div>
                                                         <input type="hidden" v-model="option.price">
                                                         <input type="hidden" v-model="option.id">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.quantity" placeholder="quantity">
+                                                               v-model="option.qty" placeholder="quantity">
                                                         <input type="number" class="form-control border-0"
                                                                v-model="option.discount" placeholder="Discount">
                                                     </div>
@@ -119,7 +134,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.domains"
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in filterDomains[0]"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
@@ -127,7 +142,7 @@
                                                         <div class="input-group-text border-0">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" v-model="option.p"
-                                                                       type="checkbox">
+                                                                       type="checkbox" :checked="option.is_show">
                                                             </div>
                                                         </div>
                                                         <input type="hidden" v-model="option.price">
@@ -150,7 +165,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.hostings"
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in filterHostings[0]"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
@@ -158,7 +173,7 @@
                                                         <div class="input-group-text border-0">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" v-model="option.p"
-                                                                       type="checkbox">
+                                                                       type="checkbox" :checked="is_show">
                                                             </div>
                                                         </div>
                                                         <input type="hidden" v-model="option.price">
@@ -182,7 +197,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.packages"
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in filterPackages[0]"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
@@ -190,7 +205,7 @@
                                                         <div class="input-group-text border-0">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" v-model="option.p"
-                                                                       type="checkbox">
+                                                                       type="checkbox" :checked="option.is_show">
                                                             </div>
                                                         </div>
                                                         <input type="hidden" v-model="option.price">
@@ -324,23 +339,13 @@
 
 
 <script setup>
-    import Pagination from "../../../components/Pagination"
-    import Icon from '../../../components/Icon'
-    import Modal from '../../../components/Modal'
-    import {ref, watch} from "vue";
-    import debounce from "lodash/debounce";
-    import {Inertia} from "@inertiajs/inertia";
-    import Swal from 'sweetalert2'
-    import {useForm} from "@inertiajs/inertia-vue3";
-    import TextEditor from "../../../components/TextEditor";
-    import TextArea from "../../../components/Textarea";
-    import QuantityButton from "../../../components/QuantityButton";
-    import ServiceItem from "../../../components/ServiceItem";
-    import ServiceCard from "../../../components/ServiceCard";
-    import InputFieldError from "../../../components/InputFieldError";
-    import QtyButton from "../../../components/QtyButton";
+import {computed} from "vue";
+import {Inertia} from "@inertiajs/inertia";
+import Swal from 'sweetalert2'
+import {useForm} from "@inertiajs/inertia-vue3";
+import TextEditor from "../../../components/TextEditor";
 
-    let props = defineProps({
+let props = defineProps({
         clients      : Object,
         services     : Object,
         packages     : Object,
@@ -363,7 +368,7 @@
         valid_until   : props.edit_quot.quot.valid_until,
         payment_policy: props.edit_quot.quot.payment_policy,
         Trams_Services: props.edit_quot.quot.terms_of_service,
-        status        : props.edit_quot.quot.status ===1 ? true : false,
+        status        : props.edit_quot.quot.status === 1 ? true : false,
 
 
         hostings      : props.hostings,
@@ -378,7 +383,7 @@
 
     let worksTitle   = "Select work services"
     let domainTitle  = "Select domains"
-    let hostingTitle = "Select hosting"
+    let HostingTitle = "Select hosting"
     let packageTitle = "Select packages"
 
 
@@ -410,5 +415,66 @@
     let deleteRow = (index) => {
         formData.quatations.splice(index, 1)
     }
+
+    let filterWOrk = computed(() =>{
+        return props.edit_quot.works.map(function (o1) {
+            return props.works.map(function (o2) {
+                return {
+                    name:o1.name,
+                    id:o1.id,
+                    price:o2.price,
+                    qty:o1.pivot.quantity > 0 ?? null,
+                    discount:o1.pivot.discount  > 0 ?? null,
+                    is_show: o1.id === o2.id,
+                }
+            });
+        });
+    })
+
+    let filterDomains = computed(() =>{
+        return props.edit_quot.domains.map(function (o1) {
+            return props.domains.map(function (o2) {
+                return {
+                    name:o1.name,
+                    id:o1.id,
+                    price:o2.price,
+                    quantity:o1.pivot.quantity > 0 ?? null,
+                    discount:o1.pivot.discount  > 0 ?? null,
+                    is_show: o1.id === o2.id,
+                }
+            });
+        });
+    })
+
+    let filterHostings = computed(() =>{
+        return props.edit_quot.hostings.map(function (o1) {
+            return props.hostings.map(function (o2) {
+                return {
+                    name:o1.name,
+                    id:o1.id,
+                    price:o2.price,
+                    quantity:o1.pivot.quantity > 0 ?? null,
+                    discount:o1.pivot.discount  > 0 ?? null,
+                    is_show: o1.id === o2.id,
+                }
+            });
+        });
+    })
+
+    let filterPackages = computed(() =>{
+        return props.edit_quot.packages.map(function (o1) {
+            return props.packages.map(function (o2) {
+                return {
+                    name:o1.name,
+                    id:o1.id,
+                    price:o2.price,
+                    quantity:o1.pivot.quantity > 0 ?? null,
+                    discount:o1.pivot.discount  > 0 ?? null,
+                    is_show: o1.id === o2.id,
+                }
+            });
+        });
+    })
+
 
 </script>
