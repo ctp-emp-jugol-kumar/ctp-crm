@@ -19,6 +19,7 @@
                             </div>
                         </div>
 
+                        {{ filterWOrk }}
                         <div class="col-md-11 mx-auto">
                             <form @submit.prevent="updateQutation">
                                 <div class="card">
@@ -343,7 +344,6 @@ import {computed} from "vue";
 import {Inertia} from "@inertiajs/inertia";
 import Swal from 'sweetalert2'
 import {useForm} from "@inertiajs/inertia-vue3";
-import TextEditor from "../../../components/TextEditor";
 
 let props = defineProps({
         clients      : Object,
@@ -417,19 +417,66 @@ let props = defineProps({
     }
 
     let filterWOrk = computed(() =>{
-        return props.edit_quot.works.map(function (o1) {
-            return props.works.map(function (o2) {
-                return {
-                    name:o1.name,
-                    id:o1.id,
-                    price:o2.price,
-                    qty:o1.pivot.quantity > 0 ?? null,
-                    discount:o1.pivot.discount  > 0 ?? null,
-                    is_show: o1.id === o2.id,
-                }
-            });
-        });
+
+
+        let arr1 = [
+            {"id" : 1, "name" : "name 1"},
+            {"id" : 2, "name" : "name 2"},
+            {"id" : 3, "name" : "name 3"},
+            {"id" : 4, "name" : "name 4"},
+            {"id" : 6, "name" : "name 6"}
+        ]
+
+        let arr2 = [
+            {"id" : 1, "name" : "name 1"},
+            {"id" : 4, "name" : "name 4"},
+            {"id" : 6, "name" : "name 6"}
+        ]
+
+        let arrNew = [
+            {"id" : 1, "name" : "name 1", "exist": true},
+            {"id" : 2, "name" : "name 2", "exist": false},
+            {"id" : 3, "name" : "name 3", "exist": false},
+            {"id" : 4, "name" : "name 4", "exist": true},
+            {"id" : 6, "name" : "name 6", "exist": true}
+        ]
+
+
+        // const ignoreOrderCompare = (a, b) => {
+        //     if (a.length !== b.length) return false;
+        //     const elements = new Set([...a, ...b]);
+        //     for (const x of elements) {
+        //         const count1 = a.filter(e => e === x).length;
+        //         const count2 = b.filter(e => e === x).length;
+        //         if (count1 !== count2) return false;
+        //     }
+        //     return true;
+        // }
+        //
+        // console.log(ignoreOrderCompare(props.edit_quot.works, props.works));
+
+        //
+        // props.edit_quot.works.forEach(function(item){
+        //     console.log(item);
+        // })
+
+
+        // return props.edit_quot.works.map(function (o1) {
+        //     return props.works.map(function (o2) {
+        //         return {
+        //             name:o1.name,
+        //             id:o1.id,
+        //             price:o2.price,
+        //             qty:o1.pivot.quantity > 0 ?? null,
+        //             discount:o1.pivot.discount  > 0 ?? null,
+        //             is_show: o1.id === o2.id,
+        //         }
+        //     });
+        // });
     })
+
+
+
 
     let filterDomains = computed(() =>{
         return props.edit_quot.domains.map(function (o1) {

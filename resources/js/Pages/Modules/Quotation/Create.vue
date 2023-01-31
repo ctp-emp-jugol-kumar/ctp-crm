@@ -18,6 +18,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-md-11 mx-auto">
                             <form @submit.prevent="createQutation">
                                 <div class="card">
@@ -29,9 +30,9 @@
                                                         <Required/>
                                                     </label>
                                                     <div class="">
-                                                        <select2 v-model="formData.client_id" :options="clients"
+                                                        <v-select v-model="formData.client_id" :options="clients"
                                                                  :reduce="client => client.id" label="name"
-                                                                 placeholder="Select Client"></select2>
+                                                                 placeholder="Select Client"></v-select>
                                                         <InputFieldError :errors="errors.client_id"/>
                                                     </div>
                                                 </div>
@@ -79,12 +80,19 @@
                                 </div>
 
 
+
+
+
                                 <!--works sections-->
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
                                         <h4 class="card-title">{{ worksTitle }}</h4>
+
+                                        <button @click="collupsWork" class="btn-icon rounded-circle btn bg-light-primary" type="button">
+                                            <vue-feather type="arrow-down"></vue-feather>
+                                        </button>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body collapse" id="collapseExample1">
                                         <div class="row">
                                             <div class="col-md-4 mb-1" v-for="(option , index) in formData.works"
                                                  :key="index">
@@ -113,10 +121,14 @@
 
                                 <!--domain sections-->
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
                                         <h4 class="card-title">{{ domainTitle }}</h4>
+
+                                        <button @click="collupsService" class="btn-icon rounded-circle btn bg-light-primary" type="button">
+                                            <vue-feather type="arrow-down"></vue-feather>
+                                        </button>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body collapse" id="collapseExample2">
                                         <div class="row">
                                             <div class="col-md-4 mb-1" v-for="(option , index) in formData.domains"
                                                  :key="index">
@@ -144,10 +156,14 @@
 
                                 <!--hosting sections-->
                                 <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">{{ HostingTitle }}</h4>
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <h4 class="card-title">Hosting</h4>
+
+                                        <button @click="collupsHosting" class="btn-icon rounded-circle btn bg-light-primary" type="button">
+                                            <vue-feather type="arrow-down"></vue-feather>
+                                        </button>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body collapse" id="collapseExample3">
                                         <div class="row">
                                             <div class="col-md-4 mb-1" v-for="(option , index) in formData.hostings"
                                                  :key="index">
@@ -178,8 +194,11 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h4 class="card-title">{{ packageTitle }}</h4>
+                                        <button @click="collupsPackage" class="btn-icon rounded-circle btn bg-light-primary" type="button">
+                                            <vue-feather type="arrow-down"></vue-feather>
+                                        </button>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body collapse" id="collapseExample4">
                                         <div class="row">
                                             <div class="col-md-4 mb-1" v-for="(option , index) in formData.packages"
                                                  :key="index">
@@ -355,13 +374,13 @@
 
 
     let formData = useForm({
-        client_id     : "",
-        subject       : "",
-        date          : "",
-        valid_until   : "",
-        payment_policy: "",
-        Trams_Services: "",
-        status        : "",
+        client_id     : null,
+        subject       : null,
+        date          : null,
+        valid_until   : null,
+        payment_policy: null,
+        Trams_Services: null,
+        status        : null,
 
 
         hostings      : props.hostings,
@@ -450,75 +469,35 @@
         formData.quatations.splice(index, 1)
     }
 
+
+    let collupsWork = () =>{
+        var element = document.getElementById("collapseExample1");
+        element.classList.toggle("show");
+    }
+
+    let collupsService = () =>{
+        var element = document.getElementById("collapseExample2");
+        element.classList.toggle("show");
+    }
+    let collupsHosting = () =>{
+        var element = document.getElementById("collapseExample3");
+        element.classList.toggle("show");
+    }
+    let collupsPackage = () =>{
+        var element = document.getElementById("collapseExample4");
+        element.classList.toggle("show");
+    }
 </script>
 
-<script>
-    /*export default {
+<style scopd>
 
-        el: '.container',
+    .webkitTransaction{
+        -webkit-transition: all 5s ease-in-out;
+        -moz-transition: all 5s ease-in-out;
+        -ms-transition: all 5s ease-in-out;
+        -o-transition: all 5s ease-in-out;
+        transition: all 5s ease-in-out;
+    }
 
-        data() {
-            return {
-                data: {
-                    quatations: [
-                        {
-                            itemname: '',
-                            cost: '',
-                            quantity: ''
-                        }
-                    ],
-                    client_id: "",
-                    subject: "",
-                    valid_until: "",
-                    website_id: "",
-                    platform_id: "",
-                    design_id: "",
-                    domain_id: "",
-                    hosting_id: "",
-                    page: "",
-                    page_price: "",
-                    content_page: "",
-                    content_price: "",
-                    payment_policy: "",
-                    terms_of_service: "",
-                    date: "",
-                    woarks: [],
-                    status: "",
-                },
-            }
-        },
-
-        methods: {
-            addRow() {
-                this.data.quatations.push({
-                    itemname: '',
-                    cost: '',
-                    quantity: ''
-                })
-            },
-            deleteRow(index) {
-                this.data.quatations.splice(index, 1)
-            },
-            createQutation() {
-                Inertia.post('/admin/quotations', this.data, {
-                    preserveState: true,
-                    // onStart: () =>{ data.processing = true},
-                    // onFinish: () => { data.processing = false},
-                    onSuccess: () => {
-                        // document.getElementById('createDomains').$vb.modal.hide()
-                        this.data.quatations.reset()
-                        Swal.fire(
-                            'Saved!',
-                            'Your file has been Saved.',
-                            'success'
-                        )
-                    },
-                })
-            }
-        }
-    }*/
-</script>
-
-<style lang="scss">
     /*@import "../../../../sass/base/plugins/tables/datatables";*/
 </style>

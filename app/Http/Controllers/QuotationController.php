@@ -88,7 +88,7 @@ class QuotationController extends Controller
     }
 
 
-    public function createArrayGroups($items)
+    public function createArrayGroups($items): array
     {
         $added = array();
         foreach($items as $item){
@@ -106,7 +106,8 @@ class QuotationController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
