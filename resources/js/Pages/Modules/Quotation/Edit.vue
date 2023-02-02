@@ -19,7 +19,6 @@
                             </div>
                         </div>
 
-                        {{ filterWOrk }}
                         <div class="col-md-11 mx-auto">
                             <form @submit.prevent="updateQutation">
                                 <div class="card">
@@ -103,7 +102,8 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in filterWOrk[0]"
+<!--                                            <div class="col-md-4 mb-1" v-for="(option , index) in filterWOrk"-->
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in eWorks"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
@@ -111,13 +111,15 @@
                                                         <div class="input-group-text border-0">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" v-model="option.p"
-                                                                       type="checkbox" :checked="option.is_show">
+                                                                       type="checkbox" :checked="option.pivot">
                                                             </div>
                                                         </div>
                                                         <input type="hidden" v-model="option.price">
                                                         <input type="hidden" v-model="option.id">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.qty" placeholder="quantity">
+                                                                placeholder="quantity" v-model="option.quantity"
+                                                               @change="$event.target.value = option?.pivot?.quantity" >
+
                                                         <input type="number" class="form-control border-0"
                                                                v-model="option.discount" placeholder="Discount">
                                                     </div>
@@ -358,6 +360,8 @@ let props = defineProps({
         errors       : Object,
 
         edit_quot    : Object,
+
+        eWorks       : []
     })
 
 
@@ -417,62 +421,13 @@ let props = defineProps({
     }
 
     let filterWOrk = computed(() =>{
+        let arrNew = [];
+        props.edit_quot.works.forEach(obj1 => {
+            let found = props.works.find(obj2 => obj2.id === obj1.id);
 
-
-        let arr1 = [
-            {"id" : 1, "name" : "name 1"},
-            {"id" : 2, "name" : "name 2"},
-            {"id" : 3, "name" : "name 3"},
-            {"id" : 4, "name" : "name 4"},
-            {"id" : 6, "name" : "name 6"}
-        ]
-
-        let arr2 = [
-            {"id" : 1, "name" : "name 1"},
-            {"id" : 4, "name" : "name 4"},
-            {"id" : 6, "name" : "name 6"}
-        ]
-
-        let arrNew = [
-            {"id" : 1, "name" : "name 1", "exist": true},
-            {"id" : 2, "name" : "name 2", "exist": false},
-            {"id" : 3, "name" : "name 3", "exist": false},
-            {"id" : 4, "name" : "name 4", "exist": true},
-            {"id" : 6, "name" : "name 6", "exist": true}
-        ]
-
-
-        // const ignoreOrderCompare = (a, b) => {
-        //     if (a.length !== b.length) return false;
-        //     const elements = new Set([...a, ...b]);
-        //     for (const x of elements) {
-        //         const count1 = a.filter(e => e === x).length;
-        //         const count2 = b.filter(e => e === x).length;
-        //         if (count1 !== count2) return false;
-        //     }
-        //     return true;
-        // }
-        //
-        // console.log(ignoreOrderCompare(props.edit_quot.works, props.works));
-
-        //
-        // props.edit_quot.works.forEach(function(item){
-        //     console.log(item);
-        // })
-
-
-        // return props.edit_quot.works.map(function (o1) {
-        //     return props.works.map(function (o2) {
-        //         return {
-        //             name:o1.name,
-        //             id:o1.id,
-        //             price:o2.price,
-        //             qty:o1.pivot.quantity > 0 ?? null,
-        //             discount:o1.pivot.discount  > 0 ?? null,
-        //             is_show: o1.id === o2.id,
-        //         }
-        //     });
-        // });
+            arrNew.push({...obj1,});
+        });
+        return arrNew;
     })
 
 

@@ -392,7 +392,6 @@ class QuotationController extends Controller
 
         $mainarray = array();
         foreach ($quotation->domains as $item){
-
             $mainarray [] =[
                 'name' => $item->name,
                 'price' => $item->price ?? 0,
@@ -483,14 +482,64 @@ class QuotationController extends Controller
     public function editQuotation($id){
 
         $quot = Quotation::findOrFail($id);
+
+        $domains = Domain::all(['id','name', 'price']);
+
+        $eDomains = [];
+        foreach ($domains as $domain){
+            foreach ($quot->domains as $qD){
+                if ($domain->id == $qD->id){
+                    $eDomains[] = [
+                      "mD" => $domain,
+                      "qd" => $qD
+                    ];
+                }else{
+                    $eDomains[] = [
+                        "mD" => $domain
+                    ];
+                }
+            }
+        }
+
+
+        // works
+        $eWorks = [];
+        $works  = Work::all(['id','name', 'price']);
+        $qWOrks = $quot->works;
+
+
+
+
+        $mainWorks = $works->map(function ($item) use($qWOrks){
+            $isTrue = false;
+            foreach ($qWOrks as $work){
+                if ($work->id == $item->id){
+                    $isTrue = true;
+                    break;
+                }
+            }
+            return $isTrue ? $work : $item;
+        });
+
+
+
+
+//                "hostings"   => $quot->hostings,
+//                "works"      => $quot->works,
+//                "packages"   => $quot->packages,
+//                "quotItems"  => $quot->quotationItems,
+
+        return $mainWorks;
+
         return Inertia::render('Modules/Quotation/Edit', [
             "clients"   => Client::all(['id','name', 'email', 'phone', 'address']),
             "services"  => Website::all(['id','name', 'price']),
             "packages"  => Design::all(['id','name', 'price']),
             "platforms" => Platform::all(['id','name', 'price']),
-            "domains"   => Domain::all(['id','name', 'price']),
             "hostings"  => Hosting::all(['id','name', 'price']),
             "works"     => Work::all(['id','name', 'price']),
+
+            "eWorks"    => $mainWorks,
 
             "edit_quot" => [
                 "quot"       => $quot,
