@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AutorizaitonController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignController;
@@ -80,8 +81,7 @@ Route::prefix('admin')->group(function(){
         // invoices management
         Route::resource('invoices', InvoiceController::class);
         Route::get('edit/invoice/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
-        Route::get('download-invoice/{id}', [InvoiceController::class, 'generateInvoicePDFFile'])
-            ->name('invoices.generateInvoicePDFFile');
+        Route::get('download-invoice/{id}', [InvoiceController::class, 'generateInvoicePDFFile'])->name('invoices.generateInvoicePDFFile');
 
 
 
@@ -98,6 +98,7 @@ Route::prefix('admin')->group(function(){
         Route::resource('transaction', TransactionController::class);
         Route::post('quotation/transaction', [TransactionController::class, 'saveQuotationTransaction'])->name('saveQuotationTransaction');
 
+        Route::resource('chat', ChatController::class);
     });
 
     Route::post('/logout', [LoginController::class, 'destroy']);
@@ -126,17 +127,6 @@ Route::put('/test/update/{id}', [\App\Http\Controllers\TestController::class, 'u
 //});
 
 
-Route::get('/check-json', function (){
-    // Read the JSON file
-    $json = file_get_contents("../public/role_permissions.json");
-
-    // Decode the JSON file
-    $json_data = json_decode($json,true);
-
-    // Display data
-    dd($json_data);
-
-});
 
 
 

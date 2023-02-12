@@ -48,7 +48,7 @@
                         </Link>
                     </li>
                     <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('chat.show') || this.$page.props.auth.user.role == 'Administrator' ">
-                        <Link preserve-scroll class="d-flex align-items-center" href="#">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/chat">
                             <vue-feather type="message-circle" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Chat</span>
                         </Link>

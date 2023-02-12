@@ -7,6 +7,8 @@
 @import './base/plugins/tables/datatables';
 @import './base/pages/app-ecommerce';
 @import './base/pages/app-ecommerce-details';
+@import './base/pages/app-chat.scss';
+@import './base/pages/app-chat-list.scss';
 
 .scroll-area::-webkit-scrollbar{
     width: 0 !important;

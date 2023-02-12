@@ -11,6 +11,7 @@
                         <th class="sorting">Date</th>
                         <th class="sorting">Created by</th>
                         <th class="sorting">Status</th>
+                        <th class="sorting">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,6 +23,11 @@
                         <span v-if="qut.status" class="badge badge-light-success">Success</span>
                         <span v-else class="badge badge-light-warning">Pending</span>
                     </td>
+                    <td>
+                        <a class="btn bg-light-warning" :href="`/admin/quotations/${qut.id}`" target="_blank">
+                            <Icon title="pencil" />
+                        </a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -31,6 +37,7 @@
 </template>
 
 <script setup>
+import Icon from '../Icon'
 import {useDate} from '../../composables/useDate.js'
     defineProps({
         quotations: Object

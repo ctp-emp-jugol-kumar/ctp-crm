@@ -102,25 +102,24 @@
                                     <div class="card-body">
                                         <div class="row">
 <!--                                            <div class="col-md-4 mb-1" v-for="(option , index) in filterWOrk"-->
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in eWorks"
+                                            <div class="col-md-4 mb-1" v-for="(formData , index) in eWorks"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
                                                     <div class="input-group border-0">
                                                         <div class="input-group-text border-0">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" v-model="option.p"
-                                                                       type="checkbox" :checked="option.pivot">
+                                                                <input class="form-check-input" v-model="formData.p"
+                                                                       type="checkbox">
                                                             </div>
                                                         </div>
-                                                        <input type="hidden" v-model="option.price">
-                                                        <input type="hidden" v-model="option.id">
+                                                        <input type="hidden" v-model="formData.pivot.price">
+                                                        <input type="hidden" v-model="formData.id">
                                                         <input type="number" class="form-control border-0"
-                                                                placeholder="quantity" v-model="option.quantity"
-                                                               @change="$event.target.value = option?.pivot?.quantity" >
+                                                                placeholder="quantity" v-model="formData.pivot.quantity">
 
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.discount" placeholder="Discount">
+                                                               v-model="formData.pivot.discount" placeholder="Discount">
                                                     </div>
                                                 </div>
                                             </div>

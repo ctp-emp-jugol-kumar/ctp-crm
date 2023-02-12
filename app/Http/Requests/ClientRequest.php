@@ -33,7 +33,7 @@ class ClientRequest extends FormRequest
             "company" => ['nullable','string'],
             "address" => ['nullable','string', 'max:150'],
             "note" => ['nullable','string'],
-            "status" => ['nullable','string'],
+            "status" => ['nullable'],
             "agents" => ['nullable','array']
         ];
     }

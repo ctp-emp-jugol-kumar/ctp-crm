@@ -86,6 +86,7 @@
                                         <h2>Subject:</h2>
                                     </div>
                                     <div class="card-body">
+
                                         <table class="table table-borderless table-striped">
                                             <thead>
                                             <tr>
@@ -279,7 +280,7 @@
                                             <span class="fw-bold">{{ item.old_total_pay }} Tk</span>
                                         </td>
                                         <td class="py-1">
-                                            <span class="fw-bold">{{ total_due }} Tk</span>
+                                            <span class="fw-bold">{{ item.total_due }} Tk</span>
                                         </td>
                                         <td class="py-1">
                                             <span>{{ item.method }}</span>
@@ -312,12 +313,12 @@
         info:Object,
     })
     let createForm = useForm({
-        grandTotal: '',
-        payment_id:'',
-        pay_amount:'',
-        discount:'',
-        payment_note:'',
-        method_id:'',
+        grandTotal: null,
+        payment_id: null,
+        pay_amount: null,
+        discount: null,
+        payment_note: null,
+        method_id: null,
         quotation_id:props.info.quotation.id,
     })
 
@@ -325,6 +326,7 @@
     let addPayment = () => {
         Inertia.post(props.info.payment_url, createForm, {
             onSuccess: () => {
+                createForm.reset();
                 alert("saved Transaction")
             }
         })

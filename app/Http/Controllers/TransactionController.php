@@ -58,7 +58,7 @@ class TransactionController extends Controller
             'old_total_pay' => $oldTotalPay,
             'pay_amount' => $payAmount,
             'discount'   => $discount,
-            'total_due'  => ($grandTotal - $payAmount - $discount) ?? 0,
+            'total_due'  => ($grandTotal - ($payAmount + $discount)) ?? 0,
 
 
             'date'       => now(),

@@ -63,16 +63,16 @@ class ClientsController extends Controller
      */
     public function store(ClientRequest $request)
     {
-        try {
+//        try {
             $client = Client::create($request->validated());
 
             if ($request->agents){
                 $client->users()->attach($request->input('agents'));
             }
             return redirect()->route('clients.index');
-        }catch (\Exception $e){
-            return redirect()->route('clients.index');
-        }
+//        }catch (\Exception $e){
+//            return redirect()->route('clients.index');
+//        }
     }
 
     /**

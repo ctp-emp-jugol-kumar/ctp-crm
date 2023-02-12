@@ -49,8 +49,8 @@ class QuotationController extends Controller
                 "subject"      => $qot->subject,
                 "status"       => $qot->status,
                 "date"         => $qot->date->format('M-d-Y'),
-                "client_name"  => $qot->client->name ?? null,
-                "user_name"    => $qot->user ? $qot->user->name : "unknown",
+                "client_name"  => $qot->client->name,
+                "user_name"    => $qot->user->name,
                 "show_url"     => URL::route('quotations.show', $qot->id),
                 "edit_url"     => URL::route('quotations.edit', $qot->id)
             ]);
@@ -83,12 +83,11 @@ class QuotationController extends Controller
             "domains"   => Domain::all(['id','name', 'price']),
             "hostings"  => Hosting::all(['id','name', 'price']),
             "works"     => Work::all(['id','name', 'price']),
-            "methods"   => Method::all(['id', 'name']),
         ]);
     }
 
 
-    public function createArrayGroups($items): array
+    public function createArrayGroups($items)
     {
         $added = array();
         foreach($items as $item){
@@ -106,18 +105,19 @@ class QuotationController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     *
      */
     public function store(Request $request)
     {
+//
+//        Request::validate([
+//            'client_id'          => "required",
+//            'subject'            => "required",
+//            'valid_until'        => "required",
+//            'date'               => "required",
+//        ]);
 
-        Request::validate([
-            'client_id'          => "required",
-            'subject'            => "required",
-            'valid_until'        => "required",
-            'date'               => "required",
-        ]);
+
 
         $quotation = Quotation::create([
             'user_id'             => Auth::id(),
@@ -135,21 +135,20 @@ class QuotationController extends Controller
         $quotationWorks          = Request::input('works');
         $quotationPackages       = Request::input('packages');
 
-
         if (count($quotationDomains)) {
-            $quotation->domains()->sync($this->createArrayGroups($quotationDomains));
+            $data = $quotation->domains()->attach($this->createArrayGroups($quotationDomains));
         }
 
         if (count($quotationHostings)) {
-            $quotation->hostings()->sync($this->createArrayGroups($quotationHostings));
+            $quotation->hostings()->attach($this->createArrayGroups($quotationHostings));
         }
 
         if (count($quotationWorks)) {
-            $quotation->works()->sync($this->createArrayGroups($quotationWorks));
+            $quotation->works()->attach($this->createArrayGroups($quotationWorks));
         }
 
         if (count($quotationPackages)) {
-            $quotation->packages()->sync($this->createArrayGroups($quotationPackages));
+            $quotation->packages()->attach($this->createArrayGroups($quotationPackages));
         }
 
 
@@ -165,16 +164,15 @@ class QuotationController extends Controller
             ];
         }
         $quotation->quotationItems()->createMany($quotationsOption);
-
-
-
         return redirect()->route('quotations.index');
-
-
     }
 
 
     public function oldStoreMethod(){
+
+
+
+
 
 
 
@@ -184,6 +182,7 @@ class QuotationController extends Controller
             'valid_until' => "required",
             'date' => "required",
         ]);
+
 
         $quotation = Quotation::create([
             'user_id'          => Auth::id(),
@@ -204,6 +203,8 @@ class QuotationController extends Controller
             'date'             => Request::input('date'),
             'status'           => filled(Request::input('status')),
         ]);
+
+
 
 
 
@@ -230,6 +231,7 @@ class QuotationController extends Controller
             ];
         }
         $quotation->quotationItems()->createMany($quatationsOptoin);
+//        }
         return redirect()->route('quotations.index');
     }
 
@@ -278,6 +280,7 @@ class QuotationController extends Controller
              ]
          ]);
      }*/
+
 
 
 
@@ -384,96 +387,80 @@ class QuotationController extends Controller
     }
 
 
-
-
-
     public function createInvoice($id){
         $quotation = Quotation::findOrFail($id);
 
+
         $mainarray = array();
+
         foreach ($quotation->domains as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price ?? 0,
-                'discount' => $item->pivot->discount ?? 0,
-                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+                'price' => $item->price,
+                'discount' => $item->pivot->discount,
+                'quantity' => $item->pivot->quantity
             ];
         }
+
         foreach ($quotation->hostings as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price ?? 0,
-                'discount' => $item->pivot->discount ?? 0,
-                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+                'price' => $item->price,
+                'discount' => $item->pivot->discount,
+                'quantity' => $item->pivot->quantitiy
             ];
         }
         foreach ($quotation->works as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price ?? 0,
-                'discount' => $item->pivot->discount ?? 0,
-                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+                'price' => $item->price,
+                'discount' => $item->pivot->discount,
+                'quantity' => $item->pivot->quantitiy
             ];
         }
         foreach ($quotation->packages as $item){
             $mainarray [] =[
                 'name' => $item->name,
-                'price' => $item->price ?? 0,
-                'discount' => $item->pivot->discount ?? 0,
-                'quantity' => $item->pivot->quantity > 0 ? $item->pivot->quantity  : 1
+                'price' => $item->price,
+                'discount' => $item->pivot->discount,
+                'quantity' => $item->pivot->quantitiy
             ];
         }
         foreach ($quotation->quotationItems as $item){
             $mainarray [] =[
                 'name' => $item->name ?? $item->itemname,
-                'price' => $item->price ?? 0,
-                'discount' => $item->discount ?? 0,
-                'quantity' => $item->quantity > 0 ? $item->quantity  : 1,
+                'price' => $item->price,
+                'discount' => $item->discount,
+                'quantity' => $item->quantity
             ];
         }
 
-
-        $transactions = [];
-        foreach($quotation->transactions as $item){
-            $transactions[] = [
-                "amount"     => $item->amount ?? 0,
-                "user"       => $item->user,
-                "method"     => $item->method->name,
-
-                "pay_amount" => $item->pay_amount ?? 0,
-                "discount"   => $item->discount ?? 0,
-                "total_due"  => $item->total_due ?? 0,
-                "old_total_pay" => $item->old_total_pay ?? 0,
-                "date"       => $item->date->format('d M,y'),
-                "note"       => $item->note,
-            ];
-        }
-
-        $totalPay = $quotation->transactions->sum('pay_amount') + $quotation->transactions->sum('discount');
-
-        $quotationLastTransaction = $quotation->transactions->last() ?? [
-                'pay_amount' => 0,
-                'discount' => 0
-            ];
 
         $data =[
             'quotation'          => $quotation,
             'others_info'        => [
                 "items"          => $mainarray,
+//                "domains"        => $quotation->domains,
+//                "hosgings"       => $quotation->hostings,
+//                "works"          => $quotation->works,
+//                "packages"       => $quotation->packages,
+//                "items"          => $quotation->quotationItems,
                 "create_invoice" => URL::route('quotation.download', $quotation->id)
             ],
 
             'quotation_owner'    => [
                 'creator'        => $quotation->user,
                 'client'         => $quotation->client,
-            ],
-            'transactions'    => $transactions,
-            "total_pay"       => $totalPay,
-            "last_payment"    => $quotationLastTransaction,
+            ]
         ];
 
+//        return view('invoice.quotation', compact('data'));
+//        exit();
+
         $pdf = Pdf::loadView('invoice.quotation', compact('data'));
+
         return $pdf->download('quotation.pdf');
+
 
     }
 
@@ -482,73 +469,23 @@ class QuotationController extends Controller
     public function editQuotation($id){
 
         $quot = Quotation::findOrFail($id);
-
-        $domains = Domain::all(['id','name', 'price']);
-
-        $eDomains = [];
-        foreach ($domains as $domain){
-            foreach ($quot->domains as $qD){
-                if ($domain->id == $qD->id){
-                    $eDomains[] = [
-                      "mD" => $domain,
-                      "qd" => $qD
-                    ];
-                }else{
-                    $eDomains[] = [
-                        "mD" => $domain
-                    ];
-                }
-            }
-        }
-
-
-        // works
-        $eWorks = [];
-        $works  = Work::all(['id','name', 'price']);
-        $qWOrks = $quot->works;
-
-
-
-
-        $mainWorks = $works->map(function ($item) use($qWOrks){
-            $isTrue = false;
-            foreach ($qWOrks as $work){
-                if ($work->id == $item->id){
-                    $isTrue = true;
-                    break;
-                }
-            }
-            return $isTrue ? $work : $item;
-        });
-
-
-
-
-//                "hostings"   => $quot->hostings,
-//                "works"      => $quot->works,
-//                "packages"   => $quot->packages,
-//                "quotItems"  => $quot->quotationItems,
-
-        return $mainWorks;
-
         return Inertia::render('Modules/Quotation/Edit', [
-            "clients"   => Client::all(['id','name', 'email', 'phone', 'address']),
+            "clients"   => Client::all(['id','name']),
             "services"  => Website::all(['id','name', 'price']),
             "packages"  => Design::all(['id','name', 'price']),
             "platforms" => Platform::all(['id','name', 'price']),
+            "domains"   => Domain::all(['id','name', 'price']),
             "hostings"  => Hosting::all(['id','name', 'price']),
             "works"     => Work::all(['id','name', 'price']),
 
-            "eWorks"    => $mainWorks,
-
             "edit_quot" => [
-                "quot"       => $quot,
-                "domains"    => $quot->domains,
-                "hostings"   => $quot->hostings,
-                "works"      => $quot->works,
-                "packages"   => $quot->packages,
-                "quotItems"  => $quot->quotationItems,
-                "update_url" => URL::route('quotations.update', $id),
+                "quot"      => $quot,
+                "domains"   => $quot->domains,
+                "hostings"  => $quot->hostings,
+                "works"     => $quot->works,
+                "packages"  => $quot->packages,
+                "quotItems" => $quot->quotationItems,
+                "update_url"=> URL::route('quotations.update', $id),
             ]
 
         ]);
@@ -562,7 +499,7 @@ class QuotationController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Quotation  $quotation
-     * @return \Illuminate\Http\Response
+     * @return string
      */
     public function update(Request $request, Quotation $quotation)
     {
@@ -584,11 +521,12 @@ class QuotationController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Quotation  $quotation
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Quotation $quotation)
     {
-        //
+        $quotation->delete();
+        return back();
     }
 
 

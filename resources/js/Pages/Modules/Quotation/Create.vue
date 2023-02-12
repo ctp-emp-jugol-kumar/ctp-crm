@@ -94,23 +94,23 @@
                                     </div>
                                     <div class="card-body collapse" id="collapseExample1">
                                         <div class="row">
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.works"
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in props.works"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
                                                     <div class="input-group border-0">
                                                         <div class="input-group-text border-0">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" v-model="option.p"
+                                                                <input class="form-check-input" v-model="formData.works[index].p"
                                                                        type="checkbox">
                                                             </div>
                                                         </div>
-                                                        <input type="hidden" v-model="option.price">
-                                                        <input type="hidden" v-model="option.id">
+                                                        <input type="hidden" v-model="formData.works[index].price">
+                                                        <input type="hidden" v-model="formData.works[index].id">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.quantity" placeholder="quantity">
+                                                               v-model="formData.works[index].quantity" placeholder="quantity">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.discount" placeholder="Discount">
+                                                               v-model="formData.works[index].discount" placeholder="Discount">
                                                     </div>
                                                 </div>
                                             </div>
@@ -130,23 +130,22 @@
                                     </div>
                                     <div class="card-body collapse" id="collapseExample2">
                                         <div class="row">
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.domains"
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in props.domains"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
                                                     <div class="input-group border-0">
                                                         <div class="input-group-text border-0">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" v-model="option.p"
-                                                                       type="checkbox">
+                                                                <input class="form-check-input" v-model="formData.domains[index].p" type="checkbox">
                                                             </div>
                                                         </div>
-                                                        <input type="hidden" v-model="option.price">
-                                                        <input type="hidden" v-model="option.id">
+                                                        <input type="hidden" v-model="formData.domains[index].price">
+                                                        <input type="hidden" v-model="formData.domains[index].id">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.quantity" placeholder="quantity">
+                                                               v-model="formData.domains[index].quantity" placeholder="quantity">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.discount" placeholder="Discount">
+                                                               v-model="formData.domains[index].discount" placeholder="Discount">
                                                     </div>
                                                 </div>
                                             </div>
@@ -165,23 +164,23 @@
                                     </div>
                                     <div class="card-body collapse" id="collapseExample3">
                                         <div class="row">
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.hostings"
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in props.hostings"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
                                                     <div class="input-group border-0">
                                                         <div class="input-group-text border-0">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" v-model="option.p"
+                                                                <input class="form-check-input" v-model="formData.hostings[index].p"
                                                                        type="checkbox">
                                                             </div>
                                                         </div>
-                                                        <input type="hidden" v-model="option.price">
-                                                        <input type="hidden" v-model="option.id">
+                                                        <input type="hidden"  v-model="formData.hostings[index].price">
+                                                        <input type="hidden"  v-model="formData.hostings[index].id">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.quantity" placeholder="quantity">
+                                                               v-model="formData.hostings[index].quantity" placeholder="quantity">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.discount" placeholder="Discount">
+                                                               v-model="formData.hostings[index].discount" placeholder="Discount">
                                                     </div>
                                                 </div>
                                             </div>
@@ -200,7 +199,7 @@
                                     </div>
                                     <div class="card-body collapse" id="collapseExample4">
                                         <div class="row">
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.packages"
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in props.packages"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
@@ -359,17 +358,17 @@
     import QtyButton from "../../../components/QtyButton";
 
     let props = defineProps({
-        clients      : Object,
-        services     : Object,
-        packages     : Object,
-        platforms    : Object,
-        works        : Object,
-        filters      : Object,
-        domains      : Object,
-        hostings     : Object,
-        notification : Object,
-        errors       : Object,
-        methods      : Object,
+        clients      : null,
+        services     : null,
+        packages     : null,
+        platforms    : null,
+        works        : null,
+        filters      : null,
+        domains      : null,
+        hostings     : null,
+        notification : null,
+        errors       : null,
+        methods      : null,
     })
 
 
@@ -382,11 +381,10 @@
         Trams_Services: null,
         status        : null,
 
-
-        hostings      : props.hostings,
-        domains       : props.domains,
-        works         : props.works,
-        packages      : props.packages,
+        works         : [],
+        domains       : [],
+        hostings      : [],
+        packages      : [],
 
         quatations: [
             {
@@ -399,6 +397,24 @@
 
 
     });
+
+
+    props.works.forEach(function(item, index){
+        formData.works[index] = item;
+    });
+
+    props.domains.forEach(function(item, index){
+        formData.domains[index] = item;
+    });
+
+    props.hostings.forEach(function(item, index){
+        formData.hostings[index] = item;
+    });
+
+    props.packages.forEach(function(item, index){
+        formData.packages[index] = item;
+    });
+
 
     let worksTitle   = "Select work services"
     let domainTitle  = "Select domains"
