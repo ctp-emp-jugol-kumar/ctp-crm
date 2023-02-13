@@ -47,6 +47,10 @@ class TransactionController extends Controller
         $discount   = Request::input('discount') ?? 0;
         $payAmount  = Request::input('pay_amount') ?? 0;
         $oldTotalPay = CustomInvoice::findOrFail(Request::input('invoice_id'))->transactions->sum('total_pay') + $payAmount + $discount;
+
+
+        return ["pay_amount" => $payAmount, "discount" => $discount, "grand total" => $grandTotal, "old pay" => $oldTotalPay];
+
         Transaction::create([
             'method_id'  => Request::input('payment_id'),
             'user_id'    => Auth::id(),
@@ -78,6 +82,11 @@ class TransactionController extends Controller
         $grandTotal = Request::input('grandTotal') ?? 0;
         $discount   = Request::input('discount') ?? 0;
         $payAmount  = Request::input('pay_amount') ?? 0;
+
+//        return ["pay_amount" => $payAmount, "discount" => $discount, "grand total" => $grandTotal, "quotation" => $quotation, "transactions" => $quotation->transactions];
+
+
+
         Transaction::create([
             'method_id'  => Request::input('method_id'),
             'user_id'    => Auth::id(),

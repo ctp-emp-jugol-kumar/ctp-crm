@@ -95,7 +95,7 @@ class QuotationController extends Controller
                 $id = $item['id'];
                 $added[$id] = [
                     'price'    => $item['price']    ?? 0,
-                    'quantity' => $item["quantity"] ?? 0,
+                    'quantity' => $item["quantity"] ?? 1,
                     'discount' => $item["discount"] ?? 0,
                 ];
             }
@@ -357,31 +357,36 @@ class QuotationController extends Controller
                 'discount' => 0
             ];
 
-        return Inertia::render('Modules/Quotation/Show', [
-            'info' =>[
-                'quotation'          => $quotation,
-                'dates'              => [
-                    'date'           => $quotation->date->format('M-d-Y'),
-                    'valid_until'    => $quotation->valid_until->format('M-d-Y'),
-                ],
 
-                'others_info'        => [
-                    "items"          => $mainarray,
-                    "create_invoice" => URL::route('quotation.download', $quotation->id)
-                ],
 
-                'quotation_owner'    => [
-                    'creator'        => $quotation->user,
-                    'client'         => $quotation->client,
-                ],
-                'total_pay'          => $totalPay,
-                'last_payment'       => $quotationLastTransaction,
-                'transactions'       => $transactions,
 
-                'payment_methods'    => Method::all(),
-                'payment_url'        => URL::route('saveQuotationTransaction'),
-            ]
-        ]);
+
+
+
+        return Inertia::render('Modules/Quotation/Show',   ["info" => [
+            'quotation'          => $quotation,
+            'dates'              => [
+                'date'           => $quotation->date->format('M-d-Y'),
+                'valid_until'    => $quotation->valid_until->format('M-d-Y'),
+            ],
+
+            'others_info'        => [
+                "items"          => $mainarray,
+                "create_invoice" => URL::route('quotation.download', $quotation->id)
+            ],
+
+            'quotation_owner'    => [
+                'creator'        => $quotation->user,
+                'client'         => $quotation->client,
+            ],
+            'total_pay'          => $totalPay,
+            'last_payment'       => $quotationLastTransaction,
+            'transactions'       => $transactions,
+
+            'payment_methods'    => Method::all(),
+            'payment_url'        => URL::route('saveQuotationTransaction'),
+        ]
+    ]);
 
 
     }
@@ -398,7 +403,7 @@ class QuotationController extends Controller
                 'name' => $item->name,
                 'price' => $item->price,
                 'discount' => $item->pivot->discount,
-                'quantity' => $item->pivot->quantity
+                'quantity' => $item->pivot->quantity ?? 1
             ];
         }
 
@@ -407,7 +412,7 @@ class QuotationController extends Controller
                 'name' => $item->name,
                 'price' => $item->price,
                 'discount' => $item->pivot->discount,
-                'quantity' => $item->pivot->quantitiy
+                'quantity' => $item->pivot->quantitiy ?? 1
             ];
         }
         foreach ($quotation->works as $item){
@@ -415,7 +420,7 @@ class QuotationController extends Controller
                 'name' => $item->name,
                 'price' => $item->price,
                 'discount' => $item->pivot->discount,
-                'quantity' => $item->pivot->quantitiy
+                'quantity' => $item->pivot->quantitiy ?? 1
             ];
         }
         foreach ($quotation->packages as $item){
@@ -423,7 +428,7 @@ class QuotationController extends Controller
                 'name' => $item->name,
                 'price' => $item->price,
                 'discount' => $item->pivot->discount,
-                'quantity' => $item->pivot->quantitiy
+                'quantity' => $item->pivot->quantitiy ?? 1
             ];
         }
         foreach ($quotation->quotationItems as $item){
@@ -431,27 +436,54 @@ class QuotationController extends Controller
                 'name' => $item->name ?? $item->itemname,
                 'price' => $item->price,
                 'discount' => $item->discount,
-                'quantity' => $item->quantity
+                'quantity' => $item->quantity ?? 1
             ];
         }
 
+        $transactions = [];
+        foreach($quotation->transactions as $item){
+            $transactions[] = [
+                "amount"     => $item->amount ?? 0,
+                "user"       => $item->user,
+                "method"     => $item->method->name,
 
-        $data =[
+                "pay_amount" => $item->pay_amount ?? 0,
+                "discount"   => $item->discount ?? 0,
+                "total_due"  => $item->total_due ?? 0,
+                "old_total_pay" => $item->old_total_pay ?? 0,
+                "date"       => $item->date->format('d M,y'),
+                "note"       => $item->note,
+            ];
+        }
+
+        $totalPay = $quotation->transactions->sum('pay_amount') + $quotation->transactions->sum('discount');
+
+        $quotationLastTransaction = $quotation->transactions->last() ?? [
+                'pay_amount' => 0,
+                'discount' => 0
+            ];
+        $data = [
             'quotation'          => $quotation,
+            'dates'              => [
+                'date'           => $quotation->date->format('M-d-Y'),
+                'valid_until'    => $quotation->valid_until->format('M-d-Y'),
+            ],
+
             'others_info'        => [
                 "items"          => $mainarray,
-//                "domains"        => $quotation->domains,
-//                "hosgings"       => $quotation->hostings,
-//                "works"          => $quotation->works,
-//                "packages"       => $quotation->packages,
-//                "items"          => $quotation->quotationItems,
                 "create_invoice" => URL::route('quotation.download', $quotation->id)
             ],
 
             'quotation_owner'    => [
                 'creator'        => $quotation->user,
                 'client'         => $quotation->client,
-            ]
+            ],
+            'total_pay'          => $totalPay,
+            'last_payment'       => $quotationLastTransaction,
+            'transactions'       => $transactions,
+
+            'payment_methods'    => Method::all(),
+            'payment_url'        => URL::route('saveQuotationTransaction'),
         ];
 
 //        return view('invoice.quotation', compact('data'));
@@ -459,7 +491,7 @@ class QuotationController extends Controller
 
         $pdf = Pdf::loadView('invoice.quotation', compact('data'));
 
-        return $pdf->download('quotation.pdf');
+        return $pdf->download($data["quotation_owner"]["client"]["name"]."_".now()->format('d_m_Y')."_".'quotation.pdf');
 
 
     }
@@ -467,27 +499,94 @@ class QuotationController extends Controller
 
 
     public function editQuotation($id){
+        $quot = Quotation::with('client')->findOrFail($id);
 
-        $quot = Quotation::findOrFail($id);
-        return Inertia::render('Modules/Quotation/Edit', [
+
+        $qWOrks = $quot->works;
+        $works = Work::all(['id','name', 'price']);
+        $editedWork = $works->map(function ($item) use($qWOrks){
+            $isTrue = false;
+            $data = null;
+            foreach ($qWOrks as $work){
+                if ($work->id == $item->id){
+                    $isTrue = true;
+                    $data = $work;
+                    $data['p'] = true;
+                    $data['quantity'] = $work->pivot->quantity;
+                    $data['discount'] = $work->pivot->discount;
+                    break;
+                }
+            }
+            return $isTrue ? $data : $item;
+        });
+
+        $hostings = Hosting::all(['id','name', 'price']);
+        $editHostings = $quot->hostings;
+        $editedHostings = $hostings->map(function ($item) use($editHostings){
+            $isTrue = false;
+            $data = null;
+            foreach ($editHostings as $eItem){
+                if ($eItem->id == $item->id){
+                    $isTrue = true;
+                    $data = $eItem;
+                    $data['p'] = true;
+                    $data['quantity'] = $eItem->pivot->quantity;
+                    $data['discount'] = $eItem->pivot->discount;
+                    break;
+                }
+            }
+            return $isTrue ? $data : $item;
+        });
+
+        $editedDomains = $quot->domains;
+        $domains = Domain::all(['id','name', 'price']);
+        $editedDomains = $domains->map(function ($item) use($editedDomains){
+            $isTrue = false;
+            $data = null;
+            foreach ($editedDomains as $eItem){
+                if ($eItem->id == $item->id){
+                    $isTrue = true;
+                    $data = $eItem;
+                    $data['p'] = true;
+                    $data['quantity'] = $eItem->pivot->quantity;
+                    $data['discount'] = $eItem->pivot->discount;
+                    break;
+                }
+            }
+            return $isTrue ? $data : $item;
+        });
+
+
+        $packages = Design::all(['id','name', 'price']);
+        $editPackages = $quot->packages;
+
+        $editPackages = $packages->map(function ($item) use($editPackages){
+            $isTrue = false;
+            $data = null;
+            foreach ($editPackages as $eItem){
+                if ($eItem->id == $item->id){
+                    $isTrue = true;
+                    $data = $eItem;
+                    $data['p'] = true;
+                    $data['quantity'] = $eItem->pivot->quantity;
+                    $data['discount'] = $eItem->pivot->discount;
+                    break;
+                }
+            }
+            return $isTrue ? $data : $item;
+        });
+
+
+        return Inertia::render('Modules/Quotation/EditQuot', [
             "clients"   => Client::all(['id','name']),
-            "services"  => Website::all(['id','name', 'price']),
-            "packages"  => Design::all(['id','name', 'price']),
-            "platforms" => Platform::all(['id','name', 'price']),
-            "domains"   => Domain::all(['id','name', 'price']),
-            "hostings"  => Hosting::all(['id','name', 'price']),
-            "works"     => Work::all(['id','name', 'price']),
-
-            "edit_quot" => [
-                "quot"      => $quot,
-                "domains"   => $quot->domains,
-                "hostings"  => $quot->hostings,
-                "works"     => $quot->works,
-                "packages"  => $quot->packages,
-                "quotItems" => $quot->quotationItems,
-                "update_url"=> URL::route('quotations.update', $id),
-            ]
-
+            "editable_works" => $editedWork,
+            "edited_hosting" => $editedHostings,
+            "edited_domains" => $editedDomains,
+            "edit_packages" => $editPackages,
+            "quotItems" => $quot->quotationItems,
+            "quotDetails"      => $quot,
+            "client"=> $quot->client,
+            "update_url"=> URL::route('quotations.update', $id),
         ]);
 
 
@@ -503,9 +602,16 @@ class QuotationController extends Controller
      */
     public function update(Request $request, Quotation $quotation)
     {
+
+        if(is_integer(Request::input("client_id"))){
+            $clientId = Request::input('client_id');
+        }else{
+            $clientId = $quotation->client->id;
+        }
+
         $quotation->update([
             'user_id'            => Auth::id(),
-            'client_id'          => Request::input('client_id'),
+            'client_id'          => $clientId,
             'subject'            => Request::input('subject'),
             'date'               => Request::input('date'),
             'valid_until'        => Request::input('valid_until'),
@@ -513,6 +619,55 @@ class QuotationController extends Controller
             'terms_of_service'   => Request::input('Trams_Services'),
             'status'             => filled(Request::input('status')),
         ]);
+
+        $quotationDomains        = Request::input('domains');
+        $quotationHostings       = Request::input('hostings');
+        $quotationWorks          = Request::input('works');
+        $quotationPackages       = Request::input('packages');
+
+        if (count($quotationDomains)) {
+            $data = $quotation->domains()->sync($this->createArrayGroups($quotationDomains));
+        }
+
+        if (count($quotationHostings)) {
+            $quotation->hostings()->sync($this->createArrayGroups($quotationHostings));
+        }
+
+        if (count($quotationWorks)) {
+            $quotation->works()->sync($this->createArrayGroups($quotationWorks));
+        }
+
+        if (count($quotationPackages)) {
+            $quotation->packages()->sync($this->createArrayGroups($quotationPackages));
+        }
+
+
+        $comment1 = new Comment;
+        $comment1->comment = "Hi ItSolutionStuff.com Comment 1";
+
+        $comment2 = new Comment;
+        $comment2->comment = "Hi ItSolutionStuff.com Comment 2";
+
+        $quotations = Request::input('quatations');
+        $quotationsOption = [];
+        foreach ($quotations as $key => $option) {
+
+            foreach ($quotation->quotationItems as $item){
+                $item = $option;
+            }
+
+            $quotationsOption [] = $quotation->quotationItems[$key];
+
+
+            $item[] = [
+                'quotation_id'   => $quotation->id,
+                'itemname'       => $option['itemname'],
+                'discount'       => $option['discount'] ?? 0,
+                'price'          => $option['price']    ?? 0,
+                'quantity'       => $option['quantity'] ?? 1
+            ];
+        }
+        $quotation->quotationItems()->sync($quotationsOption);
 
         return "updated";
     }

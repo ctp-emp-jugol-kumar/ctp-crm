@@ -183,6 +183,7 @@
                     $total = 0;
                 @endphp
                 @foreach ($data['others_info']['items'] as $item)
+
                     <tr>
                         <td class="border text-left">
                             {!! $item['name'] !!}
@@ -191,8 +192,8 @@
                             @php
                                 $subTotal += $item['price'] * $item['quantity'] ?? 1
                             @endphp
-                            <strong>{{ $item['price']}} * {{ $item['quantity'] ?? 1 }}
-                                = {{  $item['price'] * $item['quantity'] ??1 }}Tk</strong>
+                            <strong>{{ $item['price']}} * {{ $item['quantity']  }}
+                                = {{  $item['price'] * $item['quantity'] }}Tk</strong>
                         </td>
                         <td class="border text-right">
                             @php

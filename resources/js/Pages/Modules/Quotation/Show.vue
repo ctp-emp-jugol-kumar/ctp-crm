@@ -21,7 +21,7 @@
                             </div>
                         </div>
                         <div class="col-md-12 mx-auto">
-                            <div class="row">
+                            <div class="row match-height">
                                 <div class="col">
                                     <div class="card">
                                         <div class="card-header">
@@ -280,7 +280,7 @@
                                             <span class="fw-bold">{{ item.old_total_pay }} Tk</span>
                                         </td>
                                         <td class="py-1">
-                                            <span class="fw-bold">{{ item.total_due }} Tk</span>
+                                            <span class="fw-bold">{{ item.amount - item.old_total_pay }} Tk</span>
                                         </td>
                                         <td class="py-1">
                                             <span>{{ item.method }}</span>

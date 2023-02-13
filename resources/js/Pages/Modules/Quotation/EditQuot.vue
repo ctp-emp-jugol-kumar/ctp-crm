@@ -20,6 +20,66 @@
 
                         <div class="col-md-11 mx-auto">
                             <form @submit.prevent="updateQutation">
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="modal-body">
+                                            <div class="row mb-1">
+                                                <div class="col-md">
+                                                    <label>Client :
+                                                        <Required/>
+                                                    </label>
+                                                    <div class="">
+                                                        <v-select v-model="formData.client_id" :options="clients"
+                                                                  :reduce="client => client.id" label="name"
+                                                                  placeholder="Select Client"></v-select>
+                                                        <InputFieldError :errors="errors.client_id"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md">
+                                                    <label>Subject :
+                                                        <Required/>
+                                                    </label>
+                                                    <div class="">
+                                                        <input type="text" placeholder="Subjects"
+                                                               v-model="formData.subject"
+                                                               class="form-control">
+                                                        <span class="error text-sm text-danger"></span>
+                                                        <InputFieldError :errors="errors.subject"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-1">
+                                                <div class="col-md">
+                                                    <label>Date :
+                                                        <Required/>
+                                                    </label>
+                                                    <div class="">
+                                                        <Datepicker v-model="formData.date" :monthChangeOnScroll="false"
+                                                                    placeholder="Select Date" autoApply></Datepicker>
+                                                        <InputFieldError :errors="errors.date"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md">
+                                                    <label>Valid until :
+                                                        <Required/>
+                                                    </label>
+
+                                                    <div class="">
+                                                        <Datepicker v-model="formData.valid_until"
+                                                                    :monthChangeOnScroll="false"
+                                                                    placeholder="Select Date" autoApply></Datepicker>
+                                                        <InputFieldError :errors="errors.valid_until"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <!--works sections-->
                                 <div class="card">
                                     <div class="card-header d-flex align-items-center justify-content-between">
@@ -84,6 +144,185 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!--hosting sections-->
+                                <div class="card">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <h4 class="card-title">Hosting</h4>
+
+                                        <button @click="collupsHosting" class="btn-icon rounded-circle btn bg-light-primary" type="button">
+                                            <vue-feather type="arrow-down"></vue-feather>
+                                        </button>
+                                    </div>
+                                    <div class="card-body collapse" id="collapseExample3">
+                                        <div class="row">
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in props.edited_hosting"
+                                                 :key="index">
+                                                <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
+                                                <div class="border-1 border-light rounded-3 p-25">
+                                                    <div class="input-group border-0">
+                                                        <div class="input-group-text border-0">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" v-model="formData.hostings[index].p"
+                                                                       type="checkbox">
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden"  v-model="formData.hostings[index].price">
+                                                        <input type="hidden"  v-model="formData.hostings[index].id">
+                                                        <input type="number" class="form-control border-0"
+                                                               v-model="formData.hostings[index].quantity" placeholder="quantity">
+                                                        <input type="number" class="form-control border-0"
+                                                               v-model="formData.hostings[index].discount" placeholder="Discount">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--domain sections-->
+                                <div class="card">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <h4 class="card-title">{{ domainTitle }}</h4>
+
+                                        <button @click="collupsService" class="btn-icon rounded-circle btn bg-light-primary" type="button">
+                                            <vue-feather type="arrow-down"></vue-feather>
+                                        </button>
+                                    </div>
+                                    <div class="card-body collapse" id="collapseExample2">
+                                        <div class="row">
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in props.edited_domains"
+                                                 :key="index">
+                                                <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
+                                                <div class="border-1 border-light rounded-3 p-25">
+                                                    <div class="input-group border-0">
+                                                        <div class="input-group-text border-0">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" v-model="formData.domains[index].p" type="checkbox">
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" v-model="formData.domains[index].price">
+                                                        <input type="hidden" v-model="formData.domains[index].id">
+                                                        <input type="number" class="form-control border-0"
+                                                               v-model="formData.domains[index].quantity" placeholder="quantity">
+                                                        <input type="number" class="form-control border-0"
+                                                               v-model="formData.domains[index].discount" placeholder="Discount">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--package sections-->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">{{ packageTitle }}</h4>
+                                        <button @click="collupsPackage" class="btn-icon rounded-circle btn bg-light-primary" type="button">
+                                            <vue-feather type="arrow-down"></vue-feather>
+                                        </button>
+                                    </div>
+                                    <div class="card-body collapse" id="collapseExample4">
+                                        <div class="row">
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in props.edit_packages"
+                                                 :key="index">
+                                                <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
+                                                <div class="border-1 border-light rounded-3 p-25">
+                                                    <div class="input-group border-0">
+                                                        <div class="input-group-text border-0">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" v-model="formData.packages[index].p" type="checkbox">
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" v-model="formData.packages[index].price">
+                                                        <input type="hidden" v-model="formData.packages[index].id">
+                                                        <input type="number" class="form-control border-0" v-model="formData.packages[index].quantity" placeholder="quantity">
+                                                        <input type="number" class="form-control border-0" v-model="formData.packages[index].discount" placeholder="Discount">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6" data-repeater-item
+                                         v-for="(item, index) in formData.quatations">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title">index: {{ index }} total:
+                                                    {{ formData.quatations.length - 1 }}</h4>
+                                                <div class="row d-flex align-items-center">
+                                                    <div class="col-12">
+                                                        <div class="mb-1">
+                                                            <TextEditor v-model="item.itemname"
+                                                                        placeholder="Item Details"/>
+                                                        </div>
+                                                        <div class="input-group border-0 d-flex">
+                                                            <!-- <QtyButton/>-->
+                                                            <input type="number" class="form-control rounded-start"
+                                                                   placeholder="quantity" v-model="item.quantity">
+
+                                                            <input type="number" class="form-control rounded-start"
+                                                                   placeholder="Price" v-model="item.price">
+
+                                                            <input type="number" class="form-control"
+                                                                   placeholder="Discount" v-model="item.discount">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    v-if="index === formData.quatations.length - 1"
+                                                    class="btn btn-primary btn-sm float-end mt-25"
+                                                    type="button"
+                                                    name="button"
+                                                    @click="addRow">
+                                                    <vue-feather type="plus"/>
+                                                </button>
+                                                <button
+                                                    v-else
+                                                    class="btn btn-danger btn-sm float-end mt-25"
+                                                    @click="deleteRow(index)"
+                                                    data-repeater-delete
+                                                    type="button">
+                                                    <vue-feather type="trash"/>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-item-center justify-content-between">
+                                            <div class="d-flex flex-column">
+                                                <label class="form-check-label mb-50"
+                                                       for="customSwitch10">Primary</label>
+                                                <div class="form-check form-switch form-check-primary">
+                                                    <input type="checkbox" class="form-check-input"
+                                                           v-model="formData.status" id="customSwitch11" checked/>
+                                                    <label class="form-check-label" for="customSwitch11">
+                                                        <span class="switch-icon-left"><i
+                                                            data-feather="check"></i></span>
+                                                        <span class="switch-icon-right"><i data-feather="x"></i></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <button type="submit"
+                                                        class="btn btn-primary waves-effect waves-float waves-light me-2">
+                                                    Submit
+                                                </button>
+                                                <button type="reset" class="btn btn-outline-secondary"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close">Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -116,14 +355,29 @@ import InputFieldError from "../../../components/InputFieldError";
 import QtyButton from "../../../components/QtyButton";
 
 const props=defineProps({
-    editable_works:[] | null,
+    editable_works:[]|null,
+    edited_hosting:[]|null,
+    edited_domains:[]|null,
+    edit_packages:[]|null,
+    quotItems:[]|null,
+    quotDetails:Object|null,
+
+    clients:[]|null,
+    errors:[]|null,
     update_url:null
 })
 
 
 const formData = useForm({
-    works:[],
+    client_id:null,
+    subject:null,
+    date:null,
+    valid_until:null,
 
+    works:[],
+    hostings:[],
+    domains:[],
+    packages:[],
     quatations: [
         {
             itemname: '',
@@ -134,14 +388,34 @@ const formData = useForm({
     ],
 });
 
+formData.client_id=props.quotDetails.client.name;
+formData.subject=props.quotDetails.subject;
+formData.valid_until=props.quotDetails.valid_until;
+formData.date=props.quotDetails.date;
 
 props.editable_works.forEach(function(item, index){
     formData.works[index] = item;
 });
+props.edited_hosting.forEach(function(item, index){
+    formData.hostings[index] = item;
+});
+props.edited_domains.forEach(function(item, index){
+    formData.domains[index] = item;
+});
+
+props.edit_packages.forEach(function(item, index){
+    formData.packages[index] = item;
+});
+
+props.quotItems.forEach(function(item, index){
+    formData.quatations[index] = item;
+});
 
 
-const worksTitle   = "Select work services"
-
+let worksTitle   = "Select work services"
+let domainTitle  = "Select domains"
+let hostingTitle = "Select hosting"
+let packageTitle = "Select packages"
 
 const deleteItemModal = (id) => {
     Swal.fire({

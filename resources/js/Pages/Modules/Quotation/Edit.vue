@@ -102,24 +102,23 @@
                                     <div class="card-body">
                                         <div class="row">
 <!--                                            <div class="col-md-4 mb-1" v-for="(option , index) in filterWOrk"-->
-                                            <div class="col-md-4 mb-1" v-for="(formData , index) in eWorks"
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in props.edit_works"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
                                                     <div class="input-group border-0">
                                                         <div class="input-group-text border-0">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" v-model="formData.p"
+                                                                <input class="form-check-input" v-model="formData.works[index].p"
                                                                        type="checkbox">
                                                             </div>
                                                         </div>
-                                                        <input type="hidden" v-model="formData.pivot.price">
-                                                        <input type="hidden" v-model="formData.id">
+                                                        <input type="hidden" v-model="formData.works[index].price">
+                                                        <input type="hidden" v-model="formData.works[index].id">
                                                         <input type="number" class="form-control border-0"
-                                                                placeholder="quantity" v-model="formData.pivot.quantity">
-
+                                                               v-model="formData.works[index].quantity" placeholder="quantity">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="formData.pivot.discount" placeholder="Discount">
+                                                               v-model="formData.works[index].discount" placeholder="Discount">
                                                     </div>
                                                 </div>
                                             </div>
@@ -350,7 +349,7 @@ let props = defineProps({
         services     : Object,
         packages     : Object,
         platforms    : Object,
-        works        : Object,
+        works        : Object | null,
         filters      : Object,
         domains      : Object,
         hostings     : Object,
@@ -358,30 +357,35 @@ let props = defineProps({
         errors       : Object,
 
         edit_quot    : Object,
+        edit_works: [] | null,
 
         eWorks       : []
     })
 
 
     let formData = useForm({
-        client_id     : props.edit_quot.quot.client_id,
-        subject       : props.edit_quot.quot.subject,
-        date          : props.edit_quot.quot.date,
-        valid_until   : props.edit_quot.quot.valid_until,
-        payment_policy: props.edit_quot.quot.payment_policy,
-        Trams_Services: props.edit_quot.quot.terms_of_service,
-        status        : props.edit_quot.quot.status === 1 ? true : false,
+        client_id     : null,
+        subject       : null,
+        date          : null,
+        valid_until   : null,
+        payment_policy: null,
+        Trams_Services: null,
+        status        : null,
 
 
-        hostings      : props.hostings,
-        domains       : props.domains,
-        works         : props.works,
-        packages      : props.packages,
+        hostings      : null,
+        domains       : null,
+        works         : null,
+        packages      : null,
 
-        quatations: props.edit_quot.quotItems,
-
-
+        quatations: null,
     });
+
+    props.edit_works.forEach(function(item, index){
+        console.log(item)
+        formData.works[index] = item;
+    });
+
 
     let worksTitle   = "Select work services"
     let domainTitle  = "Select domains"

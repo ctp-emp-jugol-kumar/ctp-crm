@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\User;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Validation\Rule;
 
 
 class ClientsController extends Controller
@@ -63,11 +64,28 @@ class ClientsController extends Controller
      */
     public function store(ClientRequest $request)
     {
+
+       $data = $request->validate([
+
+            "name" => ['required'],
+            "email" => ['required', 'email', Rule::unique('clients', 'email')],
+            "secondary_email" => ['nullable','email'],
+            "phone" => ['required', 'regex:/(^([+]{1}[8]{2}|0088)?(01){1}[3-9]{1}\d{8})$/'],
+            "secondary_phone" => ['nullable','regex:/(^([+]{1}[8]{2}|0088)?(01){1}[3-9]{1}\d{8})$/'],
+            "company" => ['nullable'],
+            "address" => ['nullable', 'max:150'],
+            "note" => ['nullable'],
+            "status" => ['nullable'],
+            "agents" => ['nullable']
+        ]);
+
+       $data['status'] = $request->status["name"];
+
 //        try {
-            $client = Client::create($request->validated());
+            $client = Client::create($data);
 
             if ($request->agents){
-                $client->users()->attach($request->input('agents'));
+                $client->users()->sync($request->input('agents'));
             }
             return redirect()->route('clients.index');
 //        }catch (\Exception $e){
