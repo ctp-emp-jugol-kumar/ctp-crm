@@ -33,7 +33,7 @@
                                 <div class="d-flex justify-content-between align-items-end mt-1 pt-25">
                                     <div class="role-heading">
                                         <h4 class="fw-bolder">{{ role.name  }}</h4>
-                                        <a href="javascript:;" class="role-edit-modal" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+                                        <a href="javascript:;" class="role-edit-modal" @click="editRole(role.id)">
                                             <small class="fw-bolder">Edit Role</small>
                                         </a>
                                     </div>
@@ -101,7 +101,6 @@
                                         >
                                             <img class="rounded-circle" :src="user.photo" alt="Avatar" />
                                         </li>
-
                                     </ul>
                                 </td>
                             </tr>
@@ -116,7 +115,7 @@
                 <Modal id="addRoleModal" title="Add New Role" v-vb-is:modal size="lg">
                     <div class="modal-body px-5 pb-5">
                         <div class="text-center mb-4">
-                            <h1 class="role-title">Add New Role</h1>
+                            <h1 class="role-title">{{ editRoleRef ? "Edit This" : "Add New" }} Role</h1>
                             <p>Set role permissions</p>
                         </div>
                         <!-- Add role form -->
@@ -199,6 +198,9 @@
     import {useForm} from "@inertiajs/inertia-vue3";
     import Swal from "sweetalert2";
     import Modal from '../../../components/Modal'
+    import {Inertia} from "@inertiajs/inertia";
+    import {ref} from "vue";
+    import axios from 'axios';
 
     let props = defineProps({
         permissions:Object,
@@ -270,6 +272,16 @@
         });
     }
 
+    const editRoleRef = ref(null);
+    let editRole = (id) =>{
+        axios.get(`authorizations/${id}/edit`).then((res)=>{
+            editRoleRef.value = res.data;
+            createRole.selectedPermissions = res.data.permissions;
+            document.getElementById('addRoleModal').$vb.modal.show()
+        }).catch((err)=>{
+            console.log(err)
+        })
+    }
 
 
 
