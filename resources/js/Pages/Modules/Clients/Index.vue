@@ -288,18 +288,37 @@
 
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Assign Agent: </label>
-                        <select class="form-control" v-model="updateForm.status">
-                            <option v-for="option in status" :value="option" :selected="option === 'New Lead'">{{ option }}
-                            </option>
-                        </select>
+                        <v-select v-model="updateForm.status"
+                                  label="name"
+                                  :options="status"
+                                  placeholder="~~Select Sub Category~~"
+                                  :reduce="optoin"></v-select>
 
                     </div>
                     <div class="col-md">
                         <label>Assign Agent: </label>
-                        <select class="form-control" v-model="updateForm.agents" multiple>
-                            <option v-for="user in users" :value="user.id">{{ user.name }}</option>
-                        </select>
+
+                        <v-select
+                            multiple
+                            v-model="updateForm.agents"
+                            :options="users"
+                            placeholder="Search Country Name"
+                            :reduce="user => user.id"
+                            label="name">
+                            <template v-slot:option="option">
+                                <li class="d-flex align-items-start py-1">
+                                    <div class="avatar me-75">
+                                        <img :src="`${option.photo}`" alt="" width="38" height="38">
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="me-1 d-flex flex-column">
+                                            <strong class="mb-25">{{ option.name }}</strong>
+                                            <span >{{ option.email }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </template>
+                        </v-select>
                     </div>
                 </div>
             </div>
@@ -454,9 +473,11 @@
     }
 
     let editClient = (url) => {
-        axios.get(url).then(res => {
-            editData.value = res.data;
+        axios.get(url+"?edit=true").then(res => {
 
+            console.log(res.data)
+
+            editData.value = res.data;
             updateForm.name = res.data.name;
             updateForm.email = res.data.email;
             updateForm.secondary_email = res.data.secondary_email;
@@ -466,6 +487,7 @@
             updateForm.address = res.data.address;
             updateForm.note = res.data.note;
             updateForm.status = res.data.status;
+            updateForm.agents = res.data.users;
 
             document.getElementById('editClient').$vb.modal.show();
         }).catch(err => {

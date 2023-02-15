@@ -38,7 +38,7 @@ class ClientsController extends Controller
                             ->orWhere('description', 'like', "%{$search}");
                         });
                     ;
-                })
+                })->latest()
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
                 ->through(fn($client) => [
@@ -73,7 +73,6 @@ class ClientsController extends Controller
     {
 
        $data = $request->validate([
-
             "name" => ['required'],
             "email" => ['required', 'email', Rule::unique('clients', 'email')],
             "secondary_email" => ['nullable','email'],
@@ -84,20 +83,16 @@ class ClientsController extends Controller
             "note" => ['nullable'],
             "status" => ['nullable'],
             "agents" => ['nullable']
-        ]);
+       ]);
 
        $data['status'] = $request->status["name"];
 
-//        try {
-            $client = Client::create($data);
+       $client = Client::create($data);
+       if ($request->agents){
+            $client->users()->sync($request->input('agents'));
+       }
+        return redirect()->route('clients.index');
 
-            if ($request->agents){
-                $client->users()->sync($request->input('agents'));
-            }
-            return redirect()->route('clients.index');
-//        }catch (\Exception $e){
-//            return redirect()->route('clients.index');
-//        }
     }
 
     /**
@@ -108,16 +103,25 @@ class ClientsController extends Controller
      */
     public function show($id)
     {
-        $user = Client::findOrFail($id)->load('transactions','transactions.user',
+
+        $user = Client::findOrFail($id)->load('users','transactions','transactions.user',
             'transactions.method','customeInvoices',
             'quotations','quotations.user', 'projects',
             'projects.users', 'customeInvoices', 'customeInvoices.user');
+
+        if(Request::input('edit')){
+            return $user;
+        }
 
 
         return inertia('Modules/Clients/Show', [
             "user" => $user,
             'image' => "/images/avatar.png"
         ]);
+    }
+
+    public function edit($id){
+        return $id;
     }
 
     /**
