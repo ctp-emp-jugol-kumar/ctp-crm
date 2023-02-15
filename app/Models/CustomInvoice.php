@@ -13,6 +13,7 @@ class CustomInvoice extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+    protected $dates = ['date'];
 
 
     public function client(){

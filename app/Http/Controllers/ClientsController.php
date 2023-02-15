@@ -22,15 +22,22 @@ class ClientsController extends Controller
     {
         return inertia('Modules/Clients/Index', [
             $search = Request::input('search'),
-            'clients' => Client::query()
+            'clients' => Client::query()->with('projects')
                 ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('email', 'like', "%{$search}%")
+                    $query
+                        ->where('email', 'like', "%{$search}%")
                           ->orWhere('name', 'like', "%{$search}%")
                           ->orWhere('company', 'like', "%{$search}%")
                           ->orWhere('secondary_email', 'like', "%{$search}%")
                           ->orWhere('secondary_phone', 'like', "%{$search}%")
                           ->orWhere('address', 'like', "%{$search}%")
-                          ->orWhere('phone', 'like', "%{$search}%");
+                          ->orWhere('phone', 'like', "%{$search}%")
+
+                        ->orWhereHas('projects', function ($developer) use($search){
+                            $developer->where('name', 'like', "%{$search}%")
+                            ->orWhere('description', 'like', "%{$search}");
+                        });
+                    ;
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()

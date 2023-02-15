@@ -55,7 +55,7 @@ class ProjectController extends Controller
                     "show_url"      => URL::route('projects.show', $project->id),
                 ]),
             'clients'  => Client::all(['id','name']),
-            'users'    => User::all(['id','name']),
+            'users'    => User::all(['id','name', 'photo', 'email']),
             'filters'  => Request::only(['search','perPage']),
             'main_url' => URL::route('projects.index'),
         ]);

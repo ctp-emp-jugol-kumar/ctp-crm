@@ -53,7 +53,8 @@ class InvoiceController extends Controller
                     'creator' => $invoice->user ? $invoice->user->name : 'unknown',
                     'created_at' => $invoice->created_at->format('d M Y'),
                     'invice_url' => URL::route('invoices.show', $invoice->id),
-                    "edit_url" => URL::route('invoices.edit', $invoice->id),
+                    'edit_url' => URL::route('invoices.edit', $invoice->id),
+                    'delete_url' => URL::route('invoices.delete', $invoice->id)
                 ]),
             'filters' => Request::only(['search','perPage']),
             'main_url' => URL::route('invoices.index'),
@@ -83,7 +84,7 @@ class InvoiceController extends Controller
             'user_id'       => Auth::id(),
             'client_id'        => Request::input('client_id'),
             'subject'          => Request::input('subject'),
-//            'date'             => Request::input('date')->format('d-y-m'),
+            'date'               => Request::input('date'),
             'status'           => filled(Request::input('status')),
             'trams_and_condition' => Request::input('trams_and_condition'),
             'privicy_and_policy'  => Request::input('payment_policy'),
@@ -196,10 +197,6 @@ class InvoiceController extends Controller
                 'discount' => 0
             ];
 
-
-
-
-
         $data = [
             "invoice"       => $invoice,
             "client"        => $invoice->client,
@@ -239,27 +236,57 @@ class InvoiceController extends Controller
     public function updateInvoice(Request $request, $id){
 
         $invoice = CustomInvoice::findOrFail($id);
+
+//        return Request::all();
+
         $invoice->update([
             'user_id'       => Auth::id(),
             'client_id'        => Request::input('client_id'),
             'subject'          => Request::input('subject'),
+            'date'             => Request::input('date'),
             'status'           => filled(Request::input('status')),
             'trams_and_condition' => Request::input('trams_and_condition'),
             'privicy_and_policy'  => Request::input('payment_policy'),
         ]);
 
+        $quotations=Request::input('quatations') ;
 
-
-//        $invoice->invoiceItems->createMany(Request::input('quatations'));
-
-        foreach (Request::input('quatations') as $item){
-            InvoiceItem::updateOrcreate([
-                'invoice_id' => $invoice->id,
-                'item_name'  => $item['item_name'],
-                'price'      => $item['price'],
-                'discount'   => $item['discount'],
-            ]);
+        $quotationsOption = [];
+        foreach ($quotations as $key => $option) {
+            $quotationsOption[] = [
+                'id'             => $option["id"] ?? null,
+                'quotation_id'   => $invoice->id,
+                'item_name'       => $option['item_name'],
+                'discount'       => $option['discount'] ?? 0,
+                'price'          => $option['price']    ?? 0,
+                'quantity'       => $option['quantity'] ?? 1
+            ];
         }
+
+        $array = $invoice->invoiceItems->toArray();
+        $deletedItems=[];
+        $deletedItems = array_map(function($item)use($quotationsOption){
+            return in_array($item['id'], array_column($quotationsOption, 'id')) ? null : $item["id"];
+        }, $array);
+        foreach ($deletedItems as $deletedItem){
+            if ($deletedItem){
+                $invoice->invoiceItems()->find($deletedItem)->delete();
+            }
+        }
+
+
+        $relatedModels = $invoice->invoiceItems;
+        foreach ($quotationsOption as $item) {
+            $updateData = $relatedModels->find($item['id']);
+            if($updateData){
+                $updateData->update($item);
+            }else{
+                if ($item['id'] == null){
+                    $invoice->invoiceItems()->create($item);
+                }
+            }
+        }
+
 
         return Redirect::route('invoices.index');
     }
@@ -281,10 +308,11 @@ class InvoiceController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
+     * @return Invoice
      */
-    public function destroy(Invoice $invoice)
+    public function destroy($id)
     {
-        //
+        $invoice = CustomInvoice::findOrFail($id);
+        $invoice->delete();
     }
 }

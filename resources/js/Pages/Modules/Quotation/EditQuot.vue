@@ -250,24 +250,22 @@
                                          v-for="(item, index) in formData.quatations">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h4 class="card-title">index: {{ index }} total:
-                                                    {{ formData.quatations.length - 1 }}</h4>
+                                                <h4 class="card-title">Item: {{ index + 1 }} </h4>
                                                 <div class="row d-flex align-items-center">
                                                     <div class="col-12">
                                                         <div class="mb-1">
-                                                            <TextEditor v-model="item.itemname"
+                                                            <TextEditor v-model="formData.quatations[index].item_name"
                                                                         placeholder="Item Details"/>
                                                         </div>
                                                         <div class="input-group border-0 d-flex">
-                                                            <!-- <QtyButton/>-->
-                                                            <input type="number" class="form-control rounded-start"
-                                                                   placeholder="quantity" v-model="item.quantity">
+
+                                                            <!--                                                            <QtyButton/>-->
 
                                                             <input type="number" class="form-control rounded-start"
-                                                                   placeholder="Price" v-model="item.price">
+                                                                   placeholder="Price" v-model="formData.quatations[index].price">
 
                                                             <input type="number" class="form-control"
-                                                                   placeholder="Discount" v-model="item.discount">
+                                                                   placeholder="Discount" v-model="formData.quatations[index].discount" >
                                                         </div>
                                                     </div>
                                                 </div>
@@ -280,8 +278,7 @@
                                                     <vue-feather type="plus"/>
                                                 </button>
                                                 <button
-                                                    v-else
-                                                    class="btn btn-danger btn-sm float-end mt-25"
+                                                    class="btn btn-danger btn-sm float-end mt-25 me-1"
                                                     @click="deleteRow(index)"
                                                     data-repeater-delete
                                                     type="button">
@@ -380,7 +377,8 @@ const formData = useForm({
     packages:[],
     quatations: [
         {
-            itemname: '',
+            id:'',
+            item_name: '',
             price: '',
             discount: '',
             quantity: ''
@@ -463,16 +461,16 @@ const updateQutation = () => {
     })
 }
 
-const addRow = () => {
+let addRow = () => {
     formData.quatations.push({
-        itemname: '',
+        item_name: '',
         price: '',
+        quantity: '',
         discount: '',
-        quantity: ''
     })
 }
 
-const deleteRow = (index) => {
+let deleteRow = (index) => {
     formData.quatations.splice(index, 1)
 }
 

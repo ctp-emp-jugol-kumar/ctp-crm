@@ -63,7 +63,7 @@
                                                        class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
                                                     </a>
-                                                    <button @click="deleteItemModal(invoice.id)"
+                                                    <button @click="deleteItemModal(invoice.delete_url)"
                                                             type="button"
                                                             class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash" />
@@ -121,7 +121,7 @@
     })
 
 
-    let deleteItemModal = (id) => {
+    let deleteItemModal = (url) => {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -132,7 +132,7 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Inertia.delete(adminPath.value + '/users/' + id, { preserveState: true, replace: true, onSuccess: page => {
+                Inertia.delete(url, { preserveState: true, replace: true, onSuccess: page => {
                         Swal.fire(
                             'Deleted!',
                             'Your file has been deleted.',

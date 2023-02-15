@@ -603,6 +603,8 @@ class QuotationController extends Controller
     public function update(Request $request, Quotation $quotation)
     {
 
+//        return Request::all();
+
         if(is_integer(Request::input("client_id"))){
             $clientId = Request::input('client_id');
         }else{
@@ -642,33 +644,43 @@ class QuotationController extends Controller
         }
 
 
-        $comment1 = new Comment;
-        $comment1->comment = "Hi ItSolutionStuff.com Comment 1";
-
-        $comment2 = new Comment;
-        $comment2->comment = "Hi ItSolutionStuff.com Comment 2";
-
         $quotations = Request::input('quatations');
+
         $quotationsOption = [];
         foreach ($quotations as $key => $option) {
-
-            foreach ($quotation->quotationItems as $item){
-                $item = $option;
-            }
-
-            $quotationsOption [] = $quotation->quotationItems[$key];
-
-
-            $item[] = [
+            $quotationsOption[] = [
+                'id'             => $option["id"] ?? null,
                 'quotation_id'   => $quotation->id,
-                'itemname'       => $option['itemname'],
+                'item_name'       => $option['item_name'],
                 'discount'       => $option['discount'] ?? 0,
                 'price'          => $option['price']    ?? 0,
                 'quantity'       => $option['quantity'] ?? 1
             ];
         }
-        $quotation->quotationItems()->sync($quotationsOption);
 
+        $array = $quotation->quotationItems->toArray();
+        $deletedItems=[];
+        $deletedItems = array_map(function($item)use($quotationsOption){
+            return in_array($item['id'], array_column($quotationsOption, 'id')) ? null : $item["id"];
+        }, $array);
+        foreach ($deletedItems as $deletedItem){
+            if ($deletedItem){
+                $quotation->quotationItems()->find($deletedItem)->delete();
+            }
+        }
+
+
+        $relatedModels = $quotation->quotationItems;
+        foreach ($quotationsOption as $item) {
+            $updateData = $relatedModels->find($item['id']);
+            if($updateData){
+                $updateData->update($item);
+            }else{
+                if ($item['id'] == null){
+                    $quotation->quotationItems()->create($item);
+                }
+            }
+        }
         return "updated";
     }
 

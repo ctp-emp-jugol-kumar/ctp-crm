@@ -171,9 +171,10 @@
                     <div class="col-md">
                         <label>Client: <span class="text-danger">*</span></label>
                         <div class="">
-                            <select2 v-model="createForm.client_id" :options="clients"
-                                     :reduce="client => client.id" label="name"
-                                     placeholder="Select Client"></select2>
+                            <v-select v-model="createForm.client_id" :options="clients"
+                                      :reduce="client => client.id" label="name"
+                                      placeholder="Select Client"></v-select>
+
                             <InputFieldError :errors="errors.client_id"/>
                         </div>
                     </div>
@@ -246,18 +247,39 @@
                 <div class="row mb-1">
                     <div class="col-md">
                         <label>Project Status: </label>
-                        <select class="form-control" v-model="createForm.status">
-                            <option v-for="optoin in status" :value="optoin" :selected="optoin === 'New Lead'">
-                                {{optoin }}
-                            </option>
-                        </select>
+
+                        <v-select v-model="createForm.status"
+                                  @update:modelValue="subCategorySelected"
+                                  label="name"
+                                  :options="status"
+                                  placeholder="~~Select Sub Category~~"
+                                  :reduce="optoin"></v-select>
+
                     </div>
 
                     <div class="col-md">
                         <label>Assign Developers: </label>
-                        <select class="form-control" v-model="createForm.agents" multiple name="agents[]">
-                            <option v-for="user in users" :value="user.id">{{ user.name }}</option>
-                        </select>
+                        <v-select
+                            multiple
+                            v-model="createForm.agents"
+                            :options="users"
+                            placeholder="Search Country Name"
+                            :reduce="user => user.id"
+                            label="name">
+                            <template v-slot:option="option">
+                                <li class="d-flex align-items-start py-1">
+                                    <div class="avatar me-75">
+                                        <img :src="`${option.photo}`" alt="" width="38" height="38">
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="me-1 d-flex flex-column">
+                                            <strong class="mb-25">{{ option.name }}</strong>
+                                            <span >{{ option.email }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </template>
+                        </v-select>
                     </div>
                 </div>
 
@@ -400,7 +422,7 @@
     import axios from 'axios';
 
 
-    let props = defineProps({
+    const props = defineProps({
         projects: Object,
         filters: Object,
         errors: Object,
@@ -411,28 +433,28 @@
     });
 
 
-    let editData = ref([]);
+    const editData = ref([]);
 
 
-    let createForm = useForm({
-        name: "",
-        note: "",
-        status: "",
-        date:"",
-        start_date:'',
-        end_date:'',
-        agents: [null],
-        client_id:"",
-        descriptions:"",
-        credintials:'',
-        project_details:'',
+    const createForm = useForm({
+        name: null,
+        note: null,
+        status: null,
+        date:null,
+        start_date:null,
+        end_date:null,
+        agents:null,
+        client_id:null,
+        descriptions:null,
+        credintials:null,
+        project_details:null,
 
         files:null,
 
         processing: Boolean,
     })
 
-    // let updateForm = useForm({
+    // const updateForm = useForm({
     //     name: "",
     //     email: "",
     //     secondary_email: "",
@@ -445,7 +467,7 @@
     //     agents: null,
     // })
 
-    let status = [
+    const status = [
         'New Project',
         'In Process',
         'Testing',
@@ -454,7 +476,7 @@
         'Canceled'
     ]
 
-    let deleteItemModal = (id) => {
+    const deleteItemModal = (id) => {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -485,10 +507,10 @@
         })
     };
 
-    let addDataModal = () => {
+    const addDataModal = () => {
         document.getElementById('addItemModal').$vb.modal.show()
     }
-    let createProject = () => {
+    const createProject = () => {
         Inertia.post('projects', createForm, {
             preserveState: true,
             onStart: () => {
@@ -509,7 +531,7 @@
         })
     }
 
-    let updateClientForm = (id) => {
+    const updateClientForm = (id) => {
         Inertia.put('clients/' + id, updateForm, {
             preserveState: true,
             onStart: () => {
@@ -530,7 +552,7 @@
         })
     }
 
-    let editClient = (url) => {
+    const editClient = (url) => {
         axios.get(url).then(res => {
             editData.value = res.data;
             //
@@ -550,14 +572,14 @@
         });
     }
 
-    // let showProject = (url) =>{
+    // const showProject = (url) =>{
     //     Inertia.get(url, {
     //
     //     })
     // }
 
-    let search = ref(props.filters.search);
-    let perPage = ref(props.filters.perPage);
+    const search = ref(props.filters.search);
+    const perPage = ref(props.filters.perPage);
 
     watch([search, perPage], debounce(function ([val, val2]) {
         Inertia.get(props.main_url, {search: val, perPage: val2}, {preserveState: true, replace: true});

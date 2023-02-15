@@ -82,6 +82,8 @@ Route::prefix('admin')->group(function(){
         Route::resource('invoices', InvoiceController::class);
         Route::get('edit/invoice/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
         Route::get('download-invoice/{id}', [InvoiceController::class, 'generateInvoicePDFFile'])->name('invoices.generateInvoicePDFFile');
+        Route::delete('edit/invoice/{id}', [InvoiceController::class, 'destroy'])->name('invoices.delete');
+
 
 
 
