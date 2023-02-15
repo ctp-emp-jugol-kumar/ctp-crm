@@ -89,7 +89,7 @@ class ClientsController extends Controller
 
        $client = Client::create($data);
        if ($request->agents){
-            $client->users()->sync($request->input('agents'));
+            $client->users()->attach($request->input('agents'));
        }
         return redirect()->route('clients.index');
 
@@ -134,6 +134,9 @@ class ClientsController extends Controller
     public function update(UpdateClient $request, Client $client)
     {
         $client->update($request->validated());
+        if ($request->agents){
+            $client->users()->sync($request->input('agents'));
+        }
         return redirect()->route('clients.index');
     }
 
