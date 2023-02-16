@@ -22,7 +22,7 @@ class ProjectController extends Controller
     {
 
         return inertia('Modules/Projects/Index', [
-            'projects' => Project::query()->with(['client', 'client:id,name,phone,email', 'users', 'users:id,name'])
+            'projects' => Project::query()->with(['client', 'client:id,name,phone,email', 'users', 'users:id,name,photo'])
                 ->when(Request::input('search'), function ($query, $search) {
                     $query
                     ->where('name', 'like', "%{$search}%")
@@ -54,7 +54,7 @@ class ProjectController extends Controller
                     "edit_url"      => URL::route('projects.edit', $project->id),
                     "show_url"      => URL::route('projects.show', $project->id),
                 ]),
-            'clients'  => Client::all(['id','name']),
+            'clients'  => Client::all(['id','name', 'email', 'phone', 'photo']),
             'users'    => User::all(['id','name', 'photo', 'email']),
             'filters'  => Request::only(['search','perPage']),
             'main_url' => URL::route('projects.index'),
@@ -148,11 +148,12 @@ class ProjectController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
      */
     public function edit($id)
     {
-        //
+        return Project::with(['user', 'users', 'clients', 'client'])->findOrFail($id);
+
     }
 
     /**
@@ -164,7 +165,34 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $project = Project::findOrFail($id);
+        $filePath = "";
+
+        if (Request::hasFile('files')) {
+            $filePath = Request::file('files')->store('image', 'public');
+            $project->files = $filePath;
+            $project->save();
+        }
+
+        $project->update([
+            "name"        => Request::input('name'),
+            "user_id"     => Auth::id(),
+            "client_id"   => Request::input('client_id'),
+            "date"        => Request::input('date'),
+            "start"       => Request::input('start_date'),
+            "end"         => Request::input('end_date'),
+            "description" => Request::input('project_details'),
+            "credential"  => Request::input('credintials'),
+            "status"      => Request::input('status'),
+        ]);
+
+
+        $project->clients()->sync(Request::all('client_id'));
+        $agents = Request::input('agents');
+        if (count($agents)) {
+            $project->users()->sync($this->createArrayGroups($agents));
+        }
+
     }
 
     /**

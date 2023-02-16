@@ -97,6 +97,7 @@ Route::prefix('admin')->group(function(){
         Route::resource('purposes', PurposeController::class);
         // projects management
         Route::resource('projects', ProjectController::class);
+        Route::post('projects/{id}', [ProjectController::class, 'update']);
         // transaction management
         Route::resource('transaction', TransactionController::class);
         Route::post('quotation/transaction', [TransactionController::class, 'saveQuotationTransaction'])->name('saveQuotationTransaction');

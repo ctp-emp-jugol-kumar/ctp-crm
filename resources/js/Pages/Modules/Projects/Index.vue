@@ -51,7 +51,7 @@
                                             <th class="sorting">Project Name</th>
                                             <th class="sorting">Delivery Date</th>
                                             <th class="sorting">Developers</th>
-                                            <th class="sorting">Project Status</th>
+<!--                                            <th class="sorting">Project Status</th>-->
                                             <th class="sorting">Project Progress</th>
                                             <th class="sorting">Created At</th>
                                             <th class="sorting">Actions</th>
@@ -82,11 +82,11 @@
                                                          class="avatar pull-up"
                                                          data-bs-original-title="Elicia Rieske"
                                                          v-for="(developer, index) in projects.project.users" :key="developer.id">
-                                                        <img :src="projects.project.files" alt="Avatar" height="30" width="30">
+                                                        <img :src="developer.photo" alt="Avatar" height="30" width="30">
                                                     </div>
                                                 </div>
                                             </th>
-                                            <td>
+<!--                                            <td>
                                                 <span
                                                     class="badge"
                                                     :class="{
@@ -98,7 +98,7 @@
                                                 }">
                                                     {{ projects.project.status }}
                                                 </span>
-                                            </td>
+                                            </td>-->
                                             <td>
                                                 <div class="progress" style="height: 7px;">
                                                     <div role="progressbar"
@@ -121,13 +121,44 @@
                                             <td>{{ projects.create_at }}</td>
 
                                             <td>
+
+<!--
+                                                <div class="btn-group dropup dropdown-icon-wrapper">
+                                                    <button type="button"
+                                                            class="btn dropdown-toggle dropdown-toggle-split waves-effect waves-float waves-light"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                                                    </button>
+
+                                                    <div class="dropdown-menu">
+                                                        <span class="dropdown-item">
+                                                            <a :href="projects.show_url"
+                                                               class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
+                                                                <Icon title="eye"/>
+                                                            </a>
+                                                        </span>
+                                                        <span class="dropdown-item"
+                                                              @click="editProject(projects.edit_url)">
+                                                            <Icon title="pencil"/>
+                                                            <span class="ms-1">Edit</span>
+                                                        </span>
+                                                        <span class="dropdown-item"
+                                                              @click="deleteItemModal(projects.id)">
+                                                            <Icon title="trash"/>
+                                                           <span class="ms-1">Delete</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+-->
+
+
                                                 <div class="demo-inline-spacing">
                                                     <a :href="projects.show_url"
                                                             class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
                                                         <Icon title="eye"/>
                                                     </a>
 
-                                                    <button type="button" @click="editClient(projects.edit_url)"
+                                                    <button type="button" @click="editProject(projects.edit_url)"
                                                             class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="pencil"/>
                                                     </button>
@@ -155,7 +186,7 @@
     </div>
 
 
-    <Modal id="addItemModal" title="Add New Client" v-vb-is:modal size="lg">
+    <Modal id="addItemModal" title="Add New Project" v-vb-is:modal size="lg">
         <form @submit.prevent="createProject">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -305,13 +336,13 @@
         </form>
     </Modal>
 
-<!--
-    <Modal id="editClient" title="Show Client" v-vb-is:modal size="lg">
-        <form @submit.prevent="updateClientForm(editData.id)">
+
+    <Modal id="editItemModal" title="Update Project" v-vb-is:modal size="lg">
+        <form @submit.prevent="updateProject(editData.id)">
             <div class="modal-body">
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Name:
+                        <label>Project Name:
                             <Required/>
                         </label>
                         <div class="">
@@ -320,80 +351,147 @@
                         </div>
                     </div>
                     <div class="col-md">
-                        <label>Email: <span class="text-danger">*</span></label>
+                        <label>Client: <span class="text-danger">*</span></label>
                         <div class="">
-                            <input v-model="updateForm.email" type="email" placeholder="eg.example@creativetechpark.com"
-                                   class="form-control">
-                            <span v-if="errors.email" class="error text-sm text-danger">{{ errors.email }}</span>
+                            <v-select v-model="updateForm.client_id" :options="clients"
+                                      :reduce="client => client.id" label="name"
+                                      placeholder="Select Client">
+                                    <template v-slot:option="option">
+                                        <li class="d-flex align-items-start py-1">
+                                            <div class="avatar me-75">
+                                                <img :src="`${option.photo}`" alt="" width="38" height="38">
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-between w-100">
+                                                <div class="me-1 d-flex flex-column">
+                                                    <strong class="mb-25">{{ option.name }}</strong>
+                                                    <span >{{ option.email }}</span>
+                                                    <span >{{ option.phone }}</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </template>
+                            </v-select>
+
+                            <InputFieldError :errors="errors.client_id"/>
                         </div>
                     </div>
                 </div>
+
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Secondary Email: </label>
-                        <input v-model="updateForm.secondary_email" type="email" placeholder="second.eg@ctpbd.com"
-                               class="form-control">
-                        <span v-if="errors.secondary_email" class="error text-sm text-danger">{{
-                                errors.secondary_email
-                            }}</span>
+                        <label>Date :
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <Datepicker v-model="updateForm.date" :monthChangeOnScroll="false"
+                                        placeholder="Select Date" autoApply></Datepicker>
+                            <InputFieldError :errors="errors.date"/>
+                        </div>
                     </div>
+
                     <div class="col-md">
-                        <label>Phone: <span class="text-danger">*</span></label>
-                        <input v-model="updateForm.phone" type="text" placeholder="+88017********" class="form-control">
-                        <span v-if="errors.phone" class="error text-sm text-danger">{{ errors.phone }}</span>
+                        <label>Start date :
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <Datepicker v-model="updateForm.start_date"
+                                        :monthChangeOnScroll="false"
+                                        placeholder="Select Date" autoApply></Datepicker>
+                            <InputFieldError :errors="errors.valid_until"/>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md">
+                        <label>End date :
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <Datepicker v-model="updateForm.end_date"
+                                        :monthChangeOnScroll="false"
+                                        placeholder="Select Date" autoApply></Datepicker>
+                            <InputFieldError :errors="errors.valid_until"/>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row mb-1">
+                    <div class="col-md-12">
+                        <label>Project Description  :
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <TextEditor v-model="updateForm.credintials"></TextEditor>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <label>Project Credential's : </label>
+                        <div class="">
+                            <TextEditor v-model="updateForm.project_details"></TextEditor>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Upload Files</label>
+                        <ImageUploader v-model="updateForm.files" label="Project Files" />
                     </div>
                 </div>
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Secondary Phone: </label>
-                        <input v-model="updateForm.secondary_phone" type="text" placeholder="+88017********"
-                               class="form-control">
-                        <span v-if="errors.secondary_phone" class="error text-sm text-danger">{{
-                                errors.secondary_phone
-                            }}</span>
+                        <label>Project Status: </label>
+
+                        <v-select v-model="updateForm.status"
+                                  label="name"
+                                  :options="status"
+                                  placeholder="~~Select Sub Category~~"
+                                  :reduce="optoin"></v-select>
+
                     </div>
+
                     <div class="col-md">
-                        <label>Company: </label>
-                        <input v-model="updateForm.company" type="text" placeholder="Enter Company Name"
-                               class="form-control">
-                        <span v-if="errors.company" class="error text-sm text-danger">{{ errors.company }}</span>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Address: </label>
-                        <textarea v-model="updateForm.address" type="text" placeholder="Enter Full Address" rows="5"
-                                  class="form-control"></textarea>
-                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.address }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Nots: </label>
-                        <textarea v-model="updateForm.note" type="text" placeholder="Enter note messages" rows="5"
-                                  class="form-control"></textarea>
-                        <span v-if="errors.note" class="error text-sm text-danger">{{ errors.note }}</span>
+                        <label>Assign Developers: </label>
+                        <v-select
+                            multiple
+                            v-model="updateForm.agents"
+                            :options="users"
+                            placeholder="Search Country Name"
+                            :reduce="user => user.id"
+                            label="name">
+                            <template v-slot:option="option">
+                                <li class="d-flex align-items-start py-1">
+                                    <div class="avatar me-75">
+                                        <img :src="`${option.photo}`" alt="" width="38" height="38">
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="me-1 d-flex flex-column">
+                                            <strong class="mb-25">{{ option.name }}</strong>
+                                            <span >{{ option.email }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </template>
+                        </v-select>
                     </div>
                 </div>
 
                 <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Assign Agent: </label>
-                        <select class="form-control" v-model="updateForm.status">
-                            <option v-for="option in status" :value="option" :selected="option === 'New Lead'">{{ option }}
-                            </option>
-                        </select>
-
-                    </div>
-                    <div class="col-md">
-                        <label>Assign Agent: </label>
-                        <select class="form-control" v-model="updateForm.agents" multiple>
-                            <option v-for="user in users" :value="user.id">{{ user.name }}</option>
-                        </select>
+                    <div class="col-md-12 mt-2">
+                        <label>Nots : </label>
+                        <div class="">
+                            <TextEditor v-model="updateForm.note"></TextEditor>
+                        </div>
                     </div>
                 </div>
             </div>
 
+
             <div class="modal-footer">
-                <button :disabled="createForm.processing" type="submit"
+                <button :disabled="updateForm.processing" type="submit"
                         class="btn btn-primary waves-effect waves-float waves-light">Submit
                 </button>
                 <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
@@ -401,7 +499,8 @@
                 </button>
             </div>
         </form>
-    </Modal>-->
+    </Modal>
+
 
 </template>
 
@@ -433,7 +532,6 @@
     });
 
 
-    const editData = ref([]);
 
 
     const createForm = useForm({
@@ -454,18 +552,23 @@
         processing: Boolean,
     })
 
-    // const updateForm = useForm({
-    //     name: "",
-    //     email: "",
-    //     secondary_email: "",
-    //     phone: "",
-    //     secondary_phone: "",
-    //     company: "",
-    //     address: "",
-    //     note: "",
-    //     status: "",
-    //     agents: null,
-    // })
+    const updateForm = useForm({
+        name: null,
+        note: null,
+        status: null,
+        date:null,
+        start_date:null,
+        end_date:null,
+        agents:[],
+        client_id:null,
+        descriptions:null,
+        credintials:null,
+        project_details:null,
+
+        files:null,
+
+        processing: Boolean,
+    })
 
     const status = [
         'New Project',
@@ -531,8 +634,33 @@
         })
     }
 
-    const updateClientForm = (id) => {
-        Inertia.put('clients/' + id, updateForm, {
+    const editData = ref(null);
+    const editProject = (url) => {
+        axios.get(url).then(res => {
+            editData.value = res.data;
+
+            updateForm.name = res.data.name;
+            updateForm.note = res.data.note;
+            updateForm.status = res.data.status;
+            updateForm.date = res.data.date;
+            updateForm.start_date = res.data.start_date;
+            updateForm.end_date = res.data.end_date;
+            res.data.users.map(item => updateForm.agents.push(item));
+            updateForm.client_id = res.data.client_id ?? null;
+            updateForm.descriptions = res.data.descriptions;
+            updateForm.credintials = res.data.credintials;
+            updateForm.project_details =res.data.project_details;
+
+            console.log(res);
+
+
+            document.getElementById('editItemModal').$vb.modal.show();
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+    const updateProject = (id) => {
+        Inertia.post(props.main_url+"/"+ id, updateForm, {
             preserveState: true,
             onStart: () => {
                 createForm.processing = true
@@ -541,8 +669,8 @@
                 createForm.processing = false
             },
             onSuccess: () => {
-                document.getElementById('editClient').$vb.modal.hide()
-                createForm.reset()
+                document.getElementById('editItemModal').$vb.modal.hide()
+                updateForm.reset()
                 Swal.fire(
                     'Saved!',
                     'Your file has been Updated.',
@@ -552,25 +680,6 @@
         })
     }
 
-    const editClient = (url) => {
-        axios.get(url).then(res => {
-            editData.value = res.data;
-            //
-            // updateForm.name = res.data.name;
-            // updateForm.email = res.data.email;
-            // updateForm.secondary_email = res.data.secondary_email;
-            // updateForm.phone = res.data.phone;
-            // updateForm.secondary_phone = res.data.secondary_phone;
-            // updateForm.company = res.data.company;
-            // updateForm.address = res.data.address;
-            // updateForm.note = res.data.note;
-            // updateForm.status = res.data.status;
-
-            document.getElementById('editClient').$vb.modal.show();
-        }).catch(err => {
-            console.log(err);
-        });
-    }
 
     // const showProject = (url) =>{
     //     Inertia.get(url, {
