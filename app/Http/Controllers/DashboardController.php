@@ -28,12 +28,9 @@ class DashboardController extends Controller
      */
     public function __invoke(Request $request)
     {
-
-//        Auth::user()->
-//        return "ok";
-
-//        return Auth::user()->getPermissionsViaRoles();
-
+        if (!auth()->user()->can('dashboard.show')){
+            abort(401);
+        }
 
         return Inertia::render('Test', [
             "data" => [

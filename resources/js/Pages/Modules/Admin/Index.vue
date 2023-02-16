@@ -36,6 +36,7 @@
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Advanced Search</h4>
                                     <button
+                                        v-if="this.$page.props.auth.user.can.includes('user.create') || this.$page.props.auth.user.role === 'Administrator'"
                                         class="dt-button add-new btn btn-primary"
                                         @click="addDataModal"
                                     >
@@ -98,16 +99,19 @@
                                             <td>
                                                 <div class="demo-inline-spacing">
                                                     <Link :href="user.show_url"
-                                                        type="button"
+                                                          v-if="this.$page.props.auth.user.can.includes('user.show') || this.$page.props.auth.user.role === 'Administrator'"
+                                                          type="button"
                                                         class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
                                                     </Link>
                                                     <button
+                                                        v-if="this.$page.props.auth.user.can.includes('user.edit') || this.$page.props.auth.user.role === 'Administrator'"
                                                         type="button"
                                                         class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="pencil" />
                                                     </button>
                                                     <button @click="deleteItemModal(user.id)"
+                                                            v-if="this.$page.props.auth.user.can.includes('user.delete') || this.$page.props.auth.user.role === 'Administrator'"
                                                             type="button"
                                                             class="btn btn-icon btn-icon rounded-circle aves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash" />

@@ -18,6 +18,9 @@ class AdminController extends Controller
      */
     public function index()
     {
+        if (!auth()->user()->can('user.index')){
+            abort(404);
+        }
 
         return inertia('Modules/Admin/Index', [
             'users' => User::query()
@@ -54,6 +57,9 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+        if (!auth()->user()->can('user.create')){
+            abort(404);
+        }
         $image_path = "";
         if (Request::hasFile('photo')){
             $image_path = Request::file('photo')->store('image', 'public');
@@ -77,6 +83,9 @@ class AdminController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->can('user.show')){
+            abort(404);
+        }
         $user = User::findOrFail($id)->load('invoices', 'projects', 'roles');
         return inertia('Modules/Admin/Show', [
             "user" => $user,

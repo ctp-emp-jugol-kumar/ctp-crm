@@ -159,12 +159,12 @@
                                     <span class="menu-item text-truncate" data-i18n="Login">Role & Permissions</span>
                                 </Link>
                             </li>
-                            <li v-if="this.$page.props.auth.user.can.includes('user.create') || this.$page.props.auth.user.role == 'Administrator' ">
+<!--                            <li v-if="this.$page.props.auth.user.can.includes('user.create') || this.$page.props.auth.user.role == 'Administrator' ">
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/users/create">
                                     <vue-feather type="circle" />
                                     <span class="menu-item text-truncate" data-i18n="Login">Create user</span>
                                 </Link>
-                            </li>
+                            </li>-->
                             <li v-if="this.$page.props.auth.user.can.includes('user.index') || this.$page.props.auth.user.role == 'Administrator' ">
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/users">
                                     <vue-feather type="circle" />

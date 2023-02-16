@@ -13,6 +13,7 @@
                                     <h4 class="card-title">Clients Information's </h4>
 <!--                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal" data-bs-target="#addItemModal">Add Client</button>-->
                                     <button
+                                        v-if="this.$page.props.auth.user.can.includes('client.show') || this.$page.props.auth.user.role === 'Administrator'"
                                         class="dt-button add-new btn btn-primary"
                                         @click="addDataModal"
                                     >
@@ -82,11 +83,13 @@
                                                         <Icon title="eye" />
                                                     </Link>
                                                     <button type="button" @click="editClient(user.show_url)"
+                                                            v-if="this.$page.props.auth.user.can.includes('client.edit') || this.$page.props.auth.user.role === 'Administrator'"
                                                             class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="pencil"/>
                                                     </button>
 
                                                     <button @click="deleteItemModal(user.id)" type="button"
+                                                            v-if="this.$page.props.auth.user.can.includes('client.delete') || this.$page.props.auth.user.role === 'Administrator'"
                                                             class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash"/>
                                                     </button>
