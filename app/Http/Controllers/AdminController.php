@@ -79,7 +79,7 @@ class AdminController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @return array
      */
     public function show($id)
     {
@@ -87,6 +87,9 @@ class AdminController extends Controller
             abort(404);
         }
         $user = User::findOrFail($id)->load('invoices', 'projects', 'roles');
+        if(Request::input("api")){
+            return $user;
+        }
         return inertia('Modules/Admin/Show', [
             "user" => $user,
         ]);
@@ -101,7 +104,21 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->update([
+            'name' => Request::input('name'),
+            'email' => Request::input('email'),
+            'phone' => Request::input('phone'),
+            'address' => Request::input('address')
+        ]);
+        $user->roles()->sync(Request::input('roles_name'));
+        $image_path = "";
+        if (Request::hasFile('photo')){
+            $image_path = Request::file('photo')->store('image', 'public');
+            $user->photo = $image_path;
+            $user->save();
+        }
+        return back();
     }
 
     /**

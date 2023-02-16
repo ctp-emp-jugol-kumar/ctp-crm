@@ -36,7 +36,7 @@
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Advanced Search</h4>
                                     <button
-                                        v-if="this.$page.props.auth.user.can.includes('user.create') || this.$page.props.auth.user.role === 'Administrator'"
+                                        v-if="this.$page.props.auth.user.can.includes('user.create') || this.$page.props.auth.user.role == 'Administrator' "
                                         class="dt-button add-new btn btn-primary"
                                         @click="addDataModal"
                                     >
@@ -99,19 +99,20 @@
                                             <td>
                                                 <div class="demo-inline-spacing">
                                                     <Link :href="user.show_url"
-                                                          v-if="this.$page.props.auth.user.can.includes('user.show') || this.$page.props.auth.user.role === 'Administrator'"
+                                                          v-if="this.$page.props.auth.user.can.includes('user.show') || this.$page.props.auth.user.role == 'Administrator' "
                                                           type="button"
                                                         class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
                                                     </Link>
                                                     <button
-                                                        v-if="this.$page.props.auth.user.can.includes('user.edit') || this.$page.props.auth.user.role === 'Administrator'"
+                                                        v-if="this.$page.props.auth.user.can.includes('user.edit') || this.$page.props.auth.user.role == 'Administrator' "
                                                         type="button"
+                                                        @click="editUser(user.show_url)"
                                                         class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="pencil" />
                                                     </button>
                                                     <button @click="deleteItemModal(user.id)"
-                                                            v-if="this.$page.props.auth.user.can.includes('user.delete') || this.$page.props.auth.user.role === 'Administrator'"
+                                                            v-if="this.$page.props.auth.user.can.includes('user.delete') || this.$page.props.auth.user.role == 'Administrator' "
                                                             type="button"
                                                             class="btn btn-icon btn-icon rounded-circle aves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash" />
@@ -182,17 +183,87 @@
                         <Image  label="Profile Picture" v-model="createForm.photo"/>
                     </div>
                     <div class="col-md">
-                        <select class="form-control" multiple v-model="createForm.roles_name"
-                                 placeholder="Assign User">
-                            <option disabled selected> ~~ Assign User Roles ~~</option>
-                            <option v-for="role in roles" :value="role.name">{{ role.name }}</option>
-                        </select>
+                        <v-select
+                            multiple
+                            v-model="createForm.roles_name"
+                            :options="roles"
+                            placeholder="Search Country Name"
+                            :reduce="role => role.id"
+                            label="name">
+                        </v-select>
+
                     </div>
                 </div>
                 <div class="row mb-1">
                     <div class="col-md">
                         <label>Address: </label>
                         <textarea v-model="createForm.address" type="text" placeholder="Enter Full Address" rows="5" class="form-control"></textarea>
+                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.address }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button :disabled="createForm.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit
+                </button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel
+                </button>
+            </div>
+        </form>
+    </Modal>
+
+
+    <Modal id="editItemModal" title="Edit User" v-vb-is:modal size="lg">
+        <form @submit.prevent="updateUser(editData.id)">
+            <div class="modal-body">
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Name:
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <input v-model="updateForm.name" type="text" placeholder="Name" class="form-control">
+                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <label>Email: <span class="text-danger">*</span></label>
+                        <div class="">
+                            <input v-model="updateForm.email" type="email" placeholder="eg.example@creativetechpark.com"
+                                   class="form-control">
+                            <span v-if="errors.email" class="error text-sm text-danger">{{ errors.email }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Phone: <span class="text-danger">*</span></label>
+                        <input v-model="updateForm.phone" type="text" placeholder="+88017********" class="form-control">
+                        <span v-if="errors.phone" class="error text-sm text-danger">{{ errors.phone }}</span>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <Image  label="Profile Picture" v-model="updateForm.photo"/>
+                    </div>
+                    <div class="col-md">
+                        <v-select
+                            multiple
+                            v-model="updateForm.roles_name"
+                            :options="roles"
+                            placeholder="Search Country Name"
+                            :reduce="role => role.id"
+                            label="name">
+                        </v-select>
+
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Address: </label>
+                        <textarea v-model="updateForm.address" type="text" placeholder="Enter Full Address" rows="5" class="form-control"></textarea>
                         <span v-if="errors.name" class="error text-sm text-danger">{{ errors.address }}</span>
                     </div>
                 </div>
@@ -224,6 +295,7 @@
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
+    import axios from "axios";
 
     let props = defineProps({
         users: Object,
@@ -235,6 +307,20 @@
     });
 
     let createForm = useForm({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        photo:"",
+        password:"",
+        password_confirmation:"",
+        roles_name:[],
+
+        processing: Boolean,
+    })
+
+
+    let updateForm = useForm({
         name: "",
         email: "",
         phone: "",
@@ -269,6 +355,41 @@
             },
         })
     }
+
+    const editData = ref(null);
+    const editUser = (url) =>{
+        axios.get(url+"?api=true").then((res) =>{
+            editData.value = res.data
+            updateForm.name  = res.data.name;
+            updateForm.email = res.data.email;
+            updateForm.phone = res.data.phone;
+            updateForm.address = res.data.address;
+            res.data.roles.map(item => updateForm.roles_name = item.id);
+            document.getElementById('editItemModal').$vb.modal.show();
+        }).catch((err) => console.log(err))
+    }
+
+
+    const updateUser = (id) => {
+        Inertia.post(`users/${id}`, updateForm, {
+            preserveState: true,
+            onStart: () => {
+                createForm.processing = true
+            },
+            onFinish: () => {
+                createForm.processing = false
+            },
+            onSuccess: () => {
+                document.getElementById('addItemModal').$vb.modal.hide()
+                createForm.reset()
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Saved.',
+                    'success'
+                )
+            },
+        })
+    }
     let deleteItemModal = (id) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -280,20 +401,23 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Inertia.delete(adminPath.value + '/users/' + id, { preserveState: true, replace: true, onSuccess: page => {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
-                        )
-                    },
-                    onError: errors => {
-                        Swal.fire(
-                            'Oops...',
-                            'Something went wrong!',
-                            'error'
-                        )
-                    }})
+                Inertia.delete(adminPath.value + '/users/' + id, {
+                preserveState: true,
+                replace: true,
+                onSuccess: page => {
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                },
+                onError: errors => {
+                    Swal.fire(
+                        'Oops...',
+                        'Something went wrong!',
+                        'error'
+                    )
+                }})
             }
         })
     };

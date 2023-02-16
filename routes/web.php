@@ -48,6 +48,7 @@ Route::prefix('admin')->group(function(){
         Route::get('dashboard', DashboardController::class);
         // user management
         Route::resource('users', AdminController::class);
+        Route::post('users/{id}', [AdminController::class, 'update']);
         // user authorizations
         Route::resource('authorizations', AutorizaitonController::class);
         // clients management

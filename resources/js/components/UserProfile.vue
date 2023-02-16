@@ -21,7 +21,7 @@
                                         <div class="d-flex justify-content-between flex-column col-xl-6 col-21">
                                             <div class="d-flex justify-content-start">
                                             <span class="b-avatar badge-light-danger rounded">
-                                                <img class="rounded me-2"  style="width: 140px;height: 140px;" :src="props.image" alt="avatar">
+                                                <img :src="props.user.photo ?? $page.props.auth.MAIN_URL+props.image" class="rounded me-2"  style="width: 140px;height: 140px;"  alt="avatar">
                                             </span>
                                                 <div class="d-flex flex-column ml-1">
                                                     <div class="mb-1">

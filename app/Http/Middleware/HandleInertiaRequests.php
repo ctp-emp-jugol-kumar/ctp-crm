@@ -55,6 +55,7 @@ class HandleInertiaRequests extends Middleware
                     'can' => $can
                 ],
                 'ADMIN_URL' => 'http://127.0.0.1:8000/admin',
+                'MAIN_URL' => config('app.url'),
             ] : null
         ]);
     }
