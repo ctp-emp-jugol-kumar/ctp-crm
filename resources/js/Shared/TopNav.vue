@@ -71,12 +71,12 @@
                         </a>
                     </div>
                 </li>
-                <li class="nav-item nav-search">
+<!--                <li class="nav-item nav-search">
                     Logout
-                    <Link preserve-scroll method="post" class="nav-link nav-link-search" href="/admin/logout">
+                    <Link preserve-scroll method="post" as="button" class="nav-link nav-link-search" href="/admin/logout">
                         <vue-feather type="power" />
                     </Link>
-                </li>
+                </li>-->
             </ul>
         </div>
     </nav>

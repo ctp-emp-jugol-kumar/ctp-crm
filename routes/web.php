@@ -7,9 +7,11 @@ use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\DomainController;
+use App\Http\Controllers\ExpanceController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\HostingController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MethodController;
 use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\ProjectController;
@@ -54,6 +56,8 @@ Route::prefix('admin')->group(function(){
         // clients management
         Route::get('clients', [ClientsController::class, 'index']);
         Route::resource('clients', ClientsController::class);
+        // leads management
+        Route::resource('leads', LeadController::class);
         // designs management
         Route::resource('designs', DesignController::class);
         // services management
@@ -101,7 +105,8 @@ Route::prefix('admin')->group(function(){
         // transaction management
         Route::resource('transaction', TransactionController::class);
         Route::post('quotation/transaction', [TransactionController::class, 'saveQuotationTransaction'])->name('saveQuotationTransaction');
-
+        //expanse management
+        Route::resource('expense', ExpanceController::class);
         Route::resource('chat', ChatController::class);
     });
 

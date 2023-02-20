@@ -65,20 +65,20 @@ class RolesAndPermissionsSeeder extends Seeder
                 ]
             ],
             [
-                'module' => "Client",
+                'module' => "Leads",
                 'permissions' => [
-                    'client.show',
-                    'client.index',
-                    'client.create',
-                    'client.edit',
-                    'client.delete'
+                    'leads.show',
+                    'leads.index',
+                    'leads.create',
+                    'leads.edit',
+                    'leads.delete'
                 ],
                 'name' => [
-                    'Show Client',
-                    'Manage Client',
-                    'Create Client',
-                    'Edit Client',
-                    'Delete Client'
+                    'Show Leads',
+                    'Manage Leads',
+                    'Create Leads',
+                    'Edit Leads',
+                    'Delete Leads'
                 ]
             ],
             [
@@ -317,6 +317,23 @@ class RolesAndPermissionsSeeder extends Seeder
                     'Create Note',
                     'Edit Note',
                     'Delete Note'
+                ]
+            ],
+            [
+                'module' => "Expanse",
+                'permissions' => [
+                    'expanse.show',
+                    'expanse.index',
+                    'expanse.create',
+                    'expanse.edit',
+                    'expanse.delete'
+                ],
+                'name' => [
+                    'Show Expanse',
+                    'Manage Expanse',
+                    'Create Expanse',
+                    'Edit Expanse',
+                    'Delete Expanse'
                 ]
             ],
         ];

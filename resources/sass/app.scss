@@ -39,3 +39,30 @@
     height: calc(100vh - 4.45rem) !important;
     overflow-x: scroll !important;
 }
+
+
+
+[data-title]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 0.5s;
+    visibility: visible;
+}
+[data-title]:after {
+    content: attr(data-title);
+    background-color: #000000ba;
+    color: #fff;
+    font-size: 10px;
+    position: absolute;
+    padding: 7px 10px;
+    bottom: 17px;
+    left: 0;
+    border-radius: 5px 5px 5px 0px;
+    white-space: nowrap;
+    opacity: 0;
+    border: none !important;
+    z-index: 99999;
+    visibility: hidden;
+}
+[data-title] {
+    position: relative;
+}

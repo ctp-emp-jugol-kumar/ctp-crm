@@ -27,7 +27,7 @@ class ClientsController extends Controller
 
         return inertia('Modules/Clients/Index', [
             $search = Request::input('search'),
-            'clients' => Client::query()->with('projects')
+            'clients' => Client::query()->with('projects')->where('status', 'Converted to Customer')
                 ->when(Request::input('search'), function ($query, $search) {
                     $query
                         ->where('email', 'like', "%{$search}%")
