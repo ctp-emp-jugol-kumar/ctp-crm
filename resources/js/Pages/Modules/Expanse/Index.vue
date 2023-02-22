@@ -10,7 +10,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
-                                    <h4 class="card-title">Methods Information's </h4>
+                                    <h4 class="card-title">Expanse Information's </h4>
                                     <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
                                             data-bs-target="#createData"
                                     >Add Method</button>
@@ -31,34 +31,54 @@
                                             <div
                                                 class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
                                                 <div class="select-search-area">
-                                                    <label>Search:<input v-model="search" type="search" class="form-control" placeholder=""
+                                                    <label>Search:<input v-model="search" type="search" class="form-control" placeholder="Search..."
                                                                          aria-controls="DataTables_Table_0"></label>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <table class="user-list-table table">
+                                    <table class="user-list-table table table-striped">
                                         <thead class="table-light">
                                         <tr class="">
                                             <th class="sorting">#id</th>
+                                            <th class="sorting">Subject</th>
+                                            <th class="sorting">Purpose</th>
+                                            <th class="sorting">Method</th>
+                                            <th class="sorting">Amount</th>
+                                            <th class="sorting">User</th>
                                             <th class="sorting">Created At</th>
                                             <th class="sorting">Actions</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr v-for="hosting in expanses.data" :key="hosting.id">
-                                            <td>{{ hosting.id }}</td>
-                                            <td>{{ hosting.created_at }}</td>
+                                        <tr v-for="exp in expanses.data" :key="exp.id">
                                             <td>
-                                                <div class="demo-inline-spacing">
-                                                    <button type="button" @click="editItem(hosting.show_url)"
-                                                            class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
-                                                        <Icon title="eye"/>
-                                                    </button>
-                                                    <button @click="deleteItemModal(hosting.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
-                                                        <Icon title="trash" />
-                                                    </button>
-                                                </div>
+                                                <a href="#">
+                                                    #EXP_{{ exp.id }}
+                                                </a>
+                                            </td>
+                                            <td>{{ exp.subject }}</td>
+                                            <td>{{ exp.purpse.name }}</td>
+                                            <td>{{ exp.method.name }}</td>
+                                            <td>{{ exp.amount+" Tk" }}</td>
+                                            <td>
+                                                <a class="text-capitalize" :href="`/admin/users/${exp.user.id}`" target="_blank">
+                                                    {{ exp.user.name }}
+                                                </a>
+                                            </td>
+                                            <td>{{ exp.created_at }}</td>
+                                            <td>
+                                                <button type="button"  @click="editItem(exp.show_url)"
+                                                        v-if="this.$page.props.auth.user.can.includes('client.edit') || this.$page.props.auth.user.role == 'Administrator' "
+                                                        class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
+                                                    <Icon title="pencil"/>
+                                                </button>
+
+                                                <button @click="deleteItemModal(exp.id)" type="button"
+                                                        v-if="this.$page.props.auth.user.can.includes('client.delete') || this.$page.props.auth.user.role == 'Administrator' "
+                                                        class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
+                                                    <Icon title="trash"/>
+                                                </button>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -74,16 +94,96 @@
         </div>
     </div>
 
-    <Modal id="createData" title="Edit Hostings" v-vb-is:modal size="md">
+    <Modal id="createData" title="Add New Expanse" v-vb-is:modal size="md">
         <form @submit.prevent="createData">
             <div class="modal-body">
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Method Name: <Required/></label>
-                        <div class="">
-                            <input v-model="updateForm.name" type="text" placeholder="Method Name" class="form-control">
-                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
-                        </div>
+                <div class="row mb-1 flex-column">
+                    <div class="col mb-1">
+                        <label>Purpose <Required/></label>
+                        <v-select v-model="createForm.purpose_id" :options="purposes" :reduce="item => item.id" label="name" placeholder="Select Expanse Purpose"></v-select>
+                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                    </div>
+
+                    <div class="col mb-1">
+                        <label>Expanse Subject <Required/></label>
+                        <input v-model="createForm.subject" type="text" placeholder="e.g expanse subject" class="form-control">
+                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                    </div>
+                    <div class="col mb-1">
+                        <label>Expanse Amount <Required/></label>
+                        <input v-model="createForm.amount" type="text" placeholder="e.g 00.00 Tk" class="form-control">
+                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                    </div>
+                    <div class="col mb-1">
+                        <label>Payment Method <Required/></label>
+                        <v-select v-model="createForm.method_id" :options="methods" :reduce="item => item.id" label="name" placeholder="Select Expanse Purpose"></v-select>
+                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                    </div>
+                    <div class="col-md mb-1">
+                        <label>Expanse Date <Required/></label>
+                        <Datepicker v-model="createForm.expanse_date"
+                                    :monthChangeOnScroll="false"
+                                    placeholder="Select Date" autoApply></Datepicker>
+                        <InputFieldError :errors="errors.valid_until"/>
+                    </div>
+                    <div class="col mb-1">
+                        <ImageUploader v-model="createForm.document" label="Expanse Document" type="text" class="form-control"/>
+                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                    </div>
+                    <div class="col-md-12">
+                        <Textarea v-model="createForm.details" label="Expanse Note" placeholder="e.g explain here about more details in this expanse."></Textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button :disabled="createForm.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit</button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel</button>
+            </div>
+        </form>
+    </Modal>
+
+
+    <Modal id="updateData" title="Update This Expanse" v-vb-is:modal size="md">
+        <form @submit.prevent="updateData(editData.id)">
+            <div class="modal-body">
+                <div class="row mb-1 flex-column">
+                    <div class="col mb-1">
+                        <label>Purpose <Required/></label>
+                        <v-select v-model="updateForm.purpose_id" :options="purposes" :reduce="item => item.id" label="name" placeholder="Select Expanse Purpose"></v-select>
+                        <span v-if="errors.purpose_id" class="error text-sm text-danger">{{ errors.purpose_id }}</span>
+                    </div>
+
+                    <div class="col mb-1">
+                        <label>Expanse Subject <Required/></label>
+                        <input v-model="updateForm.subject" type="text" placeholder="e.g expanse subject" class="form-control">
+                        <span v-if="errors.subject" class="error text-sm text-danger">{{ errors.subject }}</span>
+                    </div>
+                    <div class="col mb-1">
+                        <label>Expanse Amount <Required/></label>
+                        <input v-model="updateForm.amount" type="text" placeholder="e.g 00.00 Tk" class="form-control">
+                        <span v-if="errors.amount" class="error text-sm text-danger">{{ errors.amount }}</span>
+                    </div>
+                    <div class="col mb-1">
+                        <label>Payment Method <Required/></label>
+                        <v-select v-model="updateForm.method_id" :options="methods" :reduce="item => item.id" label="name" placeholder="Select Expanse Purpose"></v-select>
+                        <span v-if="errors.method_id" class="error text-sm text-danger">{{ errors.method_id }}</span>
+                    </div>
+                    <div class="col-md mb-1">
+                        <label>Expanse Date <Required/></label>
+                        <Datepicker v-model="updateForm.expanse_date"
+                                    :monthChangeOnScroll="false"
+                                    placeholder="Select Date" autoApply></Datepicker>
+                        <span v-if="errors.expanse_date" class="error text-sm text-danger">{{ errors.expanse_date }}</span>
+                    </div>
+                    <div class="col mb-1">
+                        <ImageUploader v-model="updateForm.document" label="Expanse Document" type="text" class="form-control"/>
+                        <span v-if="errors.document" class="error text-sm text-danger">{{ errors.document }}</span>
+                    </div>
+                    <div class="col-md-12">
+                        <Textarea v-model="updateForm.details" label="Expanse Note" placeholder="e.g explain here about more details in this expanse."></Textarea>
                     </div>
                 </div>
             </div>
@@ -104,6 +204,10 @@
 import Pagination from "../../../components/Pagination"
 import Icon from '../../../components/Icon'
 import Modal from '../../../components/Modal'
+import ImageUploader from "../../../components/ImageUploader"
+import Textarea from "../../../components/Textarea";
+
+
 import {ref, watch} from "vue";
 import debounce from "lodash/debounce";
 import {Inertia} from "@inertiajs/inertia";
@@ -112,6 +216,8 @@ import {useForm} from "@inertiajs/inertia-vue3";
 import axios from "axios";
 
 let props = defineProps({
+    purposes:[]|null,
+    methods:[]|null,
     expanses: Object,
     filters: Object,
     notification:Object,
@@ -122,16 +228,90 @@ let props = defineProps({
 
 
 let createForm = useForm({
-    name:"",
+    purpose_id:null,
+    method_id:null,
+    subject:null,
+    amount:null,
+    expanse_date:null,
+    document:null,
+    details:null,
 
     processing:Boolean,
 })
 
-let updateForm = useForm({
-    name:"",
-})
 
+let createData = () => {
+    Inertia.post(props.main_url, createForm,{
+        preserveState: true,
+        onStart: () => {
+            createForm.processing = true
+        },
+        onFinish: () => {
+            createForm.processing = false
+        },
+        onSuccess: () => {
+            document.getElementById('createData').$vb.modal.hide()
+            createForm.reset()
+            Swal.fire(
+                'Saved!',
+                'Your file has been Added.',
+                'success'
+            )
+        },
+    })
+}
+
+
+
+let updateForm = useForm({
+    purpose_id:null,
+    method_id:null,
+    subject:null,
+    amount:null,
+    expanse_date:null,
+    document:null,
+    details:null,
+
+    processing:Boolean,
+})
 let editData = ref([]);
+
+const editItem = (url) =>{
+    axios.get(url+"/?data=true").then((res)=>{
+        editData.value = res.data;
+        updateForm.purpose_id = res.data.purpose_id;
+        updateForm.method_id = res.data.method_id;
+        updateForm.subject = res.data.subject;
+        updateForm.amount = res.data.amount;
+        updateForm.expanse_date = res.data.expanse_date;
+        updateForm.details = res.data.details;
+        document.getElementById('updateData').$vb.modal.show()
+    }).catch((err) =>{
+        console.log(err);
+    });
+}
+
+const updateData = (id) =>{
+    updateForm.post(`update-expance/${id}`,{
+        preserveState: true,
+        onStart: () => {
+            createForm.processing = true
+        },
+        onFinish: () => {
+            createForm.processing = false
+        },
+        onSuccess: () => {
+            document.getElementById('updateData').$vb.modal.hide()
+            createForm.reset()
+            Swal.fire(
+                'Saved!',
+                'Your file has been Updated.',
+                'success'
+            )
+        },
+    })
+}
+
 
 let deleteItemModal = (id) => {
     Swal.fire({
@@ -161,29 +341,6 @@ let deleteItemModal = (id) => {
         }
     })
 };
-
-
-let createData = () => {
-    Inertia.post('methods/', updateForm,{
-        preserveState: true,
-        onStart: () => {
-            createForm.processing = true
-        },
-        onFinish: () => {
-            createForm.processing = false
-        },
-        onSuccess: () => {
-            document.getElementById('createData').$vb.modal.hide()
-            createForm.reset()
-            Swal.fire(
-                'Saved!',
-                'Your file has been Updated.',
-                'success'
-            )
-        },
-    })
-}
-
 
 let search = ref(props.filters.search);
 let perPage = ref(props.filters.perPage);

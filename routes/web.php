@@ -107,6 +107,7 @@ Route::prefix('admin')->group(function(){
         Route::post('quotation/transaction', [TransactionController::class, 'saveQuotationTransaction'])->name('saveQuotationTransaction');
         //expanse management
         Route::resource('expense', ExpanceController::class);
+        Route::post('update-expance/{id}', [ExpanceController::class, 'update']);
         Route::resource('chat', ChatController::class);
     });
 

@@ -1,5 +1,5 @@
 <template>
-    <label>{{ label }}: </label>
+    <label>{{ label }} </label>
     <div class="mb-1">
         <span class="d-flex flex-row align-items-center">
             <div class="avatar avatar-xl me-1" v-show="imgUrl">

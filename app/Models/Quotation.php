@@ -23,6 +23,7 @@ class Quotation extends Model
     // public $timestamps = false;
     protected $guarded = ['id'];
     protected $fillable = [
+        'u_id',
         'client_id',
         'subject',
         'valid_until',
@@ -48,7 +49,8 @@ class Quotation extends Model
         'status',
         'user_id',
         'date',
-        'discount'
+        'discount',
+        'price'
     ];
     // protected $hidden = [];
     protected $dates = ['valid_until','date'];

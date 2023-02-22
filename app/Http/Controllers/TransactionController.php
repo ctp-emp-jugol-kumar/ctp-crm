@@ -6,20 +6,46 @@ use App\Models\CustomInvoice;
 use App\Models\Invoice;
 use App\Models\Quotation;
 use App\Models\Transaction;
+use App\Models\TransactionLine;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
 
 class TransactionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
     public function index()
     {
-        //
+        return inertia('Modules/Transaction/Index', [
+            $search = Request::input('search'),
+            'transactions' => TransactionLine::query()
+                ->latest()
+                ->with(['user', 'method'])
+                ->when(Request::input('search'), function ($query, $search) {
+                    $query->where('subject', 'like', "%{$search}%");
+                })->latest()
+                ->paginate(Request::input('perPage') ?? 10)
+                ->withQueryString()
+                ->through(fn($tra) => [
+                    'id' => $tra->id,
+                    'user' => $tra->user,
+                    'method' => $tra->method,
+                    'amount' => $tra->amount,
+                    'type' => $tra->type,
+                    'note' => $tra->note,
+                    'discount' => $tra->discount,
+                    'subject' => $tra->subject_model::findOrFail($tra->subject_id),
+                    'created_at' => $tra->created_at->format('d M Y'),
+                    'show_url' => URL::route('expense.show', $tra->id),
+                ]),
+            'filters' => Request::only(['search','perPage']),
+            "main_url" => Url::route('transaction.index'),
+        ]);
     }
 
     /**
@@ -42,14 +68,28 @@ class TransactionController extends Controller
     {
 
         $invoice = CustomInvoice::with('client')->findOrFail(Request::input('invoice_id'));
-
         $grandTotal = Request::input('grandTotal') ?? 0;
         $discount   = Request::input('discount') ?? 0;
         $payAmount  = Request::input('pay_amount') ?? 0;
         $oldTotalPay = CustomInvoice::findOrFail(Request::input('invoice_id'))->transactions->sum('total_pay') + $payAmount + $discount;
 
 
-        return ["pay_amount" => $payAmount, "discount" => $discount, "grand total" => $grandTotal, "old pay" => $oldTotalPay];
+//        return ["pay_amount" => $payAmount, "discount" => $discount, "grand total" => $grandTotal, "old pay" => $oldTotalPay];
+
+        TransactionLine::create([
+            'u_id' => 'Transaction_'.rand(73862, 5632625),
+            'user_id' => Auth::id(),
+            'type' => 'in',
+            'subject_model' => "App\\Models\\CustomInvoice",
+            'subject_id' => $invoice->id,
+            'note' => Request::input('payment_note'),
+            'amount' => $payAmount + $discount,
+            'discount' => $discount,
+            'method_id' =>Request::input('payment_id'),
+            'date' => now()
+        ]);
+
+
 
         Transaction::create([
             'method_id'  => Request::input('payment_id'),
@@ -75,10 +115,6 @@ class TransactionController extends Controller
 
     public function saveQuotationTransaction(Request $request){
         $quotation = Quotation::with('client')->findOrFail(Request::input('quotation_id'));
-
-//        return $quotation;
-//        exit();
-
         $grandTotal = Request::input('grandTotal') ?? 0;
         $discount   = Request::input('discount') ?? 0;
         $payAmount  = Request::input('pay_amount') ?? 0;
@@ -86,6 +122,18 @@ class TransactionController extends Controller
 //        return ["pay_amount" => $payAmount, "discount" => $discount, "grand total" => $grandTotal, "quotation" => $quotation, "transactions" => $quotation->transactions];
 
 
+        TransactionLine::create([
+            'u_id' => 'Transaction_'.rand(73862, 5632625),
+            'user_id' => Auth::id(),
+            'type' => 'in',
+            'subject_model' => "App\\Models\\Quotation",
+            'subject_id' => $quotation->id,
+            'note' => Request::input('payment_note'),
+            'amount' => $payAmount + $discount,
+            'discount' => $discount,
+            'method_id' =>Request::input('method_id'),
+            'date' => now()
+        ]);
 
         Transaction::create([
             'method_id'  => Request::input('method_id'),

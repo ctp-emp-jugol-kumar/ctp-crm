@@ -37,6 +37,7 @@ class QuotationController extends Controller
     public function index()
     {
         $quotation  = Quotation::query()
+            ->latest()
             ->with([
                 "client:id,name", "user:id,name"])
             ->when(Request::input('search'), function ($query, $search) {
@@ -118,10 +119,10 @@ class QuotationController extends Controller
 //        ]);
 
 
-
         $quotation = Quotation::create([
-            'user_id'             => Auth::id(),
-            'client_id'           => Request::input('client_id'),
+            'u_id' => 'Quotation_'.rand(73862, 5632625),
+            'user_id'            => Auth::id(),
+            'client_id'          => Request::input('client_id'),
             'subject'            => Request::input('subject'),
             'date'               => Request::input('date'),
             'valid_until'        => Request::input('valid_until'),
@@ -134,6 +135,9 @@ class QuotationController extends Controller
         $quotationHostings       = Request::input('hostings');
         $quotationWorks          = Request::input('works');
         $quotationPackages       = Request::input('packages');
+
+        $price = 0;
+        $discount = 0;
 
         if (count($quotationDomains)) {
             $data = $quotation->domains()->attach($this->createArrayGroups($quotationDomains));
@@ -163,8 +167,60 @@ class QuotationController extends Controller
                 'quantity'       => $option['quantity'] ?? 1
             ];
         }
+
+        foreach ($quotationsOption as $item) {
+            $price += $item['price'] * $item['quantity'];
+            $discount += $item['discount'];
+        }
+
+        foreach ($this->createArrayGroups($quotationDomains) as $item){
+            $price += $item['price'] * $item['quantity'];
+            $discount += $item['discount'];
+        }
+
+        foreach ($this->createArrayGroups($quotationHostings) as $item){
+            $price += $item['price'] * $item['quantity'];
+            $discount += $item['discount'];
+        }
+
+        foreach ($this->createArrayGroups($quotationPackages) as $item){
+            $price += $item['price'] * $item['quantity'];
+            $discount += $item['discount'];
+        }
+        foreach ($this->createArrayGroups($quotationWorks) as $item){
+            $price += $item['price'] * $item['quantity'];
+            $discount += $item['discount'];
+        }
+
+        $quotation->price = $price;
+        $quotation->discount = $discount;
+        $quotation->save();
+
         $quotation->quotationItems()->createMany($quotationsOption);
         return redirect()->route('quotations.index');
+
+
+
+//        $totalPrice = 0;
+//        $totalDiscount = 0;
+//        foreach (Request::input('quatations') as $item){
+//            $totalPrice += $item['price'];
+//            $totalDiscount += $item['discount'];
+//            InvoiceItem::create([
+//                'invoice_id' => $quotation->id,
+//                'item_name'  => $item['itemname'],
+//                'price'      => $item['price'],
+//                'discount'   => $item['discount'],
+//            ]);
+//        }
+//
+//        $quotation->total_price =  $totalPrice ?? 0;
+//        $quotation->discount = $totalDiscount ?? 0;
+//        $quotation->save();
+
+
+
+
     }
 
 
@@ -644,6 +700,8 @@ class QuotationController extends Controller
         }
 
 
+        $price = 0;
+        $discount = 0;
         $quotations = Request::input('quatations');
 
         $quotationsOption = [];
@@ -657,6 +715,35 @@ class QuotationController extends Controller
                 'quantity'       => $option['quantity'] ?? 1
             ];
         }
+
+        foreach ($quotationsOption as $item) {
+            $price += $item['price'] * $item['quantity'];
+            $discount += $item['discount'];
+        }
+
+        foreach ($this->createArrayGroups($quotationDomains) as $item){
+            $price += $item['price'] * $item['quantity'];
+            $discount += $item['discount'];
+        }
+
+        foreach ($this->createArrayGroups($quotationHostings) as $item){
+            $price += $item['price'] * $item['quantity'];
+            $discount += $item['discount'];
+        }
+
+        foreach ($this->createArrayGroups($quotationPackages) as $item){
+            $price += $item['price'] * $item['quantity'];
+            $discount += $item['discount'];
+        }
+        foreach ($this->createArrayGroups($quotationWorks) as $item){
+            $price += $item['price'] * $item['quantity'];
+            $discount += $item['discount'];
+        }
+
+        $quotation->price = $price;
+        $quotation->discount = $discount;
+        $quotation->save();
+
 
         $array = $quotation->quotationItems->toArray();
         $deletedItems=[];
@@ -681,7 +768,7 @@ class QuotationController extends Controller
                 }
             }
         }
-        return "updated";
+        return back();
     }
 
     /**

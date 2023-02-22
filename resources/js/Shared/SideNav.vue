@@ -208,6 +208,14 @@
                                     <span class="menu-title text-truncate" data-i18n="Chat">Purposes</span>
                                 </Link>
                             </li>
+
+
+                            <li class=" nav-item" v-if="this.$page.props.auth.user.role == 'Administrator' ">
+                                <Link preserve-scroll class="d-flex align-items-center" href="/admin/transaction">
+                                    <vue-feather type="circle" />
+                                    <span class="menu-title text-truncate" data-i18n="Chat">All Transactions</span>
+                                </Link>
+                            </li>
                         </ul>
                     </li>
 

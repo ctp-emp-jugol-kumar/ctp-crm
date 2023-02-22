@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Exapnse;
+use App\Models\Expanse;
+use App\Models\Method;
+use App\Models\Purpose;
+use App\Models\TransactionLine;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
 
@@ -20,19 +25,24 @@ class ExpanceController extends Controller
 
         return inertia('Modules/Expanse/Index', [
             $search = Request::input('search'),
-            'expanses' => Exapnse::query()
+            'expanses' => Expanse::query()->with(['purpse', 'user','method'])
                 ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('name', 'like', "%{$search}%");
+                    $query->where('subject', 'like', "%{$search}%");
                 })->latest()
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
                 ->through(fn($expance) => [
                     'id' => $expance->id,
-                    'name' => $expance->name,
+                    'user' => $expance->user,
+                    'purpse' => $expance->purpse,
+                    'method' => $expance->method,
+                    'amount' => $expance->amount,
+                    'subject' => $expance->subject,
                     'created_at' => $expance->created_at->format('d M Y'),
                     'show_url' => URL::route('expense.show', $expance->id),
                 ]),
-            'users' => User::all(),
+            'purposes' => Purpose::all(),
+            'methods' => Method::all(),
             'filters' => Request::only(['search','perPage']),
             "main_url" => Url::route('expense.index'),
         ]);
@@ -52,11 +62,49 @@ class ExpanceController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        Request::validate([
+            'purpose_id' => 'required|integer',
+            'subject' => 'required',
+            'amount' => 'required',
+            'method_id' => 'required',
+            'expanse_date' => 'required',
+            'document' => 'max:20000'
+        ]);
+
+        $filePath = "";
+        if (Request::hasFile('document')) {
+            $filePath = Request::file('document')->store('expanses', 'public');
+        }
+
+        $expanse = Expanse::create([
+            'u_id' => 'Expanse_'.rand(73862, 5632625),
+            'purpose_id' => Request::input('purpose_id'),
+            'subject' => Request::input('subject'),
+            'amount' => Request::input('amount'),
+            'method_id' => Request::input('method_id'),
+            'user_id' => Auth::id(),
+            'date' => Request::input('expanse_date'),
+            'details' => Request::input('details'),
+            'document' => $filePath
+        ]);
+
+        TransactionLine::create([
+            'u_id' => 'Transaction_'.rand(73862, 5632625),
+            'user_id' => Auth::id(),
+            'type' => 'out',
+            'subject_model' => "App\\Models\\Expanse",
+            'subject_id' => $expanse->id,
+            'note' => Request::input('details'),
+            'amount' => Request::input('amount'),
+            'method_id' =>Request::input('method_id'),
+            'date' => Request::input('expanse_date')
+        ]);
+
+        return back();
     }
 
     /**
@@ -65,9 +113,12 @@ class ExpanceController extends Controller
      * @param  \App\Models\expanse  $expance
      * @return \Illuminate\Http\Response
      */
-    public function show(expanse $expance)
+    public function show($id)
     {
-        //
+        if (Request::input('data')){
+            return Expanse::with(['purpse', 'user','method'])->findOrFail($id);
+        }
+        return "view";
     }
 
     /**
@@ -88,9 +139,49 @@ class ExpanceController extends Controller
      * @param  \App\Models\expanse  $expance
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, expanse $expance)
+    public function update($id)
     {
-        //
+        $expance = Expanse::findOrFail($id);
+        Request::validate([
+            'purpose_id' => 'required|integer',
+            'subject' => 'required',
+            'amount' => 'required',
+            'method_id' => 'required',
+            'expanse_date' => 'required',
+            'document' => 'nullable|max:20000'
+        ]);
+        $filePath = "";
+        if (Request::hasFile('document')) {
+            $file = Storage::disk('public')->get($expance->document);
+            if ($file != null){
+                Storage::disk('public')->delete($expance->document);
+            }
+            $filePath = Request::file('document')->store('expanses', 'public');
+        }
+        $expance->update([
+            'purpose_id' => Request::input('purpose_id'),
+            'subject' => Request::input('subject'),
+            'amount' => Request::input('amount'),
+            'method_id' => Request::input('method_id'),
+            'user_id' => Auth::id(),
+            'date' => Request::input('expanse_date'),
+            'details' => Request::input('details'),
+            'document' => $filePath
+        ]);
+
+        $transaction = TransactionLine::findOrfail($expance->id);
+        $transaction->update([
+            'user_id' => Auth::id(),
+            'type' => 'out',
+            'subject_id' => $expance->id,
+            'note' => Request::input('details'),
+            'amount' => Request::input('amount'),
+            'method_id' =>Request::input('method_id'),
+            'date' => Request::input('expanse_date')
+        ]);
+
+
+        return back();
     }
 
     /**

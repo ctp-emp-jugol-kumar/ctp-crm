@@ -81,6 +81,7 @@ class InvoiceController extends Controller
 //        ]);
 
         $quotation = CustomInvoice::create([
+            'u_id' => 'Invoice_'.rand(73862, 5632625),
             'user_id'       => Auth::id(),
             'client_id'        => Request::input('client_id'),
             'subject'          => Request::input('subject'),

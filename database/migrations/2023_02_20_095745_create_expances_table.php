@@ -15,10 +15,14 @@ return new class extends Migration
     {
         Schema::create('expanses', function (Blueprint $table) {
             $table->id();
-            $table->string('subject');
+            $table->foreignId('purpose_id')->constrained('purposes');
+            $table->string('subject')->nullable();
             $table->double('amount');
+            $table->foreignId('method_id')->constrained('methods');
             $table->foreignId('user_id')->constrained('users');
+            $table->text('details')->nullable();
             $table->string('document');
+            $table->timestamp('date');
             $table->timestamps();
         });
     }

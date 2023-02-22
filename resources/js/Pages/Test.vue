@@ -10,101 +10,49 @@
     <div class="app-content content ">
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
+
         <section id="dashboard-ecommerce">
             <div class="row match-height">
-                <div class="col-xl-12 col-md-6 col-12">
-                    <div class="card card-statistics">
-                        <div class="card-header">
-                            <h4 class="card-title">Statistics</h4>
-                            <!--                            <div class="d-flex align-items-center">-->
-                            <!--                                <p class="card-text font-small-2 me-25 mb-0">Updated 1 month ago</p>-->
-                            <!--                            </div>-->
-                        </div>
-                        <div class="card-body statistics-body">
-                            <div class="row">
-                                <div class="col-xl col-sm-6 col-12 mb-2 mb-xl-0">
-                                    <div class="d-flex flex-row">
-                                        <div class="avatar bg-light-primary me-2">
-                                            <div class="avatar-content">
-                                                <vue-feather type="users"/>
-                                            </div>
-                                        </div>
-                                        <div class="my-auto">
-                                            <h4 class="fw-bolder mb-0">{{ props.data.clients }}</h4>
-                                            <p class="card-text font-small-3 mb-0">Clients</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl col-sm-6 col-12 mb-2 mb-xl-0">
-                                    <div class="d-flex flex-row">
-                                        <div class="avatar bg-light-info me-2">
-                                            <div class="avatar-content">
-                                                <vue-feather type="refresh-ccw"/>
-                                            </div>
-                                        </div>
-                                        <div class="my-auto">
-                                            <h4 class="fw-bolder mb-0">{{ props.data.users }}</h4>
-                                            <p class="card-text font-small-3 mb-0">Users</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl col-sm-6 col-12 mb-2 mb-sm-0">
-                                    <div class="d-flex flex-row">
-                                        <div class="avatar bg-light-success me-2">
-                                            <div class="avatar-content">
-                                                <vue-feather type="trending-up"/>
-                                            </div>
-                                        </div>
-                                        <div class="my-auto">
-                                            <h4 class="fw-bolder mb-0">{{ props.data.website }}</h4>
-                                            <p class="card-text font-small-3 mb-0">Websits</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl col-sm-6 col-12">
-                                    <div class="d-flex flex-row">
-                                        <div class="avatar bg-light-danger me-2">
-                                            <div class="avatar-content">
-                                                <vue-feather type="trending-down"/>
-                                            </div>
-                                        </div>
-                                        <div class="my-auto">
-                                            <h4 class="fw-bolder mb-0">{{ props.data.work }}</h4>
-                                            <p class="card-text font-small-3 mb-0">Work</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl col-sm-6 col-12">
-                                    <div class="d-flex flex-row">
-                                        <div class="avatar bg-light-secondery me-2">
-                                            <div class="avatar-content">
-                                                <vue-feather type="zap-off"/>
-                                            </div>
-                                        </div>
-                                        <div class="my-auto">
-                                            <h4 class="fw-bolder mb-0">{{ props.data.platforms }}</h4>
-                                            <p class="card-text font-small-3 mb-0">Platforms</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl col-sm-6 col-12">
-                                    <div class="d-flex flex-row">
-                                        <div class="avatar bg-light-warning me-2">
-                                            <div class="avatar-content">
-                                                <vue-feather type="star"/>
-                                            </div>
-                                        </div>
-                                        <div class="my-auto">
-                                            <h4 class="fw-bolder mb-0">{{ props.data.packages }}</h4>
-                                            <p class="card-text font-small-3 mb-0">Packages</p>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="col-md-4 col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="fw-bolder">Total Seals</h1>
+                            <div class="d-flex align-items-center justify-content-between pe-3">
+                                <h2 class="text-success">{{ data.totalSeals }} Tk</h2>
+                                <span class="text-success">
+                                    <vue-feather type="trending-up" size="40"/>
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--/ Statistics Card -->
+                <div class="col-md-4 col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="fw-bolder">Total Expanse</h2>
+                            <div class="d-flex align-items-center justify-content-between pe-3">
+                                <h2 class="text-danger">{{ data.totalExpanse }} Tk</h2>
+                                <span class="text-danger">
+                                    <vue-feather type="trending-down" size="40"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="fw-bolder">Gross Profit</h2>
+                            <div class="d-flex align-items-center justify-content-between pe-3">
+                                <h2 class="text-info">{{ data.totalSeals - data.totalExpanse}} Tk</h2>
+                                <span class="text-info">
+                                    <vue-feather type="pocket" size="40"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -202,6 +150,103 @@
             </div>
         </section>
 
+
+        <section class="row">
+
+            <div class="col-xl-12 col-md-6 col-12">
+                <div class="card card-statistics">
+                    <div class="card-header">
+                        <h4 class="card-title">Statistics</h4>
+                        <!--                            <div class="d-flex align-items-center">-->
+                        <!--                                <p class="card-text font-small-2 me-25 mb-0">Updated 1 month ago</p>-->
+                        <!--                            </div>-->
+                    </div>
+                    <div class="card-body statistics-body">
+                        <div class="row">
+                            <div class="col-xl col-sm-6 col-12 mb-2 mb-xl-0">
+                                <div class="d-flex flex-row">
+                                    <div class="avatar bg-light-primary me-2">
+                                        <div class="avatar-content">
+                                            <vue-feather type="users"/>
+                                        </div>
+                                    </div>
+                                    <div class="my-auto">
+                                        <h4 class="fw-bolder mb-0">{{ props.data.clients }}</h4>
+                                        <p class="card-text font-small-3 mb-0">Clients</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl col-sm-6 col-12 mb-2 mb-xl-0">
+                                <div class="d-flex flex-row">
+                                    <div class="avatar bg-light-info me-2">
+                                        <div class="avatar-content">
+                                            <vue-feather type="refresh-ccw"/>
+                                        </div>
+                                    </div>
+                                    <div class="my-auto">
+                                        <h4 class="fw-bolder mb-0">{{ props.data.users }}</h4>
+                                        <p class="card-text font-small-3 mb-0">Users</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl col-sm-6 col-12 mb-2 mb-sm-0">
+                                <div class="d-flex flex-row">
+                                    <div class="avatar bg-light-success me-2">
+                                        <div class="avatar-content">
+                                            <vue-feather type="trending-up"/>
+                                        </div>
+                                    </div>
+                                    <div class="my-auto">
+                                        <h4 class="fw-bolder mb-0">{{ props.data.website }}</h4>
+                                        <p class="card-text font-small-3 mb-0">Websits</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl col-sm-6 col-12">
+                                <div class="d-flex flex-row">
+                                    <div class="avatar bg-light-danger me-2">
+                                        <div class="avatar-content">
+                                            <vue-feather type="trending-down"/>
+                                        </div>
+                                    </div>
+                                    <div class="my-auto">
+                                        <h4 class="fw-bolder mb-0">{{ props.data.work }}</h4>
+                                        <p class="card-text font-small-3 mb-0">Work</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl col-sm-6 col-12">
+                                <div class="d-flex flex-row">
+                                    <div class="avatar bg-light-secondery me-2">
+                                        <div class="avatar-content">
+                                            <vue-feather type="zap-off"/>
+                                        </div>
+                                    </div>
+                                    <div class="my-auto">
+                                        <h4 class="fw-bolder mb-0">{{ props.data.platforms }}</h4>
+                                        <p class="card-text font-small-3 mb-0">Platforms</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl col-sm-6 col-12">
+                                <div class="d-flex flex-row">
+                                    <div class="avatar bg-light-warning me-2">
+                                        <div class="avatar-content">
+                                            <vue-feather type="star"/>
+                                        </div>
+                                    </div>
+                                    <div class="my-auto">
+                                        <h4 class="fw-bolder mb-0">{{ props.data.packages }}</h4>
+                                        <p class="card-text font-small-3 mb-0">Packages</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/ Statistics Card -->
+        </section>
 
     </div>
     <!-- Dashboard Ecommerce ends -->

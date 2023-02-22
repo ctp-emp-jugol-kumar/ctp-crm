@@ -17,6 +17,10 @@ import "bootstrap";
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 
+
+
+
+
 createInertiaApp({
   resolve: name => {
     let page = require(`./Pages/${name}`).default;
