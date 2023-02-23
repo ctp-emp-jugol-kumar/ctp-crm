@@ -353,8 +353,8 @@
         subject       : null,
         date          : null,
         valid_until   : null,
-        payment_policy: null,
-        Trams_Services: null,
+        payment_policy: paymnetPolicy,
+        Trams_Services: paymnetPolicy,
         status        : null,
 
         works         : [],
@@ -364,7 +364,7 @@
 
         quatations: [
             {
-                itemname: '',
+                item_name: '',
                 price: '',
                 discount: '',
                 quantity: ''
@@ -392,6 +392,25 @@
     props.packages.forEach(function(item, index){
         formData.packages[index] = item;
     });
+
+    const paymnetPolicy = `Parts of a payment policy
+Customers want to know how to pay you for your goods or services. Your policy should include answers to customer bill payment questions:
+
+When do you expect to receive payment?
+
+Include a specific payment date
+Detail charges and interest rates for late payments
+What forms of payment do you accept?
+
+List the payment methods you accept
+You may also want to list payment methods you do not accept
+Where can customers send the payment?
+
+Note the address you want the payment sent to
+Cover available online payment options
+How can customers contact you?
+
+Add your phone number, email, and website`;
 
 
     let worksTitle   = "Select work services"

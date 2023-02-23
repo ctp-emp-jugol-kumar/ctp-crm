@@ -103,6 +103,7 @@ Route::prefix('admin')->group(function(){
         Route::post('projects/{id}', [ProjectController::class, 'update']);
         // transaction management
         Route::resource('transaction', TransactionController::class);
+        Route::post('quotation/update-status', [TransactionController::class, 'chnageQuotationStatus'])->name('chnageQuotationStatus');
         Route::post('quotation/transaction', [TransactionController::class, 'saveQuotationTransaction'])->name('saveQuotationTransaction');
         //expanse management
         Route::resource('expense', ExpanceController::class);

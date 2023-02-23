@@ -92,7 +92,7 @@ class QuotationController extends Controller
     {
         $added = array();
         foreach($items as $item){
-            if (isset($item['p'])){
+            if (isset($item['p']) && $item['p'] == 'true'){
                 $id = $item['id'];
                 $added[$id] = [
                     'price'    => $item['price']    ?? 0,
@@ -117,7 +117,7 @@ class QuotationController extends Controller
 //            'valid_until'        => "required",
 //            'date'               => "required",
 //        ]);
-
+//        return Request::all();
 
         $quotation = Quotation::create([
             'u_id' => 'Quotation_'.rand(73862, 5632625),
@@ -128,7 +128,7 @@ class QuotationController extends Controller
             'valid_until'        => Request::input('valid_until'),
             'payment_policy'     => Request::input('payment_policy'),
             'terms_of_service'   => Request::input('Trams_Services'),
-            'status'             => filled(Request::input('status')),
+            'status'             => Request::input('status')["name"],
         ]);
 
         $quotationDomains        = Request::input('domains');
@@ -136,11 +136,14 @@ class QuotationController extends Controller
         $quotationWorks          = Request::input('works');
         $quotationPackages       = Request::input('packages');
 
+//        return $quotationPackages;
+//        return $this->createArrayGroups($quotationPackages);
+
         $price = 0;
         $discount = 0;
 
         if (count($quotationDomains)) {
-            $data = $quotation->domains()->attach($this->createArrayGroups($quotationDomains));
+             $quotation->domains()->attach($this->createArrayGroups($quotationDomains));
         }
 
         if (count($quotationHostings)) {
@@ -161,7 +164,7 @@ class QuotationController extends Controller
         foreach ($quotations as $option) {
             $quotationsOption[] = [
                 'quotation_id'   => $quotation->id,
-                'itemname'       => $option['itemname'],
+                'item_name'       => $option['item_name'],
                 'discount'       => $option['discount'] ?? 0,
                 'price'          => $option['price']    ?? 0,
                 'quantity'       => $option['quantity'] ?? 1
@@ -380,9 +383,10 @@ class QuotationController extends Controller
             ];
         }
 
+
         foreach ($quotation->quotationItems as $item){
             $mainarray [] =[
-                'name' => $item->name ?? $item->itemname,
+                'name' => $item->name ?? $item->item_name,
                 'price' => $item->price ?? 0,
                 'discount' => $item->discount ?? 0,
                 'quantity' => $item->quantity > 0 ? $item->quantity  : 1,
@@ -401,7 +405,7 @@ class QuotationController extends Controller
                 "discount"   => $item->discount ?? 0,
                 "total_due"  => $item->total_due ?? 0,
                 "old_total_pay" => $item->old_total_pay ?? 0,
-                "date"       => $item->date->format('d M,y'),
+                "date"       => $item->date->format('d/M/Y'),
                 "note"       => $item->note,
             ];
         }
@@ -413,35 +417,31 @@ class QuotationController extends Controller
                 'discount' => 0
             ];
 
-
-
-
-
-
-
         return Inertia::render('Modules/Quotation/NewShow',   [
             "info" => [
-            'quotation'          => $quotation,
-            'dates'              => [
-                'date'           => $quotation->date->format('M-d-Y'),
-                'valid_until'    => $quotation->valid_until->format('M-d-Y'),
-            ],
+                'quotation'          => $quotation,
+                'dates'              => [
+                    'date'           => $quotation->date->format('d/m/Y'),
+                    'valid_until'    => $quotation->valid_until->format('d/m/Y'),
+                ],
 
-            'others_info'        => [
-                "items"          => $mainarray,
-                "create_invoice" => URL::route('quotation.download', $quotation->id)
-            ],
+                'others_info'        => [
+                    "items"          => $mainarray,
+                    "create_invoice" => URL::route('quotation.download', $quotation->id),
+                    "edit_url"     => URL::route('quotations.edit', $quotation->id)
 
-            'quotation_owner'    => [
-                'creator'        => $quotation->user,
-                'client'         => $quotation->client,
-            ],
-            'total_pay'          => $totalPay,
-            'last_payment'       => $quotationLastTransaction,
-            'transactions'       => $transactions,
+                ],
 
-            'payment_methods'    => Method::all(),
-            'payment_url'        => URL::route('saveQuotationTransaction'),
+                'quotation_owner'    => [
+                    'creator'        => $quotation->user,
+                    'client'         => $quotation->client,
+                ],
+                'total_pay'          => $totalPay,
+                'last_payment'       => $quotationLastTransaction,
+                'transactions'       => $transactions,
+
+                'payment_methods'    => Method::all(),
+                'change_status_url'        => URL::route('chnageQuotationStatus'),
         ]
     ]);
 
@@ -659,9 +659,6 @@ class QuotationController extends Controller
      */
     public function update(Request $request, Quotation $quotation)
     {
-
-//        return Request::all();
-
         if(is_integer(Request::input("client_id"))){
             $clientId = Request::input('client_id');
         }else{
@@ -676,7 +673,7 @@ class QuotationController extends Controller
             'valid_until'        => Request::input('valid_until'),
             'payment_policy'     => Request::input('payment_policy'),
             'terms_of_service'   => Request::input('Trams_Services'),
-            'status'             => filled(Request::input('status')),
+            'status'             => Request::input('status')["name"],
         ]);
 
         $quotationDomains        = Request::input('domains');

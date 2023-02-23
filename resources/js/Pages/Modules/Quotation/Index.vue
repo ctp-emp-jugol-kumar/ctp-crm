@@ -40,7 +40,7 @@
                                         <thead class="table-light">
                                         <tr class="">
                                             <th class="sorting">#id</th>
-                                            <th class="sorting">Client</th>
+                                            <th class="sorting">For</th>
                                             <th class="sorting">Created by</th>
                                             <th class="sorting">Date</th>
                                             <th class="sorting">Status</th>
@@ -52,7 +52,10 @@
                                         </thead>
                                         <tbody>
                                         <tr v-for="qut in quotations.data" :key="qut.id">
-                                            <td>{{ qut.id }}</td>
+                                            <td>
+                                                <a :href="qut.show_url" target="_blank">#{{ moment(new Date()).format('YYYYMMD')+qut.id}}</a>
+                                            </td>
+
                                             <td>{{ qut.client_name ?? " " }} </td>
                                             <td>{{ qut.user_name ?? " " }} </td>
                                             <td>{{ qut.date }}</td>
@@ -128,6 +131,7 @@
 <script>
 
     import axios from "axios";
+    import moment from "moment";
 
     export default {
         props: [

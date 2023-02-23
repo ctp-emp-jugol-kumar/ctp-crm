@@ -11,16 +11,13 @@ import { Alert, Button, Carousel, Collapse, Dropdown, Modal, Offcanvas, Popover,
 let vbPlugin = createVbPlugin({ Alert, Button, Carousel, Collapse, Dropdown, Modal, Offcanvas, Popover, ScrollSpy, Tab, Toast, Tooltip  })
 import 'vue-select/dist/vue-select.css';
 import vSelect from 'vue-select'
-// import '@coreui/coreui/dist/css/coreui.min.css'
-import "bootstrap";
 import CoreuiVue from "@coreui/vue";
 
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import al from "@vuepic/vue-datepicker";
-import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
 
-
+import {moment} from "moment";
 
 
 
@@ -41,6 +38,7 @@ createInertiaApp({
       .use(CoreuiVue)
       .use(store)
       .use(CKEditor)
+        .use(moment)
       .component("Link", Link)
       .component("Head", Head)
       .component(VueFeather.name, VueFeather)

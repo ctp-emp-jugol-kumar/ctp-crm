@@ -14,6 +14,7 @@
                                     <!-- Header starts -->
                                     <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
                                         <div>
+
                                             <div class="logo-wrapper">
                                                 <svg viewBox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
                                                     <defs>
@@ -40,25 +41,38 @@
                                                 </svg>
                                                 <h3 class="text-primary invoice-logo">Vuexy</h3>
                                             </div>
-                                            <p class="card-text mb-25">Office 149, 450 South Brand Brooklyn</p>
-                                            <p class="card-text mb-25">San Diego County, CA 91905, USA</p>
-                                            <p class="card-text mb-0">+1 (123) 456 7891, +44 (876) 543 2198</p>
+
+                                            <h3 class="card-text">Creative Tech Park</h3>
+                                            <p class="card-text">Imperial Irish Kingdom, Mo-03 <br>(3rd Floor), Merul Badda, Dhaka 1212</p>
+                                            <p class="card-text mb-0 pb-0">Phone: +8801639-200002</p>
+                                            <p class="card-text">Email: info@creativetechpark.com</p>
+
                                         </div>
                                         <div class="mt-md-0 mt-2">
                                             <h4 class="invoice-title">
-                                                Invoice
-                                                <span class="invoice-number">#3492</span>
+                                                Quotation
+                                                <span class="invoice-number">#{{ moment(new Date()).format('YYYYMMD')+info.quotation.id }}</span>
                                             </h4>
                                             <div class="invoice-date-wrapper">
                                                 <p class="invoice-date-title">Date Issued:</p>
-                                                <p class="invoice-date">25/08/2020</p>
+                                                <p class="invoice-date">{{ info.dates.date }}</p>
                                             </div>
                                             <div class="invoice-date-wrapper">
-                                                <p class="invoice-date-title">Due Date:</p>
-                                                <p class="invoice-date">29/08/2020</p>
+                                                <p class="invoice-date-title">Valid Until:</p>
+                                                <p class="invoice-date">
+                                                    {{ info.dates.valid_until }}
+                                                    <span class="text-info cursor-pointer"  v-c-tooltip="`Quotation Validity ${diffDate} Days`" >
+                                                        <vue-feather type="info" size="10"/>
+                                                    </span>
+                                                </p>
                                             </div>
+                                            <p class="mt-3">Quotation <span class="badge badge-light-primary cursor-pointer "
+                                                                            v-c-tooltip="`Current Quotation Status ${info.quotation.status}`" >
+                                                {{ info.quotation.status }}</span></p>
                                         </div>
+
                                     </div>
+
                                     <!-- Header ends -->
                                 </div>
 
@@ -68,11 +82,15 @@
                                     <div class="row invoice-spacing">
                                         <div class="col-xl-8 p-0">
                                             <h6 class="mb-2">Invoice To:</h6>
-                                            <h6 class="mb-25">Thomas shelby</h6>
-                                            <p class="card-text mb-25">Shelby Company Limited</p>
-                                            <p class="card-text mb-25">Small Heath, B10 0HF, UK</p>
-                                            <p class="card-text mb-25">718-986-6062</p>
-                                            <p class="card-text mb-0">peakyFBlinders@gmail.com</p>
+                                            <h6 class="mb-25" v-if="info.quotation_owner.client.name">{{ info.quotation_owner.client.name }}</h6>
+                                            <p class="card-text mb-25" v-if="info.quotation_owner.client.company">{{ info.quotation_owner.client.company}}</p>
+                                            <p class="card-text mb-25" v-if="info.quotation_owner.client.address">{{ info.quotation_owner.client.address}}</p>
+                                            <p class="card-text mb-25" v-if="info.quotation_owner.client.phone || info.quotation_owner.client.secondary_phone" >
+                                                {{ info.quotation_owner.client.phone ?? info.quotation_owner.client.secondary_phone }}
+                                            </p>
+                                            <p class="card-text mb-0" v-if="info.quotation_owner.client.email || info.quotation_owner.client.secondary_email" >
+                                                {{ info.quotation_owner.client.email || info.quotation_owner.client.secondary_email }}
+                                            </p>
                                         </div>
 
                                     </div>
@@ -84,43 +102,26 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th class="py-1">Task description</th>
-                                            <th class="py-1">Rate</th>
-                                            <th class="py-1">Hours</th>
+                                            <th class="py-1">Service description</th>
+                                            <th class="py-1">Price</th>
+                                            <th class="py-1">Discount</th>
                                             <th class="py-1">Total</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
+                                        <tr v-for="(item, index) in  allData">
                                             <td class="py-1">
-                                                <p class="card-text fw-bold mb-25">Native App Development</p>
-                                                <p class="card-text text-nowrap">
-                                                    Developed a full stack native app using React Native, Bootstrap & Python
-                                                </p>
+                                                <h5 class="card-text fw-bold mb-25 text-capitalize" v-html="item.name"></h5>
+                                                Price: <small>{{ item.price }} * {{ item.quantity }} = {{ item.price * item.quantity }} Tk</small>
                                             </td>
                                             <td class="py-1">
-                                                <span class="fw-bold">$60.00</span>
+                                                <span class="fw-bold"> {{ item.price * item.quantity }} </span>
                                             </td>
                                             <td class="py-1">
-                                                <span class="fw-bold">30</span>
+                                                <span class="fw-bold">{{ item.discount }}</span>
                                             </td>
                                             <td class="py-1">
-                                                <span class="fw-bold">$1,800.00</span>
-                                            </td>
-                                        </tr>
-                                        <tr class="border-bottom">
-                                            <td class="py-1">
-                                                <p class="card-text fw-bold mb-25">Ui Kit Design</p>
-                                                <p class="card-text text-nowrap">Designed a UI kit for native app using Sketch, Figma & Adobe XD</p>
-                                            </td>
-                                            <td class="py-1">
-                                                <span class="fw-bold">$60.00</span>
-                                            </td>
-                                            <td class="py-1">
-                                                <span class="fw-bold">20</span>
-                                            </td>
-                                            <td class="py-1">
-                                                <span class="fw-bold">$1200.00</span>
+                                                <span class="fw-bold">{{ (item.price * item.quantity) - item.discount }} Tk</span>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -138,11 +139,11 @@
                                             <div class="invoice-total-wrapper">
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Subtotal:</p>
-                                                    <p class="invoice-total-amount">$1800</p>
+                                                    <p class="invoice-total-amount">{{ subTotal }} Tk</p>
                                                 </div>
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Discount:</p>
-                                                    <p class="invoice-total-amount">$28</p>
+                                                    <p class="invoice-total-amount">{{ discount }} Tk</p>
                                                 </div>
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Tax:</p>
@@ -151,7 +152,7 @@
                                                 <hr class="my-50" />
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Total:</p>
-                                                    <p class="invoice-total-amount">$1690</p>
+                                                    <p class="invoice-total-amount">{{ grandTotal }} Tk</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -183,11 +184,10 @@
                                     <button class="btn btn-primary w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">
                                         Send Invoice
                                     </button>
-                                    <button class="btn btn-outline-secondary w-100 btn-download-invoice mb-75">Download</button>
-                                    <a class="btn btn-outline-secondary w-100 mb-75" href="./app-invoice-print.html" target="_blank"> Print </a>
-                                    <a class="btn btn-outline-secondary w-100 mb-75" href="./app-invoice-edit.html"> Edit </a>
-                                    <button class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#add-payment-sidebar">
-                                        Add Payment
+                                    <a :href="info.others_info.create_invoice" class="btn btn-outline-secondary w-100 btn-download-invoice mb-75">Download</a>
+                                    <a :href="info.others_info.edit_url" class="btn btn-outline-secondary w-100 mb-75"> Edit </a>
+                                    <button class="btn btn-success w-100" @click="changeStatus">
+                                        Change Status
                                     </button>
                                 </div>
                             </div>
@@ -199,6 +199,30 @@
         </div>
     </div>
 
+    <Modal id="change-status" title="Change Quotation Status" v-vb-is:modal size="sm">
+        <form @submit.prevent="addPayment">
+            <div class="modal-body">
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <v-select v-model="updateForm.status"
+                                  label="name"
+                                  :options="status"
+                                  placeholder="~~Select Sub Category~~"
+                                  :reduce="optoin"></v-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button :disabled="updateForm.processing" type="submit" class="btn btn-primary waves-effect waves-float waves-light">
+                    Change Status
+                </button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel
+                </button>
+            </div>
+        </form>
+    </Modal>
 </template>
 
 <script setup>
@@ -207,31 +231,35 @@ import { computed } from "vue";
 import {useForm} from "@inertiajs/inertia-vue3";
 import {Inertia} from "@inertiajs/inertia";
 import {useDate} from "../../../composables/useDate";
+import Modal from '../../../components/Modal.vue'
+import moment from 'moment';
 let { formatted } = useDate();
 
 let props = defineProps({
     info:Object,
 })
-let createForm = useForm({
-    grandTotal: null,
-    payment_id: null,
-    pay_amount: null,
-    discount: null,
-    payment_note: null,
-    method_id: null,
-    quotation_id:props.info.quotation.id,
+let updateForm = useForm({
+    quotId: props.info.quotation.id,
+    status:props.info.quotation.status,
+    processing:false,
 })
 
-
+const status = [
+    {"name":'New Quotation'}, {"name":'Sent'}, {"name":'Feedback'}, {"name":'Disqualified'}, {"name":'Converted To Invoice'}
+]
+const changeStatus = () =>  document.getElementById('change-status').$vb.modal.show()
 let addPayment = () => {
-    Inertia.post(props.info.payment_url, createForm, {
+    Inertia.post(props.info.change_status_url, updateForm, {
         onSuccess: () => {
-            createForm.reset();
-            alert("saved Transaction")
+            document.getElementById('change-status').$vb.modal.hide()
         }
     })
-    console.log(createForm);
 }
+
+const endDate = moment(props.info.dates.valid_until, "DD.MM.YYYY");
+const startDate = moment(props.info.dates.date, "DD.MM.YYYY");
+const diffDate = computed(() => endDate.diff(startDate, 'days'))
+
 
 
 let allData = computed(() =>{
@@ -257,7 +285,6 @@ let subTotal = computed(() =>{
 let grandTotal = computed(() =>{
     let sum = 0;
     [...props.info.others_info.items].map(item => sum = sum + ((parseInt(item.price) ?? 0) * (parseInt(item.quantity) ?? 1)) - parseInt(item.discount) ?? 0)
-    createForm.grandTotal = sum
     return sum;
 })
 

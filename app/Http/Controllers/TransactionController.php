@@ -112,6 +112,12 @@ class TransactionController extends Controller
         return back();
     }
 
+    public function chnageQuotationStatus(){
+        if(Request::input('quotId') != null && is_array(Request::input('status')) != null){
+            Quotation::findOrfail(Request::input('quotId'))->update(['status' => Request::input('status')['name']]);
+        }
+        return back();
+    }
 
     public function saveQuotationTransaction(Request $request){
         $quotation = Quotation::with('client')->findOrFail(Request::input('quotation_id'));
