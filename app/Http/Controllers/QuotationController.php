@@ -419,7 +419,8 @@ class QuotationController extends Controller
 
 
 
-        return Inertia::render('Modules/Quotation/Show',   ["info" => [
+        return Inertia::render('Modules/Quotation/NewShow',   [
+            "info" => [
             'quotation'          => $quotation,
             'dates'              => [
                 'date'           => $quotation->date->format('M-d-Y'),

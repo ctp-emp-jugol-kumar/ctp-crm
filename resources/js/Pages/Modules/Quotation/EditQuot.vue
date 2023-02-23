@@ -476,20 +476,20 @@ let deleteRow = (index) => {
 
 
 const collupsWork = () =>{
-    var element = document.getElementById("collapseExample1");
+    const element = document.getElementById("collapseExample1");
     element.classList.toggle("show");
 }
 
 const collupsService = () =>{
-    var element = document.getElementById("collapseExample2");
+    const element = document.getElementById("collapseExample2");
     element.classList.toggle("show");
 }
 const collupsHosting = () =>{
-    var element = document.getElementById("collapseExample3");
+    const element = document.getElementById("collapseExample3");
     element.classList.toggle("show");
 }
 const collupsPackage = () =>{
-    var element = document.getElementById("collapseExample4");
+    const element = document.getElementById("collapseExample4");
     element.classList.toggle("show");
 }
 </script>

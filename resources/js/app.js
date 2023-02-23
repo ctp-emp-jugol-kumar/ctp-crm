@@ -11,11 +11,14 @@ import { Alert, Button, Carousel, Collapse, Dropdown, Modal, Offcanvas, Popover,
 let vbPlugin = createVbPlugin({ Alert, Button, Carousel, Collapse, Dropdown, Modal, Offcanvas, Popover, ScrollSpy, Tab, Toast, Tooltip  })
 import 'vue-select/dist/vue-select.css';
 import vSelect from 'vue-select'
-// import "bootstrap/dist/css/bootstrap.min.css";
+// import '@coreui/coreui/dist/css/coreui.min.css'
 import "bootstrap";
+import CoreuiVue from "@coreui/vue";
 
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import al from "@vuepic/vue-datepicker";
+import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
 
 
 
@@ -35,6 +38,7 @@ createInertiaApp({
     createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(vbPlugin)
+      .use(CoreuiVue)
       .use(store)
       .use(CKEditor)
       .component("Link", Link)
@@ -53,3 +57,4 @@ InertiaProgress.init({
   color: "red",
   showSpinner: true,
 });
+

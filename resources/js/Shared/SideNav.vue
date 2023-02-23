@@ -176,7 +176,7 @@
                     <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('invoice.show') || this.$page.props.auth.user.role == 'Administrator' ">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/invoices">
                             <vue-feather type="archive" />
-                            <span class="menu-title text-truncate" data-i18n="Chat">Invoice</span>
+                            <span class="menu-title text-truncate" data-i18n="Chat">Custom Invoice</span>
                         </Link>
                     </li>
 

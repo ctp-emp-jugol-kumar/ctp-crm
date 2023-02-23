@@ -11,6 +11,7 @@ use App\Models\Hosting;
 use App\Models\Platform;
 use App\Models\Project;
 use App\Models\Quotation;
+use App\Models\TransactionLine;
 use App\Models\User;
 use App\Models\Website;
 use App\Models\Work;
@@ -44,19 +45,38 @@ class DashboardController extends Controller
         $totalSeals = $invoiceTotalSeals + $quotationTotalSeals;
         $totalDiscount = $invoiceTotalDiscount + $quotationTotalDiscount;
 
-        $quotation = Quotation::with('transactions')->get();
 
-        return $quotation;
+        $todayIn = TransactionLine::whereDate('created_at', date('Y-m-d'))->where('type', 'in')->sum('amount');
+        $todayExp = TransactionLine::whereDate('created_at', date('Y-m-d'))->where('type', 'out')->sum('amount');
 
 
-//        $marketPlaces = ModelAccountMarketplace::withCount([
-//            'orders as somaFreteGratis' => function ($query) use ($dates) {
-//                $query->select(DB::raw('sum(valor_frete)')
-//                    ->where('tipo_frete', 'gratis')
-//                    ->whereBetween('datetime', [$dates['dateStart'], $dates['dateEnd']]);
-//            }
-//        ])
-//            ->get();
+        $invoiceTotalSeals = CustomInvoice::sum('total_price');
+        $invoiceTotalDiscount = CustomInvoice::sum('discount');
+
+        $todayQseals = Quotation::whereDate('created_at', date('Y-m-d'))->sum('price');
+        $todayQdiscount = Quotation::whereDate('created_at', date('Y-m-d'))->sum('discount');
+
+        $todayIseals = CustomInvoice::whereDate('created_at', date('Y-m-d'))->sum('total_price');
+        $todayIdiscount = CustomInvoice::whereDate('created_at', date('Y-m-d'))->sum('discount');
+
+        $todaySeals = $todayQseals + $todayIseals;
+        $todayDiscount = $todayQdiscount + $todayIdiscount;
+
+
+        Quotation::with(
+            [
+                'transactions' => function($query){
+                    $query->groupBy('partUserName');
+                }
+            ])->get();
+
+
+
+
+
+//        $quotation = Quotation::with('transactions')->get();
+
+
 
         return Inertia::render('Test', [
             "data" => [
@@ -73,7 +93,12 @@ class DashboardController extends Controller
                 'work' => Work::count(),
                 'totalSeals' => $totalSeals,
                 'totalDiscount' => $totalDiscount,
-                'totalExpanse' =>Expanse::sum('amount')
+                'totalExpanse' =>Expanse::sum('amount'),
+                'todayIn' => $todayIn,
+                'todayExp' => $todayExp,
+
+                'todaySeals' => $todaySeals,
+                'todayDiscount' => $todayDiscount
             ]
         ]);
     }

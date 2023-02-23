@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import './base/bootstrap';
 @import './base/bootstrap-extended';
 @import './base/colors';
@@ -65,4 +66,20 @@
 }
 [data-title] {
     position: relative;
+}
+.btn-undefined{
+    border: none !important;
+    border-radius: 0 !important;
+}
+.ck.ck-editor__main>.ck-editor__editable:not(.ck-focused){
+    border: none !important;
+}
+.ck-editor{
+    border:1px solid #eae9ed !important;
+}
+.ck-reset_all :not(.ck-reset_all-excluded *), .ck.ck-reset, .ck.ck-reset_all{
+    background: #FFFFFF !important;
+}
+.ck.ck-toolbar{
+    border:none !important;
 }

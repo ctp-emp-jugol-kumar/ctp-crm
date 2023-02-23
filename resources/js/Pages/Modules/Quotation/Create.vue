@@ -11,7 +11,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
-                                    <h4 class="card-title">Quotations Information's </h4>
+                                    <h4 class="card-title">Quotation #{{ moment(new Date()).format('YYYYMMD') }}__</h4>
                                     <Link href="/admin/quotations" class="dt-button add-new btn btn-primary">Manage
                                         Quotations
                                     </Link>
@@ -19,70 +19,8 @@
                             </div>
                         </div>
 
-                        <div class="col-md-11 mx-auto">
-                            <form @submit.prevent="createQutation">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="modal-body">
-                                            <div class="row mb-1">
-                                                <div class="col-md">
-                                                    <label>Client :
-                                                        <Required/>
-                                                    </label>
-                                                    <div class="">
-                                                        <v-select v-model="formData.client_id" :options="clients"
-                                                                 :reduce="client => client.id" label="name"
-                                                                 placeholder="Select Client"></v-select>
-                                                        <InputFieldError :errors="errors.client_id"/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md">
-                                                    <label>Subject :
-                                                        <Required/>
-                                                    </label>
-                                                    <div class="">
-                                                        <input type="text" placeholder="Subjects"
-                                                               v-model="formData.subject"
-                                                               class="form-control">
-                                                        <span class="error text-sm text-danger"></span>
-                                                        <InputFieldError :errors="errors.subject"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-1">
-                                                <div class="col-md">
-                                                    <label>Date :
-                                                        <Required/>
-                                                    </label>
-                                                    <div class="">
-                                                        <Datepicker v-model="formData.date" :monthChangeOnScroll="false"
-                                                                    placeholder="Select Date" autoApply></Datepicker>
-                                                        <InputFieldError :errors="errors.date"/>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md">
-                                                    <label>Valid until :
-                                                        <Required/>
-                                                    </label>
-
-                                                    <div class="">
-                                                        <Datepicker v-model="formData.valid_until"
-                                                                    :monthChangeOnScroll="false"
-                                                                    placeholder="Select Date" autoApply></Datepicker>
-                                                        <InputFieldError :errors="errors.valid_until"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-
-
+                        <form class="row" @submit.prevent="createQutation">
+                            <div class="col-md-9">
                                 <!--works sections-->
                                 <div class="card">
                                     <div class="card-header d-flex align-items-center justify-content-between">
@@ -117,7 +55,6 @@
                                         </div>
                                     </div>
                                 </div>
-
 
                                 <!--domain sections-->
                                 <div class="card">
@@ -188,7 +125,6 @@
                                     </div>
                                 </div>
 
-
                                 <!--package sections-->
                                 <div class="card">
                                     <div class="card-header">
@@ -223,55 +159,27 @@
                                     </div>
                                 </div>
 
-
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="modal-body">
-                                            <div class="row mb-1">
-                                                <div class="col-md">
-                                                    <label>Payment Policy :
-                                                        <Required/>
-                                                    </label>
-                                                    <div class="">
-                                                        <TextEditor v-model="formData.payment_policy"></TextEditor>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md">
-                                                    <label>Terms Of Service : </label>
-                                                    <div class="">
-                                                        <TextEditor v-model="formData.Trams_Services"></TextEditor>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
                                 <div class="row">
-                                    <div class="col-md-6" data-repeater-item
+                                    <div class="col-md-12" data-repeater-item
                                          v-for="(item, index) in formData.quatations">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h4 class="card-title">index: {{ index }} total:
-                                                    {{ formData.quatations.length - 1 }}</h4>
+                                                <h4 class="card-title">Custom Item's</h4>
                                                 <div class="row d-flex align-items-center">
                                                     <div class="col-12">
                                                         <div class="mb-1">
-                                                            <TextEditor v-model="item.itemname"
+                                                            <TextEditor v-model="formData.quatations[index].item_name"
                                                                         placeholder="Item Details"/>
                                                         </div>
                                                         <div class="input-group border-0 d-flex">
-                                                            <!-- <QtyButton/>-->
+
+                                                            <!--                                                            <QtyButton/>-->
 
                                                             <input type="number" class="form-control rounded-start"
-                                                                   placeholder="quantity" v-model="item.quantity">
-
-                                                            <input type="number" class="form-control rounded-start"
-                                                                   placeholder="Price" v-model="item.price">
+                                                                   placeholder="Price" v-model="formData.quatations[index].price">
 
                                                             <input type="number" class="form-control"
-                                                                   placeholder="Discount" v-model="item.discount">
+                                                                   placeholder="Discount" v-model="formData.quatations[index].discount" >
                                                         </div>
                                                     </div>
                                                 </div>
@@ -284,8 +192,7 @@
                                                     <vue-feather type="plus"/>
                                                 </button>
                                                 <button
-                                                    v-else
-                                                    class="btn btn-danger btn-sm float-end mt-25"
+                                                    class="btn btn-danger btn-sm float-end mt-25 me-1"
                                                     @click="deleteRow(index)"
                                                     data-repeater-delete
                                                     type="button">
@@ -298,36 +205,104 @@
 
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="d-flex align-item-center justify-content-between">
-                                            <div class="d-flex flex-column">
-                                                <label class="form-check-label mb-50"
-                                                       for="customSwitch10">Primary</label>
-                                                <div class="form-check form-switch form-check-primary">
-                                                    <input type="checkbox" class="form-check-input"
-                                                           v-model="formData.status" id="customSwitch10" checked/>
-                                                    <label class="form-check-label" for="customSwitch10">
-                                                        <span class="switch-icon-left"><i
-                                                            data-feather="check"></i></span>
-                                                        <span class="switch-icon-right"><i data-feather="x"></i></span>
-                                                    </label>
-                                                </div>
-                                            </div>
+                                        <div>
+                                            <button type="submit"
+                                                    class="btn btn-success waves-effect waves-float waves-light me-2">
+                                                Save & Back
+                                            </button>
+                                            <button type="submit"
+                                                    class="btn btn-primary waves-effect waves-float waves-light me-2">
+                                                Save & Send
+                                            </button>
+                                            <button type="reset" class="btn btn-outline-warning me-2"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Close">Form Reset
+                                            </button>
+                                            <a href="/admin/quotations"
+                                                    class="btn btn-outline-secondary waves-effect waves-float waves-light me-2">
+                                                Go To Back
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                               <div class="card">
+                                   <div class="card-body">
+                                       <h2>Quotation Details</h2>
+                                       <div class="mb-1">
+                                           <label>Client <Required/></label>
+                                           <div class="">
+                                               <v-select v-model="formData.client_id" :options="clients"
+                                                         :reduce="client => client.id" label="name"
+                                                         placeholder="Select Client"></v-select>
+                                               <InputFieldError :errors="errors.client_id"/>
+                                           </div>
+                                       </div>
+                                       <div class="mb-1">
+                                            <label>Subject <Required/></label>
+                                           <div class="">
+                                               <input type="text" placeholder="Subjects" v-model="formData.subject" class="form-control">
+                                               <InputFieldError :errors="errors.subject"/>
+                                           </div>
+                                       </div>
+                                       <div class="mb-1">
+                                           <label>Date <Required/></label>
+                                           <div class="">
+                                               <Datepicker v-model="formData.date" :monthChangeOnScroll="false"
+                                                           placeholder="Select Date" autoApply></Datepicker>
+                                               <InputFieldError :errors="errors.date"/>
+                                           </div>
+                                       </div>
 
-                                            <div>
-                                                <button type="submit"
-                                                        class="btn btn-primary waves-effect waves-float waves-light me-2">
-                                                    Submit
-                                                </button>
-                                                <button type="reset" class="btn btn-outline-secondary"
-                                                        data-bs-dismiss="modal"
-                                                        aria-label="Close">Cancel
-                                                </button>
+                                       <div class="mb-1">
+                                           <label>Valid until <Required/> </label>
+                                           <div class="">
+                                               <Datepicker v-model="formData.valid_until"
+                                                           :monthChangeOnScroll="false"
+                                                           placeholder="Select Date" autoApply></Datepicker>
+                                               <InputFieldError :errors="errors.valid_until"/>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3>Quotation Status</h3>
+                                        <div class="col-md">
+                                            <div class="">
+                                                <v-select v-model="formData.status"
+                                                          width="100%"
+                                                          label="name"
+                                                          :options="status"
+                                                          placeholder="Select Quotation Status"
+                                                          :reduce="optoin"></v-select>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3>Payment Policy</h3>
+                                        <div class="col-md">
+                                            <div class="">
+                                                <TextEditor v-model="formData.payment_policy"></TextEditor>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3>Terms Of Service</h3>
+                                        <div class="col-md">
+                                            <div class="">
+                                                <TextEditor v-model="formData.Trams_Services"></TextEditor>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </section>
                 <!--/ Advanced Search -->
@@ -356,6 +331,7 @@
     import ServiceCard from "../../../components/ServiceCard";
     import InputFieldError from "../../../components/InputFieldError";
     import QtyButton from "../../../components/QtyButton";
+    import moment from 'moment'
 
     let props = defineProps({
         clients      : null,
@@ -398,7 +374,9 @@
 
     });
 
-
+    let status = [
+        {"name":'New Quotation'}, {"name":'Sent'}, {"name":'Feedback'}, {"name":'Disqualified'}, {"name":'Converted To Invoice'}
+    ]
     props.works.forEach(function(item, index){
         formData.works[index] = item;
     });
@@ -472,12 +450,13 @@
     }
 
 
+
     let addRow = () => {
         formData.quatations.push({
-            itemname: '',
+            item_name: '',
             price: '',
+            quantity: '',
             discount: '',
-            quantity: ''
         })
     }
 
@@ -485,22 +464,21 @@
         formData.quatations.splice(index, 1)
     }
 
-
     let collupsWork = () =>{
-        var element = document.getElementById("collapseExample1");
+        const element = document.getElementById("collapseExample1");
         element.classList.toggle("show");
     }
 
     let collupsService = () =>{
-        var element = document.getElementById("collapseExample2");
+        const element = document.getElementById("collapseExample2");
         element.classList.toggle("show");
     }
     let collupsHosting = () =>{
-        var element = document.getElementById("collapseExample3");
+        const element = document.getElementById("collapseExample3");
         element.classList.toggle("show");
     }
     let collupsPackage = () =>{
-        var element = document.getElementById("collapseExample4");
+        const element = document.getElementById("collapseExample4");
         element.classList.toggle("show");
     }
 </script>

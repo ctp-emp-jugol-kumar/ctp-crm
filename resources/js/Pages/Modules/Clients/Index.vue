@@ -94,7 +94,25 @@
                                                             class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash"/>
                                                     </button>
+
+
                                                 </div>
+                                            </td>
+                                            <td>
+
+                                                <CDropdown>
+                                                    <CDropdownToggle>
+                                                        <vue-feather type="more-vertical" />
+                                                    </CDropdownToggle>
+                                                    <CDropdownMenu>
+                                                        <CDropdownItem href="#">Action</CDropdownItem>
+                                                        <CDropdownItem href="#">Another action</CDropdownItem>
+                                                        <CDropdownItem href="#">Something else here</CDropdownItem>
+                                                    </CDropdownMenu>
+                                                </CDropdown>
+
+
+
                                             </td>
                                         </tr>
                                         </tbody>

@@ -40,9 +40,9 @@
                                         <thead class="table-light">
                                         <tr class="">
                                             <th class="sorting">#id</th>
-                                            <th class="sorting">Date</th>
                                             <th class="sorting">Client</th>
                                             <th class="sorting">Created by</th>
+                                            <th class="sorting">Date</th>
                                             <th class="sorting">Status</th>
 <!--                                            <th class="sorting">Total</th>-->
 <!--                                            <th class="sorting">Domain</th>-->
@@ -53,9 +53,9 @@
                                         <tbody>
                                         <tr v-for="qut in quotations.data" :key="qut.id">
                                             <td>{{ qut.id }}</td>
-                                            <td>{{ qut.date }}</td>
                                             <td>{{ qut.client_name ?? " " }} </td>
                                             <td>{{ qut.user_name ?? " " }} </td>
+                                            <td>{{ qut.date }}</td>
                                             <td>
                                                 <span v-if="qut.status" class="badge badge-light-success">Success</span>
                                                 <span v-else class="badge badge-light-warning">Pending</span>
@@ -64,22 +64,26 @@
 <!--                                            <td>{{ qut.domain ?? " "}}</td>-->
 <!--                                            <td>{{ qut.hosting ?? " " }}</td>-->
                                             <td>
+                                                <CDropdown>
+                                                    <CDropdownToggle>
+                                                        <vue-feather type="more-vertical" />
+                                                    </CDropdownToggle>
+                                                    <CDropdownMenu>
 
-
-                                                <div class="demo-inline-spacing">
-<!--                                                    <button @click="showQuotation(qut.id, 'invoice')" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
-                                                        <Icon title="book" />
-                                                    </button>-->
-                                                    <a :href="qut.edit_url" class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
-                                                        <Icon title="pencil" />
-                                                    </a>
-                                                    <a :href="qut.show_url" class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
-                                                        <Icon title="eye" />
-                                                    </a>
-                                                    <button @click="deleteItemModal(qut.id)" type="button" class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
-                                                        <Icon title="trash" />
-                                                    </button>
-                                                </div>
+                                                        <CDropdownItem :href="qut.edit_url" v-c-tooltip="qut.client_name" >
+                                                            <Icon title="pencil" />
+                                                            <span class="ms-1">Edit</span>
+                                                        </CDropdownItem>
+                                                        <CDropdownItem :href="qut.show_url" target="_blank">
+                                                            <Icon title="eye" />
+                                                            <span class="ms-1">Show</span>
+                                                        </CDropdownItem>
+                                                        <CDropdownItem @click="deleteItemModal(qut.id)">
+                                                            <Icon title="trash" />
+                                                            <span class="ms-1">Delete</span>
+                                                        </CDropdownItem>
+                                                    </CDropdownMenu>
+                                                </CDropdown>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -158,7 +162,7 @@
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
     import {defineProps} from "@vue/runtime-core";
-
+    import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
 
     let props = defineProps({
         quotations: Object,

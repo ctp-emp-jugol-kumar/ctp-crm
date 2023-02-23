@@ -32,6 +32,8 @@
     },
     "dependencies": {
         "@ckeditor/ckeditor5-vue": "^4.0.1",
+        "@coreui/coreui": "^4.2.6",
+        "@coreui/vue": "^4.7.0",
         "@inertiajs/inertia": "^0.11.0",
         "@inertiajs/inertia-vue3": "^0.6.0",
         "@inertiajs/progress": "^0.2.7",

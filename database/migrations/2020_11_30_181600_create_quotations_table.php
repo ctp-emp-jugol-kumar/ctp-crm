@@ -26,13 +26,12 @@ class CreateQuotationsTable extends Migration
             $table->integer('page_price')->default(0)->nullable();
             $table->longText('additional')->nullable();
             $table->integer('additional_price')->default(0)->nullable();
-            // $table->boolean('content')->default(0)->nullable();
             $table->integer('content_page')->nullable();
             $table->integer('content_price')->nullable();
             $table->text('note')->nullable();
             $table->text('payment_policy')->nullable();
             $table->text('terms_of_service')->nullable();
-            $table->boolean('status')->default(0);
+            $table->string('status');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();

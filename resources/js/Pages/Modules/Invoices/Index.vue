@@ -54,21 +54,26 @@
                                             <td>{{ invoice.invoice.subject }} </td>
                                             <td>{{ invoice.created_at }}</td>
                                             <td>
-                                                <div class="demo-inline-spacing">
-                                                    <a :href="invoice.edit_url"
-                                                       class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
-                                                        <Icon title="pencil" />
-                                                    </a>
-                                                    <a :href="invoice.invice_url"
-                                                       class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
-                                                        <Icon title="eye" />
-                                                    </a>
-                                                    <button @click="deleteItemModal(invoice.delete_url)"
-                                                            type="button"
-                                                            class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
-                                                        <Icon title="trash" />
-                                                    </button>
-                                                </div>
+
+                                                <CDropdown>
+                                                    <CDropdownToggle>
+                                                        <vue-feather type="more-vertical" />
+                                                    </CDropdownToggle>
+                                                    <CDropdownMenu>
+                                                        <CDropdownItem :href="invoice.edit_url" >
+                                                            <Icon title="pencil" />
+                                                            <span class="ms-1">Edit</span>
+                                                        </CDropdownItem>
+                                                        <CDropdownItem :href="invoice.invice_url">
+                                                            <Icon title="eye" />
+                                                            <span class="ms-1">Show</span>
+                                                        </CDropdownItem>
+                                                        <CDropdownItem @click="deleteItemModal(invoice.delete_url)">
+                                                            <Icon title="trash" />
+                                                            <span class="ms-1">Delete</span>
+                                                        </CDropdownItem>
+                                                    </CDropdownMenu>
+                                                </CDropdown>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -99,6 +104,7 @@
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
+    import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
 
 
 
