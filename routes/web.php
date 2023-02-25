@@ -82,6 +82,7 @@ Route::prefix('admin')->group(function(){
         Route::get('edit/quotation/{id}', [QuotationController::class, 'editQuotation'])->name('quotations.edit');
         Route::post('quotation/update-status', [QuotationController::class, 'chnageQuotationStatus'])->name('chnageQuotationStatus');
         Route::get('quotations-to-invoice/{id}', [QuotationController::class, 'quotationInvoice'])->name('quotations.quotationInvoice');
+        Route::post('quotations-invoice-payment', [QuotationController::class, 'addPayment'])->name('quotations.addPayment');
 
 
         // invoices management

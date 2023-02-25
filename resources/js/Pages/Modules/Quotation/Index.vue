@@ -85,10 +85,10 @@
 <!--                                            <td>{{ qut.domain ?? " "}}</td>-->
 <!--                                            <td>{{ qut.hosting ?? " " }}</td>-->
                                             <td class="d-flex align-items-center">
-                                                <span class="text-info" v-c-tooltip="'Click & Change Quotation Status'"  @click="changeStatus(qut.id)">
+                                                <span class="text-info cursor-pointer" v-c-tooltip="'Click & Change Quotation Status'"  @click="changeStatus(qut.id)">
                                                     <vue-feather type="refresh-ccw" size="20"/>
                                                 </span>
-                                                <span class="text-secondery mx-1" v-c-tooltip="'Click & Change Quotation Status\n Send Mail For Click here'"  @click="changeStatus(qut.id)">
+                                                <span class="text-secondery mx-1 cursor-pointer" v-c-tooltip="'Click & Change Quotation Status\n Send Mail For Click here'"  @click="changeStatus(qut.id)">
                                                     <vue-feather type="mail" size="20"/>
                                                 </span>
                                                 <CDropdown>

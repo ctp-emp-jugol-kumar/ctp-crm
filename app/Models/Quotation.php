@@ -3,7 +3,6 @@
 namespace App\Models;
 
 
-use App\Http\Controllers\QuotationInvoice;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -181,10 +180,10 @@ class Quotation extends Model
     {
         return $this->belongsToMany('App\Models\Feature', 'feature_quotation');
     }
-
+//
     public function invoice()
     {
-        return $this->hasOne('App\Models\Invoice', 'quotation_id');
+        return $this->hasOne(Invoice::class);
     }
 
     public function transactions()

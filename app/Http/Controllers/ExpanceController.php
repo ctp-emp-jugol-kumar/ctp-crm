@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Expanse;
 use App\Models\Method;
 use App\Models\Purpose;
+use App\Models\Transaction;
 use App\Models\TransactionLine;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -81,7 +82,7 @@ class ExpanceController extends Controller
         }
 
         $expanse = Expanse::create([
-            'u_id' => 'Expanse_'.rand(73862, 5632625),
+            'u_id' => date('Yd', strtotime(now())),
             'purpose_id' => Request::input('purpose_id'),
             'subject' => Request::input('subject'),
             'amount' => Request::input('amount'),
@@ -91,17 +92,27 @@ class ExpanceController extends Controller
             'details' => Request::input('details'),
             'document' => $filePath
         ]);
-
-        TransactionLine::create([
-            'u_id' => 'Transaction_'.rand(73862, 5632625),
-            'user_id' => Auth::id(),
-            'type' => 'out',
-            'subject_model' => "App\\Models\\Expanse",
-            'subject_id' => $expanse->id,
-            'note' => Request::input('details'),
-            'amount' => Request::input('amount'),
-            'method_id' =>Request::input('method_id'),
-            'date' => Request::input('expanse_date')
+//        TransactionLine::create([
+//            'u_id' => date('Yd', strtotime(now())),
+//            'user_id' => Auth::id(),
+//            'type' => 'out',
+//            'subject_model' => "App\\Models\\Expanse",
+//            'subject_id' => $expanse->id,
+//            'note' => Request::input('details'),
+//            'amount' => Request::input('amount'),
+//            'method_id' =>Request::input('method_id'),
+//            'date' => Request::input('expanse_date')
+//        ]);
+        Transaction::create([
+            'u_id'       => date('Yd', strtotime(now())),
+            'transaction_model' => 'App\\Models\\Expanse',
+            'method_id'  => Request::input('method_id'),
+            'user_id'    => Auth::id(),
+            'expanse_id' => $expanse->id,
+            'total_pay'  => Request::input('amount'),
+            'date'       => Request::input('expanse_date'),
+            'note'       => Request::input('details'),
+            'type'       => 'out'
         ]);
 
         return back();

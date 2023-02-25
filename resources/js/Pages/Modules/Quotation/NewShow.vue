@@ -185,7 +185,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <button class="btn btn-primary w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">
-                                        Send Invoice
+                                        Send Quotation
                                     </button>
                                     <a :href="info.others_info.create_invoice" class="btn btn-outline-secondary w-100 btn-download-invoice mb-75">Download</a>
                                     <a :href="info.others_info.edit_url" class="btn btn-outline-secondary w-100 mb-75"> Edit </a>

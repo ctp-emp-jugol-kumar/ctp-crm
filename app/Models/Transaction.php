@@ -5,6 +5,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static create(array $array)
+ */
 class Transaction extends Model
 {
 
@@ -20,12 +23,15 @@ class Transaction extends Model
     // public $timestamps = false;
     protected $guarded = ['id'];
     protected $fillable = [
+        'u_id',
+        'transaction_model',
         'method_id',
         'purpose_id',
         'user_id',
         'client_id',
         'invoice_id',
         'quotation_id',
+        'expanse_id',
         'amount',
         'pay_amount',
         'old_total_pay',

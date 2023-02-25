@@ -11,7 +11,7 @@ use App\Models\Invoice;
 use App\Models\Method;
 use App\Models\Platform;
 use App\Models\Quotation;
-use App\Models\QuotationItem;
+use App\Models\Transaction;
 use App\Models\Website;
 use App\Models\Work;
 
@@ -131,7 +131,7 @@ class QuotationController extends Controller
 //        return Request::all();
 
         $quotation = Quotation::create([
-            'u_id' => 'Quotation_'.rand(73862, 5632625),
+            'u_id'               => date('Yd', strtotime(now())),
             'user_id'            => Auth::id(),
             'client_id'          => Request::input('client_id'),
             'subject'            => Request::input('subject'),
@@ -307,7 +307,7 @@ class QuotationController extends Controller
      * Display the specified resource.
      *
      * @param Quotation $quotation
-     * @return \Inertia\Response
+     * @return false|string
      */
     /* public function show($id)
      {
@@ -353,9 +353,11 @@ class QuotationController extends Controller
 
 
 
-    public function show(Quotation $quotation)
+    public function show($id)
     {
+        $quotation = Quotation::with(['invoice', 'invoice.transactions', 'invoice.transactions.user', 'invoice.transactions.method'])->findOrFail($id);
 
+//        return $quotation;
 
         $mainarray = array();
         foreach ($quotation->domains as $item){
@@ -404,28 +406,6 @@ class QuotationController extends Controller
         }
 
 
-        $transactions = [];
-        foreach($quotation->transactions as $item){
-            $transactions[] = [
-                "amount"     => $item->amount ?? 0,
-                "user"       => $item->user,
-                "method"     => $item->method->name,
-
-                "pay_amount" => $item->pay_amount ?? 0,
-                "discount"   => $item->discount ?? 0,
-                "total_due"  => $item->total_due ?? 0,
-                "old_total_pay" => $item->old_total_pay ?? 0,
-                "date"       => $item->date->format('d/M/Y'),
-                "note"       => $item->note,
-            ];
-        }
-
-        $totalPay = $quotation->transactions->sum('pay_amount') + $quotation->transactions->sum('discount');
-
-        $quotationLastTransaction = $quotation->transactions->last() ?? [
-                'pay_amount' => 0,
-                'discount' => 0
-            ];
 
         if(Request::input('type') === 'show_invoice'){
             return Inertia::render('Modules/Quotation/Invoice',   [
@@ -444,13 +424,9 @@ class QuotationController extends Controller
                         'creator'        => $quotation->user,
                         'client'         => $quotation->client,
                     ],
-                    'total_pay'          => $totalPay,
-                    'last_payment'       => $quotationLastTransaction,
-                    'transactions'       => $transactions,
-                    'invoice'            => $quotation->invoice,
-
+                    'invoice' => $quotation->invoice,
                     'payment_methods'    => Method::all(),
-                    'change_status_url'  => URL::route('chnageQuotationStatus'),
+                    'add_payment'  => URL::route('quotations.addPayment'),
                 ]
             ]);
         }
@@ -475,9 +451,6 @@ class QuotationController extends Controller
                     'creator'        => $quotation->user,
                     'client'         => $quotation->client,
                 ],
-                'total_pay'          => $totalPay,
-                'last_payment'       => $quotationLastTransaction,
-                'transactions'       => $transactions,
 
                 'payment_methods'    => Method::all(),
                 'change_status_url'  => URL::route('chnageQuotationStatus'),
@@ -834,15 +807,18 @@ class QuotationController extends Controller
                         'sub_total' => $quotaiton->price,
                         'discount' => $quotaiton->discount,
                         'grand_total' => $quotaiton->price - $quotaiton->discount,
+                        'due' => $quotaiton->price - $quotaiton->discount,
                     ]);
                 }else{
                     Invoice::create([
+                        'u_id' => date('Yd', strtotime(now())),
                         'quotation_id' => $quotaiton->id,
                         'client_id' => $quotaiton->client->id,
                         'sub_total' => $quotaiton->price,
                         'discount' => $quotaiton->discount,
                         'grand_total' => $quotaiton->price - $quotaiton->discount,
-                        'status' => 'Converted Form Quotation'
+                        'status' => 'Converted Form Quotation',
+                        'due' => $quotaiton->price - $quotaiton->discount,
                     ]);
                 }
                 $quotaiton->update(['status' => $status]);
@@ -856,5 +832,39 @@ class QuotationController extends Controller
         return back();
     }
 
+    public function addPayment(){
+        $quotation = Quotation::with(['invoice','client'])->findOrFail(Request::input('quotation_id'));
+        $invoice = Invoice::where('quotation_id',$quotation->id)->first();
+        $totalPay = Request::input('pay_amount')+Request::input('discount');
+        Transaction::create([
+            'u_id'       => date('Yd', strtotime(now())),
+            'transaction_model' => 'App\\Models\\Invoice',
+            'method_id'  => Request::input('payment_id'),
+            'user_id'    => Auth::id(),
+            'client_id'  => $quotation->client->id,
+            'invoice_id' => $quotation->invoice->id,
+
+            'amount'     => $quotation->invoice->grand_total,
+            'pay_amount' => Request::input('pay_amount'),
+            'discount'   => Request::input('discount'),
+
+            'total_pay'  => $totalPay,
+            'total_due'  => $invoice->due - $totalPay,
+
+            'date'       => now(),
+            'note'       => Request::input('payment_note'),
+
+            'type'       => 'in'
+        ]);
+
+        $tk = $invoice->due - $totalPay;
+        $invoice->update([
+           'pay' =>  $quotation->invoice->pay + $totalPay,
+            'due' => $tk
+        ]);
+
+
+        return back();
+    }
 
 }

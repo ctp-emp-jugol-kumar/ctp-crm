@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static create(array $array)
+ * @method static findOrFail(mixed $id)
  */
 class Invoice extends Model
 {
@@ -24,13 +25,14 @@ class Invoice extends Model
     // public $timestamps = false;
     protected $guarded = ['id'];
     protected $fillable = [
+        'u_id',
         'quotation_id',
         'sub_total',
         'grand_total',
         'qtn',
         'discount',
-        // 'pay',
-        // 'due',
+         'pay',
+         'due',
         'status',
         'date'
     ];
@@ -43,29 +45,6 @@ class Invoice extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function getPayAttribute()
-    {
-        return $this->transactions ? $this->transactions->sum('amount') : 0;
-    }
-    public function getDueAttribute()
-    {
-        return $this->transactions ? $this->grand_total - $this->transactions->sum('amount') : $this->grand_total;
-    }
-    public function getClientNameAttribute()
-    {
-        return $this->quotation->client ? $this->quotation->client->name : '-';
-    }
-    public function getCreatedByAttribute()
-    {
-        return $this->quotation->user ? $this->quotation->user->name : '-';
-    }
-
-    public static function boot() {
-        parent::boot();
-        self::deleting(function($invoice) {
-            $invoice->transactions()->delete();
-        });
-    }
 
     /*
     |--------------------------------------------------------------------------
@@ -77,26 +56,11 @@ class Invoice extends Model
     {
         return $this->belongsTo('App\Models\Quotation');
     }
+
     public function transactions()
     {
         return $this->hasMany('App\Models\Transaction');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | SCOPES
-    |--------------------------------------------------------------------------
-    */
 
-    /*
-    |--------------------------------------------------------------------------
-    | ACCESSORS
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | MUTATORS
-    |--------------------------------------------------------------------------
-    */
 }

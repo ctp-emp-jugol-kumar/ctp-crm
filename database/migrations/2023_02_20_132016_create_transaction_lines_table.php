@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('subject_id')->nullable();
             $table->foreignId('method_id')->constrained('methods');
             $table->text('note')->nullable();
-            $table->double('amount');
+            $table->double('amount')->default(0);
             $table->timestamp('date');
             $table->integer('discount')->nullable();
             $table->timestamps();
