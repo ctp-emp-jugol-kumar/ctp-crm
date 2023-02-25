@@ -106,6 +106,7 @@ class ExpanceController extends Controller
         Transaction::create([
             'u_id'       => date('Yd', strtotime(now())),
             'transaction_model' => 'App\\Models\\Expanse',
+            'transaction_model_id' => $expanse->id,
             'method_id'  => Request::input('method_id'),
             'user_id'    => Auth::id(),
             'expanse_id' => $expanse->id,

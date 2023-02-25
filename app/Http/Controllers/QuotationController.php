@@ -839,6 +839,7 @@ class QuotationController extends Controller
         Transaction::create([
             'u_id'       => date('Yd', strtotime(now())),
             'transaction_model' => 'App\\Models\\Invoice',
+            'transaction_model_id' => $invoice->id,
             'method_id'  => Request::input('payment_id'),
             'user_id'    => Auth::id(),
             'client_id'  => $quotation->client->id,

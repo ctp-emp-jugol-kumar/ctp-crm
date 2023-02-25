@@ -23,7 +23,7 @@ class TransactionController extends Controller
     {
         return inertia('Modules/Transaction/Index', [
             $search = Request::input('search'),
-            'transactions' => TransactionLine::query()
+            'transactions' => Transaction::query()
                 ->latest()
                 ->with(['user', 'method'])
                 ->when(Request::input('search'), function ($query, $search) {
@@ -32,14 +32,8 @@ class TransactionController extends Controller
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
                 ->through(fn($tra) => [
-                    'id' => $tra->id,
-                    'user' => $tra->user,
-                    'method' => $tra->method,
-                    'amount' => $tra->amount,
-                    'type' => $tra->type,
-                    'note' => $tra->note,
-                    'discount' => $tra->discount,
-                    'subject' => $tra->subject_model::findOrFail($tra->subject_id),
+                    'tran' => $tra,
+                    'subject' => $tra->transaction_model::findOrFail($tra->subject_id),
                     'created_at' => $tra->created_at->format('d M Y'),
                     'show_url' => URL::route('expense.show', $tra->id),
                 ]),

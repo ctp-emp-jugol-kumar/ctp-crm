@@ -51,42 +51,9 @@
                                         <tr v-for="tra in transactions.data" :key="tra.id">
                                             <td>
                                                 <a href="#">
-                                                    #EXP_{{ tra.id }}
+                                                    #EXP_{{ tran.id }}
                                                 </a>
                                             </td>
-                                            <td>
-                                                <div class="d-flex">
-                                                    <a href="#">
-                                                        {{ tra.subject.u_id }}
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td>{{ tra.method.name }}</td>
-                                            <td>
-                                                <span class="text-bold text-success" v-if="tra.type ==='in'">
-                                                    + {{ tra.amount+" Tk" }}
-                                                </span>
-                                                <span class="text-danger text-bold" v-else>
-                                                    - {{ tra.amount+" Tk" }}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span>{{ tra.discount ?? 0  }} Tk</span>
-                                            </td>
-                                            <td>
-                                                <span class="text-bold text-success" v-if="tra.type ==='in'">
-                                                    <vue-feather type="trending-up"/>
-                                                </span>
-                                                <span class="text-danger text-bold"  v-else>
-                                                    <vue-feather type="trending-down"/>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <a class="text-capitalize" :href="`/admin/users/${tra.user.id}`" target="_blank">
-                                                    {{ tra.user.name }}
-                                                </a>
-                                            </td>
-                                            <td>{{ tra.created_at }}</td>
                                         </tr>
                                         </tbody>
                                     </table>

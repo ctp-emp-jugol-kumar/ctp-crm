@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::table('transactions', function (Blueprint $table) {
             $table->string('u_id')->nullable()->after('id');
             $table->string('transaction_model')->nullable()->after('client_id');
+            $table->string('transaction_model_id')->nullable()->after('transaction_model');
         });
     }
 
@@ -29,6 +30,7 @@ return new class extends Migration
         Schema::table('transactions', function (Blueprint $table) {
             $table->dropColumn('u_id');
             $table->dropColumn('transaction_model');
+            $table->dropColumn('transaction_model_id');
         });
     }
 };
