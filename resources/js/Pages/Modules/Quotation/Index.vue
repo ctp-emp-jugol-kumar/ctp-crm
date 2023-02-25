@@ -53,20 +53,24 @@
                                         <tbody>
                                         <tr v-for="qut in quotations.data" :key="qut.id">
                                             <td>
-                                                <a :href="qut.show_url" target="_blank">#{{ moment(new Date()).format('YYYYMMD')+qut.id}}</a>
+                                                <a :href="qut.show_url" target="_blank" v-c-tooltip="'Click & Show Quotation New Tab'">#{{ moment(new Date()).format('YYYYMMD')+qut.id}}</a>
                                             </td>
 
                                             <td>{{ qut.client_name ?? " " }} </td>
                                             <td>{{ qut.user_name ?? " " }} </td>
                                             <td>{{ qut.date }}</td>
                                             <td>
-                                                <span v-if="qut.status" class="badge badge-light-success">Success</span>
-                                                <span v-else class="badge badge-light-warning">Pending</span>
+                                                <span class="badge badge-light-primary text-capitalize" :class="{ 'badge-light-success' : qut.status === 'Converted To Invoice' }" v-c-tooltip="qut.status" >
+                                                    {{ qut.status }}
+                                                </span>
                                             </td>
 <!--                                            <td>{{ qut.totalPrice }} TK</td>-->
 <!--                                            <td>{{ qut.domain ?? " "}}</td>-->
 <!--                                            <td>{{ qut.hosting ?? " " }}</td>-->
-                                            <td>
+                                            <td class="d-flex align-items-center">
+                                                <button class="btn text-info" v-c-tooltip="'Click & Change Quotation Status'" >
+                                                    <vue-feather type="refresh-ccw" size="20"/>
+                                                </button>
                                                 <CDropdown>
                                                     <CDropdownToggle>
                                                         <vue-feather type="more-vertical" />

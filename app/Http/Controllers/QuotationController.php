@@ -119,6 +119,14 @@ class QuotationController extends Controller
 //        ]);
 //        return Request::all();
 
+        $price = 0;
+        $discount = 0;
+        $discount += Request::input('discount');
+
+//        return $discount;
+//
+//        return Request::all();
+
         $quotation = Quotation::create([
             'u_id' => 'Quotation_'.rand(73862, 5632625),
             'user_id'            => Auth::id(),
@@ -138,9 +146,6 @@ class QuotationController extends Controller
 
 //        return $quotationPackages;
 //        return $this->createArrayGroups($quotationPackages);
-
-        $price = 0;
-        $discount = 0;
 
         if (count($quotationDomains)) {
              $quotation->domains()->attach($this->createArrayGroups($quotationDomains));
@@ -345,7 +350,9 @@ class QuotationController extends Controller
 
 
 
-    public function show(Quotation $quotation){
+    public function show(Quotation $quotation)
+    {
+
 
         $mainarray = array();
         foreach ($quotation->domains as $item){
@@ -673,7 +680,7 @@ class QuotationController extends Controller
             'valid_until'        => Request::input('valid_until'),
             'payment_policy'     => Request::input('payment_policy'),
             'terms_of_service'   => Request::input('Trams_Services'),
-            'status'             => Request::input('status')["name"],
+            'status'             => Request::input('status')["name"] ?? $quotation->status,
         ]);
 
         $quotationDomains        = Request::input('domains');
@@ -766,7 +773,7 @@ class QuotationController extends Controller
                 }
             }
         }
-        return back();
+        return Redirect::route('quotations.index');
     }
 
     /**

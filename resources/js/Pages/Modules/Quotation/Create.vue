@@ -266,6 +266,17 @@
                                        </div>
                                    </div>
                                </div>
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3>Given Discount</h3>
+                                        <div class="col-md">
+                                            <div class="">
+                                                <input class="form-control" v-model="formData.discount" placeholder="e.g 0.00 Tk"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="card">
                                     <div class="card-body">
                                         <h3>Quotation Status</h3>
@@ -355,6 +366,7 @@
         valid_until   : null,
         payment_policy: paymnetPolicy,
         Trams_Services: paymnetPolicy,
+        discount      : null,
         status        : null,
 
         works         : [],

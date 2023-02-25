@@ -132,7 +132,10 @@
                                     <div class="row invoice-sales-total-wrapper">
                                         <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
                                             <p class="card-text mb-0">
-                                                <span class="fw-bold">Salesperson:</span> <span class="ms-75">Alfie Solomons</span>
+                                                <span class="fw-bold">Salesperson:</span>
+                                                <span class="ms-75 text-capitalize">
+                                                    {{ info.quotation_owner.creator.name }}
+                                                </span>
                                             </p>
                                         </div>
                                         <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">

@@ -63,13 +63,9 @@ class DashboardController extends Controller
         $todayDiscount = $todayQdiscount + $todayIdiscount;
 
 
-        Quotation::with(
-            [
-                'transactions' => function($query){
-                    $query->groupBy('partUserName');
-                }
-            ])->get();
+//        $quot = Quotation::withSum('transactions', 'amount')->get();
 
+//        return $quot;
 
 
 
