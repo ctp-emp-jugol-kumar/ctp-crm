@@ -54,7 +54,8 @@ class QuotationController extends Controller
                 "client_name"  => $qot->client->name,
                 "user_name"    => $qot->user->name,
                 "show_url"     => URL::route('quotations.show', $qot->id),
-                "edit_url"     => URL::route('quotations.edit', $qot->id)
+                "edit_url"     => URL::route('quotations.edit', $qot->id),
+                "invoice_url"  => URL::route('quotations.quotationInvoice', $qot->id)
             ]);
 
         return inertia('Modules/Quotation/Index', [
@@ -425,6 +426,35 @@ class QuotationController extends Controller
                 'pay_amount' => 0,
                 'discount' => 0
             ];
+
+        if(Request::input('type') === 'show_invoice'){
+            return Inertia::render('Modules/Quotation/Invoice',   [
+                "info" => [
+                    'quotation'          => $quotation,
+                    'dates'              => [
+                        'date'           => $quotation->date->format('d/m/Y'),
+                        'valid_until'    => $quotation->valid_until->format('d/m/Y'),
+                    ],
+                    'others_info'        => [
+                        "items"          => $mainarray,
+                        "create_invoice" => URL::route('quotation.download', $quotation->id),
+                        "edit_url"     => URL::route('quotations.edit', $quotation->id)
+                    ],
+                    'quotation_owner'    => [
+                        'creator'        => $quotation->user,
+                        'client'         => $quotation->client,
+                    ],
+                    'total_pay'          => $totalPay,
+                    'last_payment'       => $quotationLastTransaction,
+                    'transactions'       => $transactions,
+                    'invoice'            => $quotation->invoice,
+
+                    'payment_methods'    => Method::all(),
+                    'change_status_url'  => URL::route('chnageQuotationStatus'),
+                ]
+            ]);
+        }
+
 
         return Inertia::render('Modules/Quotation/NewShow',   [
             "info" => [
@@ -801,17 +831,14 @@ class QuotationController extends Controller
                     $quotaiton->invoice->update([
                         'quotation_id' => $quotaiton->id,
                         'client_id' => $quotaiton->client->id,
-//                        'date' => now(),
                         'sub_total' => $quotaiton->price,
                         'discount' => $quotaiton->discount,
                         'grand_total' => $quotaiton->price - $quotaiton->discount,
                     ]);
                 }else{
-                    //id	quotation_id	sub_total	grand_total	qtn	discount	status	created_at	updated_at	date
                     Invoice::create([
                         'quotation_id' => $quotaiton->id,
                         'client_id' => $quotaiton->client->id,
-//                        'date' => now(),
                         'sub_total' => $quotaiton->price,
                         'discount' => $quotaiton->discount,
                         'grand_total' => $quotaiton->price - $quotaiton->discount,
@@ -819,7 +846,6 @@ class QuotationController extends Controller
                     ]);
                 }
                 $quotaiton->update(['status' => $status]);
-
             }else{
                 if ($quotaiton->invoice != null){
                     $quotaiton->invoice->delete();
@@ -829,5 +855,6 @@ class QuotationController extends Controller
         }
         return back();
     }
+
 
 }

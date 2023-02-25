@@ -142,16 +142,16 @@
                                             <div class="invoice-total-wrapper">
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Subtotal:</p>
-                                                    <p class="invoice-total-amount">{{ subTotal }} Tk</p>
+                                                    <p class="invoice-total-amount">{{ props.info.quotation.price }} Tk</p>
                                                 </div>
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Discount:</p>
-                                                    <p class="invoice-total-amount">{{ discount }} Tk</p>
+                                                    <p class="invoice-total-amount">{{ props.info.quotation.discount }} Tk</p>
                                                 </div>
-                                                <div class="invoice-total-item">
+<!--                                                <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Tax:</p>
                                                     <p class="invoice-total-amount">21%</p>
-                                                </div>
+                                                </div>-->
                                                 <hr class="my-50" />
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Total:</p>
@@ -285,18 +285,16 @@ let subTotal = computed(() =>{
     return sum;
 })
 
+
+// let discount = computed(() => {
+//     let sum = 0;
+//     [...props.info.others_info.items].map(item => sum = sum +  parseInt(item.discount) ?? 0)
+//     return sum + props.info.quotation.discount;
+// })
+
 let grandTotal = computed(() =>{
-    let sum = 0;
-    [...props.info.others_info.items].map(item => sum = sum + ((parseInt(item.price) ?? 0) * (parseInt(item.quantity) ?? 1)) - parseInt(item.discount) ?? 0)
-    return sum;
+    return props.info.quotation.price - props.info.quotation.discount;
 })
-
-let discount = computed(() => {
-    let sum = 0;
-    [...props.info.others_info.items].map(item => sum = sum +  parseInt(item.discount) ?? 0)
-    return sum;
-})
-
 
 
 

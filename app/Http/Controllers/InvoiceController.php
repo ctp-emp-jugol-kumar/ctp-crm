@@ -316,4 +316,9 @@ class InvoiceController extends Controller
         $invoice = CustomInvoice::findOrFail($id);
         $invoice->delete();
     }
+
+
+
+
+
 }

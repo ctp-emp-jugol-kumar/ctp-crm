@@ -10,44 +10,55 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-                                <div class="card-header border-bottom d-flex justify-content-between">
+                                <div class="card-header d-flex justify-content-between">
                                     <h4 class="card-title">Quotations Information's </h4>
-                                    <Link href="quotations/create" class="dt-button add-new btn btn-primary">Add Quotations</Link>
                                 </div>
-                                <div class="card-datatable table-responsive pt-0">
-                                    <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
-                                        <div class="col-sm-12 col-lg-4 d-flex justify-content-center justify-content-lg-start">
-                                            <div class="select-search-area">
-                                                <label>Show <select class="form-select" v-model="perPage">
-                                                    <option :value="undefined">10</option>
-                                                    <option value="25">25</option>
-                                                    <option value="50">50</option>
-                                                    <option value="100">100</option>
-                                                </select> entries</label>
+                                <div class="card-datatable table-responsive pt-0 px-2">
+                                    <div class="d-flex align-items-center justify-content-between border-bottom">
+                                        <div class="select-search-area d-flex align-items-center">
+                                            <select class="form-select" v-model="perPage">
+                                                <option :value="undefined">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                            <Link href="quotations/create" class="btn btn-primary ml-2 d-flex align-items-center">
+                                                <vue-feather type="plus" size="15"/>
+                                                <span>
+                                                    Add Quotations
+                                                </span>
+                                            </Link>
+                                            <div class="ml-2">
+                                                <select class="select2 form-select w-100" id="select2-basic">
+                                                    <option selected disabled>Search By Quotation Status</option>
+                                                    <option value="AK">Alaska</option>
+                                                    <option value="HI">Hawaii</option>
+                                                    <option value="CA">California</option>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 col-lg-8 ps-xl-75 ps-0">
-                                            <div
-                                                class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
-                                                <div class="select-search-area">
-                                                    <label>Search:<input v-model="search" type="search" class="form-control" placeholder=""
-                                                                         aria-controls="DataTables_Table_0"></label>
-                                                </div>
+                                        <div
+                                            class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
+                                            <div class="select-search-area">
+                                                <label>Search:<input v-model="search" type="search" class="form-control" placeholder="What You Find ?"
+                                                                     aria-controls="DataTables_Table_0"></label>
                                             </div>
                                         </div>
                                     </div>
+
+
                                     <table class="user-list-table table">
                                         <thead class="table-light">
                                         <tr class="">
-                                            <th class="sorting">#id</th>
-                                            <th class="sorting">For</th>
-                                            <th class="sorting">Created by</th>
-                                            <th class="sorting">Date</th>
-                                            <th class="sorting">Status</th>
+                                            <th class="sorting bg-white py-1">#id</th>
+                                            <th class="sorting bg-white py-1">For</th>
+                                            <th class="sorting bg-white py-1">Created by</th>
+                                            <th class="sorting bg-white py-1">Date</th>
+                                            <th class="sorting bg-white py-1">Status</th>
 <!--                                            <th class="sorting">Total</th>-->
 <!--                                            <th class="sorting">Domain</th>-->
 <!--                                            <th class="sorting">Hosting</th>-->
-                                            <th class="sorting">Actions</th>
+                                            <th class="sorting bg-white py-1">Actions</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -74,14 +85,26 @@
 <!--                                            <td>{{ qut.domain ?? " "}}</td>-->
 <!--                                            <td>{{ qut.hosting ?? " " }}</td>-->
                                             <td class="d-flex align-items-center">
-                                                <button class="btn text-info" v-c-tooltip="'Click & Change Quotation Status'"  @click="changeStatus(qut.id)">
+                                                <span class="text-info" v-c-tooltip="'Click & Change Quotation Status'"  @click="changeStatus(qut.id)">
                                                     <vue-feather type="refresh-ccw" size="20"/>
-                                                </button>
+                                                </span>
+                                                <span class="text-secondery mx-1" v-c-tooltip="'Click & Change Quotation Status\n Send Mail For Click here'"  @click="changeStatus(qut.id)">
+                                                    <vue-feather type="mail" size="20"/>
+                                                </span>
                                                 <CDropdown>
-                                                    <CDropdownToggle>
+                                                    <CDropdownToggle class="p-0">
                                                         <vue-feather type="more-vertical" />
                                                     </CDropdownToggle>
                                                     <CDropdownMenu>
+                                                        <CDropdownItem :href="qut.show_url+'?type=show_invoice'" v-if="qut.status === 'Converted To Invoice'">
+                                                            <vue-feather type="file" size="15"/>
+                                                            <span class="ms-1">Show Invoice</span>
+                                                        </CDropdownItem>
+
+                                                        <CDropdownItem v-if="qut.status === 'Converted To Invoice'">
+                                                            <vue-feather type="download" size="15"/>
+                                                            <span class="ms-1">Download Invoice</span>
+                                                        </CDropdownItem>
 
                                                         <CDropdownItem :href="qut.edit_url" v-c-tooltip="qut.client_name" >
                                                             <Icon title="pencil" />

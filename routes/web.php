@@ -81,6 +81,7 @@ Route::prefix('admin')->group(function(){
             ->name('quotation.download');
         Route::get('edit/quotation/{id}', [QuotationController::class, 'editQuotation'])->name('quotations.edit');
         Route::post('quotation/update-status', [QuotationController::class, 'chnageQuotationStatus'])->name('chnageQuotationStatus');
+        Route::get('quotations-to-invoice/{id}', [QuotationController::class, 'quotationInvoice'])->name('quotations.quotationInvoice');
 
 
         // invoices management
@@ -88,7 +89,6 @@ Route::prefix('admin')->group(function(){
         Route::get('edit/invoice/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
         Route::get('download-invoice/{id}', [InvoiceController::class, 'generateInvoicePDFFile'])->name('invoices.generateInvoicePDFFile');
         Route::delete('edit/invoice/{id}', [InvoiceController::class, 'destroy'])->name('invoices.delete');
-
 
 
 
