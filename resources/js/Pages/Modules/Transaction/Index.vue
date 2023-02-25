@@ -41,7 +41,6 @@
                                             <th class="sorting">Subject</th>
                                             <th class="sorting">Method</th>
                                             <th class="sorting">Amount</th>
-                                            <th class="sorting">Discount</th>
                                             <th class="sorting">Payment Type</th>
                                             <th class="sorting">User</th>
                                             <th class="sorting">Created At</th>
@@ -51,8 +50,33 @@
                                         <tr v-for="tra in transactions.data" :key="tra.id">
                                             <td>
                                                 <a href="#">
-                                                    #EXP_{{ tran.id }}
+                                                    #Tran-{{ tra.tran.u_id+tra.tran.id }}
                                                 </a>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0)">{{ `${tra.tran.transaction_model}::find(${tra.tran.transaction_model_id})` }}</a>
+                                            </td>
+                                            <td>
+                                                {{ tra.tran.method.name }}
+                                            </td>
+                                            <td>
+                                                {{ tra.tran.total_pay }} Tk
+                                            </td>
+                                            <td class="cursor-pointer" v-if="tra.tran.type ==='in'"  v-c-tooltip="`Cash In  ${tra.tran.total_pay} Tk \n Rechived By ${tra.tran.user.name}`">
+                                                <span class="text-bold text-success font-bold"  >
+                                                    <vue-feather type="trending-up"/>
+                                                </span>
+                                            </td>
+                                            <td class="cursor-pointer" v-else v-c-tooltip="`Cash Out  ${tra.tran.total_pay} Tk \n Expanse By ${tra.tran.user.name}`">
+                                                <span class="text-danger text-bold font-bold">
+                                                    <vue-feather type="trending-down"/>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {{ tra.tran.user.name }}
+                                            </td>
+                                            <td>
+                                                {{  moment(tra.tran.created_at).format('lll') }}
                                             </td>
                                         </tr>
                                         </tbody>
@@ -77,8 +101,7 @@ import Icon from '../../../components/Icon'
 import Modal from '../../../components/Modal'
 import ImageUploader from "../../../components/ImageUploader"
 import Textarea from "../../../components/Textarea";
-
-
+import moment from 'moment';
 import {ref, watch} from "vue";
 import debounce from "lodash/debounce";
 import {Inertia} from "@inertiajs/inertia";
