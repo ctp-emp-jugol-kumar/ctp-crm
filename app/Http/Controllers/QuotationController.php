@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Design;
 use App\Models\Domain;
 use App\Models\Hosting;
+use App\Models\Invoice;
 use App\Models\Method;
 use App\Models\Platform;
 use App\Models\Quotation;
@@ -60,6 +61,7 @@ class QuotationController extends Controller
             'quotations'  => $quotation,
             'filters'     => Request::only(['search','perPage']),
             'url'         => URL::route('quotations.index'),
+            'change_status_url'  => URL::route('chnageQuotationStatus'),
         ]);
 
 
@@ -448,7 +450,7 @@ class QuotationController extends Controller
                 'transactions'       => $transactions,
 
                 'payment_methods'    => Method::all(),
-                'change_status_url'        => URL::route('chnageQuotationStatus'),
+                'change_status_url'  => URL::route('chnageQuotationStatus'),
         ]
     ]);
 
@@ -784,10 +786,48 @@ class QuotationController extends Controller
      */
     public function destroy(Quotation $quotation)
     {
+//        return $quotation;
         $quotation->delete();
         return back();
     }
 
 
+    public function chnageQuotationStatus(){
+        if(Request::input('quotId') != null && is_array(Request::input('status')) != null){
+            $status = Request::input('status')["name"];
+            $quotaiton = Quotation::findOrfail(Request::input('quotId'))->load(['invoice', 'client']);
+            if ($status == 'Converted To Invoice'){
+                if ($quotaiton->invoice != null){
+                    $quotaiton->invoice->update([
+                        'quotation_id' => $quotaiton->id,
+                        'client_id' => $quotaiton->client->id,
+//                        'date' => now(),
+                        'sub_total' => $quotaiton->price,
+                        'discount' => $quotaiton->discount,
+                        'grand_total' => $quotaiton->price - $quotaiton->discount,
+                    ]);
+                }else{
+                    //id	quotation_id	sub_total	grand_total	qtn	discount	status	created_at	updated_at	date
+                    Invoice::create([
+                        'quotation_id' => $quotaiton->id,
+                        'client_id' => $quotaiton->client->id,
+//                        'date' => now(),
+                        'sub_total' => $quotaiton->price,
+                        'discount' => $quotaiton->discount,
+                        'grand_total' => $quotaiton->price - $quotaiton->discount,
+                        'status' => 'Converted Form Quotation'
+                    ]);
+                }
+                $quotaiton->update(['status' => $status]);
+
+            }else{
+                if ($quotaiton->invoice != null){
+                    $quotaiton->invoice->delete();
+                }
+                $quotaiton->update(['status' => $status]);
+            }
+        }
+        return back();
+    }
 
 }

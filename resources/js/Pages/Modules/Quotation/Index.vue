@@ -60,7 +60,13 @@
                                             <td>{{ qut.user_name ?? " " }} </td>
                                             <td>{{ qut.date }}</td>
                                             <td>
-                                                <span class="badge badge-light-primary text-capitalize" :class="{ 'badge-light-success' : qut.status === 'Converted To Invoice' }" v-c-tooltip="qut.status" >
+                                                <span class="badge badge-light-primary text-capitalize"
+                                                      :class="{
+                                                            'badge-light-success' : qut.status === 'Converted To Invoice',
+                                                            'badge-light-info' : qut.status === 'Feedback',
+                                                            'badge-light-danger' : qut.status === 'Disqualified'
+
+                                                }" v-c-tooltip="qut.status" >
                                                     {{ qut.status }}
                                                 </span>
                                             </td>
@@ -68,7 +74,7 @@
 <!--                                            <td>{{ qut.domain ?? " "}}</td>-->
 <!--                                            <td>{{ qut.hosting ?? " " }}</td>-->
                                             <td class="d-flex align-items-center">
-                                                <button class="btn text-info" v-c-tooltip="'Click & Change Quotation Status'" >
+                                                <button class="btn text-info" v-c-tooltip="'Click & Change Quotation Status'"  @click="changeStatus(qut.id)">
                                                     <vue-feather type="refresh-ccw" size="20"/>
                                                 </button>
                                                 <CDropdown>
@@ -108,22 +114,32 @@
         </div>
     </div>
 
-
-
-
-    <Modal id="showQuotation" title="Show Quotations" v-vb-is:modal :size="{defalut:'lg'}">
-        <form @submit.prevent="createPlatforms">
-            <div class="card-body">
-                 <h2>Cllling</h2>
+    <Modal id="change-status" title="Change Quotation Status" v-vb-is:modal size="sm">
+        <form @submit.prevent="addPayment">
+            <div class="modal-body">
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <v-select v-model="updateForm.status"
+                                  label="name"
+                                  :options="status"
+                                  placeholder="~~Select Sub Category~~"
+                                  :reduce="optoin"></v-select>
+                    </div>
+                </div>
             </div>
+
             <div class="modal-footer">
-                <button :disabled="createForm.processing" type="submit"
-                        class="btn btn-primary waves-effect waves-float waves-light">Submit</button>
+                <button :disabled="updateForm.processing" type="submit" class="btn btn-primary waves-effect waves-float waves-light">
+                    Change Status
+                </button>
                 <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                        aria-label="Close">Cancel</button>
+                        aria-label="Close">Cancel
+                </button>
             </div>
         </form>
     </Modal>
+
+
 
 
 
@@ -177,11 +193,21 @@
         filters: Object,
         notification:Object,
         url:String,
+        change_status_url:null,
     });
+    const status = [
+        {"name":'New Quotation'}, {"name":'Sent'}, {"name":'Feedback'}, {"name":'Disqualified'}, {"name":'Converted To Invoice'}
+    ]
 
     let createForm = useForm({
         name:"",
         processing:Boolean,
+    })
+
+    let updateForm = useForm({
+        quotId: null,
+        status:null,
+        processing:false,
     })
 
 
@@ -196,7 +222,7 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Inertia.delete(adminPath.value + '/users/' + id, { preserveState: true, replace: true, onSuccess: page => {
+                Inertia.delete(props.url+"/"+ id, { preserveState: true, replace: true, onSuccess: page => {
                     Swal.fire(
                         'Deleted!',
                         'Your file has been deleted.',
@@ -225,6 +251,19 @@
     let createInvoice = (id) => {
         Inertia.get(props.url+"/invoice/"+id);
     }
+
+    const changeStatus = (id) =>  {
+        updateForm.quotId = id;
+        document.getElementById('change-status').$vb.modal.show()
+    }
+    let addPayment = () => {
+        Inertia.post(props.change_status_url, updateForm, {
+            onSuccess: () => {
+                document.getElementById('change-status').$vb.modal.hide()
+            }
+        })
+    }
+
 
 
     let search = ref(props.filters.search);

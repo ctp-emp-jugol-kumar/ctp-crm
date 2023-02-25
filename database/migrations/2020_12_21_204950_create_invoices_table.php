@@ -14,14 +14,14 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('quotation_id');
+            $table->foreignIdFor(\App\Models\Quotation::class, 'quotation_id')->constrained('quotations')->cascadeOnUpdate()->cascadeOnDelete();
             $table->unsignedInteger('sub_total');
             $table->unsignedInteger('grand_total');
             $table->unsignedInteger('qtn')->default(1);
             $table->unsignedInteger('discount')->default(0);
-            // $table->unsignedInteger('pay')->default(0);
-            // $table->unsignedInteger('due')->default(0);
-            $table->boolean('status')->default(1);
+             $table->unsignedInteger('pay')->default(0);
+             $table->unsignedInteger('due')->default(0);
+            $table->string('status')->default(1);
             $table->timestamps();
         });
     }

@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 
+/**
+ * @method static create(array $array)
+ */
 class Invoice extends Model
 {
 

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('domain_quotation', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('domain_id')->constrained('domains');
+            $table->foreignId('domain_id')->constrained('domains')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('quotation_id')->constrained('quotations');
             $table->integer('price')->default(0);
             $table->integer('quantity')->default(1);

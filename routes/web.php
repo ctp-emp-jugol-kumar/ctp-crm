@@ -80,6 +80,7 @@ Route::prefix('admin')->group(function(){
         Route::get('download/quotation-invoice/{id}', [QuotationController::class, 'createInvoice'])
             ->name('quotation.download');
         Route::get('edit/quotation/{id}', [QuotationController::class, 'editQuotation'])->name('quotations.edit');
+        Route::post('quotation/update-status', [QuotationController::class, 'chnageQuotationStatus'])->name('chnageQuotationStatus');
 
 
         // invoices management
@@ -103,7 +104,6 @@ Route::prefix('admin')->group(function(){
         Route::post('projects/{id}', [ProjectController::class, 'update']);
         // transaction management
         Route::resource('transaction', TransactionController::class);
-        Route::post('quotation/update-status', [TransactionController::class, 'chnageQuotationStatus'])->name('chnageQuotationStatus');
         Route::post('quotation/transaction', [TransactionController::class, 'saveQuotationTransaction'])->name('saveQuotationTransaction');
         //expanse management
         Route::resource('expense', ExpanceController::class);

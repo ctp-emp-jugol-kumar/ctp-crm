@@ -3,6 +3,7 @@
 namespace App\Models;
 
 
+use App\Http\Controllers\QuotationInvoice;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -183,7 +184,7 @@ class Quotation extends Model
 
     public function invoice()
     {
-        return $this->hasOne('App\Models\Invoice');
+        return $this->hasOne('App\Models\Invoice', 'quotation_id');
     }
 
     public function transactions()
