@@ -16,9 +16,11 @@ use App\Models\Website;
 use App\Models\Work;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use http\Env\Response;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
@@ -40,9 +42,23 @@ class QuotationController extends Controller
         $quotation  = Quotation::query()
             ->latest()
             ->with([
-                "client:id,name", "user:id,name"])
+                "client:id,name,email,phone", "user:id,name", 'invoice'])
             ->when(Request::input('search'), function ($query, $search) {
                 $query->where('email', 'like', "%{$search}%");
+            })
+            ->when(Request::input('byStatus'), function ($query, $search){
+                $query->where('status', $search);
+            })
+            ->when(Request::input('dateRange'), function ($query, $search){
+                $start_date = $search[0];
+                $end_date =  $search[1];
+                if (!empty($start_date) && !empty($end_date)) {
+                    $query->whereDate('created_at', '>=', $start_date)
+                        ->whereDate('created_at', '<=', $end_date);
+                }
+                if (empty($start_date) && !empty($end_date)) {
+                    $query->whereDate('created_at', '<=', $end_date);
+                }
             })
             ->paginate(Request::input('perPage') ?? 10)
             ->withQueryString()
@@ -51,8 +67,11 @@ class QuotationController extends Controller
                 "subject"      => $qot->subject,
                 "status"       => $qot->status,
                 "date"         => $qot->date->format('M-d-Y'),
-                "client_name"  => $qot->client->name,
+                "client"       => $qot->client,
+                "invoice"      => $qot->invoice,
                 "user_name"    => $qot->user->name,
+                "created_at"   => $qot->created_at->format('Y-m-d'),
+                "valid_until"  => $qot->valid_until->format('Y-m-d'),
                 "show_url"     => URL::route('quotations.show', $qot->id),
                 "edit_url"     => URL::route('quotations.edit', $qot->id),
                 "invoice_url"  => URL::route('quotations.quotationInvoice', $qot->id)
@@ -60,7 +79,7 @@ class QuotationController extends Controller
 
         return inertia('Modules/Quotation/Index', [
             'quotations'  => $quotation,
-            'filters'     => Request::only(['search','perPage']),
+            'filters'     => Request::only(['search','perPage', 'byStatus', 'dateRange']),
             'url'         => URL::route('quotations.index'),
             'change_status_url'  => URL::route('chnageQuotationStatus'),
         ]);
@@ -114,22 +133,18 @@ class QuotationController extends Controller
     public function store(Request $request)
     {
 //
-//        Request::validate([
-//            'client_id'          => "required",
-//            'subject'            => "required",
-//            'valid_until'        => "required",
-//            'date'               => "required",
-//        ]);
-//        return Request::all();
+        Request::validate([
+            'client_id'          => "required",
+            'subject'            => "required",
+            'valid_until'        => "required",
+            'date'               => "required",
+            'status'             => "required",
+        ]);
+
 
         $price = 0;
         $discount = 0;
         $discount += Request::input('discount');
-
-//        return $discount;
-//
-//        return Request::all();
-
         $quotation = Quotation::create([
             'u_id'               => date('Yd', strtotime(now())),
             'user_id'            => Auth::id(),

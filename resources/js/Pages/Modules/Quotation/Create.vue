@@ -288,6 +288,7 @@
                                                           :options="status"
                                                           placeholder="Select Quotation Status"
                                                           :reduce="optoin"></v-select>
+                                                <InputFieldError :errors="errors.status"/>
                                             </div>
                                         </div>
                                     </div>
@@ -387,7 +388,7 @@
     });
 
     let status = [
-        {"name":'New Quotation'}, {"name":'Sent'}, {"name":'Feedback'}, {"name":'Disqualified'}, {"name":'Converted To Invoice'}
+        {"name":'New Quotation'}, {"name":'Sent'}, {"name":'Feedback'}
     ]
     props.works.forEach(function(item, index){
         formData.works[index] = item;

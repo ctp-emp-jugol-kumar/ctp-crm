@@ -12,6 +12,7 @@ let vbPlugin = createVbPlugin({ Alert, Button, Carousel, Collapse, Dropdown, Mod
 import 'vue-select/dist/vue-select.css';
 import vSelect from 'vue-select'
 import CoreuiVue from "@coreui/vue";
+import { VTooltip, VPopover, VClosePopover } from 'v-tooltip'
 
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -37,6 +38,7 @@ createInertiaApp({
       .use(vbPlugin)
       .use(CoreuiVue)
       .use(store)
+        .directive('tooltip', VTooltip)
       .use(CKEditor)
         .use(moment)
       .component("Link", Link)
