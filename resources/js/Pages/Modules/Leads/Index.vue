@@ -20,31 +20,51 @@
                                         Add Lead
                                     </button>
                                 </div>
-                                <div class="card-datatable table-responsive pt-0">
-                                    <div
-                                        class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
-                                        <div
-                                            class="col-sm-12 col-lg-4 d-flex justify-content-center justify-content-lg-start">
-                                            <div class="select-search-area">
-                                                <label>Show <select class="form-select" v-model="perPage">
-                                                    <option :value="undefined">10</option>
-                                                    <option value="25">25</option>
-                                                    <option value="50">50</option>
-                                                    <option value="100">100</option>
-                                                </select> entries</label>
+                                <div class="card-datatable table-responsive pt-0 px-2">
+                                    <div class="d-flex align-items-center justify-content-between border-bottom">
+                                        <div class="select-search-area d-flex align-items-center">
+                                            <select class="form-select" v-model="perPage">
+                                                <option :value="undefined">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                            <div class="ml-2">
+                                                <select v-model="searchByStatus" class="select2 form-select select w-100">
+                                                    <option selected disabled :value="undefined">Filter By Quotation Status</option>
+                                                    <option :value="null">All</option>
+                                                    <option v-for="item in status" :value="item.name" >{{ item.name }}</option>
+                                                </select>
+                                            </div>
+                                            <div v-if="!isCustom">
+                                                <select v-model="dateRange" @update:modelValue="changeDateRange" class="select2 form-select select w-100 ms-1" id="select2-basic">
+                                                    <option selected disabled :value="undefined">Filter By Date</option>
+                                                    <option :value="null">All</option>
+                                                    <option v-for="(type, index) in range.ranges" :value="type">
+                                                        {{ index }}
+                                                    </option>
+                                                    <option value="custom">Custom Range</option>
+                                                </select>
+                                            </div>
+                                            <div v-else>
+                                                <Datepicker v-model="dateRange" :monthChangeOnScroll="false" range multi-calendars
+                                                            placeholder="Select Date Range" autoApply  @update:model-value="handleDate" ></Datepicker>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 col-lg-8 ps-xl-75 ps-0">
-                                            <div
-                                                class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
-                                                <div class="select-search-area">
-                                                    <label>Search:<input v-model="search" type="search"
-                                                                         class="form-control" placeholder='Search...'
-                                                                         aria-controls="DataTables_Table_0"></label>
-                                                </div>
+                                        <div
+                                            class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
+                                            <div class="select-search-area">
+                                                <label>Search
+                                                    <input v-model="search"
+                                                           type="search"
+                                                           class="form-control"
+                                                           placeholder="What You Find ?"
+                                                           aria-controls="DataTables_Table_0">
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
+
                                     <table class="user-list-table table">
                                         <thead class="table-light">
                                         <tr class=null>
@@ -473,6 +493,10 @@
     import axios from 'axios';
     import DropdownItems from "../../../components/modules/DropdownItems"
 
+    import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
+    import {useDate} from "../../../composables/useDate";
+    const range = useDate();
+
 
     let props = defineProps({
         clients: Object,
@@ -529,7 +553,7 @@
 
     let status = [
         {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Proposal Sent'},
-        {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Convarted To Customer'}
+        {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}
     ]
 
     let deleteItemModal = (id) => {
@@ -631,14 +655,32 @@
         });
     }
 
+    const dateRange = ref(props.filters.dateRange)
+    const isCustom =ref(false);
+    const changeDateRange = (event) => {
+        if(event=== 'custom'){
+            isCustom.value = true;
+            dateRange.value = '';
+        }
+    };
+    const handleDate = (event) => isCustom.value = event !== null;
 
+
+    const searchByStatus = ref(props.filters.byStatus)
     let search = ref(props.filters.search);
     let perPage = ref(props.filters.perPage);
 
-    watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get(props.main_url, {search: val, perPage: val2}, {preserveState: true, replace: true});
+    watch([search, perPage, searchByStatus, dateRange], debounce(function ([val, val2, val3, val4]) {
+        Inertia.get(props.main_url, { search: val, perPage: val2, byStatus: val3 , dateRange: val4}, { preserveState: true, replace: true });
     }, 300));
 
-
 </script>
-
+<style>
+.dp__input_wrap svg{
+    margin-left: 11px;
+}
+.dp__input_icon_pad {
+    padding: 8px 35px !important;
+    border-radius: 5px !important;
+}
+</style>

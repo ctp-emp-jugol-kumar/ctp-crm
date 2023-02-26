@@ -23,7 +23,22 @@ class LeadController extends Controller
                         ->orWhere('address', 'like', "%{$search}%")
                         ->orWhere('phone', 'like', "%{$search}%")
                     ;
-                })->latest()
+                })
+                ->when(Request::input('byStatus'), function ($query, $search){
+                    $query->where('status', $search);
+                })
+                ->when(Request::input('dateRange'), function ($query, $search){
+                    $start_date = $search[0];
+                    $end_date =  $search[1];
+                    if (!empty($start_date) && !empty($end_date)) {
+                        $query->whereDate('created_at', '>=', $start_date)
+                            ->whereDate('created_at', '<=', $end_date);
+                    }
+                    if (empty($start_date) && !empty($end_date)) {
+                        $query->whereDate('created_at', '<=', $end_date);
+                    }
+                })
+                ->latest()
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
                 ->through(fn($client) => [
@@ -35,8 +50,8 @@ class LeadController extends Controller
                     'created_at' => $client->created_at->format('d M Y'),
                 ]),
             'users' => User::all(),
-            'filters' => Request::only(['search','perPage']),
-            "main_url" => Url::route('clients.index'),
+            'filters'     => Request::only(['search','perPage', 'byStatus', 'dateRange']),
+            "main_url" => Url::route('leads.index'),
         ]);
 
     }

@@ -44,7 +44,31 @@ class QuotationController extends Controller
             ->with([
                 "client:id,name,email,phone", "user:id,name", 'invoice'])
             ->when(Request::input('search'), function ($query, $search) {
-                $query->where('email', 'like', "%{$search}%");
+                $query->where('u_id', 'like', "%{$search}%")
+                ->orWhere('u_id', 'like', "%{$search}%")
+                ->orWhereHas('client', function ($client) use($search){
+                    $client
+                        ->where('name',    'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                    ;
+                })
+                ->orWhereHas('domains', function($hosting) use($search){
+                    $hosting->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('hostings', function($hosting) use($search){
+                    $hosting->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('works', function($hosting) use($search){
+                    $hosting->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('packages', function($hosting) use($search){
+                    $hosting->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('quotationItems', function($hosting) use($search){
+                    $hosting->where('item_name', 'like', "%{$search}%");
+                })
+                ;
             })
             ->when(Request::input('byStatus'), function ($query, $search){
                 $query->where('status', $search);

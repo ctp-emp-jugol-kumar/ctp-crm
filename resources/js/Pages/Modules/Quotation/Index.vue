@@ -93,7 +93,7 @@
                                                           Invoice Id : #${qut.invoice.u_id}${qut.invoice.id}
                                                           Client Name: ${qut.client.name}
                                                           Phone : ${qut.client.phone ?? null}
-                                                          Total Amount: ${qut.invoice.amount}
+                                                          Total Amount: ${qut.invoice.grand_total}
                                                           Total pay: ${qut.invoice.pay}
                                                           Total Due: ${qut.invoice.due}`"
                                                     >
@@ -341,7 +341,7 @@
 
 </script>
 
-<style scoped>
+<style>
 .dp__input_wrap svg{
     margin-left: 11px;
 }
