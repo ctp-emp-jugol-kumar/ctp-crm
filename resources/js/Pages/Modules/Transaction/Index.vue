@@ -62,7 +62,7 @@
                                                 </select>
                                             </div>
                                             <div v-else>
-                                                <Datepicker class="ms-2" v-model="dateRange" :monthChangeOnScroll="false" range multi-calendars
+                                                <Datepicker v-model="dateRange" :monthChangeOnScroll="false" range multi-calendars
                                                             placeholder="Select Date Range" autoApply  @update:model-value="handleDate" ></Datepicker>
                                             </div>
                                         </div>
@@ -188,7 +188,7 @@ watch([search, perPage, searchByStatus, dateRange], debounce(function ([val, val
 
 </script>
 
-<style scoped>
+<style>
 .dp__input_wrap svg{
     margin-left: 11px;
 }

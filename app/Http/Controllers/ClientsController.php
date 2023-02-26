@@ -43,7 +43,19 @@ class ClientsController extends Controller
                             ->orWhere('description', 'like', "%{$search}");
                         });
                     ;
-                })->latest()
+                })
+                ->when(Request::input('dateRange'), function ($query, $search){
+                    $start_date = $search[0];
+                    $end_date =  $search[1];
+                    if (!empty($start_date) && !empty($end_date)) {
+                        $query->whereDate('created_at', '>=', $start_date)
+                            ->whereDate('created_at', '<=', $end_date);
+                    }
+                    if (empty($start_date) && !empty($end_date)) {
+                        $query->whereDate('created_at', '<=', $end_date);
+                    }
+                })
+                ->latest()
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
                 ->through(fn($client) => [
@@ -61,7 +73,7 @@ class ClientsController extends Controller
                     'show_url' => URL::route('clients.show', $client->id),
                 ]),
             'users' => User::all(),
-            'filters' => Request::only(['search','perPage']),
+            'filters' => Request::only(['search','perPage', 'dateRange']),
             "main_url" => Url::route('clients.index'),
         ]);
 
