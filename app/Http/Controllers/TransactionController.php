@@ -28,7 +28,22 @@ class TransactionController extends Controller
                 ->with(['user', 'method'])
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('subject', 'like', "%{$search}%");
-                })->latest()
+                })
+                ->when(Request::input('byStatus'), function ($query, $search){
+                    $query->where('type', $search);
+                })
+                ->when(Request::input('dateRange'), function ($query, $search){
+                    $start_date = $search[0];
+                    $end_date =  $search[1];
+                    if (!empty($start_date) && !empty($end_date)) {
+                        $query->whereDate('created_at', '>=', $start_date)
+                            ->whereDate('created_at', '<=', $end_date);
+                    }
+                    if (empty($start_date) && !empty($end_date)) {
+                        $query->whereDate('created_at', '<=', $end_date);
+                    }
+                })
+                ->latest()
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
                 ->through(fn($tra) => [
@@ -37,7 +52,7 @@ class TransactionController extends Controller
                     'created_at' => $tra->created_at->format('d M Y'),
                     'show_url' => URL::route('expense.show', $tra->id),
                 ]),
-            'filters' => Request::only(['search','perPage']),
+            'filters'     => Request::only(['search','perPage', 'byStatus', 'dateRange']),
             "main_url" => Url::route('transaction.index'),
         ]);
     }

@@ -64,7 +64,6 @@
                                         </div>
                                     </div>
 
-
                                     <table class="user-list-table table">
                                         <thead class="table-light">
                                         <tr class="">
@@ -342,7 +341,7 @@
 
 </script>
 
-<style>
+<style scoped>
 .dp__input_wrap svg{
     margin-left: 11px;
 }

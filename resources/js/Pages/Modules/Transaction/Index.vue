@@ -11,29 +11,75 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Transactions Information's </h4>
+                                    <div>
+                                        <CDropdown>
+                                            <CDropdownToggle class="p-0">
+                                                <button class="btn bg-light-secondary d-flex align-items-center">
+                                                    <vue-feather type="external-link" size="15"/>
+                                                    <span class="px-1">Export</span>
+                                                    <vue-feather type="chevron-down" size="15"/>
+                                                </button>
+                                            </CDropdownToggle>
+                                            <CDropdownMenu>
+                                                <CDropdownItem target="_blank">
+<!--                                                    <vue-feather type="download" size="15"/>-->
+                                                    <span class="ms-1">PDF</span>
+                                                </CDropdownItem>
+                                                <CDropdownItem target="_blank">
+                                                    <!--                                                    <vue-feather type="download" size="15"/>-->
+                                                    <span class="ms-1">EXCEL</span>
+                                                </CDropdownItem>
+                                            </CDropdownMenu>
+                                        </CDropdown>
+                                    </div>
                                 </div>
-                                <div class="card-datatable table-responsive pt-0">
-                                    <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
-                                        <div class="col-sm-12 col-lg-4 d-flex justify-content-center justify-content-lg-start">
-                                            <div class="select-search-area">
-                                                <label>Show <select class="form-select" v-model="perPage">
-                                                    <option :value="undefined">10</option>
-                                                    <option value="25">25</option>
-                                                    <option value="50">50</option>
-                                                    <option value="100">100</option>
-                                                </select> entries</label>
+                                <div class="card-datatable table-responsive pt-0 px-2">
+                                    <div class="d-flex align-items-center justify-content-between border-bottom">
+                                        <div class="select-search-area d-flex align-items-center">
+                                            <select class="form-select" v-model="perPage">
+                                                <option :value="undefined">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+
+                                            <div class="ml-2">
+                                                <select v-model="searchByStatus" class="select2 form-select select w-100">
+                                                    <option selected disabled :value="undefined">Filter By Type</option>
+                                                    <option :value="null">All</option>
+                                                    <option value="in" >Credited</option>
+                                                    <option value="out" >Deviated</option>
+                                                </select>
+                                            </div>
+                                            <div v-if="!isCustom">
+                                                <select v-model="dateRange" @update:modelValue="changeDateRange" class="select2 form-select select w-100 ms-1" id="select2-basic">
+                                                    <option selected disabled :value="undefined">Filter By Date</option>
+                                                    <option :value="null">All</option>
+                                                    <option v-for="(type, index) in range.ranges" :value="type">
+                                                        {{ index }}
+                                                    </option>
+                                                    <option value="custom">Custom Range</option>
+                                                </select>
+                                            </div>
+                                            <div v-else>
+                                                <Datepicker class="ms-2" v-model="dateRange" :monthChangeOnScroll="false" range multi-calendars
+                                                            placeholder="Select Date Range" autoApply  @update:model-value="handleDate" ></Datepicker>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 col-lg-8 ps-xl-75 ps-0">
-                                            <div
-                                                class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
-                                                <div class="select-search-area">
-                                                    <label>Search:<input v-model="search" type="search" class="form-control" placeholder="Search..."
-                                                                         aria-controls="DataTables_Table_0"></label>
-                                                </div>
+                                        <div
+                                            class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
+                                            <div class="select-search-area">
+                                                <label>Search
+                                                    <input v-model="search"
+                                                           type="search"
+                                                           class="form-control"
+                                                           placeholder="What You Find ?"
+                                                           aria-controls="DataTables_Table_0">
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
+
                                     <table class="user-list-table table table-striped">
                                         <thead class="table-light">
                                         <tr class="">
@@ -110,6 +156,10 @@ import {Inertia} from "@inertiajs/inertia";
 import Swal from 'sweetalert2'
 import {useForm} from "@inertiajs/inertia-vue3";
 import axios from "axios";
+import {useDate} from "../../../composables/useDate";
+const range = useDate();
+import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
+
 
 let props = defineProps({
     transactions: []|null,
@@ -118,20 +168,33 @@ let props = defineProps({
 });
 
 
+const dateRange = ref(props.filters.dateRange)
+const isCustom =ref(false);
+const changeDateRange = (event) => {
+    if(event=== 'custom'){
+        isCustom.value = true;
+        dateRange.value = '';
+    }
+};
+const handleDate = (event) => isCustom.value = event !== null;
+const searchByStatus = ref(props.filters.byStatus)
+
 
 let search = ref(props.filters.search);
 let perPage = ref(props.filters.perPage);
-
-watch([search, perPage], debounce(function ([val, val2]) {
-    Inertia.get(props.main_url, { search: val, perPage: val2 }, { preserveState: true, replace: true });
+watch([search, perPage, searchByStatus, dateRange], debounce(function ([val, val2, val3, val4]) {
+    Inertia.get(props.main_url, { search: val, perPage: val2, byStatus: val3 , dateRange: val4}, { preserveState: true, replace: true });
 }, 300));
-
-
-
-
 
 </script>
 
-<style lang="scss">
-/*@import "../../../../sass/base/plugins/tables/datatables";*/
+<style scoped>
+.dp__input_wrap svg{
+    margin-left: 11px;
+}
+.dp__input_icon_pad {
+    padding: 8px 35px !important;
+    border-radius: 5px !important;
+}
 </style>
+
