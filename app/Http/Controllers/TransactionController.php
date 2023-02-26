@@ -33,7 +33,7 @@ class TransactionController extends Controller
                 ->withQueryString()
                 ->through(fn($tra) => [
                     'tran' => $tra,
-                    'model' => $tra->transaction_model ? $tra->transaction_model::findOrFail($tra->transaction_model_id) : null,
+                    'model' => $tra->transaction_model && $tra->transaction_model_id ? $tra->transaction_model::find($tra->transaction_model_id) : null,
                     'created_at' => $tra->created_at->format('d M Y'),
                     'show_url' => URL::route('expense.show', $tra->id),
                 ]),

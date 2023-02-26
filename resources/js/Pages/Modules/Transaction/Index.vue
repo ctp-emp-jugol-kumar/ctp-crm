@@ -63,13 +63,15 @@
                                                 {{ tra.tran.total_pay }} Tk
                                             </td>
                                             <td class="cursor-pointer" v-if="tra.tran.type ==='in'"  v-c-tooltip="`Cash In  ${tra.tran.total_pay} Tk \n Rechived By ${tra.tran.user.name}`">
-                                                <span class="text-bold text-success font-bold"  >
+                                                <span class="text-bold text-success font-bold d-flex align-items-center">
                                                     <vue-feather type="trending-up"/>
+                                                    <span class="ms-1">Credited</span>
                                                 </span>
                                             </td>
                                             <td class="cursor-pointer" v-else v-c-tooltip="`Cash Out  ${tra.tran.total_pay} Tk \n Expanse By ${tra.tran.user.name}`">
-                                                <span class="text-danger text-bold font-bold">
+                                                <span class="text-danger text-bold font-bold d-flex align-items-center">
                                                     <vue-feather type="trending-down"/>
+                                                    <span class="ms-1">Debited</span>
                                                 </span>
                                             </td>
                                             <td>

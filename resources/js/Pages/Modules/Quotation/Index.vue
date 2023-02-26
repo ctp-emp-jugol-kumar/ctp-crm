@@ -96,7 +96,7 @@
                                                         <vue-feather type="more-vertical" />
                                                     </CDropdownToggle>
                                                     <CDropdownMenu>
-                                                        <CDropdownItem :href="qut.show_url+'?type=show_invoice'" v-if="qut.status === 'Converted To Invoice'">
+                                                        <CDropdownItem :href="qut.show_url+'?type=show_invoice'" v-if="qut.status === 'Converted To Invoice'" target="_blank">
                                                             <vue-feather type="file" size="15"/>
                                                             <span class="ms-1">Show Invoice</span>
                                                         </CDropdownItem>

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('quotation_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('quotation_id')->nullable();
+            $table->foreignId('quotation_id')->constrained('quotations')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('item_name')->nullable();
             $table->integer('price')->nullable()->default(0);
             $table->integer('discount')->nullable()->default(0);

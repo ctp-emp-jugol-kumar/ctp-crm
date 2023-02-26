@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('quotation_work', function (Blueprint $table) {
             $table->id();
             $table->foreignId('work_id')->constrained('works')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('quotation_id')->constrained('quotations');
+            $table->foreignId('quotation_id')->constrained('quotations')->cascadeOnDelete()->cascadeOnUpdate();
             $table->integer('price')->default(0);
             $table->integer('quantity')->default(1);
             $table->integer('discount')->default(0);
