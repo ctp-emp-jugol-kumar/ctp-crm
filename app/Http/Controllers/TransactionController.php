@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use App\Models\Quotation;
 use App\Models\Transaction;
 use App\Models\TransactionLine;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
@@ -21,41 +22,56 @@ class TransactionController extends Controller
      */
     public function index()
     {
+        $search = Request::input('search');
+        $transactions = Transaction::query()
+            ->latest()
+            ->with(['user', 'method'])
+            ->when(Request::input('search'), function ($query, $search) {
+                $query->where('subject', 'like', "%{$search}%");
+            })
+            ->when(Request::input('byStatus'), function ($query, $search){
+                $query->where('type', $search);
+            })
+            ->when(Request::input('dateRange'), function ($query, $search){
+                $start_date = $search[0];
+                $end_date =  $search[1];
+                if (!empty($start_date) && !empty($end_date)) {
+                    $query->whereDate('created_at', '>=', $start_date)
+                        ->whereDate('created_at', '<=', $end_date);
+                }
+                if (empty($start_date) && !empty($end_date)) {
+                    $query->whereDate('created_at', '<=', $end_date);
+                }
+            })
+            ->latest()
+            ->paginate(Request::input('perPage') ?? 10)
+            ->withQueryString()
+            ->through(fn($tra) => [
+                'tran' => $tra,
+                'model' => $tra->transaction_model && $tra->transaction_model_id ? $tra->transaction_model::find($tra->transaction_model_id) : null,
+                'created_at' => $tra->created_at->format('d M Y'),
+                'show_url' => URL::route('expense.show', $tra->id),
+            ]);
+
+        if (Request::input('export_pdf') === 'true'){
+            return $this->loadDownload($transactions);
+        }
+
         return inertia('Modules/Transaction/Index', [
-            $search = Request::input('search'),
-            'transactions' => Transaction::query()
-                ->latest()
-                ->with(['user', 'method'])
-                ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('subject', 'like', "%{$search}%");
-                })
-                ->when(Request::input('byStatus'), function ($query, $search){
-                    $query->where('type', $search);
-                })
-                ->when(Request::input('dateRange'), function ($query, $search){
-                    $start_date = $search[0];
-                    $end_date =  $search[1];
-                    if (!empty($start_date) && !empty($end_date)) {
-                        $query->whereDate('created_at', '>=', $start_date)
-                            ->whereDate('created_at', '<=', $end_date);
-                    }
-                    if (empty($start_date) && !empty($end_date)) {
-                        $query->whereDate('created_at', '<=', $end_date);
-                    }
-                })
-                ->latest()
-                ->paginate(Request::input('perPage') ?? 10)
-                ->withQueryString()
-                ->through(fn($tra) => [
-                    'tran' => $tra,
-                    'model' => $tra->transaction_model && $tra->transaction_model_id ? $tra->transaction_model::find($tra->transaction_model_id) : null,
-                    'created_at' => $tra->created_at->format('d M Y'),
-                    'show_url' => URL::route('expense.show', $tra->id),
-                ]),
+            'transactions' => $transactions,
             'filters'     => Request::only(['search','perPage', 'byStatus', 'dateRange']),
             "main_url" => Url::route('transaction.index'),
         ]);
     }
+
+    protected function loadDownload($data){
+        Pdf::setOption(['enable_php', true]);
+//        return view('reports.pdf_transaction_list', compact('data'));
+        $pdf = Pdf::loadView('reports.pdf_transaction_list', compact('data'));
+        return $pdf->download("transaction"."_".now()->format('d_m_Y')."_".'quotation.pdf');
+    }
+
+
 
     /**
      * Show the form for creating a new resource.

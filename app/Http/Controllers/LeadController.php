@@ -49,7 +49,7 @@ class LeadController extends Controller
                 'phone' => $client->phone,
                 'email' => $client->email,
                 'status' => $client->status,
-                'created_at' => $client->created_at->format('d M Y'),
+                'created_at' => $client?->created_at?->format('d M Y'),
             ]);
         if (Request::input('export_pdf') === 'true'){
             return $this->loadDownload($clients);
@@ -69,7 +69,7 @@ class LeadController extends Controller
         Pdf::setOption(['enable_php', true]);
 //        return view('reports.pdf_lead_list', compact('data'));
         $pdf = Pdf::loadView('reports.pdf_lead_list', compact('data'));
-        return $pdf->download("transaction"."_".now()->format('d_m_Y')."_".'quotation.pdf');
+        return $pdf->download("Lead_Sheet"."_".now()->format('d_m_Y')."_".'quotation.pdf');
     }
 
 }

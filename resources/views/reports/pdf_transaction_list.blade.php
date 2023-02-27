@@ -149,23 +149,56 @@
             <table class="main-table">
                 <thead>
                 <tr>
-                    <th class="text-center">Description</th>
-                    <th class="text-center">Price</th>
-                    <th class="text-center">Discount</th>
+                    <th class="text-center">Id</th>
+                    <th class="text-center">Module</th>
+                    <th class="text-center">Amount</th>
+                    <th class="text-center">Type</th>
+                    <th class="text-center">Receive By</th>
                     <th class="text-right">Join Date</th>
                 </tr>
                 </thead>
                 <tbody>
+                @php
+                    $debit = 0;
+                    $credit = 0;
+                @endphp
                 @foreach($data as $key => $item)
+                    @php
+                        if($item['tran']?->type === 'in'){
+                            $credit += $item['tran']?->total_pay;
+                        }else{
+                            $debit += $item['tran']?->total_pay;
+                        }
+                    @endphp
                     <tr style="background:{{ $key %2 == 0 ? "#f1f1f1" : "#ffffff" }} ">
-                        <td>{{ $item['name']  ?? ''}}</td>
-                        <td>{{ $item['phone'] ?? ''}}</td>
-                        <td>{{ $item['email'] ?? $item['secondery_email'] ?? ''  }}</td>
-                        <td>{{ date('Y-m-d',strtotime($item['created_at'])) }}</td>
+                        <td>#{{ $item['tran']?->u_id ?? ''  }}{{ $item['tran']?->id ?? ''  }}</td>
+                        <td>{{ $item['tran']?->transaction_model ?? ''  }}::find({{ $item['tran']->id ?? '' }})</td>
+                        <td>{{ $item['tran']?->total_pay }} Tk</td>
+                        <td style="color: {{ $item['tran']?->type === 'in' ? '#16cd00' : 'red' }}">
+                            {{ $item['tran']?->type === 'in' ? "Credited" : "Debited" }}
+                        </td>
+                        <td>{{ $item['tran']?->user?->name ?? '' }}</td>
+                        <td>{{ date('Y-m-d H:i:s',strtotime($item['created_at'])) }}</td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
+
+
+            <div>
+                <h2>
+                    Total Credited : {{ $credit }} Tk
+                </h2>
+                <h2 style="
+                    border-bottom: 1px solid gray;
+                    max-width: max-content;
+                    padding-bottom: 10px;
+                ">
+                    Total Debited : {{ $debit }} Tk
+                </h2>
+                <h2>Net Profit : {{ $credit - $debit }} Tk</h2>
+            </div>
+
         </div>
     </div>
 
