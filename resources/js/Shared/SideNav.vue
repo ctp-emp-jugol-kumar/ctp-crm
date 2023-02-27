@@ -226,6 +226,13 @@
                         </Link>
                     </li>
 
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('project.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/notes">
+                            <vue-feather type="package" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Notes</span>
+                        </Link>
+                    </li>
+
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/logout">
                             <vue-feather type="log-out" />
