@@ -13,6 +13,9 @@ class CustomInvoice extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    protected $fillable = ['u_id', 'client_id', 'subject', 'user_id','grand_total', 'pay', 'due', 'status', 'trams_and_condition', 'privicy_and_policy', 'date'];
+
     protected $dates = ['date'];
 
 
