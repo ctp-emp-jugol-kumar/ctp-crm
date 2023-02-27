@@ -67,8 +67,7 @@ class QuotationController extends Controller
                 })
                 ->orWhereHas('quotationItems', function($hosting) use($search){
                     $hosting->where('item_name', 'like', "%{$search}%");
-                })
-                ;
+                });
             })
             ->when(Request::input('byStatus'), function ($query, $search){
                 $query->where('status', $search);

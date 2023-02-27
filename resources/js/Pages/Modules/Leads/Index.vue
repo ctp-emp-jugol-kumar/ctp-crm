@@ -19,6 +19,27 @@
                                     >
                                         Add Lead
                                     </button>
+                                    <div>
+                                        <CDropdown>
+                                            <CDropdownToggle class="p-0">
+                                                <button class="btn bg-light-secondary d-flex align-items-center">
+                                                    <vue-feather type="external-link" size="15"/>
+                                                    <span class="px-1">Export</span>
+                                                    <vue-feather type="chevron-down" size="15"/>
+                                                </button>
+                                            </CDropdownToggle>
+                                            <CDropdownMenu>
+                                                <CDropdownItem @click="exportPDF">
+                                                    <!--                                                    <vue-feather type="download" size="15"/>-->
+                                                    <span class="ms-1">PDF</span>
+                                                </CDropdownItem>
+                                                <CDropdownItem target="_blank">
+                                                    <!--                                                    <vue-feather type="download" size="15"/>-->
+                                                    <span class="ms-1">EXCEL</span>
+                                                </CDropdownItem>
+                                            </CDropdownMenu>
+                                        </CDropdown>
+                                    </div>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0 px-2">
                                     <div class="d-flex align-items-center justify-content-between border-bottom">
@@ -654,6 +675,17 @@
             console.log(err);
         });
     }
+
+
+    const url = location.search;
+    const exportPDF =() =>{
+        if (url){
+            window.location.href = window.location.href+"&export_pdf=true";
+        }else{
+            window.location.href = window.location.href+"?export_pdf=true";
+        }
+    }
+
 
     const dateRange = ref(props.filters.dateRange)
     const isCustom =ref(false);

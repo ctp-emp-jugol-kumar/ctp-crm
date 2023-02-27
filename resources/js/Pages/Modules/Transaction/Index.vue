@@ -21,7 +21,7 @@
                                                 </button>
                                             </CDropdownToggle>
                                             <CDropdownMenu>
-                                                <CDropdownItem target="_blank">
+                                                <CDropdownItem @click="exportPDF">
 <!--                                                    <vue-feather type="download" size="15"/>-->
                                                     <span class="ms-1">PDF</span>
                                                 </CDropdownItem>
@@ -168,6 +168,16 @@ let props = defineProps({
 });
 
 
+const url = location.search;
+const exportPDF =() =>{
+    if (url){
+        window.location.href = window.location.href+"&export_pdf=true";
+    }else{
+        window.location.href = window.location.href+"?export_pdf=true";
+    }
+}
+
+
 const dateRange = ref(props.filters.dateRange)
 const isCustom =ref(false);
 const changeDateRange = (event) => {
@@ -185,6 +195,8 @@ let perPage = ref(props.filters.perPage);
 watch([search, perPage, searchByStatus, dateRange], debounce(function ([val, val2, val3, val4]) {
     Inertia.get(props.main_url, { search: val, perPage: val2, byStatus: val3 , dateRange: val4}, { preserveState: true, replace: true });
 }, 300));
+
+
 
 </script>
 
