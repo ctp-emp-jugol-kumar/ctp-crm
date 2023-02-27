@@ -90,15 +90,13 @@ Route::prefix('admin')->group(function(){
         Route::get('edit/invoice/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
         Route::get('download-invoice/{id}', [InvoiceController::class, 'generateInvoicePDFFile'])->name('invoices.generateInvoicePDFFile');
         Route::delete('edit/invoice/{id}', [InvoiceController::class, 'destroy'])->name('invoices.delete');
-
-
-
         Route::patch('update/invoice/{id}',[InvoiceController::class, 'updateInvoice'])->name('updateInvoices');
+        Route::post('invoice/custom/transaction', [InvoiceController::class, 'addPayment'])->name('saveInvoiceTransaction');
 
 
-        // invoices management
+        // method management
         Route::resource('methods', MethodController::class);
-        // invoices management
+        // purposes management
         Route::resource('purposes', PurposeController::class);
         // projects management
         Route::resource('projects', ProjectController::class);
