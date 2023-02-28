@@ -221,7 +221,7 @@
                                     <button class="btn btn-primary w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">
                                         Send Invoice
                                     </button>
-                                    <a :href="info.others_info.create_invoice" class="btn btn-outline-secondary w-100 btn-download-invoice mb-75">Download</a>
+                                    <a :href="info.others_info.create_invoice+'?is_invoice=true'" class="btn btn-outline-secondary w-100 btn-download-invoice mb-75">Download</a>
                                     <button class="btn btn-info w-100 mb-75" @click="openTransactions">Transaction History</button>
                                     <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#add-payment-sidebar">Add Payment</button>
                                 </div>

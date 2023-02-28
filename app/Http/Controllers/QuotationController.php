@@ -540,35 +540,36 @@ class QuotationController extends Controller
         }
         foreach ($quotation->quotationItems as $item){
             $mainarray [] =[
-                'name' => $item->name ?? $item->itemname,
+                'name' => $item->name ?? $item->item_name,
                 'price' => $item->price,
                 'discount' => $item->discount,
                 'quantity' => $item->quantity ?? 1
             ];
         }
 
-        $transactions = [];
-        foreach($quotation->transactions as $item){
-            $transactions[] = [
-                "amount"     => $item->amount ?? 0,
-                "user"       => $item->user,
-                "method"     => $item->method->name,
+//        $transactions = [];
+//        foreach($quotation->transactions as $item){
+//            $transactions[] = [
+//                "amount"     => $item->amount ?? 0,
+//                "user"       => $item->user,
+//                "method"     => $item->method->name,
+//
+//                "pay_amount" => $item->pay_amount ?? 0,
+//                "discount"   => $item->discount ?? 0,
+//                "total_due"  => $item->total_due ?? 0,
+//                "old_total_pay" => $item->old_total_pay ?? 0,
+//                "date"       => $item->date->format('d M,y'),
+//                "note"       => $item->note,
+//            ];
+//        }
+//
+//        $totalPay = $quotation->transactions->sum('pay_amount') + $quotation->transactions->sum('discount');
+//
+//        $quotationLastTransaction = $quotation->transactions->last() ?? [
+//                'pay_amount' => 0,
+//                'discount' => 0
+//            ];
 
-                "pay_amount" => $item->pay_amount ?? 0,
-                "discount"   => $item->discount ?? 0,
-                "total_due"  => $item->total_due ?? 0,
-                "old_total_pay" => $item->old_total_pay ?? 0,
-                "date"       => $item->date->format('d M,y'),
-                "note"       => $item->note,
-            ];
-        }
-
-        $totalPay = $quotation->transactions->sum('pay_amount') + $quotation->transactions->sum('discount');
-
-        $quotationLastTransaction = $quotation->transactions->last() ?? [
-                'pay_amount' => 0,
-                'discount' => 0
-            ];
         $data = [
             'quotation'          => $quotation,
             'dates'              => [
@@ -585,18 +586,25 @@ class QuotationController extends Controller
                 'creator'        => $quotation->user,
                 'client'         => $quotation->client,
             ],
-            'total_pay'          => $totalPay,
-            'last_payment'       => $quotationLastTransaction,
-            'transactions'       => $transactions,
+
 
             'payment_methods'    => Method::all(),
             'payment_url'        => URL::route('saveQuotationTransaction'),
         ];
 
-//        return view('invoice.quotation', compact('data'));
+        $isQuotation = true;
+        if(Request::input('is_invoice') === 'true'){
+            $isQuotation = false;
+            $data["invoice"] = $quotation->invoice;
+
+        }
+
+
+
+//        return view('invoice.quotation', compact('data', 'isQuotation'));
 //        exit();
 
-        $pdf = Pdf::loadView('invoice.quotation', compact('data'));
+        $pdf = Pdf::loadView('invoice.quotation', compact('data', 'isQuotation'));
 
         return $pdf->download($data["quotation_owner"]["client"]["name"]."_".now()->format('d_m_Y')."_".'quotation.pdf');
 
@@ -709,11 +717,14 @@ class QuotationController extends Controller
      */
     public function update(Request $request, Quotation $quotation)
     {
+
+
         if(is_integer(Request::input("client_id"))){
             $clientId = Request::input('client_id');
         }else{
             $clientId = $quotation->client->id;
         }
+
 
         $quotation->update([
             'user_id'            => Auth::id(),
@@ -791,6 +802,17 @@ class QuotationController extends Controller
         $quotation->price = $price;
         $quotation->discount = $discount;
         $quotation->save();
+
+        if ($quotation->invoice &&  $quotation->invoice != null){
+            $quotation->invoice->update([
+                'quotation_id' => $quotation->id,
+                'client_id' => $quotation->client->id,
+                'sub_total' => $quotation->price,
+                'discount' => $quotation->discount,
+                'grand_total' => $quotation->price - $quotation->discount,
+                'due' => $quotation->price - $quotation->discount,
+            ]);
+        }
 
 
         $array = $quotation->quotationItems->toArray();

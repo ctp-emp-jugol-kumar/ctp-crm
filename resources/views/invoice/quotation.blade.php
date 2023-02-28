@@ -159,12 +159,13 @@
         </div>
         <div class="col-3">
             <div class="to">
-                <h3>Invoice ID:
-                    CTP-{{ date('Yd', strtotime($data['quotation']['created_at'])) }}{{ $data['quotation']['id'] }}</h3>
+                <h3> {{ $isQuotation ? "Quotation" : "Invoice" }} ID:
+                    CTP-{{ $data["quotation"]["u_id"].$data["quotation"]["id"] }}</h3>
                 <p>Date: {{ date('D, d F, Y', strtotime($data['quotation']['created_at'])) }}</p>
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col-3">
             <table class="main-table">
@@ -178,57 +179,65 @@
                 </thead>
                 <tbody>
                 @php
-                    $subTotal = 0;
-                    $discount = 0;
-                    $total = 0;
+                    $total = 0
                 @endphp
                 @foreach ($data['others_info']['items'] as $item)
-
                     <tr>
                         <td class="border text-left">
                             {!! $item['name'] !!}
                         </td>
                         <td class="border text-center">
-                            @php
-                                $subTotal += $item['price'] * $item['quantity'] ?? 1
-                            @endphp
                             <strong>{{ $item['price']}} * {{ $item['quantity']  }}
                                 = {{  $item['price'] * $item['quantity'] }}Tk</strong>
                         </td>
                         <td class="border text-right">
-                            @php
-                                $discount += $item['discount'] ?? 0
-                            @endphp
                             <strong>{{ $item['discount'] ?? 0 }} Tk</strong>
                         </td>
-                        @php
-                            $total += ($item['price'] * $item['quantity'] ??1) - $item['discount'] ?? 0
-                        @endphp
                         <td class="border text-right">
-                            <strong>{{ $total }} Tk</strong>
+                            <strong>{{ ($item['price'] * $item['quantity']) - $item['discount'] ?? 0 }} Tk</strong>
                         </td>
                     </tr>
                 @endforeach
-                <tr>
-                    <td class="text-right border" colspan="3">Sub Total</td>
-                    <td class="text-right border"><strong>{{ $subTotal }} Tk</strong></td>
-                </tr>
-                <tr>
-                    <td class="text-right border" colspan="3">Discount</td>
-                    <td class="text-right border"><strong> - {{ $discount }} Tk</strong></td>
-                </tr>
-                <tr>
-                    <td class="text-right border" colspan="3">Grand Total</td>
-                    <td class="text-right border"><strong>{{ $total }} Tk</strong></td>
-                </tr>
-                <tr>
-                    <td class="text-right border" colspan="3">Amount Paid</td>
-                    <td class="text-right border"><strong>- {{ $data['total_pay']  }} Tk</strong></td>
-                </tr>
-                <tr>
-                    <td class="text-right border" colspan="3">Total Due</td>
-                    <td class="text-right border"><strong>{{ $total - $data['total_pay'] }} Tk</strong></td>
-                </tr>
+                @php
+                    $grand_total = $data['quotation']["price"] -  $data['quotation']["discount"];
+                @endphp
+
+                @if($isQuotation != true )
+                    <tr>
+                        <td class="text-right border" colspan="3">Sub Total</td>
+                        <td class="text-right border"><strong>{{ $data['invoice']["sub_total"]  }} Tk</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-right border" colspan="3">Discount</td>
+                        <td class="text-right border"><strong> {{ $data['invoice']["discount"]  }} Tk</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-right border" colspan="3">Grand Total</td>
+                        <td class="text-right border"><strong>{{ $data['invoice']['grand_total'] }} Tk</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-right border" colspan="3">Amount Paid</td>
+                        <td class="text-right border"><strong>{{ $data['invoice']['pay'] }} Tk</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-right border" colspan="3">Total Due</td>
+                        <td class="text-right border"><strong>{{ $data['invoice']['due'] }}  Tk</strong></td>
+                    </tr>
+                @else
+                    <tr>
+                        <td class="text-right border" colspan="3">Sub Total</td>
+                        <td class="text-right border"><strong>{{ $data['quotation']["price"]  }} Tk</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-right border" colspan="3">Discount</td>
+                        <td class="text-right border"><strong> {{ $data['quotation']["discount"]  }} Tk</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-right border" colspan="3">Grand Total</td>
+                        <td class="text-right border"><strong>{{ $grand_total }} Tk</strong></td>
+                    </tr>
+                @endif
+
                 </tbody>
             </table>
         </div>
@@ -240,8 +249,7 @@
                 $numberToWords = new NumberToWords\NumberToWords;
                 $numberTransformer = $numberToWords->getNumberTransformer('en');
             @endphp
-
-            <p id="inword"><strong>Inword:</strong> {{ $numberTransformer->toWords($subTotal) }} Taka Only.</p>
+            <p id="inword"><strong>Inword:</strong> {{ $numberTransformer->toWords($grand_total) }} Taka Only.</p>
         </div>
     </div>
     {{--  <div class="row">
