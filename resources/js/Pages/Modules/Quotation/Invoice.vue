@@ -202,10 +202,9 @@
                                 <!-- Invoice Note starts -->
                                 <div class="card-body invoice-padding pt-0">
                                     <div class="row">
-                                        <div class="col-12">
-                                            <span class="fw-bold">Note:</span>
-                                            <span>It was a pleasure working with you and your team. We hope you will keep us in mind for future freelance
-                                                projects. Thank You!</span>
+                                        <div class="col-12 d-flex">
+                                            <span class="fw-bold me-1">Note:</span>
+                                            <span v-html="info.quotation.note"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -279,9 +278,11 @@
                         </div>
 
                         <div class="mb-1">
-                            <label class="form-label"></label>
+                            <label class="form-label">Payment Method: <Required/></label>
                             <v-select v-model="createForm.payment_id" :options="props.info.payment_methods" :reduce="payment => payment.id"
                                       label="name"  placeholder="Select Payment Method"></v-select>
+                            <InputFieldError :errors="errors.payment_id"/>
+
                         </div>
 
                         <div class="mb-1">
@@ -365,10 +366,13 @@ import {useDate} from "../../../composables/useDate";
 import Modal from '../../../components/Modal.vue'
 import moment from 'moment';
 import Swal from "sweetalert2";
+import InputFieldError from "../../../components/InputFieldError";
+
 let { formatted } = useDate();
 
 let props = defineProps({
     info:Object,
+    errors:Object | null,
 })
 let updateForm = useForm({
     quotId: props.info.quotation.id,
@@ -430,6 +434,13 @@ let addPayment = () => {
                 'Added!',
                 'Transition Added Successfully Done',
                 'success'
+            )
+        },
+        onError: (res)=>{
+            Swal.fire(
+                'Transaction Failed!',
+                res.payment_id,
+                'error'
             )
         }
     })

@@ -265,8 +265,8 @@
       </div>--}}
 
     <div class="row mt-3">
-        <div class="col-3">
-            <p class="text-center">This is an electronically generated document, no signature is required.</p>
+        <div class="col-3 text-center">
+            <p class="text-center">{!! $data['quotation']["note"] ?? null !!}</p>
             <p class="text-center">Created By {{ $data['quotation_owner']['creator']['name'] }}</p>
         </div>
     </div>

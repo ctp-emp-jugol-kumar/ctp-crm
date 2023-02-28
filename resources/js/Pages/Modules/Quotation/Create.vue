@@ -159,6 +159,19 @@
                                     </div>
                                 </div>
 
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Note</h4>
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-12">
+                                                    <TextEditor v-model="formData.note"
+                                                                placeholder="Item Details"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <div class="row">
                                     <div class="col-md-12" data-repeater-item
                                          v-for="(item, index) in formData.quatations">
@@ -369,6 +382,7 @@
         Trams_Services: paymnetPolicy,
         discount      : null,
         status        : null,
+        note          : null,
 
         works         : [],
         domains       : [],

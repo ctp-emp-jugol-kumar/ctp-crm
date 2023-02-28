@@ -168,10 +168,9 @@
                                 <!-- Invoice Note starts -->
                                 <div class="card-body invoice-padding pt-0">
                                     <div class="row">
-                                        <div class="col-12">
-                                            <span class="fw-bold">Note:</span>
-                                            <span>It was a pleasure working with you and your team. We hope you will keep us in mind for future freelance
-                                                projects. Thank You!</span>
+                                        <div class="col-12 d-flex">
+                                            <span class="fw-bold me-1">Note:</span>
+                                            <span v-html="info.quotation.note"></span>
                                         </div>
                                     </div>
                                 </div>

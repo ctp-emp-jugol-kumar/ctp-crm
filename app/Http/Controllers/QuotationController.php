@@ -178,6 +178,7 @@ class QuotationController extends Controller
             'payment_policy'     => Request::input('payment_policy'),
             'terms_of_service'   => Request::input('Trams_Services'),
             'status'             => Request::input('status')["name"],
+            'note'               => Request::input('note')
         ]);
 
         $quotationDomains        = Request::input('domains');
@@ -735,6 +736,7 @@ class QuotationController extends Controller
             'payment_policy'     => Request::input('payment_policy'),
             'terms_of_service'   => Request::input('Trams_Services'),
             'status'             => Request::input('status')["name"] ?? $quotation->status,
+            'note'               => Request::input('note')
         ]);
 
         $quotationDomains        = Request::input('domains');
@@ -893,6 +895,11 @@ class QuotationController extends Controller
     }
 
     public function addPayment(){
+
+        Request::validate([
+            'payment_id' => 'required|integer'
+        ]);
+
         $quotation = Quotation::with(['invoice','client'])->findOrFail(Request::input('quotation_id'));
         $invoice = Invoice::where('quotation_id',$quotation->id)->first();
         $totalPay = Request::input('pay_amount')+Request::input('discount');
