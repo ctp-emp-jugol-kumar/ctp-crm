@@ -13,6 +13,7 @@ use App\Http\Controllers\HostingController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MethodController;
+use App\Http\Controllers\NoteCategoryController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\ProjectController;
@@ -109,6 +110,8 @@ Route::prefix('admin')->group(function(){
         Route::resource('expense', ExpanceController::class);
         Route::post('update-expance/{id}', [ExpanceController::class, 'update']);
         Route::resource('chat', ChatController::class);
+        // note category management
+        Route::resource('notes-category', NoteCategoryController::class);
         // note management
         Route::resource('notes', NoteController::class);
     });
