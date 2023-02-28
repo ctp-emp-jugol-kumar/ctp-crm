@@ -226,12 +226,33 @@
                         </Link>
                     </li>
 
-                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('project.show') || this.$page.props.auth.user.role == 'Administrator' ">
-                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/notes">
-                            <vue-feather type="package" />
-                            <span class="menu-title text-truncate" data-i18n="Chat">Notes</span>
-                        </Link>
+
+                    <li class=" nav-item has-sub" :class="{'open' : clickMenu === 5}"  @click="toggleSubMenu(5)"
+                        v-if="this.$page.props.auth.user.can.includes('user.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                        <a preserve-scroll class="d-flex align-items-center">
+                            <vue-feather type="cpu" />
+                            <span class="menu-title text-truncate"
+                                  data-i18n="Authentication">Notes</span>
+                        </a>
+                        <ul class="menu-content">
+                            <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('project.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                                <Link preserve-scroll class="d-flex align-items-center" href="/admin/notes-category">
+                                    <vue-feather type="circle" />
+                                    <span class="menu-title text-truncate" data-i18n="Chat">Notes Category</span>
+                                </Link>
+                            </li>
+
+                            <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('client.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                                <Link preserve-scroll class="d-flex align-items-center" href="/admin/notes">
+                                    <vue-feather type="circle" />
+                                    <span class="menu-title text-truncate" data-i18n="Chat">Notes</span>
+                                </Link>
+                            </li>
+                        </ul>
                     </li>
+
+
+
 
                     <li class=" nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/logout">

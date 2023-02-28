@@ -189,13 +189,12 @@
                 </div>
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Assign Agent: </label>
+                        <label>Client Status: </label>
                         <v-select v-model="createForm.status"
                                   @update:modelValue="subCategorySelected"
                                   label="name"
                                   :options="status"
-                                  placeholder="~~Select Sub Category~~"
-                                  :reduce="optoin"></v-select>
+                                  placeholder="~~Select Sub Category~~"></v-select>
                     </div>
                     <div class="col-md">
                         <label>Assign Agent: </label>
