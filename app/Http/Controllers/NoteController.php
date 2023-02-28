@@ -88,8 +88,10 @@ class NoteController extends Controller
      * @param  \App\Models\Note  $note
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function show(Note $note)
+    public function show($id)
     {
+
+        $note = Note::with(["noteCategory", "users"])->findOrFail($id);
         if(Request::input("satus") === 'edit'){
             return inertia('Modules/Notes/Edit', [
                 "note" => $note
