@@ -114,6 +114,7 @@ Route::prefix('admin')->group(function(){
         Route::resource('notes-category', NoteCategoryController::class);
         // note management
         Route::resource('notes', NoteController::class);
+        Route::post('notes-update', [NoteController::class, 'update'])->name('notes.update');
     });
 
     Route::post('/logout', [LoginController::class, 'destroy']);

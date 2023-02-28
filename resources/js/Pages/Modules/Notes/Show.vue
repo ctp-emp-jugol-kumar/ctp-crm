@@ -14,8 +14,8 @@
                                      <h4 class="me-2">Assigned Users: </h4>
                                      <div class="avatar-group mt-50">
                                          <div class="avatar pull-up "
-                                              data-bs-original-title="Elicia Rieske"
-                                              v-for="(user, index) in note.users" :key="user.id" v-c-tooltip="user.name">
+                                              v-for="(user, index) in note.users"
+                                              :key="user.id" v-c-tooltip="user.name">
                                              <img :src="user.photo" alt="Avatar" height="30" width="30">
                                          </div>
                                      </div>

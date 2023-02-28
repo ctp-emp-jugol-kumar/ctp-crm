@@ -65,7 +65,7 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        $data = Request::validate([
+        Request::validate([
             "title" =>  "required",
             "notes" => "required",
             "category" => "required|integer",
@@ -75,7 +75,7 @@ class NoteController extends Controller
             'title' => Request::input('title'),
             'note_category_id' => Request::input('category'),
             'notes' => Request::input('notes'),
-            'status' => filled(Request::input('status'))
+            'status' => Request::input('status') === "true",
         ]);
         $note->users()->attach(Request::input('agents'));
         return back();
@@ -94,7 +94,10 @@ class NoteController extends Controller
         $note = Note::with(["noteCategory", "users"])->findOrFail($id);
         if(Request::input("satus") === 'edit'){
             return inertia('Modules/Notes/Edit', [
-                "note" => $note
+                "note" => $note,
+                "users" => User::all(),
+                "categories" => NoteCategory::all(),
+                "update_url" => URL::route('notes.update')
             ]);
         }else{
             return inertia('Modules/Notes/Show', [
@@ -119,11 +122,29 @@ class NoteController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Note  $note
-     * @return \Illuminate\Http\Response
+     * @return array
      */
-    public function update(Request $request, Note $note)
+    public function update()
     {
-        //
+        $note = Note::findOrFail(Request::input('noteId'));
+
+        $agents = [];
+        foreach (Request::input("agents") as $item){
+            if (is_int($item)){
+                $agents[] = $item;
+            }else{
+                $agents[] = $item["id"];
+            }
+        }
+        $note->update([
+            'title' => Request::input('title'),
+            'note_category_id' => Request::input('category'),
+            'notes' => Request::input('notes'),
+            'status' => Request::input("status"),
+        ]);
+
+        $note->users()->sync($agents);
+        return back();
     }
 
     /**
