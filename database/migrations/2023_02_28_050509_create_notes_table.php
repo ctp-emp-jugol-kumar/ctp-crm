@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateNotesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +14,11 @@ class CreateNotesTable extends Migration
     public function up()
     {
         Schema::create('notes', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->longText('title');
-            $table->boolean('status')->default(0);
+            $table->id();
+            $table->foreignId('note_category_id')->constrained('note_categories')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('title');
+            $table->longText('notes');
+            $table->boolean('status');
             $table->timestamps();
         });
     }
@@ -29,4 +32,4 @@ class CreateNotesTable extends Migration
     {
         Schema::dropIfExists('notes');
     }
-}
+};
