@@ -18,7 +18,10 @@
                         <div class="card-body">
                             <h1 class="fw-bolder">Total Seals</h1>
                             <div class="d-flex align-items-center justify-content-between pe-3">
-                                <h2 class="text-success">{{ data.totalSeals }} Tk</h2>
+                                <div>
+                                    <h2 class="text-success">{{ data.totalGrand }} Tk</h2>
+                                    <small class="text-warning">Total Seals Without Discount : {{ data.totalSeals }}</small>
+                                </div>
                                 <span class="text-success">
                                     <vue-feather type="trending-up" size="40"/>
                                 </span>
@@ -43,9 +46,12 @@
                 <div class="col-md-4 col-sm-12">
                     <div class="card">
                         <div class="card-body">
-                            <h2 class="fw-bolder">Gross Profit</h2>
+                            <div class="d-flex align-items-center">
+                                <h2 class="fw-bolder">Gross Profit</h2>
+                                <span class="text-info cursor-pointer" v-c-tooltip="`(Custom Invoice Amount + Quotation Invoice Amount ) - (Custom Invoice Discount + Quotation Invoice Discount + Total Expanse ) = Gross profit`"><vue-feather type="info"/></span>
+                            </div>
                             <div class="d-flex align-items-center justify-content-between pe-3">
-                                <h2 class="text-info">{{ data.totalSeals - data.totalExpanse}} Tk</h2>
+                                <h2 class="text-info">{{ data.totalProfit }} Tk</h2>
                                 <span class="text-info">
                                     <vue-feather type="refresh-ccw" size="40"/>
                                 </span>
@@ -62,8 +68,8 @@
                     <div class="card">
                         <div class="card-body d-flex align-items-center justify-content-between">
                             <div>
-                                <h3 class="fw-bolder mb-75">{{ data.todaySeals - data.todayDiscount}} Tk</h3>
-                                <span>Today Seals</span>
+                                <h3 class="fw-bolder mb-75"> {{ data.totalPay }} Tk</h3>
+                                <span>Total Payment</span>
                             </div>
                             <div class="avatar bg-light-success p-50">
                                 <vue-feather type="dollar-sign"/>
@@ -75,8 +81,8 @@
                     <div class="card">
                         <div class="card-body d-flex align-items-center justify-content-between">
                             <div>
-                                <h3 class="fw-bolder mb-75">{{ data.todayIn }} Tk</h3>
-                                <span>Today Income</span>
+                                <h3 class="fw-bolder mb-75">{{ data.totalDue }} Tk</h3>
+                                <span>Total Due</span>
                             </div>
                             <div class="avatar bg-light-primary p-50">
                                 <span class="avatar-content">
@@ -90,8 +96,8 @@
                     <div class="card">
                         <div class="card-body d-flex align-items-center justify-content-between">
                             <div>
-                                <h3 class="fw-bolder mb-75">{{ data.todayExp }} Tk</h3>
-                                <span>Today Expanse</span>
+                                <h3 class="fw-bolder mb-75">{{ data.todayIn }} Tk</h3>
+                                <span>Today Income</span>
                             </div>
                             <div class="avatar bg-light-danger p-50">
                                 <span class="avatar-content">
@@ -106,8 +112,8 @@
                     <div class="card">
                         <div class="card-body d-flex align-items-center justify-content-between">
                             <div>
-                                <h3 class="fw-bolder mb-75">{{ data.todayIn - data.todayExp }} Tk</h3>
-                                <span>Today Profit</span>
+                                <h3 class="fw-bolder mb-75">{{ data.todayExp }} Tk</h3>
+                                <span>Today Expanse</span>
                             </div>
                             <div class="avatar bg-light-info p-50">
                                 <vue-feather type="framer"/>

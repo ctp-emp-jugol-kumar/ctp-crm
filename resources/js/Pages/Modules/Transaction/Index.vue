@@ -10,7 +10,10 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
-                                    <h4 class="card-title">Transactions Information's </h4>
+                                    <div class="d-flex align-items-center">
+                                        <h4 class="card-title me-1">Transactions Information's</h4>
+                                        <span class="text-info cursor-pointer" @click="tranDetails"> <vue-feather type="info" size="15"/></span>
+                                    </div>
                                     <div>
                                         <CDropdown>
                                             <CDropdownToggle class="p-0">
@@ -139,6 +142,21 @@
             </div>
         </div>
     </div>
+
+
+
+    <Modal id="showData" title="Total Transactions" v-vb-is:modal size="sm">
+        <div class="modal-body">
+            <div class="row mb-1">
+                <div class="col-md">
+                    <h3>Total Credited : {{ credited }} Tk</h3>
+                    <h3>Total Debited : {{ debited }} Tk</h3>
+                </div>
+            </div>
+        </div>
+    </Modal>
+
+
 </template>
 <script>
 
@@ -161,12 +179,15 @@ const range = useDate();
 import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
 
 
-let props = defineProps({
+const props = defineProps({
     transactions: []|null,
+    credited:null,
+    debited:null,
     filters: Object,
     main_url: String,
 });
 
+const tranDetails = () => document.getElementById("showData").$vb.modal.show()
 
 const url = location.search;
 const exportPDF =() =>{
@@ -195,6 +216,8 @@ let perPage = ref(props.filters.perPage);
 watch([search, perPage, searchByStatus, dateRange], debounce(function ([val, val2, val3, val4]) {
     Inertia.get(props.main_url, { search: val, perPage: val2, byStatus: val3 , dateRange: val4}, { preserveState: true, replace: true });
 }, 300));
+
+
 
 
 

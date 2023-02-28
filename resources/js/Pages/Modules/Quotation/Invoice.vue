@@ -320,7 +320,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in info.invoice.transactions">
+                    <tr v-for="item in info.invoice.transactions" :key="item.u_id">
                         <td>
                             <a href="javascript:void(0)">#{{ item.u_id }}</a>
                         </td>
@@ -333,14 +333,15 @@
                             Due <span>{{ item.total_due }} Tk</span>
                         </td>
                         <td>
-                            <span class="text-capitalize">{{ item.user.name  }}</span></td>
+                            <span class="text-capitalize">{{ item.user.name  }}</span>
+                        </td>
                         <td><span class="text-capitalize">{{ item.method.name }}</span></td>
                         <td>
                             <div class="d-flex align-items-center">
-                                <span class="cursor-pointer text-info me-2" v-c-tooltip="item.note">
+                                <span class="cursor-pointer text-info me-2" v-if="item.note" v-c-tooltip="item?.note">
                                     <vue-feather type="info"/>
                                 </span>
-                                    <span class="cursor-pointer text-warning" v-c-tooltip="`Download Payment Statement`">
+                                <span class="cursor-pointer text-warning" v-c-tooltip="`Download Payment Statement`">
                                     <vue-feather type="download"/>
                                 </span>
                             </div>
@@ -408,11 +409,6 @@ let subTotal = computed(() =>{
 })
 
 
-// let discount = computed(() => {
-//     let sum = 0;
-//     [...props.info.others_info.items].map(item => sum = sum +  parseInt(item.discount) ?? 0)
-//     return sum + props.info.quotation.discount;
-// })
 
 let grandTotal = computed(() =>{
     return props.info.quotation.price - props.info.quotation.discount;
@@ -444,8 +440,6 @@ let addPayment = () => {
             )
         }
     })
-
-    console.log(createForm);
 }
 
 const openTransactions =()=> document.getElementById('showTransactions').$vb.modal.show();

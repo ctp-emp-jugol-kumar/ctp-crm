@@ -57,10 +57,16 @@ class TransactionController extends Controller
             return $this->loadDownload($transactions);
         }
 
+
+        $credited = Transaction::where('type', 'in')->sum('total_pay');
+        $debided = Transaction::where('type', 'out')->sum('total_pay');
+
         return inertia('Modules/Transaction/Index', [
             'transactions' => $transactions,
             'filters'     => Request::only(['search','perPage', 'byStatus', 'dateRange']),
             "main_url" => Url::route('transaction.index'),
+            "credited" => $credited,
+            "debited" => $debided
         ]);
     }
 

@@ -8,13 +8,16 @@ use App\Models\Design;
 use App\Models\Domain;
 use App\Models\Expanse;
 use App\Models\Hosting;
+use App\Models\Invoice;
 use App\Models\Platform;
 use App\Models\Project;
 use App\Models\Quotation;
+use App\Models\Transaction;
 use App\Models\TransactionLine;
 use App\Models\User;
 use App\Models\Website;
 use App\Models\Work;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -35,20 +38,46 @@ class DashboardController extends Controller
             abort(401);
         }
 
+        // custom invoice total incomes
         $invoiceTotalSeals = CustomInvoice::sum('total_price');
         $invoiceTotalDiscount = CustomInvoice::sum('discount');
+        $cinvoiceGrandTotal = $invoiceTotalSeals - $invoiceTotalDiscount;
 
-        $quotationTotalSeals = Quotation::sum('price');
-        $quotationTotalDiscount = Quotation::sum('discount');
+        $cinvoiceTotalPay = CustomInvoice::sum('pay');
+        $cinvoiceTotalDue = CustomInvoice::sum('due');
+
+        // quotation to invoice total incomes
+        $invoiceSubTotal = Invoice::sum('sub_total');
+        $invoiceGrandTotal = Invoice::sum('grand_total');
+        $invoiceDiscount = Invoice::sum('discount');
+
+        $invoiceTotalPay = Invoice::sum('pay');
+        $invoiceTotalDue = Invoice::sum('due');
 
 
-        $totalSeals = $invoiceTotalSeals + $quotationTotalSeals;
-        $totalDiscount = $invoiceTotalDiscount + $quotationTotalDiscount;
+        // total expanse
+        $totalExpanse = Expanse::sum('amount');
 
 
-        $todayIn = TransactionLine::whereDate('created_at', date('Y-m-d'))->where('type', 'in')->sum('amount');
-        $todayExp = TransactionLine::whereDate('created_at', date('Y-m-d'))->where('type', 'out')->sum('amount');
+        // calculation
+        $totalSeals = $invoiceTotalSeals + $invoiceSubTotal;
+        $totalDiscount = $invoiceTotalDiscount + $invoiceDiscount;
 
+        $totalGrand = $invoiceGrandTotal + $cinvoiceGrandTotal;
+        $totalProfit = $totalGrand - $totalExpanse;
+
+        $grandTotalPay = $cinvoiceTotalPay + $invoiceTotalPay;
+        $grandTotalDue = $cinvoiceTotalDue + $invoiceTotalDue;
+
+
+//        return $totalSeals. " ".$totalDiscount;
+
+        $invoiceTotalPay = Invoice::sum('pay');
+        $invoiceTotalDue = Invoice::sum('due');
+
+
+        $todayIn = Transaction::whereDate('created_at', Carbon::now()->format('Y-m-d'))->where('type', 'in')->sum('total_pay');
+        $todayExp = Transaction::whereDate('created_at',  Carbon::now()->format('Y-m-d'))->where('type', 'out')->sum('total_pay');
 
         $invoiceTotalSeals = CustomInvoice::sum('total_price');
         $invoiceTotalDiscount = CustomInvoice::sum('discount');
@@ -87,9 +116,21 @@ class DashboardController extends Controller
                 'users' => User::count(),
                 'website' => Website::count(),
                 'work' => Work::count(),
+
+
+                // transaction list
                 'totalSeals' => $totalSeals,
                 'totalDiscount' => $totalDiscount,
-                'totalExpanse' =>Expanse::sum('amount'),
+                'totalGrand' => $totalGrand,
+                'totalExpanse' => $totalExpanse,
+                'totalProfit' => $totalProfit,
+
+                'totalPay' => $grandTotalPay,
+                'totalDue' => $grandTotalDue,
+
+
+
+
                 'todayIn' => $todayIn,
                 'todayExp' => $todayExp,
 

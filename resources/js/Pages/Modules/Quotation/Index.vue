@@ -90,12 +90,12 @@
                                                     <span class="text-info cursor-pointer"
                                                           v-if="qut.status === 'Converted To Invoice'"
                                                           v-c-tooltip="`
-                                                          Invoice Id : #${qut.invoice.u_id}${qut.invoice.id}
+                                                          Invoice Id : #${qut.invoice?.u_id}${qut.invoice?.id}
                                                           Client Name: ${qut.client.name}
                                                           Phone : ${qut.client.phone ?? null}
-                                                          Total Amount: ${qut.invoice.grand_total}
-                                                          Total pay: ${qut.invoice.pay}
-                                                          Total Due: ${qut.invoice.due}`"
+                                                          Total Amount: ${qut.invoice?.grand_total}
+                                                          Total pay: ${qut.invoice?.pay}
+                                                          Total Due: ${qut.invoice?.due}`"
                                                     >
                                                     <vue-feather type="info" size="15"/>
                                                 </span>
