@@ -13,7 +13,7 @@
                                     <h4 class="card-title">Lead Information's </h4>
 <!--                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal" data-bs-target="#addItemModal">Add Client</button>-->
                                     <button
-                                        v-if="this.$page.props.auth.user.can.includes('client.create') || this.$page.props.auth.user.role == 'Administrator'"
+                                        v-if="this.$page.props.auth.user.can.includes('leads.create') || this.$page.props.auth.user.role == 'Administrator'"
                                         class="dt-button add-new btn btn-primary"
                                         @click="addDataModal"
                                     >
@@ -33,10 +33,10 @@
                                                     <!--                                                    <vue-feather type="download" size="15"/>-->
                                                     <span class="ms-1">PDF</span>
                                                 </CDropdownItem>
-                                                <CDropdownItem target="_blank">
-                                                    <!--                                                    <vue-feather type="download" size="15"/>-->
+<!--                                                <CDropdownItem target="_blank">
+                                                    &lt;!&ndash;                                                    <vue-feather type="download" size="15"/>&ndash;&gt;
                                                     <span class="ms-1">EXCEL</span>
-                                                </CDropdownItem>
+                                                </CDropdownItem>-->
                                             </CDropdownMenu>
                                         </CDropdown>
                                     </div>
@@ -133,17 +133,16 @@
                                                           class="btn p-50 btn-sm btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
                                                     </Link>-->
-
                                                     <button type="button" @click="editClient(user.show_url)"
+                                                            v-if="this.$page.props.auth.user.can.includes('leads.edit') || this.$page.props.auth.user.role == 'Administrator'"
                                                             data-title="Edit Item"
-                                                            v-if="this.$page.props.auth.user.can.includes('client.edit') || this.$page.props.auth.user.role == 'Administrator' "
                                                             class="btn p-50 btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="pencil"/>
                                                     </button>
 
                                                     <button @click="deleteItemModal(user.id)" type="button"
                                                             data-title="Delete"
-                                                            v-if="this.$page.props.auth.user.can.includes('client.delete') || this.$page.props.auth.user.role == 'Administrator' "
+                                                            v-if="this.$page.props.auth.user.can.includes('leads.delete') || this.$page.props.auth.user.role == 'Administrator' "
                                                             class="btn p-50 btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash"/>
                                                     </button>
@@ -554,11 +553,11 @@
 
     const clientStatus = ref(true);
     const changeStatus = (event) =>{
-        clientStatus.value = event.name !== 'Convarted To Customer';
+        clientStatus.value = event.name !== 'Converted to Customer';
     }
 
     const updateStatus = (id, status) =>{
-        clientStatus.value = event.name !== 'Convarted To Customer';
+        clientStatus.value = event.name !== 'Converted to Customer';
         updateForm.status = status;
         document.getElementById('chaneStatusModal').$vb.modal.show()
     }
@@ -566,7 +565,7 @@
 
     let status = [
         {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Proposal Sent'},
-        {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Convarted To Customer'}
+        {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Converted to Customer'}
     ]
 
     let deleteItemModal = (id) => {
@@ -600,7 +599,12 @@
         })
     };
 
-    let addDataModal = () => document.getElementById('addItemModal').$vb.modal.show()
+    let addDataModal = () => {
+        createForm.reset();
+        createForm.processing = false;
+        clientStatus.value = true;
+        document.getElementById('addItemModal').$vb.modal.show()
+    }
     let createClientForm = () => {
         Inertia.post('clients', createForm, {
             preserveState: true,

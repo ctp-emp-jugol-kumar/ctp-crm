@@ -27,7 +27,10 @@ class ClientsController extends Controller
 
         return inertia('Modules/Clients/Index', [
             $search = Request::input('search'),
-            'clients' => Client::query()->with('projects')->where('status', 'Converted to Customer')
+            'clients' => Client::query()
+                ->with('projects')
+                ->where('status', '=', 'Converted to Customer')
+                ->latest()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query
                         ->where('email', 'like', "%{$search}%")
@@ -160,15 +163,29 @@ class ClientsController extends Controller
             abort(401 );
         }
 
-
-//        return Request::all();
         $data = $request->validated();
-        $data['status'] = $request->status["name"];
+
+        if(is_array(Request::input('status'))){
+            $data['status'] = $request->status["name"];
+        }else{
+            $data['status'] = $request->status;
+        }
+
+        $agents = [];
+        foreach (Request::input("agents") as $item){
+            if (is_int($item)){
+                $agents[] = $item;
+            }else{
+                $agents[] = $item["id"];
+            }
+        }
 
         $client->update($data);
-        if ($request->agents){
-            $client->users()->sync($request->input('agents'));
-        }
+        $client->users()->sync($agents);
+
+//        if ($request->agents){
+//            $client->users()->sync($request->input('agents'));
+//        }
         return back();
 //        return redirect()->route('clients.index');
     }

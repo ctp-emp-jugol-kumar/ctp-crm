@@ -95,11 +95,11 @@
                                                         <vue-feather type="more-vertical" />
                                                     </CDropdownToggle>
                                                     <CDropdownMenu>
-                                                        <CDropdownItem :href="user.show_url"  v-if="this.$page.props.auth.user.can.includes('client.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                                                        <CDropdownItem  @click="editClient(user.show_url)"   v-if="this.$page.props.auth.user.can.includes('client.show') || this.$page.props.auth.user.role == 'Administrator' ">
                                                             <Icon title="pencil" />
                                                             <span class="ms-1">Edit</span>
                                                         </CDropdownItem>
-                                                        <CDropdownItem @click="editClient(user.show_url)"  v-if="this.$page.props.auth.user.can.includes('client.edit') || this.$page.props.auth.user.role == 'Administrator' ">
+                                                        <CDropdownItem :href="user.show_url" v-if="this.$page.props.auth.user.can.includes('client.edit') || this.$page.props.auth.user.role == 'Administrator' ">
                                                             <Icon title="eye" />
                                                             <span class="ms-1">Show</span>
                                                         </CDropdownItem>
@@ -415,7 +415,7 @@
 
     let status = [
         {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Proposal Sent'},
-        {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Convarted To Customer'}
+        {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Converted to Customer'}
     ]
 
     let deleteItemModal = (id) => {
