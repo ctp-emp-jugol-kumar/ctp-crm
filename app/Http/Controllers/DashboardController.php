@@ -103,8 +103,44 @@ class DashboardController extends Controller
 
 
 
+        // This Year Transaction Chart Query
+        $tranByCount = Transaction::query()
+            ->whereYear('created_at', date('Y'))
+            ->selectRaw("month(created_at) as month")
+            ->selectRaw('count(*) as count')
+            ->selectRaw('Sum(total_pay) as amount')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('month', 'count')
+            ->values()
+            ->toArray();
+
+//        return dd($tranByCount);
+        $tranByAmount = Transaction::query()
+            ->whereYear('created_at', date('Y'))
+            ->selectRaw("month(created_at) as month")
+            ->selectRaw('count(*) as count')
+            ->selectRaw('Sum(total_pay) as amount')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('amount', 'month')
+            ->values()
+            ->toArray();
+
+       // This Year Expanse Chart Query
+        $tranByExpanse = Expanse::query()
+            ->whereYear('created_at', date('Y'))
+            ->selectRaw("month(created_at) as month")
+            ->selectRaw('Sum(amount) as amount')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('amount', 'month')
+            ->values()
+            ->toArray();
+
+
         return Inertia::render('Test', [
-            "data" => [
+            "trans" => [
                 'clients' => Client::count(),
                 'packages' => Design::count(),
                 'domain' => Domain::count(),
@@ -135,7 +171,11 @@ class DashboardController extends Controller
                 'todayExp' => $todayExp,
 
                 'todaySeals' => $todaySeals,
-                'todayDiscount' => $todayDiscount
+                'todayDiscount' => $todayDiscount,
+
+                'tranByCount' => $tranByCount,
+                'tranByAmount' => $tranByAmount,
+                'tranByExp' => $tranByExpanse,
             ]
         ]);
     }

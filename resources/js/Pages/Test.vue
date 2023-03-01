@@ -5,7 +5,6 @@
         <meta type="description" content="Home information" head-key="description">
     </Head>
 
-
     <!-- Dashboard Ecommerce Starts -->
     <div class="app-content content ">
         <div class="content-overlay"></div>
@@ -19,8 +18,8 @@
                             <h1 class="fw-bolder">Total Seals</h1>
                             <div class="d-flex align-items-center justify-content-between pe-3">
                                 <div>
-                                    <h2 class="text-success">{{ data.totalGrand }} Tk</h2>
-                                    <small class="text-warning">Total Seals Without Discount : {{ data.totalSeals }}</small>
+                                    <h2 class="text-success">{{ trans.totalGrand }} Tk</h2>
+                                    <small class="text-warning">Total Seals Without Discount : {{ trans.totalSeals }}</small>
                                 </div>
                                 <span class="text-success">
                                     <vue-feather type="trending-up" size="40"/>
@@ -34,7 +33,7 @@
                         <div class="card-body">
                             <h2 class="fw-bolder">Total Expanse</h2>
                             <div class="d-flex align-items-center justify-content-between pe-3">
-                                <h2 class="text-danger">{{ data.totalExpanse }} Tk</h2>
+                                <h2 class="text-danger">{{ trans.totalExpanse }} Tk</h2>
                                 <span class="text-danger">
                                     <vue-feather type="trending-down" size="40"/>
                                 </span>
@@ -51,7 +50,7 @@
                                 <span class="text-info cursor-pointer" v-c-tooltip="`(Custom Invoice Amount + Quotation Invoice Amount ) - (Custom Invoice Discount + Quotation Invoice Discount + Total Expanse ) = Gross profit`"><vue-feather type="info"/></span>
                             </div>
                             <div class="d-flex align-items-center justify-content-between pe-3">
-                                <h2 class="text-info">{{ data.totalProfit }} Tk</h2>
+                                <h2 class="text-info">{{ trans.totalProfit }} Tk</h2>
                                 <span class="text-info">
                                     <vue-feather type="refresh-ccw" size="40"/>
                                 </span>
@@ -68,7 +67,7 @@
                     <div class="card">
                         <div class="card-body d-flex align-items-center justify-content-between">
                             <div>
-                                <h3 class="fw-bolder mb-75"> {{ data.totalPay }} Tk</h3>
+                                <h3 class="fw-bolder mb-75"> {{ trans.totalPay }} Tk</h3>
                                 <span>Total Payment</span>
                             </div>
                             <div class="avatar bg-light-success p-50">
@@ -81,7 +80,7 @@
                     <div class="card">
                         <div class="card-body d-flex align-items-center justify-content-between">
                             <div>
-                                <h3 class="fw-bolder mb-75">{{ data.totalDue }} Tk</h3>
+                                <h3 class="fw-bolder mb-75">{{ trans.totalDue }} Tk</h3>
                                 <span>Total Due</span>
                             </div>
                             <div class="avatar bg-light-primary p-50">
@@ -96,7 +95,7 @@
                     <div class="card">
                         <div class="card-body d-flex align-items-center justify-content-between">
                             <div>
-                                <h3 class="fw-bolder mb-75">{{ data.todayIn }} Tk</h3>
+                                <h3 class="fw-bolder mb-75">{{ trans.todayIn }} Tk</h3>
                                 <span>Today Income</span>
                             </div>
                             <div class="avatar bg-light-danger p-50">
@@ -112,12 +111,24 @@
                     <div class="card">
                         <div class="card-body d-flex align-items-center justify-content-between">
                             <div>
-                                <h3 class="fw-bolder mb-75">{{ data.todayExp }} Tk</h3>
+                                <h3 class="fw-bolder mb-75">{{ trans.todayExp }} Tk</h3>
                                 <span>Today Expanse</span>
                             </div>
                             <div class="avatar bg-light-info p-50">
                                 <vue-feather type="framer"/>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <Bar :data="data" :options="options" />
                         </div>
                     </div>
                 </div>
@@ -231,9 +242,45 @@
 
 <script setup>
 
+import {
+    Chart as ChartJS,
+    Title,
+    Tooltip,
+    Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale
+} from 'chart.js'
+import { Bar } from 'vue-chartjs'
+import {options} from './Modules/chartConfig'
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+
+
 let props = defineProps({
-    data: Object,
+    trans: Object,
 })
+
+const data = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    datasets: [
+        {
+            label: 'Transaction Count',
+            backgroundColor: '#d8b7ff',
+            data:  props.trans.tranByCount,
+        },
+        {
+            label: 'Transaction Amount Tk ',
+            backgroundColor: '#c6ffa3',
+            data:  props.trans.tranByAmount,
+        },
+        {
+            label: 'Expanse Amount Tk ',
+            backgroundColor: '#ffb5b5',
+            data:  props.trans.tranByExp,
+        },
+    ]
+}
+
 
 
 </script>
