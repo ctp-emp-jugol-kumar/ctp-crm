@@ -115,6 +115,7 @@ Route::prefix('admin')->group(function(){
         // note management
         Route::resource('notes', NoteController::class);
         Route::post('notes-update', [NoteController::class, 'update'])->name('notes.update');
+        Route::get('employee-notes', [NoteController::class, 'employeeNotes'])->name('notes.empNots');
     });
 
     Route::post('/logout', [LoginController::class, 'destroy']);

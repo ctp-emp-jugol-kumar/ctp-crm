@@ -227,8 +227,8 @@
                     </li>
 
 
-                    <li class=" nav-item has-sub" :class="{'open' : clickMenu === 5}"  @click="toggleSubMenu(5)"
-                        v-if="this.$page.props.auth.user.can.includes('user.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                    <li class="nav-item has-sub" :class="{'open' : clickMenu === 5}"  @click="toggleSubMenu(5)"
+                        v-if="this.$page.props.auth.user.can.includes('notes.show') || this.$page.props.auth.user.role == 'Administrator' ">
                         <a preserve-scroll class="d-flex align-items-center">
                             <vue-feather type="cpu" />
                             <span class="menu-title text-truncate"
@@ -250,11 +250,16 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-item" v-else>
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/employee-notes">
+                            <vue-feather type="file-text" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Notes</span>
+                        </Link>
+                    </li>
 
 
 
-
-                    <li class=" nav-item">
+                    <li class="nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" method="post" href="/admin/logout">
                             <vue-feather type="log-out" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Logout</span>

@@ -153,8 +153,18 @@ class NoteController extends Controller
      * @param  \App\Models\Note  $note
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Note $note)
+    public function destroy($id)
     {
-        //
+        Note::findOrFail($id)->delete();
+        return back();
     }
+
+
+    public function employeeNotes(){
+        return inertia('Modules/Notes/EmployeeNotes', [
+            'notes' => Note::with(['noteCategory', 'users'])->get()
+        ]);
+    }
+
+
 }

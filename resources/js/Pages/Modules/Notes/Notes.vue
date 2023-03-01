@@ -81,7 +81,8 @@
                                                                         <Icon title="eye" />
                                                                         <span class="ms-1">Show</span>
                                                                     </CDropdownItem>
-                                                                    <CDropdownItem @click="deleteItemModal(qut.id)">
+
+                                                                    <CDropdownItem @click="deleteItemModal(item.id)">
                                                                         <Icon title="trash" />
                                                                         <span class="ms-1">Delete</span>
                                                                     </CDropdownItem>
@@ -96,7 +97,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                     <div class="row match-height">
                                         <form class="row" @submit.prevent="createNote">
@@ -161,42 +161,27 @@
                                                                 </label>
                                                             </div>
                                                         </div>
-    <!--
-
-                                                        <div class="row mb-1">
-                                                            Note Create Rules
-
-                                                            <ul>
-                                                                <li>Sensative Clear note</li>
-                                                                <li>Note must be have an category</li>
-                                                                <li>Can have many agents under one notes</li>
-                                                                <li>Note must be created by supper admin</li>
-                                                            </ul>
-
-                                                        </div>
-    -->
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="row mb-1">
-                                                    <label>Name: <Required/> </label>
-                                                    <div class=null>
-                                                        <TextEditor v-model="createForm.notes" rows="30"></TextEditor>
-                                                        <span v-if="errors.notes" class="error text-sm text-danger">{{ errors.notes }}</span>
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row mb-1">
+                                                            <label>Name: <Required/> </label>
+                                                            <div>
+                                                                <TextEditor v-model="createForm.notes"></TextEditor>
+                                                                <span v-if="errors.notes" class="error text-sm text-danger">{{ errors.notes }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <button :disabled="createForm.processing" type="submit"
+                                                                class="btn btn-primary waves-effect waves-float waves-light me-2">Submit</button>
+                                                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                                                                aria-label="Close">Cancel</button>
                                                     </div>
                                                 </div>
-
-
-                                                <button :disabled="createForm.processing" type="submit"
-                                                        class="btn btn-primary waves-effect waves-float waves-light me-2">Submit</button>
-                                                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                                                        aria-label="Close">Cancel</button>
                                             </div>
-                                        </div>
-                                    </div>
                                         </form>
                                     </div>
                                 </div>
@@ -228,8 +213,6 @@
     import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
     import TextEditor from "../../../components/TextEditor";
 
-
-
     let props = defineProps({
         notes: Object | null,
         users:Object | null,
@@ -238,9 +221,6 @@
         errors: Object,
         main_url: null,
     });
-
-
-    let editData = ref([]);
 
 
     let createForm = useForm({
@@ -253,18 +233,6 @@
         processing: Boolean,
     })
 
-    let updateForm = useForm({
-        name: null,
-        email: null,
-        secondary_email: null,
-        phone: null,
-        secondary_phone: null,
-        company: null,
-        address: null,
-        note: null,
-        status: null,
-        agents: null,
-    })
 
     let deleteItemModal = (id) => {
         Swal.fire({
@@ -277,7 +245,7 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Inertia.delete('clients/' + id, {
+                Inertia.delete(props.main_url + `/${id}`, {
                     preserveState: true, replace: true, onSuccess: page => {
                         Swal.fire(
                             'Deleted!',
@@ -307,78 +275,24 @@
                 createForm.processing = false
             },
             onSuccess: () => {
-                document.getElementById('addItemModal').$vb.modal.hide()
                 createForm.reset()
                 Swal.fire(
                     'Saved!',
-                    'Your file has been Saved.',
+                    'Your Notes has been Saved.',
                     'success'
                 )
             },
         })
     }
 
-    let updateClientForm = (id) => {
-        Inertia.put('clients/' + id, updateForm, {
-            preserveState: true,
-            onStart: () => {
-                createForm.processing = true
-            },
-            onFinish: () => {
-                createForm.processing = false
-            },
-            onSuccess: () => {
-                document.getElementById('editClient').$vb.modal.hide()
-                createForm.reset()
-                Swal.fire(
-                    'Saved!',
-                    'Your file has been Updated.',
-                    'success'
-                )
-            },
-        })
-    }
-
-    let editClient = (url) => {
-        axios.get(url+"?edit=true").then(res => {
-
-            console.log(res.data)
-
-            editData.value = res.data;
-            updateForm.name = res.data.name;
-            updateForm.email = res.data.email;
-            updateForm.secondary_email = res.data.secondary_email;
-            updateForm.phone = res.data.phone;
-            updateForm.secondary_phone = res.data.secondary_phone;
-            updateForm.company = res.data.company;
-            updateForm.address = res.data.address;
-            updateForm.note = res.data.note;
-            updateForm.status = res.data.status;
-            updateForm.agents = res.data.users;
-
-            document.getElementById('editClient').$vb.modal.show();
-        }).catch(err => {
-            console.log(err);
-        });
-    }
 
 
-    const dateRange = ref(props.filters.dateRange)
-    const isCustom =ref(false);
-    const changeDateRange = (event) => {
-        if(event=== 'custom'){
-            isCustom.value = true;
-            dateRange.value = '';
-        }
-    };
-    const handleDate = (event) => isCustom.value = event !== null;
-    const searchByStatus = ref(props.filters.byStatus)
 
 
     let search = ref(props.filters.search);
     let perPage = ref(props.filters.perPage);
-    watch([search, perPage, searchByStatus, dateRange], debounce(function ([val, val2, val3, val4]) {
-        Inertia.get(props.main_url, { search: val, perPage: val2, byStatus: val3 , dateRange: val4}, { preserveState: true, replace: true });
+    watch([search, perPage], debounce(function ([val, val2]) {
+        Inertia.get(props.main_url, { search: val, perPage: val2}, { preserveState: true, replace: true });
     }, 300));
 
 </script>
