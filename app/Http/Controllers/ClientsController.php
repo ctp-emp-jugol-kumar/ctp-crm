@@ -91,9 +91,10 @@ class ClientsController extends Controller
      */
     public function store(ClientRequest $request)
     {
-        if (!auth()->user()->can('client.create')) {
+        if (!auth()->user()->can('client.create') || !auth()->user()->can('leads.create')) {
             abort(401 );
         }
+
        $data = $request->validate([
             "name" => ['required'],
             "email" => ['required', 'email', Rule::unique('clients', 'email')],
@@ -126,10 +127,10 @@ class ClientsController extends Controller
      */
     public function show($id)
     {
-
-        if (!auth()->user()->can('client.show')) {
+        if (!auth()->user()->can('client.show') || !auth()->user()->can('leads.show')) {
             abort(401 );
         }
+
         $user = Client::findOrFail($id)->load('users','transactions','transactions.user',
             'transactions.method','customeInvoices',
             'quotations','quotations.user', 'projects',
@@ -159,7 +160,7 @@ class ClientsController extends Controller
      */
     public function update(UpdateClient $request, Client $client)
     {
-        if (!auth()->user()->can('client.edit')) {
+        if (!auth()->user()->can('client.edit') || !auth()->user()->can('leads.edit')) {
             abort(401 );
         }
 
@@ -198,9 +199,10 @@ class ClientsController extends Controller
      */
     public function destroy($id)
     {
-        if (!auth()->user()->can('client.delete')) {
+        if (!auth()->user()->can('client.delete') || !auth()->user()->can('leads.delete')) {
             abort(401 );
         }
+
         Client::findOrFail($id)->delete();
         return back();
 //        return redirect()->route('clients.index');
