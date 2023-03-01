@@ -15,7 +15,8 @@
                                             aria-controls="home"
                                             aria-selected="true">Manage Notes</button>
                                 </li>
-                                <li class="nav-item" role="presentation">
+                                <li class="nav-item" role="presentation"
+                                    v-if="this.$page.props.auth.user.can.includes('note.create') || this.$page.props.auth.user.role == 'Administrator' ">
                                     <button class="nav-link"
                                             id="profile-tab" data-bs-toggle="tab"
                                             data-bs-target="#profile" type="button"
@@ -73,17 +74,21 @@
                                                                     <vue-feather type="more-vertical" />
                                                                 </CDropdownToggle>
                                                                 <CDropdownMenu>
-                                                                    <CDropdownItem :href="item.show_url+'?satus=edit'">
-                                                                        <Icon title="pencil" />
+                                                                    <CDropdownItem :href="item.show_url+'?satus=edit'"
+                                                                                   v-if="this.$page.props.auth.user.can.includes('note.edit') || this.$page.props.auth.user.role == 'Administrator' ">
+                                                                    <Icon title="pencil" />
                                                                         <span class="ms-1">Edit</span>
                                                                     </CDropdownItem>
-                                                                    <CDropdownItem :href="item.show_url" target="_blank">
-                                                                        <Icon title="eye" />
+                                                                    <CDropdownItem :href="item.show_url" target="_blank"
+                                                                                   v-if="this.$page.props.auth.user.can.includes('note.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                                                                    <Icon title="eye" />
                                                                         <span class="ms-1">Show</span>
                                                                     </CDropdownItem>
 
-                                                                    <CDropdownItem @click="deleteItemModal(item.id)">
-                                                                        <Icon title="trash" />
+                                                                    <CDropdownItem @click="deleteItemModal(item.id)"
+                                                                                   v-if="this.$page.props.auth.user.can.includes('note.delete') || this.$page.props.auth.user.role == 'Administrator' ">
+
+                                                                    <Icon title="trash" />
                                                                         <span class="ms-1">Delete</span>
                                                                     </CDropdownItem>
                                                                 </CDropdownMenu>
@@ -97,8 +102,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                    <div class="row match-height">
+                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"
+                                     v-if="this.$page.props.auth.user.can.includes('note.create') || this.$page.props.auth.user.role == 'Administrator' ">
+
+                                <div class="row match-height">
                                         <form class="row" @submit.prevent="createNote">
                                             <div class="col-md-6">
                                                 <div class="card">

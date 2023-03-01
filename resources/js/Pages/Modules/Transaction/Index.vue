@@ -28,10 +28,10 @@
 <!--                                                    <vue-feather type="download" size="15"/>-->
                                                     <span class="ms-1">PDF</span>
                                                 </CDropdownItem>
-                                                <CDropdownItem target="_blank">
-                                                    <!--                                                    <vue-feather type="download" size="15"/>-->
+<!--                                                <CDropdownItem target="_blank">
+                                                    &lt;!&ndash;                                                    <vue-feather type="download" size="15"/>&ndash;&gt;
                                                     <span class="ms-1">EXCEL</span>
-                                                </CDropdownItem>
+                                                </CDropdownItem>-->
                                             </CDropdownMenu>
                                         </CDropdown>
                                     </div>
@@ -103,7 +103,9 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href="javascript:void(0)">{{ `${tra.tran.transaction_model}::find(${tra.tran.transaction_model_id})` }}</a>
+                                                <a :href="`/admin/quotations/${tra.tran.transaction_model_id}?type=show_invoice`" v-if="tra.tran.transaction_model === 'App\\Models\\Invoice'" target="_blank">{{ `${tra.tran.transaction_model}::find(${tra.tran.transaction_model_id})` }}</a>
+                                                <a :href="`/admin/invoices/${tra.tran.transaction_model_id}`" v-else-if="tra.tran.transaction_model === 'App\\Models\\CustomInvoice'" target="_blank">{{ `${tra.tran.transaction_model}::find(${tra.tran.transaction_model_id})` }}</a>
+                                                <a class="text-primary" @click="editItem(`/admin/expense/${tra.tran.transaction_model_id}`)" v-else-if="tra.tran.transaction_model === 'App\\Models\\Expanse'" target="_blank">{{ `${tra.tran.transaction_model}::find(${tra.tran.transaction_model_id})` }}</a>
                                             </td>
                                             <td>
                                                 {{ tra.tran.method.name }}
@@ -156,6 +158,40 @@
         </div>
     </Modal>
 
+    <Modal id="updateData" title="Expanse Details" v-vb-is:modal size="lg">
+        <div class="modal-body">
+                <div class="row mb-1 flex-column">
+                    <div class="col mb-1">
+                        <label>Purpose</label>
+                        <input class="form-control disabled readonly" disabled :value="editData?.purpse.name" label="name"/>
+                    </div>
+
+                    <div class="col mb-1">
+                        <label>Expanse Subject</label>
+                        <input :value="editData?.subject" disabled type="text" class="form-control disabled readonly" />
+                    </div>
+                    <div class="col mb-1">
+                        <label>Expanse Amount </label>
+                        <input :value="editData?.amount" disabled type="text" class="form-control disabled readonly" />
+                    </div>
+                    <div class="col mb-1">
+                        <label>Payment Method</label>
+                        <input class="form-control disabled readonly" disabled  :value="editData?.method?.name" label="name"/>
+                    </div>
+                    <div class="col-md mb-1">
+                        <label>Expanse Date</label>
+                        <input :value="moment(editData?.date).format('ll')" disabled class="form-control disabled readonly" />
+                    </div>
+                    <div class="col-md-12">
+                        <label>Expanse Note</label>
+                        <p v-text="editData?.details"></p>
+                    </div>
+                    <div class="col mb-1" v-if="editData?.document">
+                        <img :src="`${this.$page.props?.auth?.MAIN_URL}/storage/${editData?.document}`" frameborder="0" class="w-100 h-100"/>
+                    </div>
+                </div>
+            </div>
+    </Modal>
 
 </template>
 <script>
@@ -176,6 +212,7 @@ import {useForm} from "@inertiajs/inertia-vue3";
 import axios from "axios";
 import {useDate} from "../../../composables/useDate";
 const range = useDate();
+const formatted  = useDate();
 import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
 
 
@@ -198,6 +235,16 @@ const exportPDF =() =>{
     }
 }
 
+const editData = ref(null);
+const editItem = (url) =>{
+    console.log(url);
+    axios.get(url+"/?data=true").then((res)=>{
+        editData.value = res.data;
+        document.getElementById('updateData').$vb.modal.show()
+    }).catch((err) =>{
+        console.log(err);
+    });
+}
 
 const dateRange = ref(props.filters.dateRange)
 const isCustom =ref(false);

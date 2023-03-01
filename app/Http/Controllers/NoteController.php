@@ -18,6 +18,11 @@ class NoteController extends Controller
      */
     public function index()
     {
+
+        if (!auth()->user()->can('note.index')) {
+            abort(401 );
+        }
+
         return inertia('Modules/Notes/Notes', [
             $search = Request::input('search'),
             'notes' => Note::query()
@@ -65,6 +70,9 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
+        if (!auth()->user()->can('note.create')) {
+            abort(401 );
+        }
         Request::validate([
             "title" =>  "required",
             "notes" => "required",
@@ -90,6 +98,9 @@ class NoteController extends Controller
      */
     public function show($id)
     {
+        if (!auth()->user()->can('note.show')) {
+            abort(401 );
+        }
 
         $note = Note::with(["noteCategory", "users"])->findOrFail($id);
         if(Request::input("satus") === 'edit'){
@@ -126,6 +137,9 @@ class NoteController extends Controller
      */
     public function update()
     {
+        if (!auth()->user()->can('note.edit')) {
+            abort(401 );
+        }
         $note = Note::findOrFail(Request::input('noteId'));
 
         $agents = [];
@@ -155,6 +169,9 @@ class NoteController extends Controller
      */
     public function destroy($id)
     {
+        if (!auth()->user()->can('note.delete')) {
+            abort(401 );
+        }
         Note::findOrFail($id)->delete();
         return back();
     }

@@ -209,8 +209,7 @@
                                 </Link>
                             </li>
 
-
-                            <li class=" nav-item" v-if="this.$page.props.auth.user.role == 'Administrator' ">
+                            <li class=" nav-item"  v-if="this.$page.props.auth.user.can.includes('transaction.index') || this.$page.props.auth.user.role == 'Administrator' ">
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/transaction">
                                     <vue-feather type="circle" />
                                     <span class="menu-title text-truncate" data-i18n="Chat">All Transactions</span>
@@ -228,21 +227,21 @@
 
 
                     <li class="nav-item has-sub" :class="{'open' : clickMenu === 5}"  @click="toggleSubMenu(5)"
-                        v-if="this.$page.props.auth.user.can.includes('notes.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                        v-if="this.$page.props.auth.user.can.includes('note.index') || this.$page.props.auth.user.role == 'Administrator' ">
                         <a preserve-scroll class="d-flex align-items-center">
                             <vue-feather type="cpu" />
                             <span class="menu-title text-truncate"
                                   data-i18n="Authentication">Notes</span>
                         </a>
                         <ul class="menu-content">
-                            <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('project.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                            <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('note.index') || this.$page.props.auth.user.role == 'Administrator' ">
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/notes-category">
                                     <vue-feather type="circle" />
                                     <span class="menu-title text-truncate" data-i18n="Chat">Notes Category</span>
                                 </Link>
                             </li>
 
-                            <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('client.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                            <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('note.index') || this.$page.props.auth.user.role == 'Administrator' ">
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/notes">
                                     <vue-feather type="circle" />
                                     <span class="menu-title text-truncate" data-i18n="Chat">Notes</span>

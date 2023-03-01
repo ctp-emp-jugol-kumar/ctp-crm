@@ -123,7 +123,7 @@ class ExpanceController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\expanse  $expance
-     * @return \Illuminate\Http\Response
+     * @return string
      */
     public function show($id)
     {
