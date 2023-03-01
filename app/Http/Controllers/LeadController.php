@@ -16,6 +16,7 @@ class LeadController extends Controller
         }
         $search = Request::input('search');
         $clients = Client::query()->with('projects')
+            ->latest()
             ->where('status', '!=', 'Converted to Customer')
             ->when(Request::input('search'), function ($query, $search) {
                 $query
@@ -50,6 +51,7 @@ class LeadController extends Controller
                 'email' => $client->email,
                 'status' => $client->status,
                 'created_at' => $client?->created_at?->format('d M Y'),
+                'show_url' => URL::route('leads.show', $client->id)
             ]);
         if (Request::input('export_pdf') === 'true'){
             return $this->loadDownload($clients);
@@ -71,5 +73,10 @@ class LeadController extends Controller
         $pdf = Pdf::loadView('reports.pdf_lead_list', compact('data'));
         return $pdf->download("Lead_Sheet"."_".now()->format('d_m_Y')."_".'quotation.pdf');
     }
+
+    public function show($id){
+        return Client::findOrFail($id);
+    }
+
 
 }

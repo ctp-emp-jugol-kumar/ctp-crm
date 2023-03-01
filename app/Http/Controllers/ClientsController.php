@@ -110,7 +110,8 @@ class ClientsController extends Controller
        if ($request->agents){
             $client->users()->attach($request->input('agents'));
        }
-        return redirect()->route('clients.index');
+       return back();
+//        return redirect()->route('clients.index');
 
     }
 
@@ -158,11 +159,18 @@ class ClientsController extends Controller
         if (!auth()->user()->can('client.edit')) {
             abort(401 );
         }
-        $client->update($request->validated());
+
+
+//        return Request::all();
+        $data = $request->validated();
+        $data['status'] = $request->status["name"];
+
+        $client->update($data);
         if ($request->agents){
             $client->users()->sync($request->input('agents'));
         }
-        return redirect()->route('clients.index');
+        return back();
+//        return redirect()->route('clients.index');
     }
 
     /**
@@ -177,6 +185,7 @@ class ClientsController extends Controller
             abort(401 );
         }
         Client::findOrFail($id)->delete();
-        return redirect()->route('clients.index');
+        return back();
+//        return redirect()->route('clients.index');
     }
 }

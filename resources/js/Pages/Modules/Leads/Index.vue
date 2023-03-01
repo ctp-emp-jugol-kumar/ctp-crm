@@ -120,18 +120,19 @@
                                                 'badge-light-primary' : user.status === 'Proposal Sent',
                                                 'badge-light-info' : user.status === 'Contacted',
                                                 'badge-light-warning' : user.status === 'Quote Sent',
+                                                'badge-light-purple' : user.status === 'Qualified',
                                                 'badge-light-danger' : user.status === 'Disqualified',
                                             }">{{ user.status }}</span></td>
                                             <td>{{ user.created_at }}</td>
                                             <td>
 
                                                 <div>
-                                                    <Link :href="user.show_url"
+<!--                                                    <Link :href="user.show_url"
                                                           type="button"
                                                           data-title="Show Client"
                                                           class="btn p-50 btn-sm btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
-                                                    </Link>
+                                                    </Link>-->
 
                                                     <button type="button" @click="editClient(user.show_url)"
                                                             data-title="Edit Item"
@@ -381,8 +382,7 @@
         </form>
     </Modal>
 
-
-    <Modal id="editClient" title="Show Client" v-vb-is:modal size="lg">
+    <Modal id="editClient" :title="clientStatus ?  'Edit This Lead' : 'Convert To New Client'" v-vb-is:modal :size="clientStatus ? 'sm' : 'lg'">
         <form @submit.prevent="updateClientForm(editData.id)">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -395,6 +395,14 @@
                             <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
                         </div>
                     </div>
+
+                    <div class="col-md" :class="{ 'd-none' : clientStatus }">
+                        <label>Company: </label>
+                        <input v-model="updateForm.company" type="text" placeholder="Enter Company Name" class="form-control">
+                        <span v-if="errors.company" class="error text-sm text-danger">{{ errors.company }}</span>
+                    </div>
+                </div>
+                <div class="row mb-1">
                     <div class="col-md">
                         <label>Email: <span class="text-danger">*</span></label>
                         <div class=null>
@@ -403,65 +411,49 @@
                             <span v-if="errors.email" class="error text-sm text-danger">{{ errors.email }}</span>
                         </div>
                     </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
+                    <div class="col-md" :class="{ 'd-none' : clientStatus }">
                         <label>Secondary Email: </label>
                         <input v-model="updateForm.secondary_email" type="email" placeholder="second.eg@ctpbd.com"
                                class="form-control">
-                        <span v-if="errors.secondary_email" class="error text-sm text-danger">{{
-                                errors.secondary_email
-                            }}</span>
+                        <span v-if="errors.secondary_email" class="error text-sm text-danger">{{errors.secondary_email}}</span>
                     </div>
+                </div>
+                <div class="row mb-1">
                     <div class="col-md">
                         <label>Phone: <span class="text-danger">*</span></label>
                         <input v-model="updateForm.phone" type="text" placeholder="+88017********" class="form-control">
                         <span v-if="errors.phone" class="error text-sm text-danger">{{ errors.phone }}</span>
                     </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
+                    <div class="col-md" :class="{ 'd-none' : clientStatus }">
                         <label>Secondary Phone: </label>
-                        <input v-model="updateForm.secondary_phone" type="text" placeholder="+88017********"
-                               class="form-control">
-                        <span v-if="errors.secondary_phone" class="error text-sm text-danger">{{
-                                errors.secondary_phone
-                            }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Company: </label>
-                        <input v-model="updateForm.company" type="text" placeholder="Enter Company Name"
-                               class="form-control">
-                        <span v-if="errors.company" class="error text-sm text-danger">{{ errors.company }}</span>
+                        <input v-model="updateForm.secondary_phone" type="text" placeholder="+88017********" class="form-control">
+                        <span v-if="errors.secondary_phone" class="error text-sm text-danger">{{errors.secondary_phone}}</span>
                     </div>
                 </div>
-                <div class="row mb-1">
+                <div class="row mb-1" :class="{ 'd-none' : clientStatus }">
                     <div class="col-md">
                         <label>Address: </label>
-                        <textarea v-model="updateForm.address" type="text" placeholder="Enter Full Address" rows="5"
-                                  class="form-control"></textarea>
+                        <textarea v-model="updateForm.address" type="text" placeholder="Enter Full Address" rows="5" class="form-control"></textarea>
                         <span v-if="errors.name" class="error text-sm text-danger">{{ errors.address }}</span>
                     </div>
                     <div class="col-md">
                         <label>Nots: </label>
-                        <textarea v-model="updateForm.note" type="text" placeholder="Enter note messages" rows="5"
-                                  class="form-control"></textarea>
+                        <textarea v-model="updateForm.note" type="text" placeholder="Enter note messages" rows="5" class="form-control"></textarea>
                         <span v-if="errors.note" class="error text-sm text-danger">{{ errors.note }}</span>
                     </div>
                 </div>
-
                 <div class="row mb-1">
                     <div class="col-md">
+                        <label>Lead Status</label>
                         <v-select v-model="updateForm.status"
+                                  @update:modelValue="changeStatus"
                                   label="name"
                                   :options="status"
                                   placeholder="~~Select Sub Category~~">
                         </v-select>
-
                     </div>
-                    <div class="col-md">
-                        <label>Assign Agent: </label>
-
+                    <div class="col-md" :class="{ 'd-none' : clientStatus }">
+                        <label>Assign Agent </label>
                         <v-select
                             multiple
                             v-model="updateForm.agents"
@@ -488,7 +480,7 @@
             </div>
 
             <div class="modal-footer">
-                <button :disabled="createForm.processing" type="submit"
+                <button :disabled="updateForm.processing" type="submit"
                         class="btn btn-primary waves-effect waves-float waves-light">Submit
                 </button>
                 <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
@@ -608,9 +600,7 @@
         })
     };
 
-    let addDataModal = () => {
-        document.getElementById('addItemModal').$vb.modal.show()
-    }
+    let addDataModal = () => document.getElementById('addItemModal').$vb.modal.show()
     let createClientForm = () => {
         Inertia.post('clients', createForm, {
             preserveState: true,
@@ -655,9 +645,7 @@
 
     let editClient = (url) => {
         axios.get(url+"?edit=true").then(res => {
-
             console.log(res.data)
-
             editData.value = res.data;
             updateForm.name = res.data.name;
             updateForm.email = res.data.email;
@@ -669,6 +657,7 @@
             updateForm.note = res.data.note;
             updateForm.status = res.data.status;
             updateForm.agents = res.data.users;
+            clientStatus.value = res.data.status !== 'Convarted To Customer'
 
             document.getElementById('editClient').$vb.modal.show();
         }).catch(err => {

@@ -24589,3 +24589,8 @@ div.dataTables_wrapper .dataTables_info {
 .ck.ck-toolbar {
   border: none !important;
 }
+
+.badge-light-purple {
+  background: #ffe0ff;
+  color: purple;
+}
