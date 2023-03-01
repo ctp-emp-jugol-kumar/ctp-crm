@@ -37,9 +37,11 @@
 
         <!-- BEGIN: Footer-->
         <footer class="footer footer-static footer-light">
-            <p class="clearfix mb-0"><span class="float-md-start d-block d-md-inline-block mt-25">COPYRIGHT &copy;
-                    2021<a class="ms-25" href="#"
-                           target="_blank">Tuntuni</a><span class="d-none d-sm-inline-block">, All rights
+            <p class="clearfix mb-0">
+                <span class="float-md-start d-block d-md-inline-block mt-25">COPYRIGHT &copy; {{ new Date().getFullYear() }}
+
+                <a class="ms-25" href="https://creativetechpark.com/"
+                           target="_blank">creativetechpark</a><span class="d-none d-sm-inline-block">, All rights
                         Reserved</span></span><span class="float-md-end d-none d-md-block">Hand-crafted & Made with<vue-feather type="heart" /></span></p>
         </footer>
         <button class="btn btn-primary btn-icon scroll-top" type="button"><vue-feather type="arrow-up" /></button>
