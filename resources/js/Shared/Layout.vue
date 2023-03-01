@@ -40,9 +40,14 @@
             <p class="clearfix mb-0">
                 <span class="float-md-start d-block d-md-inline-block mt-25">COPYRIGHT &copy; {{ new Date().getFullYear() }}
 
-                <a class="ms-25" href="https://creativetechpark.com/"
-                           target="_blank">creativetechpark</a><span class="d-none d-sm-inline-block">, All rights
-                        Reserved</span></span><span class="float-md-end d-none d-md-block">Hand-crafted & Made with<vue-feather type="heart" /></span></p>
+                <a class="ms-25" href="https://creativetechpark.com/" target="_blank">
+                    creativetechpark
+                </a>
+                    <span class="d-none d-sm-inline-block">, All rightsReserved
+                    </span>
+                </span>
+                <span class="float-md-end d-none d-md-block">Loved <vue-feather type="heart" /> & Made By <a href="https://www.facebook.com/zogul.kumar/" target="_blank">Jugol Kumar</a></span>
+            </p>
         </footer>
         <button class="btn btn-primary btn-icon scroll-top" type="button"><vue-feather type="arrow-up" /></button>
         <!-- END: Footer-->
