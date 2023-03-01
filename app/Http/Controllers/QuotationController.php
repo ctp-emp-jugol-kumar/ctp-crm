@@ -122,7 +122,7 @@ class QuotationController extends Controller
      */
     public function create(){
         return Inertia::render('Modules/Quotation/Create', [
-            "clients"   => Client::all(['id','name']),
+            "clients"   => Client::all(),
             "services"  => Website::all(['id','name', 'price']),
             "packages"  => Design::all(['id','name', 'price']),
             "platforms" => Platform::all(['id','name', 'price']),

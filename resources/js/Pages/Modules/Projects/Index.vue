@@ -75,9 +75,8 @@
                                             <td>{{ projects.start_date + " - " + projects.end_date }} </td>
                                             <th>
                                                 <div class="avatar-group mt-50">
-                                                    <div data-bs-toggle="tooltip"
-                                                         data-popup="tooltip-custom"
-                                                         data-bs-placement="bottom"
+                                                    <div
+                                                        v-c-tooltip="developer.name"
                                                          title=""
                                                          class="avatar pull-up"
                                                          data-bs-original-title="Elicia Rieske"
@@ -102,10 +101,11 @@
                                             <td>
                                                 <div class="progress" style="height: 7px;">
                                                     <div role="progressbar"
+                                                         v-c-tooltip="`Project Complate ${projects.project.progress} %`"
                                                          aria-valuemin="0"
                                                          aria-valuemax="100"
                                                          aria-valuenow="50"
-                                                         class="progress-bar progress-bar-striped"
+                                                         class="progress-bar progress-bar-striped cursor-pointer"
                                                          :class="{
                                                                 'bg-primary'   : projects.project.status === 'New Project',
                                                                 'bg-warning'   : projects.project.status === 'Testing',
@@ -121,53 +121,25 @@
                                             <td>{{ projects.create_at }}</td>
 
                                             <td>
-
-<!--
-                                                <div class="btn-group dropup dropdown-icon-wrapper">
-                                                    <button type="button"
-                                                            class="btn dropdown-toggle dropdown-toggle-split waves-effect waves-float waves-light"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-vertical"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                                                    </button>
-
-                                                    <div class="dropdown-menu">
-                                                        <span class="dropdown-item">
-                                                            <a :href="projects.show_url"
-                                                               class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
-                                                                <Icon title="eye"/>
-                                                            </a>
-                                                        </span>
-                                                        <span class="dropdown-item"
-                                                              @click="editProject(projects.edit_url)">
-                                                            <Icon title="pencil"/>
+                                                <CDropdown>
+                                                    <CDropdownToggle>
+                                                        <vue-feather type="more-vertical" />
+                                                    </CDropdownToggle>
+                                                    <CDropdownMenu>
+                                                        <CDropdownItem @click="editProject(projects.edit_url)">
+                                                            <Icon title="pencil" />
                                                             <span class="ms-1">Edit</span>
-                                                        </span>
-                                                        <span class="dropdown-item"
-                                                              @click="deleteItemModal(projects.id)">
-                                                            <Icon title="trash"/>
-                                                           <span class="ms-1">Delete</span>
-                                                        </span>
-                                                    </div>
-                                                </div>
--->
-
-
-                                                <div class="demo-inline-spacing">
-                                                    <a :href="projects.show_url"
-                                                            class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
-                                                        <Icon title="eye"/>
-                                                    </a>
-
-                                                    <button type="button" @click="editProject(projects.edit_url)"
-                                                            class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
-                                                        <Icon title="pencil"/>
-                                                    </button>
-
-                                                    <button @click="deleteItemModal(projects.id)" type="button"
-                                                            class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
-                                                        <Icon title="trash"/>
-                                                    </button>
-                                                </div>
+                                                        </CDropdownItem>
+                                                        <CDropdownItem  :href="projects.show_url" >
+                                                            <Icon title="eye" />
+                                                            <span class="ms-1">Show</span>
+                                                        </CDropdownItem>
+                                                        <CDropdownItem @click="deleteItemModal(projects.id)">
+                                                            <Icon title="trash" />
+                                                            <span class="ms-1">Delete</span>
+                                                        </CDropdownItem>
+                                                    </CDropdownMenu>
+                                                </CDropdown>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -519,6 +491,7 @@
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
     import axios from 'axios';
+    import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
 
 
     const props = defineProps({

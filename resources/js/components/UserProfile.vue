@@ -63,7 +63,7 @@
                                                 <tr>
                                                     <th class="pb-50">
                                                         <vue-feather type="clock" size="15" />
-                                                        <span class="font-weight-bold ms-1">Joined At</span>
+                                                        <span class="font-weight-bold ms-1">Joining</span>
                                                     </th>
                                                     <td class="pb-50"> {{ formatted(props.user.created_at) }} </td>
                                                 </tr>
