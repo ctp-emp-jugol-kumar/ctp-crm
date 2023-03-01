@@ -32,6 +32,7 @@ class InvoiceController extends Controller
     {
         return inertia('Modules/Invoices/Index', [
             'invoices' => CustomInvoice::query()
+                ->latest()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('subject', 'like', "%{$search}%")
                         ->orWhereHas('client', function ($client) use($search){
@@ -144,6 +145,7 @@ class InvoiceController extends Controller
                 "old_total_pay" => $item->old_total_pay ?? 0,
                 "date"       => $item->date->format('d M,y'),
                 "note"       => $item->note,
+
             ];
         }
 

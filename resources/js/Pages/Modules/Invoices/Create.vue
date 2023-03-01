@@ -196,6 +196,7 @@
     import ServiceCard from "../../../components/ServiceCard";
     import InputFieldError from "../../../components/InputFieldError";
     import QtyButton from "../../../components/QtyButton";
+    import {paymentPolicy, tramsConditions} from '../chartConfig.js'
 
     let props = defineProps({
         clients: Object,
@@ -215,8 +216,8 @@
         subject:null,
         client_id:null,
         date:null,
-        payment_policy:null,
-        trams_and_condition:null,
+        payment_policy:paymentPolicy,
+        trams_and_condition:tramsConditions,
     });
 
     let worksTitle = "Select work services"

@@ -1,7 +1,5 @@
 <template>
     <div>
-
-
         <div class="row mt-5">
             <div class="col">
                 <div class="card-title">
@@ -12,19 +10,13 @@
                         <div class="card">
                             <div class="card-body d-flex align-items-center justify-content-between">
                                 <div>
-                                    <h3 class="fw-bolder mb-75">0</h3>
-                                    <span>Total Projects</span>
+                                    <h3 class="fw-bolder mb-75">{{ subTotal }} Tk</h3>
+                                    <span>Total Amount</span>
                                 </div>
                                 <div class="avatar bg-light-primary p-50">
-                                <span class="avatar-content">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-user font-medium-4"><path
-                                        d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                </span>
+                                    <span class="avatar-content">
+                                        <vue-feather type="dollar-sign"/>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -33,43 +25,13 @@
                         <div class="card">
                             <div class="card-body d-flex align-items-center justify-content-between">
                                 <div>
-                                    <h3 class="fw-bolder mb-75">0</h3>
-                                    <span>Total Seals</span>
-                                </div>
-                                <div class="avatar bg-light-danger p-50">
-                                <span class="avatar-content">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-user-plus font-medium-4"><path
-                                        d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="8.5" cy="7" r="4"></circle>
-                                        <line x1="20" y1="8" x2="20" y2="14"></line>
-                                        <line x1="23" y1="11" x2="17" y2="11"></line>
-                                    </svg>
-                                </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card">
-                            <div class="card-body d-flex align-items-center justify-content-between">
-                                <div>
-                                    <h3 class="fw-bolder mb-75">0</h3>
-                                    <span>Pay Amount</span>
+                                    <h3 class="fw-bolder mb-75">{{ payTotal }} Tk</h3>
+                                    <span>Total Pay</span>
                                 </div>
                                 <div class="avatar bg-light-success p-50">
-                                <span class="avatar-content">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-user-check font-medium-4"><path
-                                        d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="8.5" cy="7" r="4"></circle>
-                                        <polyline points="17 11 19 13 23 9"></polyline>
-                                    </svg>
-                                </span>
+                                    <span class="avatar-content">
+                                        <vue-feather type="dollar-sign"/>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -78,21 +40,28 @@
                         <div class="card">
                             <div class="card-body d-flex align-items-center justify-content-between">
                                 <div>
-                                    <h3 class="fw-bolder mb-75">0</h3>
-                                    <span>Due Payment</span>
+                                    <h3 class="fw-bolder mb-75">{{ dueTotal }} Tk</h3>
+                                    <span>Total Due</span>
                                 </div>
                                 <div class="avatar bg-light-warning p-50">
-                                <span class="avatar-content">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                         stroke-linecap="round" stroke-linejoin="round"
-                                         class="feather feather-user-x font-medium-4"><path
-                                        d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="8.5" cy="7" r="4"></circle>
-                                        <line x1="18" y1="8" x2="23" y2="13"></line>
-                                        <line x1="23" y1="8" x2="18" y2="13"></line>
-                                    </svg>
-                                </span>
+                                    <span class="avatar-content">
+                                        <vue-feather type="dollar-sign"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="card-body d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h3 class="fw-bolder mb-75">{{ doscountTotal }} Tk</h3>
+                                    <span>Total Discount</span>
+                                </div>
+                                <div class="avatar bg-light-info p-50">
+                                    <span class="avatar-content">
+                                        <vue-feather type="dollar-sign"/>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -156,11 +125,67 @@
 </template>
 <script setup>
 import {useDate} from '../../composables/useDate.js'
-    defineProps({
+import {computed, ref} from 'vue'
+    const props = defineProps({
         transactions:[]
     })
 
 let {formatted} = useDate();
+
+
+
+let subTotal = computed(()=>{
+    let sum = 0;
+    props.transactions.map(a =>{
+        sum = sum + a.total_due + a.pay_amount
+    })
+    return sum;
+})
+
+let payTotal = computed(()=>{
+    let sum = 0;
+    props.transactions.map(a =>{
+        sum = sum + a.pay_amount
+    })
+    return sum;
+})
+
+let dueTotal = computed(()=>{
+    let sum = 0;
+    props.transactions.map(a =>{
+        sum = sum + a.total_due
+    })
+    return sum;
+})
+let doscountTotal = computed(()=>{
+    let sum = 0;
+    props.transactions.map(a =>{
+        sum = sum + a.discount
+    })
+    return sum;
+})
+
+// const paymentAmount = ref(0)
+//
+// let totalDiscount = computed(()=>{
+//     let sum = 0;
+//     props.info.invoice_item.map(a =>{
+//         sum = sum + a.discount
+//     })
+//     return sum;
+// })
+//
+// let grandTotal = computed(()=>{
+//     let sum = 0;
+//     props.info.invoice_item.map(a =>{
+//         sum = sum + (a.price - a.discount)
+//     })
+//     createForm.grandTotal = sum
+//     return sum;
+// })
+//
+//
+
 
 </script>
 

@@ -143,7 +143,8 @@ class ClientsController extends Controller
 
         return inertia('Modules/Clients/Show', [
             "user" => $user,
-            'image' => "/images/avatar.png"
+            'image' => "/images/avatar.png",
+            'show_url' => URL::route('clients.show', $user->id),
         ]);
     }
 

@@ -8,7 +8,6 @@
                 <thead class="table-light">
                 <tr class="">
                     <th class="sorting">#id</th>
-                    <th class="sorting">Name</th>
                     <th class="sorting">Creator</th>
                     <th class="sorting">Subject</th>
                     <th class="sorting">Created At</th>
@@ -18,25 +17,17 @@
                 <tbody>
                 <tr v-for="invoice in invoices" :key="invoice.id">
                     <td>{{ invoice.id }}</td>
-                    <td></td>
                     <td>{{ invoice.user.name }}</td>
                     <td>{{ invoice.subject }} </td>
                     <td>{{ formatted(invoice.created_at) }}</td>
                     <td>
                         <div class="demo-inline-spacing">
-                            <a :href="invoice.edit_url"
-                               class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
-                                <Icon title="pencil" />
+
+                            <a :href="`/admin/invoices/${invoice.id}`"
+                               target="_blank"
+                               class="btn bg-light-warning waves-effect waves-float waves-light">
+                               <vue-feather type="eye" size="10"/>
                             </a>
-                            <a :href="invoice.invice_url"
-                               class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
-                                <Icon title="eye" />
-                            </a>
-                            <button @click="deleteItemModal(invoice.id)"
-                                    type="button"
-                                    class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
-                                <Icon title="trash" />
-                            </button>
                         </div>
                     </td>
                 </tr>
