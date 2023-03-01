@@ -12,7 +12,7 @@
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <div class="d-flex align-items-center">
                                         <h4 class="card-title me-1">Transactions Information's</h4>
-                                        <span class="text-info cursor-pointer" @click="tranDetails"> <vue-feather type="info" size="15"/></span>
+                                        <span class="text-info cursor-pointer" @click="tranDetails" v-c-tooltip="'Click Me Me Get More Details'"> <vue-feather type="info" size="15"/></span>
                                     </div>
                                     <div>
                                         <CDropdown>
