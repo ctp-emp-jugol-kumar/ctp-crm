@@ -111,9 +111,12 @@ class DashboardController extends Controller
             ->selectRaw('Sum(total_pay) as amount')
             ->groupBy('month')
             ->orderBy('month')
-            ->pluck('month', 'count')
+//            ->get();
+            ->pluck('count','month')
             ->values()
             ->toArray();
+
+
 
 //        return dd($tranByCount);
         $tranByAmount = Transaction::query()
