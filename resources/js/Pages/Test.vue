@@ -19,7 +19,7 @@
                             <div class="d-flex align-items-center justify-content-between pe-3">
                                 <div>
                                     <h2 class="text-success">{{ trans.totalGrand }} Tk</h2>
-                                    <small class="text-warning">Total Seals Without Discount : {{ trans.totalSeals }}</small>
+                                    <small class="text-warning">Total Seals Without Discount : {{ trans.totalSeals }} Tk</small>
                                 </div>
                                 <span class="text-success">
                                     <vue-feather type="trending-up" size="40"/>
@@ -260,8 +260,10 @@ let props = defineProps({
     trans: Object,
 })
 
+console.log(props.trans.tranByExp);
+
 const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    labels:['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     datasets: [
         {
             label: 'Transaction Count',
@@ -279,6 +281,15 @@ const data = {
             data:  props.trans.tranByExp,
         },
     ]
+
+    // labels: [ 'January', 'February', 'March'],
+    // datasets: [
+    //     {
+    //         label: 'Data One',
+    //         backgroundColor: '#f87979',
+    //         data: [40, 20, 12]
+    //     }
+    // ]
 }
 
 

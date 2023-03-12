@@ -101,45 +101,82 @@ class DashboardController extends Controller
 
 //        $quotation = Quotation::with('transactions')->get();
 
+        $months = range(0, 11);
 
 
         // This Year Transaction Chart Query
-        $tranByCount = Transaction::query()
-            ->whereYear('created_at', date('Y'))
-            ->selectRaw("month(created_at) as month")
-            ->selectRaw('count(*) as count')
-            ->selectRaw('Sum(total_pay) as amount')
+//        $tranByCount = Transaction::query()
+//            ->whereYear('created_at', date('Y'))
+//            ->selectRaw("month(created_at) as month")
+//            ->selectRaw('count(*) as count')
+//            ->selectRaw('Sum(total_pay) as amount')
+//            ->groupBy('month')
+//            ->orderBy('month')
+////            ->get();
+//            ->pluck('count','month')
+//            ->values()
+//            ->toArray();
+
+
+
+
+//        $tranByAmount = Transaction::query()
+//            ->whereYear('created_at', date('Y'))
+//            ->selectRaw("month(created_at) as month")
+//            ->selectRaw('count(*) as count')
+//            ->selectRaw('Sum(total_pay) as amount')
+//            ->groupBy('month')
+//            ->orderBy('month')
+//            ->pluck('amount', 'month')
+//            ->values()
+////                ->get()
+//            ->toArray();
+
+
+
+        $transactions = Transaction::whereYear('created_at', '=', date('Y'))
+            ->select(DB::raw('MONTH(created_at) as month'), DB::raw('SUM(amount) as total'))
+            ->selectRaw(DB::raw('count(*) as count'))
             ->groupBy('month')
             ->orderBy('month')
-//            ->get();
-            ->pluck('count','month')
-            ->values()
-            ->toArray();
+            ->get();
+
+        $tranByCount = array_values(array_fill_keys($months, 0));
+        foreach ($transactions as $transaction) {
+            $tranByCount[$transaction->month - 1] = $transaction->count;
+        }
 
 
-
-//        return dd($tranByCount);
-        $tranByAmount = Transaction::query()
-            ->whereYear('created_at', date('Y'))
-            ->selectRaw("month(created_at) as month")
-            ->selectRaw('count(*) as count')
-            ->selectRaw('Sum(total_pay) as amount')
+        // this year transaction amount chart query
+        $transactions = Transaction::whereYear('created_at', '=', date('Y'))
+            ->select(DB::raw('MONTH(created_at) as month'), DB::raw('SUM(total_pay) as total'))
             ->groupBy('month')
             ->orderBy('month')
-            ->pluck('amount', 'month')
-            ->values()
-            ->toArray();
+            ->get();
 
-       // This Year Expanse Chart Query
-        $tranByExpanse = Expanse::query()
-            ->whereYear('created_at', date('Y'))
-            ->selectRaw("month(created_at) as month")
-            ->selectRaw('Sum(amount) as amount')
+//        return $transactions;
+
+        $tranByAmount = array_values(array_fill_keys($months, 0));
+        foreach ($transactions as $transaction) {
+            $tranByAmount[$transaction->month - 1] = $transaction->total;
+        }
+
+//        return $tranByAmount;
+
+
+        // This Year Expanse Chart Query
+        $expanses = Expanse::whereYear('created_at', '=', date('Y'))
+            ->select(DB::raw('MONTH(created_at) as month'), DB::raw('SUM(amount) as total'))
             ->groupBy('month')
             ->orderBy('month')
-            ->pluck('amount', 'month')
-            ->values()
-            ->toArray();
+            ->get();
+        $tranByExpanse = array_fill_keys($months, 0);
+        foreach ($expanses as $exp) {
+            $tranByExpanse[$exp->month - 1] = $exp->total;
+        }
+
+
+
 
 
         return Inertia::render('Test', [

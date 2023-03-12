@@ -111,6 +111,7 @@ class ExpanceController extends Controller
             'user_id'    => Auth::id(),
             'expanse_id' => $expanse->id,
             'total_pay'  => Request::input('amount'),
+            'amount'     => Request::input('amount'),
             'date'       => Request::input('expanse_date'),
             'note'       => Request::input('details'),
             'type'       => 'out'

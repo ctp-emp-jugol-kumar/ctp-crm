@@ -22,6 +22,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
+//        return Request::input('dateRange');
         $search = Request::input('search');
         $transactions = Transaction::query()
             ->latest()
@@ -33,15 +34,17 @@ class TransactionController extends Controller
                 $query->where('type', $search);
             })
             ->when(Request::input('dateRange'), function ($query, $search){
-                $start_date = $search[0];
-                $end_date =  $search[1];
-                if (!empty($start_date) && !empty($end_date)) {
-                    $query->whereDate('created_at', '>=', $start_date)
-                        ->whereDate('created_at', '<=', $end_date);
-                }
-                if (empty($start_date) && !empty($end_date)) {
-                    $query->whereDate('created_at', '<=', $end_date);
-                }
+
+                $start_date = date('Y-m-d H:i:s', strtotime($search[0]));
+                $end_date = date('Y-m-d H:i:s', strtotime( $search[1]));
+                $query->whereBetween('created_at', [$start_date, $end_date]);
+//                if (!empty($start_date) && !empty($end_date)) {
+//                    $query->whereDate('created_at', '>=', $start_date)
+//                        ->whereDate('created_at', '<=', $end_date);
+//                }
+//                if (empty($start_date) && !empty($end_date)) {
+//                    $query->whereDate('created_at', '<=', $end_date);
+//                }
             })
             ->latest()
             ->paginate(Request::input('perPage') ?? 10)
