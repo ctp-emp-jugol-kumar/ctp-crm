@@ -202,9 +202,10 @@ class ExpanceController extends Controller
      * @param  \App\Models\expanse  $expance
      * @return \Illuminate\Http\Response
      */
-    public function destroy(expanse $expance)
+    public function destroy($id)
     {
-        //
+        Expanse::findOrFail($id)->delete();
+        return back();
     }
 
     public function resizeImagePost(Request $request)

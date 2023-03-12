@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('expanses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('purpose_id')->constrained('purposes');
+            $table->bigInteger('purpose_id');
             $table->string('subject')->nullable();
             $table->double('amount');
-            $table->foreignId('method_id')->constrained('methods');
-            $table->foreignId('user_id')->constrained('users');
+            $table->bigInteger('method_id');
+            $table->bigInteger('user_id');
             $table->text('details')->nullable();
             $table->string('document');
             $table->timestamp('date');

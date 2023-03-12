@@ -324,7 +324,7 @@ let deleteItemModal = (id) => {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            Inertia.delete( 'methods/' + id, { preserveState: true, replace: true, onSuccess: page => {
+            Inertia.delete( 'expense/' + id, { preserveState: true, replace: true, onSuccess: page => {
                     Swal.fire(
                         'Deleted!',
                         'Your file has been deleted.',
