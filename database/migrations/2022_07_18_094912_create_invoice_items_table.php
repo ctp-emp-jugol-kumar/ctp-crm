@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('invoice_id')->nullable();
+            $table->foreignId('invoice_id')->constrained('custom_invoices')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('item_name');
             $table->integer('quantity')->default(1);
             $table->integer('price');

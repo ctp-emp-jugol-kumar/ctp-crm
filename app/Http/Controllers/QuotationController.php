@@ -7,17 +7,20 @@ use App\Models\Client;
 use App\Models\Design;
 use App\Models\Domain;
 use App\Models\Hosting;
+use App\Models\Invoice;
 use App\Models\Method;
 use App\Models\Platform;
 use App\Models\Quotation;
-use App\Models\QuotationItem;
+use App\Models\Transaction;
 use App\Models\Website;
 use App\Models\Work;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use http\Env\Response;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
@@ -39,9 +42,46 @@ class QuotationController extends Controller
         $quotation  = Quotation::query()
             ->latest()
             ->with([
-                "client:id,name", "user:id,name"])
+                "client:id,name,email,phone", "user:id,name", 'invoice'])
             ->when(Request::input('search'), function ($query, $search) {
-                $query->where('email', 'like', "%{$search}%");
+                $query->where('u_id', 'like', "%{$search}%")
+                ->orWhere('u_id', 'like', "%{$search}%")
+                ->orWhereHas('client', function ($client) use($search){
+                    $client
+                        ->where('name',    'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                    ;
+                })
+                ->orWhereHas('domains', function($hosting) use($search){
+                    $hosting->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('hostings', function($hosting) use($search){
+                    $hosting->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('works', function($hosting) use($search){
+                    $hosting->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('packages', function($hosting) use($search){
+                    $hosting->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('quotationItems', function($hosting) use($search){
+                    $hosting->where('item_name', 'like', "%{$search}%");
+                });
+            })
+            ->when(Request::input('byStatus'), function ($query, $search){
+                $query->where('status', $search);
+            })
+            ->when(Request::input('dateRange'), function ($query, $search){
+                $start_date = $search[0];
+                $end_date =  $search[1];
+                if (!empty($start_date) && !empty($end_date)) {
+                    $query->whereDate('created_at', '>=', $start_date)
+                        ->whereDate('created_at', '<=', $end_date);
+                }
+                if (empty($start_date) && !empty($end_date)) {
+                    $query->whereDate('created_at', '<=', $end_date);
+                }
             })
             ->paginate(Request::input('perPage') ?? 10)
             ->withQueryString()
@@ -50,16 +90,21 @@ class QuotationController extends Controller
                 "subject"      => $qot->subject,
                 "status"       => $qot->status,
                 "date"         => $qot->date->format('M-d-Y'),
-                "client_name"  => $qot->client->name,
+                "client"       => $qot->client,
+                "invoice"      => $qot->invoice,
                 "user_name"    => $qot->user->name,
+                "created_at"   => $qot->created_at->format('Y-m-d'),
+                "valid_until"  => $qot->valid_until->format('Y-m-d'),
                 "show_url"     => URL::route('quotations.show', $qot->id),
-                "edit_url"     => URL::route('quotations.edit', $qot->id)
+                "edit_url"     => URL::route('quotations.edit', $qot->id),
+                "invoice_url"  => URL::route('quotations.quotationInvoice', $qot->id)
             ]);
 
         return inertia('Modules/Quotation/Index', [
             'quotations'  => $quotation,
-            'filters'     => Request::only(['search','perPage']),
+            'filters'     => Request::only(['search','perPage', 'byStatus', 'dateRange']),
             'url'         => URL::route('quotations.index'),
+            'change_status_url'  => URL::route('chnageQuotationStatus'),
         ]);
 
 
@@ -77,7 +122,7 @@ class QuotationController extends Controller
      */
     public function create(){
         return Inertia::render('Modules/Quotation/Create', [
-            "clients"   => Client::all(['id','name']),
+            "clients"   => Client::all(),
             "services"  => Website::all(['id','name', 'price']),
             "packages"  => Design::all(['id','name', 'price']),
             "platforms" => Platform::all(['id','name', 'price']),
@@ -111,16 +156,20 @@ class QuotationController extends Controller
     public function store(Request $request)
     {
 //
-//        Request::validate([
-//            'client_id'          => "required",
-//            'subject'            => "required",
-//            'valid_until'        => "required",
-//            'date'               => "required",
-//        ]);
-//        return Request::all();
+        Request::validate([
+            'client_id'          => "required",
+            'subject'            => "required",
+            'valid_until'        => "required",
+            'date'               => "required",
+            'status'             => "required",
+        ]);
 
+
+        $price = 0;
+        $discount = 0;
+        $discount += Request::input('discount');
         $quotation = Quotation::create([
-            'u_id' => 'Quotation_'.rand(73862, 5632625),
+            'u_id'               => date('Yd', strtotime(now())),
             'user_id'            => Auth::id(),
             'client_id'          => Request::input('client_id'),
             'subject'            => Request::input('subject'),
@@ -129,6 +178,7 @@ class QuotationController extends Controller
             'payment_policy'     => Request::input('payment_policy'),
             'terms_of_service'   => Request::input('Trams_Services'),
             'status'             => Request::input('status')["name"],
+            'note'               => Request::input('note')
         ]);
 
         $quotationDomains        = Request::input('domains');
@@ -138,9 +188,6 @@ class QuotationController extends Controller
 
 //        return $quotationPackages;
 //        return $this->createArrayGroups($quotationPackages);
-
-        $price = 0;
-        $discount = 0;
 
         if (count($quotationDomains)) {
              $quotation->domains()->attach($this->createArrayGroups($quotationDomains));
@@ -299,7 +346,7 @@ class QuotationController extends Controller
      * Display the specified resource.
      *
      * @param Quotation $quotation
-     * @return \Inertia\Response
+     * @return false|string
      */
     /* public function show($id)
      {
@@ -345,7 +392,11 @@ class QuotationController extends Controller
 
 
 
-    public function show(Quotation $quotation){
+    public function show($id)
+    {
+        $quotation = Quotation::with(['invoice', 'invoice.transactions', 'invoice.transactions.user', 'invoice.transactions.method'])->findOrFail($id);
+
+//        return $quotation;
 
         $mainarray = array();
         foreach ($quotation->domains as $item){
@@ -394,28 +445,31 @@ class QuotationController extends Controller
         }
 
 
-        $transactions = [];
-        foreach($quotation->transactions as $item){
-            $transactions[] = [
-                "amount"     => $item->amount ?? 0,
-                "user"       => $item->user,
-                "method"     => $item->method->name,
 
-                "pay_amount" => $item->pay_amount ?? 0,
-                "discount"   => $item->discount ?? 0,
-                "total_due"  => $item->total_due ?? 0,
-                "old_total_pay" => $item->old_total_pay ?? 0,
-                "date"       => $item->date->format('d/M/Y'),
-                "note"       => $item->note,
-            ];
+        if(Request::input('type') === 'show_invoice'){
+            return Inertia::render('Modules/Quotation/Invoice',   [
+                "info" => [
+                    'quotation'          => $quotation,
+                    'dates'              => [
+                        'date'           => $quotation->date->format('d/m/Y'),
+                        'valid_until'    => $quotation->valid_until->format('d/m/Y'),
+                    ],
+                    'others_info'        => [
+                        "items"          => $mainarray,
+                        "create_invoice" => URL::route('quotation.download', $quotation->id),
+                        "edit_url"     => URL::route('quotations.edit', $quotation->id)
+                    ],
+                    'quotation_owner'    => [
+                        'creator'        => $quotation->user,
+                        'client'         => $quotation->client,
+                    ],
+                    'invoice' => $quotation->invoice,
+                    'payment_methods'    => Method::all(),
+                    'add_payment'  => URL::route('quotations.addPayment'),
+                ]
+            ]);
         }
 
-        $totalPay = $quotation->transactions->sum('pay_amount') + $quotation->transactions->sum('discount');
-
-        $quotationLastTransaction = $quotation->transactions->last() ?? [
-                'pay_amount' => 0,
-                'discount' => 0
-            ];
 
         return Inertia::render('Modules/Quotation/NewShow',   [
             "info" => [
@@ -436,12 +490,9 @@ class QuotationController extends Controller
                     'creator'        => $quotation->user,
                     'client'         => $quotation->client,
                 ],
-                'total_pay'          => $totalPay,
-                'last_payment'       => $quotationLastTransaction,
-                'transactions'       => $transactions,
 
                 'payment_methods'    => Method::all(),
-                'change_status_url'        => URL::route('chnageQuotationStatus'),
+                'change_status_url'  => URL::route('chnageQuotationStatus'),
         ]
     ]);
 
@@ -490,35 +541,36 @@ class QuotationController extends Controller
         }
         foreach ($quotation->quotationItems as $item){
             $mainarray [] =[
-                'name' => $item->name ?? $item->itemname,
+                'name' => $item->name ?? $item->item_name,
                 'price' => $item->price,
                 'discount' => $item->discount,
                 'quantity' => $item->quantity ?? 1
             ];
         }
 
-        $transactions = [];
-        foreach($quotation->transactions as $item){
-            $transactions[] = [
-                "amount"     => $item->amount ?? 0,
-                "user"       => $item->user,
-                "method"     => $item->method->name,
+//        $transactions = [];
+//        foreach($quotation->transactions as $item){
+//            $transactions[] = [
+//                "amount"     => $item->amount ?? 0,
+//                "user"       => $item->user,
+//                "method"     => $item->method->name,
+//
+//                "pay_amount" => $item->pay_amount ?? 0,
+//                "discount"   => $item->discount ?? 0,
+//                "total_due"  => $item->total_due ?? 0,
+//                "old_total_pay" => $item->old_total_pay ?? 0,
+//                "date"       => $item->date->format('d M,y'),
+//                "note"       => $item->note,
+//            ];
+//        }
+//
+//        $totalPay = $quotation->transactions->sum('pay_amount') + $quotation->transactions->sum('discount');
+//
+//        $quotationLastTransaction = $quotation->transactions->last() ?? [
+//                'pay_amount' => 0,
+//                'discount' => 0
+//            ];
 
-                "pay_amount" => $item->pay_amount ?? 0,
-                "discount"   => $item->discount ?? 0,
-                "total_due"  => $item->total_due ?? 0,
-                "old_total_pay" => $item->old_total_pay ?? 0,
-                "date"       => $item->date->format('d M,y'),
-                "note"       => $item->note,
-            ];
-        }
-
-        $totalPay = $quotation->transactions->sum('pay_amount') + $quotation->transactions->sum('discount');
-
-        $quotationLastTransaction = $quotation->transactions->last() ?? [
-                'pay_amount' => 0,
-                'discount' => 0
-            ];
         $data = [
             'quotation'          => $quotation,
             'dates'              => [
@@ -535,18 +587,25 @@ class QuotationController extends Controller
                 'creator'        => $quotation->user,
                 'client'         => $quotation->client,
             ],
-            'total_pay'          => $totalPay,
-            'last_payment'       => $quotationLastTransaction,
-            'transactions'       => $transactions,
+
 
             'payment_methods'    => Method::all(),
             'payment_url'        => URL::route('saveQuotationTransaction'),
         ];
 
-//        return view('invoice.quotation', compact('data'));
+        $isQuotation = true;
+        if(Request::input('is_invoice') === 'true'){
+            $isQuotation = false;
+            $data["invoice"] = $quotation->invoice;
+
+        }
+
+
+
+//        return view('invoice.quotation', compact('data', 'isQuotation'));
 //        exit();
 
-        $pdf = Pdf::loadView('invoice.quotation', compact('data'));
+        $pdf = Pdf::loadView('invoice.quotation', compact('data', 'isQuotation'));
 
         return $pdf->download($data["quotation_owner"]["client"]["name"]."_".now()->format('d_m_Y')."_".'quotation.pdf');
 
@@ -659,11 +718,14 @@ class QuotationController extends Controller
      */
     public function update(Request $request, Quotation $quotation)
     {
+
+
         if(is_integer(Request::input("client_id"))){
             $clientId = Request::input('client_id');
         }else{
             $clientId = $quotation->client->id;
         }
+
 
         $quotation->update([
             'user_id'            => Auth::id(),
@@ -673,7 +735,8 @@ class QuotationController extends Controller
             'valid_until'        => Request::input('valid_until'),
             'payment_policy'     => Request::input('payment_policy'),
             'terms_of_service'   => Request::input('Trams_Services'),
-            'status'             => Request::input('status')["name"],
+            'status'             => Request::input('status')["name"] ?? $quotation->status,
+            'note'               => Request::input('note')
         ]);
 
         $quotationDomains        = Request::input('domains');
@@ -742,6 +805,17 @@ class QuotationController extends Controller
         $quotation->discount = $discount;
         $quotation->save();
 
+        if ($quotation->invoice &&  $quotation->invoice != null){
+            $quotation->invoice->update([
+                'quotation_id' => $quotation->id,
+                'client_id' => $quotation->client->id,
+                'sub_total' => $quotation->price,
+                'discount' => $quotation->discount,
+                'grand_total' => $quotation->price - $quotation->discount,
+                'due' => $quotation->price - $quotation->discount,
+            ]);
+        }
+
 
         $array = $quotation->quotationItems->toArray();
         $deletedItems=[];
@@ -766,7 +840,7 @@ class QuotationController extends Controller
                 }
             }
         }
-        return back();
+        return Redirect::route('quotations.index');
     }
 
     /**
@@ -777,10 +851,88 @@ class QuotationController extends Controller
      */
     public function destroy(Quotation $quotation)
     {
+//        return $quotation;
         $quotation->delete();
         return back();
     }
 
 
+    public function chnageQuotationStatus(){
+        if(Request::input('quotId') != null && is_array(Request::input('status')) != null){
+            $status = Request::input('status')["name"];
+            $quotaiton = Quotation::findOrfail(Request::input('quotId'))->load(['invoice', 'client']);
+            if ($status == 'Converted To Invoice'){
+                if ($quotaiton->invoice != null){
+                    $quotaiton->invoice->update([
+                        'quotation_id' => $quotaiton->id,
+                        'client_id' => $quotaiton->client->id,
+                        'sub_total' => $quotaiton->price,
+                        'discount' => $quotaiton->discount,
+                        'grand_total' => $quotaiton->price - $quotaiton->discount,
+                        'due' => $quotaiton->price - $quotaiton->discount,
+                    ]);
+                }else{
+                    Invoice::create([
+                        'u_id' => date('Yd', strtotime(now())),
+                        'quotation_id' => $quotaiton->id,
+                        'client_id' => $quotaiton->client->id,
+                        'sub_total' => $quotaiton->price,
+                        'discount' => $quotaiton->discount,
+                        'grand_total' => $quotaiton->price - $quotaiton->discount,
+                        'status' => 'Converted Form Quotation',
+                        'due' => $quotaiton->price - $quotaiton->discount,
+                    ]);
+                }
+                $quotaiton->update(['status' => $status]);
+            }else{
+                if ($quotaiton->invoice != null){
+                    $quotaiton->invoice->delete();
+                }
+                $quotaiton->update(['status' => $status]);
+            }
+        }
+        return back();
+    }
+
+    public function addPayment(){
+
+        Request::validate([
+            'payment_id' => 'required|integer'
+        ]);
+
+        $quotation = Quotation::with(['invoice','client'])->findOrFail(Request::input('quotation_id'));
+        $invoice = Invoice::where('quotation_id',$quotation->id)->first();
+        $totalPay = Request::input('pay_amount')+Request::input('discount');
+        Transaction::create([
+            'u_id'       => date('Yd', strtotime(now())),
+            'transaction_model' => 'App\\Models\\Invoice',
+            'transaction_model_id' => $invoice->id,
+            'method_id'  => Request::input('payment_id'),
+            'user_id'    => Auth::id(),
+            'client_id'  => $quotation->client->id,
+            'invoice_id' => $quotation->invoice->id,
+
+            'amount'     => $quotation->invoice->grand_total,
+            'pay_amount' => Request::input('pay_amount'),
+            'discount'   => Request::input('discount'),
+
+            'total_pay'  => $totalPay,
+            'total_due'  => $invoice->due - $totalPay,
+
+            'date'       => now(),
+            'note'       => Request::input('payment_note'),
+
+            'type'       => 'in'
+        ]);
+
+        $tk = $invoice->due - $totalPay;
+        $invoice->update([
+           'pay' =>  $quotation->invoice->pay + $totalPay,
+            'due' => $tk
+        ]);
+
+
+        return back();
+    }
 
 }

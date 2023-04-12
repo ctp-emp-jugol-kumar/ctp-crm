@@ -484,7 +484,11 @@
 
         Inertia.post(props.info.payment_url, createForm, {
             onSuccess: () => {
-                // alert("saved Transaction")
+                Swal.fire(
+                    'Added!',
+                    'Transition Added Successfully Done',
+                    'success'
+                )
             }
         })
 

@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('package_quotation', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('design_id')->constrained('designs');
-            $table->foreignId('quotation_id')->constrained('quotations');
+            $table->foreignId('design_id')->constrained('designs')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('quotation_id')->constrained('quotations')->cascadeOnUpdate()->cascadeOnDelete();
             $table->integer('price')->default(0);
             $table->integer('quantity')->default(1);
             $table->integer('discount')->default(0);

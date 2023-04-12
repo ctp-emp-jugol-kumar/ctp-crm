@@ -21091,7 +21091,6 @@ body:after {
 .select2-container--default .select2-selection--single {
   min-height: 2.714rem;
   padding: 5px;
-  border: 1px solid #d8d6de;
 }
 .select2-container--classic .select2-selection--single:focus,
 .select2-container--default .select2-selection--single:focus {
@@ -24589,4 +24588,29 @@ div.dataTables_wrapper .dataTables_info {
 
 .ck.ck-toolbar {
   border: none !important;
+}
+
+.badge-light-purple {
+  background: #ffe0ff;
+  color: purple;
+}
+
+.vs__dropdown-menu {
+  overflow-x: hidden;
+}
+
+.vs__dropdown-menu::-webkit-scrollbar {
+  width: 5px !important;
+  border-radius: 15px !important;
+}
+
+/* Track */
+.vs__dropdown-menu::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+}
+
+/* Handle */
+.vs__dropdown-menu::-webkit-scrollbar-thumb {
+  background: var(--bs-primary) !important;
+  border-radius: 15px !important;
 }

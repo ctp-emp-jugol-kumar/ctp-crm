@@ -71,14 +71,16 @@ class RolesAndPermissionsSeeder extends Seeder
                     'leads.index',
                     'leads.create',
                     'leads.edit',
-                    'leads.delete'
+                    'leads.delete',
+                    'leads.download'
                 ],
                 'name' => [
                     'Show Leads',
                     'Manage Leads',
                     'Create Leads',
                     'Edit Leads',
-                    'Delete Leads'
+                    'Delete Leads',
+                    'Download Leads'
                 ]
             ],
             [

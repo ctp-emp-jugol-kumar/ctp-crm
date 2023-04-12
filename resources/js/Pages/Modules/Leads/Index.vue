@@ -13,38 +13,79 @@
                                     <h4 class="card-title">Lead Information's </h4>
 <!--                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal" data-bs-target="#addItemModal">Add Client</button>-->
                                     <button
-                                        v-if="this.$page.props.auth.user.can.includes('client.create') || this.$page.props.auth.user.role == 'Administrator'"
+                                        v-if="this.$page.props.auth.user.can.includes('leads.create') || this.$page.props.auth.user.role == 'Administrator'"
                                         class="dt-button add-new btn btn-primary"
                                         @click="addDataModal"
                                     >
                                         Add Lead
                                     </button>
+                                    <div>
+                                        <CDropdown>
+                                            <CDropdownToggle class="p-0">
+                                                <button class="btn bg-light-secondary d-flex align-items-center">
+                                                    <vue-feather type="external-link" size="15"/>
+                                                    <span class="px-1">Export</span>
+                                                    <vue-feather type="chevron-down" size="15"/>
+                                                </button>
+                                            </CDropdownToggle>
+                                            <CDropdownMenu>
+                                                <CDropdownItem @click="exportPDF">
+                                                    <!--                                                    <vue-feather type="download" size="15"/>-->
+                                                    <span class="ms-1">PDF</span>
+                                                </CDropdownItem>
+<!--                                                <CDropdownItem target="_blank">
+                                                    &lt;!&ndash;                                                    <vue-feather type="download" size="15"/>&ndash;&gt;
+                                                    <span class="ms-1">EXCEL</span>
+                                                </CDropdownItem>-->
+                                            </CDropdownMenu>
+                                        </CDropdown>
+                                    </div>
                                 </div>
-                                <div class="card-datatable table-responsive pt-0">
-                                    <div
-                                        class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
-                                        <div
-                                            class="col-sm-12 col-lg-4 d-flex justify-content-center justify-content-lg-start">
-                                            <div class="select-search-area">
-                                                <label>Show <select class="form-select" v-model="perPage">
-                                                    <option :value="undefined">10</option>
-                                                    <option value="25">25</option>
-                                                    <option value="50">50</option>
-                                                    <option value="100">100</option>
-                                                </select> entries</label>
+                                <div class="card-datatable table-responsive pt-0 px-2">
+                                    <div class="d-flex align-items-center justify-content-between border-bottom">
+                                        <div class="select-search-area d-flex align-items-center">
+                                            <select class="form-select" v-model="perPage">
+                                                <option :value="undefined">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                            <div class="ml-2">
+                                                <select v-model="searchByStatus" class="select2 form-select select w-100">
+                                                    <option selected disabled :value="undefined">Filter By Quotation Status</option>
+                                                    <option :value="null">All</option>
+                                                    <option v-for="item in status" :value="item.name" >{{ item.name }}</option>
+                                                </select>
+                                            </div>
+                                            <div v-if="!isCustom">
+                                                <select v-model="dateRange" @update:modelValue="changeDateRange" class="select2 form-select select w-100 ms-1" id="select2-basic">
+                                                    <option selected disabled :value="undefined">Filter By Date</option>
+                                                    <option :value="null">All</option>
+                                                    <option v-for="(type, index) in range.ranges" :value="type">
+                                                        {{ index }}
+                                                    </option>
+                                                    <option value="custom">Custom Range</option>
+                                                </select>
+                                            </div>
+                                            <div v-else>
+                                                <Datepicker v-model="dateRange" :monthChangeOnScroll="false" range multi-calendars
+                                                            placeholder="Select Date Range" autoApply  @update:model-value="handleDate" ></Datepicker>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 col-lg-8 ps-xl-75 ps-0">
-                                            <div
-                                                class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
-                                                <div class="select-search-area">
-                                                    <label>Search:<input v-model="search" type="search"
-                                                                         class="form-control" placeholder='Search...'
-                                                                         aria-controls="DataTables_Table_0"></label>
-                                                </div>
+                                        <div
+                                            class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
+                                            <div class="select-search-area">
+                                                <label>Search
+                                                    <input v-model="search"
+                                                           type="search"
+                                                           class="form-control"
+                                                           placeholder="What You Find ?"
+                                                           aria-controls="DataTables_Table_0">
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
+
                                     <table class="user-list-table table">
                                         <thead class="table-light">
                                         <tr class=null>
@@ -79,29 +120,29 @@
                                                 'badge-light-primary' : user.status === 'Proposal Sent',
                                                 'badge-light-info' : user.status === 'Contacted',
                                                 'badge-light-warning' : user.status === 'Quote Sent',
+                                                'badge-light-purple' : user.status === 'Qualified',
                                                 'badge-light-danger' : user.status === 'Disqualified',
                                             }">{{ user.status }}</span></td>
                                             <td>{{ user.created_at }}</td>
                                             <td>
 
                                                 <div>
-                                                    <Link :href="user.show_url"
+<!--                                                    <Link :href="user.show_url"
                                                           type="button"
                                                           data-title="Show Client"
                                                           class="btn p-50 btn-sm btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
-                                                    </Link>
-
+                                                    </Link>-->
                                                     <button type="button" @click="editClient(user.show_url)"
+                                                            v-if="this.$page.props.auth.user.can.includes('leads.edit') || this.$page.props.auth.user.role == 'Administrator'"
                                                             data-title="Edit Item"
-                                                            v-if="this.$page.props.auth.user.can.includes('client.edit') || this.$page.props.auth.user.role == 'Administrator' "
                                                             class="btn p-50 btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="pencil"/>
                                                     </button>
 
                                                     <button @click="deleteItemModal(user.id)" type="button"
                                                             data-title="Delete"
-                                                            v-if="this.$page.props.auth.user.can.includes('client.delete') || this.$page.props.auth.user.role == 'Administrator' "
+                                                            v-if="this.$page.props.auth.user.can.includes('leads.delete') || this.$page.props.auth.user.role == 'Administrator' "
                                                             class="btn p-50 btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash"/>
                                                     </button>
@@ -340,8 +381,7 @@
         </form>
     </Modal>
 
-
-    <Modal id="editClient" title="Show Client" v-vb-is:modal size="lg">
+    <Modal id="editClient" :title="clientStatus ?  'Edit This Lead' : 'Convert To New Client'" v-vb-is:modal :size="clientStatus ? 'sm' : 'lg'">
         <form @submit.prevent="updateClientForm(editData.id)">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -354,6 +394,14 @@
                             <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
                         </div>
                     </div>
+
+                    <div class="col-md" :class="{ 'd-none' : clientStatus }">
+                        <label>Company: </label>
+                        <input v-model="updateForm.company" type="text" placeholder="Enter Company Name" class="form-control">
+                        <span v-if="errors.company" class="error text-sm text-danger">{{ errors.company }}</span>
+                    </div>
+                </div>
+                <div class="row mb-1">
                     <div class="col-md">
                         <label>Email: <span class="text-danger">*</span></label>
                         <div class=null>
@@ -362,65 +410,49 @@
                             <span v-if="errors.email" class="error text-sm text-danger">{{ errors.email }}</span>
                         </div>
                     </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
+                    <div class="col-md" :class="{ 'd-none' : clientStatus }">
                         <label>Secondary Email: </label>
                         <input v-model="updateForm.secondary_email" type="email" placeholder="second.eg@ctpbd.com"
                                class="form-control">
-                        <span v-if="errors.secondary_email" class="error text-sm text-danger">{{
-                                errors.secondary_email
-                            }}</span>
+                        <span v-if="errors.secondary_email" class="error text-sm text-danger">{{errors.secondary_email}}</span>
                     </div>
+                </div>
+                <div class="row mb-1">
                     <div class="col-md">
                         <label>Phone: <span class="text-danger">*</span></label>
                         <input v-model="updateForm.phone" type="text" placeholder="+88017********" class="form-control">
                         <span v-if="errors.phone" class="error text-sm text-danger">{{ errors.phone }}</span>
                     </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
+                    <div class="col-md" :class="{ 'd-none' : clientStatus }">
                         <label>Secondary Phone: </label>
-                        <input v-model="updateForm.secondary_phone" type="text" placeholder="+88017********"
-                               class="form-control">
-                        <span v-if="errors.secondary_phone" class="error text-sm text-danger">{{
-                                errors.secondary_phone
-                            }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Company: </label>
-                        <input v-model="updateForm.company" type="text" placeholder="Enter Company Name"
-                               class="form-control">
-                        <span v-if="errors.company" class="error text-sm text-danger">{{ errors.company }}</span>
+                        <input v-model="updateForm.secondary_phone" type="text" placeholder="+88017********" class="form-control">
+                        <span v-if="errors.secondary_phone" class="error text-sm text-danger">{{errors.secondary_phone}}</span>
                     </div>
                 </div>
-                <div class="row mb-1">
+                <div class="row mb-1" :class="{ 'd-none' : clientStatus }">
                     <div class="col-md">
                         <label>Address: </label>
-                        <textarea v-model="updateForm.address" type="text" placeholder="Enter Full Address" rows="5"
-                                  class="form-control"></textarea>
+                        <textarea v-model="updateForm.address" type="text" placeholder="Enter Full Address" rows="5" class="form-control"></textarea>
                         <span v-if="errors.name" class="error text-sm text-danger">{{ errors.address }}</span>
                     </div>
                     <div class="col-md">
                         <label>Nots: </label>
-                        <textarea v-model="updateForm.note" type="text" placeholder="Enter note messages" rows="5"
-                                  class="form-control"></textarea>
+                        <textarea v-model="updateForm.note" type="text" placeholder="Enter note messages" rows="5" class="form-control"></textarea>
                         <span v-if="errors.note" class="error text-sm text-danger">{{ errors.note }}</span>
                     </div>
                 </div>
-
                 <div class="row mb-1">
                     <div class="col-md">
+                        <label>Lead Status</label>
                         <v-select v-model="updateForm.status"
+                                  @update:modelValue="changeStatus"
                                   label="name"
                                   :options="status"
                                   placeholder="~~Select Sub Category~~">
                         </v-select>
-
                     </div>
-                    <div class="col-md">
-                        <label>Assign Agent: </label>
-
+                    <div class="col-md" :class="{ 'd-none' : clientStatus }">
+                        <label>Assign Agent </label>
                         <v-select
                             multiple
                             v-model="updateForm.agents"
@@ -447,7 +479,7 @@
             </div>
 
             <div class="modal-footer">
-                <button :disabled="createForm.processing" type="submit"
+                <button :disabled="updateForm.processing" type="submit"
                         class="btn btn-primary waves-effect waves-float waves-light">Submit
                 </button>
                 <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
@@ -472,6 +504,10 @@
     import {useForm} from "@inertiajs/inertia-vue3";
     import axios from 'axios';
     import DropdownItems from "../../../components/modules/DropdownItems"
+
+    import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
+    import {useDate} from "../../../composables/useDate";
+    const range = useDate();
 
 
     let props = defineProps({
@@ -517,11 +553,11 @@
 
     const clientStatus = ref(true);
     const changeStatus = (event) =>{
-        clientStatus.value = event.name !== 'Convarted To Customer';
+        clientStatus.value = event.name !== 'Converted to Customer';
     }
 
     const updateStatus = (id, status) =>{
-        clientStatus.value = event.name !== 'Convarted To Customer';
+        clientStatus.value = event.name !== 'Converted to Customer';
         updateForm.status = status;
         document.getElementById('chaneStatusModal').$vb.modal.show()
     }
@@ -529,7 +565,7 @@
 
     let status = [
         {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Proposal Sent'},
-        {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Convarted To Customer'}
+        {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Converted to Customer'}
     ]
 
     let deleteItemModal = (id) => {
@@ -564,6 +600,9 @@
     };
 
     let addDataModal = () => {
+        createForm.reset();
+        createForm.processing = false;
+        clientStatus.value = true;
         document.getElementById('addItemModal').$vb.modal.show()
     }
     let createClientForm = () => {
@@ -610,9 +649,7 @@
 
     let editClient = (url) => {
         axios.get(url+"?edit=true").then(res => {
-
             console.log(res.data)
-
             editData.value = res.data;
             updateForm.name = res.data.name;
             updateForm.email = res.data.email;
@@ -624,6 +661,7 @@
             updateForm.note = res.data.note;
             updateForm.status = res.data.status;
             updateForm.agents = res.data.users;
+            clientStatus.value = res.data.status !== 'Convarted To Customer'
 
             document.getElementById('editClient').$vb.modal.show();
         }).catch(err => {
@@ -632,13 +670,42 @@
     }
 
 
+    const url = location.search;
+    const exportPDF =() =>{
+        if (url){
+            window.location.href = window.location.href+"&export_pdf=true";
+        }else{
+            window.location.href = window.location.href+"?export_pdf=true";
+        }
+    }
+
+
+    const dateRange = ref(props.filters.dateRange)
+    const isCustom =ref(false);
+    const changeDateRange = (event) => {
+        if(event=== 'custom'){
+            isCustom.value = true;
+            dateRange.value = '';
+        }
+    };
+    const handleDate = (event) => isCustom.value = event !== null;
+
+
+    const searchByStatus = ref(props.filters.byStatus)
     let search = ref(props.filters.search);
     let perPage = ref(props.filters.perPage);
 
-    watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get(props.main_url, {search: val, perPage: val2}, {preserveState: true, replace: true});
+    watch([search, perPage, searchByStatus, dateRange], debounce(function ([val, val2, val3, val4]) {
+        Inertia.get(props.main_url, { search: val, perPage: val2, byStatus: val3 , dateRange: val4}, { preserveState: true, replace: true });
     }, 300));
 
-
 </script>
-
+<style>
+.dp__input_wrap svg{
+    margin-left: 11px;
+}
+.dp__input_icon_pad {
+    padding: 8px 35px !important;
+    border-radius: 5px !important;
+}
+</style>

@@ -245,12 +245,24 @@
                                     </div>
                                 </div>
 
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Note</h4>
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-12">
+                                                <TextEditor v-model="formData.note"
+                                                            placeholder="Item Details"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     <div class="col-md-6" data-repeater-item
                                          v-for="(item, index) in formData.quatations">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h4 class="card-title">Item: {{ index + 1 }} </h4>
+                                                <h4 class="card-title">Custom's </h4>
                                                 <div class="row d-flex align-items-center">
                                                     <div class="col-12">
                                                         <div class="mb-1">
@@ -370,6 +382,8 @@ const formData = useForm({
     subject:null,
     date:null,
     valid_until:null,
+    note          : null,
+
 
     works:[],
     hostings:[],
@@ -390,6 +404,7 @@ formData.client_id=props.quotDetails.client.name;
 formData.subject=props.quotDetails.subject;
 formData.valid_until=props.quotDetails.valid_until;
 formData.date=props.quotDetails.date;
+formData.note=props.quotDetails.note;
 
 props.editable_works.forEach(function(item, index){
     formData.works[index] = item;

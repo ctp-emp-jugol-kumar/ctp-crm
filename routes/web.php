@@ -13,6 +13,8 @@ use App\Http\Controllers\HostingController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MethodController;
+use App\Http\Controllers\NoteCategoryController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PurposeController;
@@ -80,6 +82,9 @@ Route::prefix('admin')->group(function(){
         Route::get('download/quotation-invoice/{id}', [QuotationController::class, 'createInvoice'])
             ->name('quotation.download');
         Route::get('edit/quotation/{id}', [QuotationController::class, 'editQuotation'])->name('quotations.edit');
+        Route::post('quotation/update-status', [QuotationController::class, 'chnageQuotationStatus'])->name('chnageQuotationStatus');
+        Route::get('quotations-to-invoice/{id}', [QuotationController::class, 'quotationInvoice'])->name('quotations.quotationInvoice');
+        Route::post('quotations-invoice-payment', [QuotationController::class, 'addPayment'])->name('quotations.addPayment');
 
 
         // invoices management
@@ -87,28 +92,30 @@ Route::prefix('admin')->group(function(){
         Route::get('edit/invoice/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
         Route::get('download-invoice/{id}', [InvoiceController::class, 'generateInvoicePDFFile'])->name('invoices.generateInvoicePDFFile');
         Route::delete('edit/invoice/{id}', [InvoiceController::class, 'destroy'])->name('invoices.delete');
-
-
-
-
         Route::patch('update/invoice/{id}',[InvoiceController::class, 'updateInvoice'])->name('updateInvoices');
+        Route::post('invoice/custom/transaction', [InvoiceController::class, 'addPayment'])->name('saveInvoiceTransaction');
 
 
-        // invoices management
+        // method management
         Route::resource('methods', MethodController::class);
-        // invoices management
+        // purposes management
         Route::resource('purposes', PurposeController::class);
         // projects management
         Route::resource('projects', ProjectController::class);
         Route::post('projects/{id}', [ProjectController::class, 'update']);
         // transaction management
         Route::resource('transaction', TransactionController::class);
-        Route::post('quotation/update-status', [TransactionController::class, 'chnageQuotationStatus'])->name('chnageQuotationStatus');
         Route::post('quotation/transaction', [TransactionController::class, 'saveQuotationTransaction'])->name('saveQuotationTransaction');
         //expanse management
         Route::resource('expense', ExpanceController::class);
         Route::post('update-expance/{id}', [ExpanceController::class, 'update']);
         Route::resource('chat', ChatController::class);
+        // note category management
+        Route::resource('notes-category', NoteCategoryController::class);
+        // note management
+        Route::resource('notes', NoteController::class);
+        Route::post('notes-update', [NoteController::class, 'update'])->name('notes.update');
+        Route::get('employee-notes', [NoteController::class, 'employeeNotes'])->name('notes.empNots');
     });
 
     Route::post('/logout', [LoginController::class, 'destroy']);

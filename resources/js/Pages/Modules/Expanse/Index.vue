@@ -11,8 +11,7 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Expanse Information's </h4>
-                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#createData"
+                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" @click="addExpanseModal"
                                     >Add Method</button>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
@@ -239,6 +238,7 @@ let createForm = useForm({
     processing:Boolean,
 })
 
+const addExpanseModal = () => document.getElementById('createData').$vb.modal.show();
 
 let createData = () => {
     Inertia.post(props.main_url, createForm,{
@@ -324,7 +324,7 @@ let deleteItemModal = (id) => {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            Inertia.delete( 'methods/' + id, { preserveState: true, replace: true, onSuccess: page => {
+            Inertia.delete( 'expense/' + id, { preserveState: true, replace: true, onSuccess: page => {
                     Swal.fire(
                         'Deleted!',
                         'Your file has been deleted.',

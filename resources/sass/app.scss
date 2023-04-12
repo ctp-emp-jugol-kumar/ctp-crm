@@ -11,6 +11,7 @@
 @import './base/pages/app-chat.scss';
 @import './base/pages/app-chat-list.scss';
 
+
 .scroll-area::-webkit-scrollbar{
     width: 0 !important;
 }
@@ -83,3 +84,33 @@
 .ck.ck-toolbar{
     border:none !important;
 }
+
+.badge-light-purple{
+    background: #ffe0ff;
+    color: purple;
+}
+
+//#vs1__listbox{
+//    overflow-x: hidden;
+//}
+
+.vs__dropdown-menu{
+    overflow-x: hidden;
+}
+
+.vs__dropdown-menu::-webkit-scrollbar {
+    width: 5px !important;
+    border-radius: 15px !important;
+}
+
+/* Track */
+.vs__dropdown-menu::-webkit-scrollbar-track {
+    background: #f1f1f1 !important;
+}
+
+/* Handle */
+.vs__dropdown-menu::-webkit-scrollbar-thumb {
+    background: var(--bs-primary) !important;
+    border-radius: 15px !important;
+}
+

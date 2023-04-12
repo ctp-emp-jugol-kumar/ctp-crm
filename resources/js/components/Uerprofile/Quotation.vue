@@ -20,8 +20,15 @@
                     <td>{{ formatted(qut.date) }}</td>
                     <td>{{ qut.user.name ?? " " }} </td>
                     <td>
-                        <span v-if="qut.status" class="badge badge-light-success">Success</span>
-                        <span v-else class="badge badge-light-warning">Pending</span>
+                        <span class="badge badge-light-primary text-capitalize"
+                              :class="{
+                                    'badge-light-success' : qut.status === 'Converted To Invoice',
+                                    'badge-light-info' : qut.status === 'Feedback',
+                                     'badge-light-dark' : qut.status === 'Sent',
+                                    'badge-light-danger' : qut.status === 'Disqualified'
+                        }">
+                            {{ qut.status }}
+                        </span>
                     </td>
                     <td>
                         <a class="btn bg-light-warning" :href="`/admin/quotations/${qut.id}`" target="_blank">

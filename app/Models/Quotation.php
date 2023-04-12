@@ -180,10 +180,10 @@ class Quotation extends Model
     {
         return $this->belongsToMany('App\Models\Feature', 'feature_quotation');
     }
-
+//
     public function invoice()
     {
-        return $this->hasOne('App\Models\Invoice');
+        return $this->hasOne(Invoice::class);
     }
 
     public function transactions()

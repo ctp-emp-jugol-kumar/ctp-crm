@@ -9,6 +9,7 @@ use App\Models\InvoiceItem;
 use App\Models\Method;
 use App\Models\Quotation;
 use App\Models\QuotationItem;
+use App\Models\Transaction;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use FontLib\Table\Type\kern;
@@ -31,6 +32,7 @@ class InvoiceController extends Controller
     {
         return inertia('Modules/Invoices/Index', [
             'invoices' => CustomInvoice::query()
+                ->latest()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('subject', 'like', "%{$search}%")
                         ->orWhereHas('client', function ($client) use($search){
@@ -75,13 +77,19 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-//        Request::validate([
-//            'client_id' => "required",
-//            'date' => "required",
-//        ]);
 
-        $quotation = CustomInvoice::create([
-            'u_id' => 'Invoice_'.rand(73862, 5632625),
+        Request::validate([
+           'client_id' => 'required|integer',
+           'subject' => 'required',
+           'date' => 'required',
+           'trams_and_condition' => 'required',
+           'payment_policy' => 'required'
+        ]);
+
+
+
+        $invoice = CustomInvoice::create([
+            'u_id' => date('Yd', strtotime(now())),
             'user_id'       => Auth::id(),
             'client_id'        => Request::input('client_id'),
             'subject'          => Request::input('subject'),
@@ -98,17 +106,20 @@ class InvoiceController extends Controller
             $totalPrice += $item['price'];
             $totalDiscount += $item['discount'];
             InvoiceItem::create([
-                'invoice_id' => $quotation->id,
-                'item_name'  => $item['itemname'],
-                'price'      => $item['price'],
-                'discount'   => $item['discount'],
+                'invoice_id' => $invoice->id,
+                'item_name'  => $item['item_name'],
+                'price'      => $item['price'] ?? 0,
+                'discount'   => $item['discount'] ?? 0,
             ]);
         }
 
-        $quotation->total_price =  $totalPrice ?? 0;
-        $quotation->discount = $totalDiscount ?? 0;
-        $quotation->save();
+        $total = $totalPrice - $totalDiscount;
 
+        $invoice->total_price =  $totalPrice ?? 0;
+        $invoice->discount = $totalDiscount ?? 0;
+        $invoice->grand_total = $total;
+        $invoice->due =  $total;
+        $invoice->save();
 
         return redirect()->route('invoices.index');
     }
@@ -134,6 +145,7 @@ class InvoiceController extends Controller
                 "old_total_pay" => $item->old_total_pay ?? 0,
                 "date"       => $item->date->format('d M,y'),
                 "note"       => $item->note,
+
             ];
         }
 
@@ -159,7 +171,7 @@ class InvoiceController extends Controller
                 'payment_methods' => Method::all(),
                 "created"         => $invoice->created_at->format('D, d F, Y'),
                 'download_url'    => URL::route('invoices.generateInvoicePDFFile', $invoice->id),
-                'payment_url'     => URL::route('transaction.index'),
+                'payment_url'     => URL::route('saveInvoiceTransaction'),
             ]
         ]);
 
@@ -238,7 +250,15 @@ class InvoiceController extends Controller
 
         $invoice = CustomInvoice::findOrFail($id);
 
-//        return Request::all();
+
+        Request::validate([
+            'client_id' => 'required|integer',
+            'subject' => 'required',
+            'date' => 'required',
+            'trams_and_condition' => 'required',
+            'payment_policy' => 'required'
+        ]);
+
 
         $invoice->update([
             'user_id'       => Auth::id(),
@@ -250,11 +270,15 @@ class InvoiceController extends Controller
             'privicy_and_policy'  => Request::input('payment_policy'),
         ]);
 
-        $quotations=Request::input('quatations') ;
+        $invoices=Request::input('quatations') ;
 
-        $quotationsOption = [];
-        foreach ($quotations as $key => $option) {
-            $quotationsOption[] = [
+        $totalPrice = 0;
+        $totalDiscount = 0;
+        $invoicesOption = [];
+        foreach ($invoices as $key => $option) {
+            $totalPrice += $option['price'];
+            $totalDiscount += $option['discount'];
+            $invoicesOption[] = [
                 'id'             => $option["id"] ?? null,
                 'quotation_id'   => $invoice->id,
                 'item_name'       => $option['item_name'],
@@ -264,10 +288,18 @@ class InvoiceController extends Controller
             ];
         }
 
+
+        $total = $totalPrice - $totalDiscount;
+        $invoice->total_price =  $totalPrice ?? 0;
+        $invoice->discount = $totalDiscount ?? 0;
+        $invoice->grand_total = $total;
+        $invoice->due =  $total;
+        $invoice->save();
+
         $array = $invoice->invoiceItems->toArray();
         $deletedItems=[];
-        $deletedItems = array_map(function($item)use($quotationsOption){
-            return in_array($item['id'], array_column($quotationsOption, 'id')) ? null : $item["id"];
+        $deletedItems = array_map(function($item)use($invoicesOption){
+            return in_array($item['id'], array_column($invoicesOption, 'id')) ? null : $item["id"];
         }, $array);
         foreach ($deletedItems as $deletedItem){
             if ($deletedItem){
@@ -277,7 +309,7 @@ class InvoiceController extends Controller
 
 
         $relatedModels = $invoice->invoiceItems;
-        foreach ($quotationsOption as $item) {
+        foreach ($invoicesOption as $item) {
             $updateData = $relatedModels->find($item['id']);
             if($updateData){
                 $updateData->update($item);
@@ -316,4 +348,46 @@ class InvoiceController extends Controller
         $invoice = CustomInvoice::findOrFail($id);
         $invoice->delete();
     }
+
+
+    public function addPayment(){
+
+        $invoice = CustomInvoice::with(['client'])->findOrFail(Request::input('invoice_id'));
+
+        $totalPay = Request::input('pay_amount')+Request::input('discount');
+
+        Transaction::create([
+            'u_id'       => date('Yd', strtotime(now())),
+            'transaction_model' => 'App\\Models\\CustomInvoice',
+            'transaction_model_id' => $invoice->id,
+            'method_id'  => Request::input('payment_id'),
+            'user_id'    => Auth::id(),
+            'client_id'  => $invoice->client->id,
+            'invoice_id' => $invoice->id,
+
+            'amount'     => $invoice->grand_total,
+            'pay_amount' => Request::input('pay_amount'),
+            'discount'   => Request::input('discount'),
+
+            'total_pay'  => $totalPay,
+            'total_due'  => $invoice->due - $totalPay,
+
+            'date'       => now(),
+            'note'       => Request::input('payment_note'),
+
+            'type'       => 'in'
+        ]);
+
+        $tk = $invoice->due - $totalPay;
+        $invoice->update([
+            'pay' =>  $invoice->pay + $totalPay,
+            'due' => $tk
+        ]);
+
+
+        return back();
+    }
+
+
+
 }

@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('hosting_quotation', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('hosting_id')->constrained('hostings');
-            $table->foreignId('quotation_id')->constrained('quotations');
+            $table->foreignId('hosting_id')->constrained('hostings')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('quotation_id')->constrained('quotations')->cascadeOnDelete()->cascadeOnUpdate();
             $table->integer('price')->default(0);
             $table->integer('quantity')->default(1);
             $table->integer('discount')->default(0);

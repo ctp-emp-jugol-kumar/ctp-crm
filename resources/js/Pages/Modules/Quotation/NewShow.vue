@@ -132,23 +132,26 @@
                                     <div class="row invoice-sales-total-wrapper">
                                         <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
                                             <p class="card-text mb-0">
-                                                <span class="fw-bold">Salesperson:</span> <span class="ms-75">Alfie Solomons</span>
+                                                <span class="fw-bold">Salesperson:</span>
+                                                <span class="ms-75 text-capitalize">
+                                                    {{ info.quotation_owner.creator.name }}
+                                                </span>
                                             </p>
                                         </div>
                                         <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">
                                             <div class="invoice-total-wrapper">
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Subtotal:</p>
-                                                    <p class="invoice-total-amount">{{ subTotal }} Tk</p>
+                                                    <p class="invoice-total-amount">{{ props.info.quotation.price }} Tk</p>
                                                 </div>
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Discount:</p>
-                                                    <p class="invoice-total-amount">{{ discount }} Tk</p>
+                                                    <p class="invoice-total-amount">{{ props.info.quotation.discount }} Tk</p>
                                                 </div>
-                                                <div class="invoice-total-item">
+<!--                                                <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Tax:</p>
                                                     <p class="invoice-total-amount">21%</p>
-                                                </div>
+                                                </div>-->
                                                 <hr class="my-50" />
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Total:</p>
@@ -165,10 +168,9 @@
                                 <!-- Invoice Note starts -->
                                 <div class="card-body invoice-padding pt-0">
                                     <div class="row">
-                                        <div class="col-12">
-                                            <span class="fw-bold">Note:</span>
-                                            <span>It was a pleasure working with you and your team. We hope you will keep us in mind for future freelance
-                                                projects. Thank You!</span>
+                                        <div class="col-12 d-flex">
+                                            <span class="fw-bold me-1">Note:</span>
+                                            <span v-html="info.quotation.note"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -217,7 +219,12 @@
                                   @update:modelValue="selectedOption"
                                   label="name"
                                   :options="status"
+<<<<<<< HEAD
                                   placeholder="~~Select Sub Category~~"></v-select>
+=======
+                                  placeholder="~~Select Sub Category~~">
+                        </v-select>
+>>>>>>> cc32bf8eeaf85ff3cbb14cd3a5e654f423e2bfcb
                     </div>
                 </div>
             </div>
@@ -301,12 +308,18 @@ let subTotal = computed(() =>{
     return sum;
 })
 
+
+// let discount = computed(() => {
+//     let sum = 0;
+//     [...props.info.others_info.items].map(item => sum = sum +  parseInt(item.discount) ?? 0)
+//     return sum + props.info.quotation.discount;
+// })
+
 let grandTotal = computed(() =>{
-    let sum = 0;
-    [...props.info.others_info.items].map(item => sum = sum + ((parseInt(item.price) ?? 0) * (parseInt(item.quantity) ?? 1)) - parseInt(item.discount) ?? 0)
-    return sum;
+    return props.info.quotation.price - props.info.quotation.discount;
 })
 
+<<<<<<< HEAD
 let discount = computed(() => {
     let sum = 0;
     [...props.info.others_info.items].map(item => sum = sum +  parseInt(item.discount) ?? 0)
@@ -322,6 +335,10 @@ const selectedOption = (event) =>{
     }
     moreFields.value = false;
 }
+=======
+
+
+>>>>>>> cc32bf8eeaf85ff3cbb14cd3a5e654f423e2bfcb
 
 
 

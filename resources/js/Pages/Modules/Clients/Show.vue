@@ -1,6 +1,9 @@
 <template>
 
-    <UserProfile :user="props.user" :image="props.image"/>
+    <UserProfile
+        :user="props.user"
+        :image="props.image"
+    />
 
 </template>
 
@@ -9,6 +12,6 @@ import VueLink from '../../../components/ViewLink'
 import UserProfile from "../../../components/UserProfile";
 let props = defineProps({
     user:[],
-    image:''
+    image:'',
 })
 </script>

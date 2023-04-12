@@ -1,28 +1,7 @@
-export const data = {
-    labels: [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-    ],
-    datasets: [
-        {
-            label: 'Data One',
-            backgroundColor: '#f87979',
-            data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
-        }
-    ]
-}
-
 export const options = {
     responsive: true,
-    maintainAspectRatio: false
+    maintainAspectRatio: true
 }
+
+export const paymentPolicy = "`00s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining ess`";
+export const tramsConditions = "` Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker`";

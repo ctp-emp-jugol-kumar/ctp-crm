@@ -27,7 +27,10 @@ class ClientsController extends Controller
 
         return inertia('Modules/Clients/Index', [
             $search = Request::input('search'),
-            'clients' => Client::query()->with('projects')->where('status', 'Converted to Customer')
+            'clients' => Client::query()
+                ->with('projects')
+                ->where('status', '=', 'Converted to Customer')
+                ->latest()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query
                         ->where('email', 'like', "%{$search}%")
@@ -43,7 +46,19 @@ class ClientsController extends Controller
                             ->orWhere('description', 'like', "%{$search}");
                         });
                     ;
-                })->latest()
+                })
+                ->when(Request::input('dateRange'), function ($query, $search){
+                    $start_date = $search[0];
+                    $end_date =  $search[1];
+                    if (!empty($start_date) && !empty($end_date)) {
+                        $query->whereDate('created_at', '>=', $start_date)
+                            ->whereDate('created_at', '<=', $end_date);
+                    }
+                    if (empty($start_date) && !empty($end_date)) {
+                        $query->whereDate('created_at', '<=', $end_date);
+                    }
+                })
+                ->latest()
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
                 ->through(fn($client) => [
@@ -61,7 +76,7 @@ class ClientsController extends Controller
                     'show_url' => URL::route('clients.show', $client->id),
                 ]),
             'users' => User::all(),
-            'filters' => Request::only(['search','perPage']),
+            'filters' => Request::only(['search','perPage', 'dateRange']),
             "main_url" => Url::route('clients.index'),
         ]);
 
@@ -76,9 +91,10 @@ class ClientsController extends Controller
      */
     public function store(ClientRequest $request)
     {
-        if (!auth()->user()->can('client.create')) {
+        if (!auth()->user()->can('client.create') || !auth()->user()->can('leads.create')) {
             abort(401 );
         }
+
        $data = $request->validate([
             "name" => ['required'],
             "email" => ['required', 'email', Rule::unique('clients', 'email')],
@@ -98,7 +114,8 @@ class ClientsController extends Controller
        if ($request->agents){
             $client->users()->attach($request->input('agents'));
        }
-        return redirect()->route('clients.index');
+       return back();
+//        return redirect()->route('clients.index');
 
     }
 
@@ -110,10 +127,10 @@ class ClientsController extends Controller
      */
     public function show($id)
     {
-
-        if (!auth()->user()->can('client.show')) {
+        if (!auth()->user()->can('client.show') || !auth()->user()->can('leads.show')) {
             abort(401 );
         }
+
         $user = Client::findOrFail($id)->load('users','transactions','transactions.user',
             'transactions.method','customeInvoices',
             'quotations','quotations.user', 'projects',
@@ -126,7 +143,8 @@ class ClientsController extends Controller
 
         return inertia('Modules/Clients/Show', [
             "user" => $user,
-            'image' => "/images/avatar.png"
+            'image' => "/images/avatar.png",
+            'show_url' => URL::route('clients.show', $user->id),
         ]);
     }
 
@@ -143,14 +161,35 @@ class ClientsController extends Controller
      */
     public function update(UpdateClient $request, Client $client)
     {
-        if (!auth()->user()->can('client.edit')) {
+        if (!auth()->user()->can('client.edit') || !auth()->user()->can('leads.edit')) {
             abort(401 );
         }
-        $client->update($request->validated());
-        if ($request->agents){
-            $client->users()->sync($request->input('agents'));
+
+        $data = $request->validated();
+
+        if(is_array(Request::input('status'))){
+            $data['status'] = $request->status["name"];
+        }else{
+            $data['status'] = $request->status;
         }
-        return redirect()->route('clients.index');
+
+        $agents = [];
+        foreach (Request::input("agents") as $item){
+            if (is_int($item)){
+                $agents[] = $item;
+            }else{
+                $agents[] = $item["id"];
+            }
+        }
+
+        $client->update($data);
+        $client->users()->sync($agents);
+
+//        if ($request->agents){
+//            $client->users()->sync($request->input('agents'));
+//        }
+        return back();
+//        return redirect()->route('clients.index');
     }
 
     /**
@@ -161,10 +200,12 @@ class ClientsController extends Controller
      */
     public function destroy($id)
     {
-        if (!auth()->user()->can('client.delete')) {
+        if (!auth()->user()->can('client.delete') || !auth()->user()->can('leads.delete')) {
             abort(401 );
         }
+
         Client::findOrFail($id)->delete();
-        return redirect()->route('clients.index');
+        return back();
+//        return redirect()->route('clients.index');
     }
 }

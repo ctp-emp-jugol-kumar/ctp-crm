@@ -159,6 +159,19 @@
                                     </div>
                                 </div>
 
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Note</h4>
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-12">
+                                                    <TextEditor v-model="formData.note"
+                                                                placeholder="Item Details"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <div class="row">
                                     <div class="col-md-12" data-repeater-item
                                          v-for="(item, index) in formData.quatations">
@@ -233,9 +246,32 @@
                                        <div class="mb-1">
                                            <label>Client <Required/></label>
                                            <div class="">
-                                               <v-select v-model="formData.client_id" :options="clients"
-                                                         :reduce="client => client.id" label="name"
-                                                         placeholder="Select Client"></v-select>
+                                               <v-select
+                                                   v-model="formData.client_id"
+                                                   :options="clients"
+                                                   placeholder="Search Country Name"
+                                                   :reduce="client => client.id"
+                                                   :filter="fuseSearch"
+                                                   label="name">
+                                                   <template v-slot:option="option">
+                                                       <li class="d-flex align-items-start py-1">
+                                                           <div class="d-flex align-items-center justify-content-between w-100">
+                                                               <div class="me-1 d-flex flex-column">
+                                                                   <strong class="mb-25">{{ option.name }}</strong>
+                                                                   <span >{{ option.email }}</span>
+                                                                   <span >{{ option.phone }}
+                                                                       <span v-if="option.secondary_phone">/ {{ option.secondary_phone}}</span>
+                                                                   </span>
+                                                               </div>
+                                                           </div>
+                                                       </li>
+                                                   </template>
+                                               </v-select>
+
+
+
+
+
                                                <InputFieldError :errors="errors.client_id"/>
                                            </div>
                                        </div>
@@ -266,6 +302,17 @@
                                        </div>
                                    </div>
                                </div>
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3>Given Discount</h3>
+                                        <div class="col-md">
+                                            <div class="">
+                                                <input class="form-control" v-model="formData.discount" placeholder="e.g 0.00 Tk"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="card">
                                     <div class="card-body">
                                         <h3>Quotation Status</h3>
@@ -275,8 +322,8 @@
                                                           width="100%"
                                                           label="name"
                                                           :options="status"
-                                                          placeholder="Select Quotation Status"
-                                                          :reduce="optoin"></v-select>
+                                                          placeholder="Select Quotation Status"></v-select>
+                                                <InputFieldError :errors="errors.status"/>
                                             </div>
                                         </div>
                                     </div>
@@ -296,7 +343,7 @@
                                         <h3>Terms Of Service</h3>
                                         <div class="col-md">
                                             <div class="">
-                                                <TextEditor v-model="formData.Trams_Services"></TextEditor>
+                                                <TextEditor v-model="formData.Trams_Services"/>
                                             </div>
                                         </div>
                                     </div>
@@ -332,6 +379,8 @@
     import InputFieldError from "../../../components/InputFieldError";
     import QtyButton from "../../../components/QtyButton";
     import moment from 'moment'
+    import Fuse from 'fuse.js'
+    import {paymentPolicy, tramsConditions} from '../chartConfig.js'
 
     let props = defineProps({
         clients      : null,
@@ -347,15 +396,16 @@
         methods      : null,
     })
 
-
     let formData = useForm({
         client_id     : null,
         subject       : null,
         date          : null,
         valid_until   : null,
-        payment_policy: paymnetPolicy,
-        Trams_Services: paymnetPolicy,
+        payment_policy: paymentPolicy,
+        Trams_Services: tramsConditions,
+        discount      : null,
         status        : null,
+        note          : null,
 
         works         : [],
         domains       : [],
@@ -374,8 +424,21 @@
 
     });
 
+
+    const fuseSearch = (options, search) => {
+        const fuse = new Fuse(options, {
+            keys: ['name', 'email', 'phone','secondary_email', 'secondary_phone', 'company', 'address', 'status'],
+            shouldSort: true,
+        })
+        return search.length
+            ? fuse.search(search).map(({ item }) => item)
+            : fuse.list
+    }
+
+
+
     let status = [
-        {"name":'New Quotation'}, {"name":'Sent'}, {"name":'Feedback'}, {"name":'Disqualified'}, {"name":'Converted To Invoice'}
+        {"name":'New Quotation'}, {"name":'Sent'}, {"name":'Feedback'}
     ]
     props.works.forEach(function(item, index){
         formData.works[index] = item;
@@ -393,24 +456,6 @@
         formData.packages[index] = item;
     });
 
-    const paymnetPolicy = `Parts of a payment policy
-Customers want to know how to pay you for your goods or services. Your policy should include answers to customer bill payment questions:
-
-When do you expect to receive payment?
-
-Include a specific payment date
-Detail charges and interest rates for late payments
-What forms of payment do you accept?
-
-List the payment methods you accept
-You may also want to list payment methods you do not accept
-Where can customers send the payment?
-
-Note the address you want the payment sent to
-Cover available online payment options
-How can customers contact you?
-
-Add your phone number, email, and website`;
 
 
     let worksTitle   = "Select work services"
@@ -502,7 +547,7 @@ Add your phone number, email, and website`;
     }
 </script>
 
-<style scopd>
+<style scoped>
 
     .webkitTransaction{
         -webkit-transition: all 5s ease-in-out;
@@ -511,6 +556,4 @@ Add your phone number, email, and website`;
         -o-transition: all 5s ease-in-out;
         transition: all 5s ease-in-out;
     }
-
-    /*@import "../../../../sass/base/plugins/tables/datatables";*/
 </style>
