@@ -227,7 +227,7 @@
                     </li>
 
                     <li class=" nav-item">
-                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/logout">
+                        <Link preserve-scroll class="d-flex align-items-center" method="post" href="/admin/logout">
                             <vue-feather type="log-out" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Logout</span>
                         </Link>
