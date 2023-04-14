@@ -224,11 +224,6 @@
                             <span class="menu-title text-truncate" data-i18n="Chat">Projects</span>
                         </Link>
                     </li>
-
-<<<<<<< HEAD
-                    <li class=" nav-item">
-=======
-
                     <li class="nav-item has-sub" :class="{'open' : clickMenu === 5}"  @click="toggleSubMenu(5)"
                         v-if="this.$page.props.auth.user.can.includes('note.index') || this.$page.props.auth.user.role == 'Administrator' ">
                         <a preserve-scroll class="d-flex align-items-center">
@@ -262,7 +257,6 @@
 
 
                     <li class="nav-item">
->>>>>>> cc32bf8eeaf85ff3cbb14cd3a5e654f423e2bfcb
                         <Link preserve-scroll class="d-flex align-items-center" method="post" href="/admin/logout">
                             <vue-feather type="log-out" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Logout</span>

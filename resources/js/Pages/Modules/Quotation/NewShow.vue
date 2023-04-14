@@ -219,12 +219,9 @@
                                   @update:modelValue="selectedOption"
                                   label="name"
                                   :options="status"
-<<<<<<< HEAD
-                                  placeholder="~~Select Sub Category~~"></v-select>
-=======
+
                                   placeholder="~~Select Sub Category~~">
                         </v-select>
->>>>>>> cc32bf8eeaf85ff3cbb14cd3a5e654f423e2bfcb
                     </div>
                 </div>
             </div>
@@ -309,23 +306,17 @@ let subTotal = computed(() =>{
 })
 
 
-// let discount = computed(() => {
-//     let sum = 0;
-//     [...props.info.others_info.items].map(item => sum = sum +  parseInt(item.discount) ?? 0)
-//     return sum + props.info.quotation.discount;
-// })
 
 let grandTotal = computed(() =>{
     return props.info.quotation.price - props.info.quotation.discount;
 })
 
-<<<<<<< HEAD
+
 let discount = computed(() => {
     let sum = 0;
     [...props.info.others_info.items].map(item => sum = sum +  parseInt(item.discount) ?? 0)
     return sum;
 })
-
 
 const moreFields = ref(false);
 const selectedOption = (event) =>{
@@ -335,13 +326,6 @@ const selectedOption = (event) =>{
     }
     moreFields.value = false;
 }
-=======
-
-
->>>>>>> cc32bf8eeaf85ff3cbb14cd3a5e654f423e2bfcb
-
-
-
 
 
 

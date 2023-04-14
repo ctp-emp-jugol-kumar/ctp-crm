@@ -20,6 +20,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PurposeController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\QuotationInvoice;
+use App\Http\Controllers\SearviceController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
@@ -62,7 +63,7 @@ Route::prefix('admin')->group(function(){
         // designs management
         Route::resource('designs', DesignController::class);
         // services management
-        Route::resource('services', WebsiteController::class);
+        Route::resource('services', SearviceController::class);
         // platforms management
         Route::resource('platforms', PlatformController::class);
         // features management
