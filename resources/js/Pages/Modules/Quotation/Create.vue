@@ -379,7 +379,7 @@
     import InputFieldError from "../../../components/InputFieldError";
     import QtyButton from "../../../components/QtyButton";
     import moment from 'moment'
-    import Fuse from 'fuse.js'
+
     import {paymentPolicy, tramsConditions} from '../chartConfig.js'
 
     let props = defineProps({

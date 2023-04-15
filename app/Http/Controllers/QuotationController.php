@@ -11,6 +11,7 @@ use App\Models\Invoice;
 use App\Models\Method;
 use App\Models\Platform;
 use App\Models\Quotation;
+use App\Models\Searvice;
 use App\Models\Transaction;
 use App\Models\Website;
 use App\Models\Work;
@@ -35,9 +36,11 @@ class QuotationController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param $services
+     * @param $platforms
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function index()
+  /*  public function index()
     {
         $quotation  = Quotation::query()
             ->latest()
@@ -109,8 +112,41 @@ class QuotationController extends Controller
 
 
 
+    }*/
+
+    protected function mapedItems($services, $platforms){
+        return $services->map(function($service) use ($platforms) {
+            $platform_ids = json_decode($service->platforms);
+
+            $service_platforms = $platforms->whereIn('id', $platform_ids)->map(function($platform) {
+                $platform_featureds = json_decode($platform->featureds);
+                return ["data" => $platform, 'featureds' => $platform_featureds,];
+            });
+
+            return [
+                'service' => [
+                    'data' => $service,
+                    'platforms' => $service_platforms,
+                ],
+            ];
+        });
     }
 
+
+    public function index(){
+        $services = Searvice::all()->map(function ($service){
+             $service["platforms"] = Platform::whereIn('id', json_decode($service->platforms))->get()->map(function($platform){
+                 $platform["features"] = json_decode($platform->featureds);
+                 return collect($platform)->only(['id', 'name', 'features']);
+             });
+            return collect($service)->only(['service_name', 'id', 'platforms']);
+        });
+
+
+        return inertia('Quotation/Store', [
+            'services' => $services
+        ]);
+    }
 
 
 

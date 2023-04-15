@@ -201,14 +201,25 @@
         </div>
     </div>
 
-    <Modal id="change-status" title="Change Quotation Status" v-vb-is:modal size="sm">
+    <Modal id="change-status" :title="moreFields ? 'Convert To Invoice' : 'Change Quotation Status'" v-vb-is:modal size="sm">
         <form @submit.prevent="addPayment">
             <div class="modal-body">
-                <div class="row mb-1">
+                <div class="row mb-1 flex-column">
+                    <div class="col-md mb-1" v-if="moreFields">
+                        <label>Price </label>
+                        <input type="text" class="form-control readonly">
+                    </div>
+                    <div class="col-md mb-1" v-if="moreFields">
+                        <label>Given Discount</label>
+                        <input type="text" class="form-control">
+                    </div>
                     <div class="col-md">
+                        <label>Select Quotation Status</label>
                         <v-select v-model="updateForm.status"
+                                  @update:modelValue="selectedOption"
                                   label="name"
                                   :options="status"
+
                                   placeholder="~~Select Sub Category~~">
                         </v-select>
                     </div>
@@ -229,22 +240,32 @@
 
 <script setup>
 
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import {useForm} from "@inertiajs/inertia-vue3";
 import {Inertia} from "@inertiajs/inertia";
 import {useDate} from "../../../composables/useDate";
 import Modal from '../../../components/Modal.vue'
 import moment from 'moment';
-let { formatted } = useDate();
 
-let props = defineProps({
+
+
+const { formatted } = useDate();
+
+const props = defineProps({
     info:Object,
 })
-let updateForm = useForm({
+const updateForm = useForm({
     quotId: props.info.quotation.id,
     status:props.info.quotation.status,
     processing:false,
 })
+
+const invoiceData = useForm({
+    price:null,
+    discount:null,
+    status:null
+})
+
 
 const status = [
     {"name":'New Quotation'}, {"name":'Sent'}, {"name":'Feedback'}, {"name":'Disqualified'}, {"name":'Converted To Invoice'}
@@ -285,21 +306,26 @@ let subTotal = computed(() =>{
 })
 
 
-// let discount = computed(() => {
-//     let sum = 0;
-//     [...props.info.others_info.items].map(item => sum = sum +  parseInt(item.discount) ?? 0)
-//     return sum + props.info.quotation.discount;
-// })
 
 let grandTotal = computed(() =>{
     return props.info.quotation.price - props.info.quotation.discount;
 })
 
 
+let discount = computed(() => {
+    let sum = 0;
+    [...props.info.others_info.items].map(item => sum = sum +  parseInt(item.discount) ?? 0)
+    return sum;
+})
 
-
-
-
+const moreFields = ref(false);
+const selectedOption = (event) =>{
+    if(event.name === 'Converted To Invoice'){
+        moreFields.value = true;
+        invoiceData.price = grandTotal;
+    }
+    moreFields.value = false;
+}
 
 
 
