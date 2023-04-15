@@ -1,9 +1,13 @@
+{{--https://docraptor.com/try_it_out--}}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Invoice PDF</title>
+    <link rel="stylesheet" href="{{ ltrim(elixir('css/pdf-invoice.css'), '/') }}" />
+
     <style>
         body {
             font-size: 14px;

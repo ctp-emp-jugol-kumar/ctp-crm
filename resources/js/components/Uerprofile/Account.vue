@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6">
-                    <div class="card">
+                    <div class="card match-height">
                         <div class="card-body d-flex align-items-center justify-content-between">
                             <div>
                                 <h3 class="fw-bolder mb-75">0</h3>

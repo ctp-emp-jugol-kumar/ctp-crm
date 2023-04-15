@@ -24,6 +24,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\WorkController;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 
@@ -142,6 +143,13 @@ Route::put('/test/update/{id}', [\App\Http\Controllers\TestController::class, 'u
 //
 //
 //});
+
+
+Route::get('/pdf', function(){
+    return view('invoice.newPdf');
+    $pdf = Pdf::loadView('invoice.newInvoice');
+    return $pdf->download('invoice.pdf');
+});
 
 
 
