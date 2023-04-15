@@ -264,6 +264,12 @@
                             <span class="menu-title text-truncate" data-i18n="Chat">Logout</span>
                         </Link>
                     </li>
+                    <li class=" nav-item">
+                        <Link preserve-scroll method="post" class="d-flex align-items-center" href="/admin/logout">
+                            <vue-feather type="power" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Logout</span>
+                        </Link>
+                    </li>
                 </ul>
             </div>
         </perfect-scrollbar>
