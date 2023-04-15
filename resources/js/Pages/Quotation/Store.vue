@@ -1,24 +1,25 @@
 <template>
     <Layout>
-        <UpperQuotation>
+        <UpperQuotation :subtotal="totalPrice">
             <!-- Product Details starts -->
             <div class="card-body invoice-padding invoice-product-details" v-for="(item, index) in formData.items">
                 <div class="source-item">
                     <div data-repeater-list="group-a" >
-                        <div class="repeater-wrapper" data-repeater-item>
+                        <div class="repeater-wrapper">
                             <div class="row">
                                 <div class="col-12 d-flex product-details-border position-relative pe-0">
+                                    <p class="card-text col-title mb-md-50 mb-0">Item</p>
                                     <div class="row w-100 pe-lg-0 pe-1 py-2">
-                                        <div class="col-lg-6 col-12 mb-lg-0 mb-2 mt-lg-0 mt-2">
-                                            <p class="card-text col-title mb-md-50 mb-0">Item</p>
-                                            <div class="input-group">
+                                        <div class="col-md-7">
+                                            <div class="input-group"
+                                                 v-if="!formData.items[index].platforms?.length > 0">
                                                 <v-select :options="services"
-                                                          class="form-control"
-                                                          v-model="selected"
-                                                         label="service_name"
+                                                          class="form-control py-0"
+                                                          v-model="formData.items[index].service"
+                                                          label="service_name"
                                                           :reduce="category => category.id"
                                                           @update:modelValue="loadPlatforms(index)"
-                                                         placeholder="e.g Select Service">
+                                                          placeholder="e.g Select Service">
                                                     <template v-slot:option="option">
                                                         <li class="d-flex align-items-start py-1">
                                                             <div class="d-flex align-items-center justify-content-between w-100">
@@ -30,19 +31,20 @@
                                                     </template>
                                                 </v-select>
                                             </div>
-
-                                           <!-- <div class="input-group"
-                                                 v-if="platforms.length > 0">
+                                            <div class="input-group"
+                                                 v-if="formData.items[index].platforms?.length > 0">
                                                 <div class="input-group-prepend border-end-0 rounded-0">
-                                                    <div class="input-group-text cursor-pointer" @click="reback">
+                                                    <div class="input-group-text cursor-pointer rounded-0 border-end-0" @click="reback(index)">
                                                         <vue-feather type="arrow-left"/>
                                                     </div>
                                                 </div>
                                                 <v-select
-                                                    :options="platforms"
+                                                    :options="formData.items[index].platforms"
                                                     label="name"
                                                     class="form-control"
-                                                    placeholder="e.g Select Service">
+                                                    v-model="formData.items[index].platform"
+                                                    @update:modelValue="loadPlatformFeatureds(index)"
+                                                    placeholder="e.g Select Platform">
                                                     <template v-slot:option="option">
                                                         <li class="d-flex align-items-start py-1">
                                                             <div class="d-flex align-items-center justify-content-between w-100">
@@ -53,30 +55,53 @@
                                                         </li>
                                                     </template>
                                                 </v-select>
-                                            </div>-->
-                                            <textarea class="form-control mt-2" rows="1">Customization & Bug Fixes</textarea>
-                                        </div>
-                                        <div class="col-lg-3 col-12 my-lg-0 my-2">
-                                            <p class="card-text col-title mb-md-2 mb-0">Cost</p>
-                                            <input type="number" class="form-control" value="24" placeholder="24" />
-                                            <div class="mt-2">
-                                                <span>Discount:</span>
-                                                <span class="discount">0%</span>
-                                                <span class="tax-1 ms-50" data-bs-toggle="tooltip" data-bs-placement="top" title="Tax 1">0%</span>
-                                                <span class="tax-2 ms-50" data-bs-toggle="tooltip" data-bs-placement="top" title="Tax 2">0%</span>
+                                            </div>
+
+                                            <div class="showContentQuotation border p-2">
+                                                <table class="table table-striped details-table">
+                                                    <thead>
+                                                        <th>Name</th>
+                                                        <th>Price</th>
+                                                        <th>Qty</th>
+                                                        <th>Total</th>
+                                                        <th>Action</th>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="(fes, j)  in formData.items[index].checkFeatrueds">
+                                                            <td>{{ fes.name }}</td>
+                                                            <td>{{ fes.price }}</td>
+                                                            <td>{{ fes.qty }} </td>
+                                                            <td>{{ fes.price * fes.qty }}</td>
+                                                            <td>
+                                                                <span class="badge bg-primary cursor-pointer" @click="qtyPlus(index, j)" style="padding: 3px !important;margin-right: 4px;">
+                                                                    <vue-feather type="plus" size="5"/>
+                                                                </span>
+                                                                <span class="badge bg-warning cursor-pointer" @click="qtyMinus(index, j)"  style="padding: 3px !important;margin-right: 4px;">
+                                                                    <vue-feather type="minus" size="5"/>
+                                                                </span>
+                                                                <span class="badge bg-danger cursor-pointer" @click="itemRemove(index, j)" style="padding: 3px !important;">
+                                                                    <vue-feather type="x" size="5"/>
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
                                             </div>
                                         </div>
-                                        <div class="col-lg-2 col-12 my-lg-0 my-2">
-                                            <p class="card-text col-title mb-md-2 mb-0">Qty</p>
-                                            <input type="number" class="form-control" value="1" placeholder="1" />
-                                        </div>
-                                        <div class="col-lg-2 col-12 mt-lg-0 mt-2">
-                                            <p class="card-text col-title mb-md-50 mb-0">Price</p>
-                                            <p class="card-text mb-0">$24.00</p>
+                                        <div class="col-md-4 featruedOverflowStyle">
+                                            <div class="input-group" v-for="(fes, i)  in formData.items[index].features" >
+                                                <div class="form-check form-check-primary">
+                                                    <input type="checkbox" v-model="formData.items[index].checkFeatrueds" :value="fes" class="form-check-input" :id="`colorCheck-${index}-${i}`">
+                                                    <label class="form-check-label" :for="`colorCheck-${index}-${i}`">{{ fes.name }} ({{ fes.price }})</label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
+
                                     <div class="d-flex flex-column align-items-center justify-content-between border-start invoice-product-actions py-50 px-25">
-                                        <vue-feather type="x" class="cursor-pointer font-medium-3" data-repeater-delete></vue-feather>
+                                        <vue-feather type="x" class="cursor-pointer font-medium-3" @click="removeItem(index)"></vue-feather>
                                         <div class="dropdown">
                                             <vue-feather class="cursor-pointer more-options-dropdown me-0"
                                                          type="settings"
@@ -85,39 +110,6 @@
                                                          aria-haspopup="true"
                                                          aria-expanded="false">
                                             </vue-feather>
-                                            <div class="dropdown-menu dropdown-menu-end item-options-menu p-1" aria-labelledby="dropdownMenuButton">
-                                                <div class="mb-1">
-                                                    <label for="discount-input" class="form-label">Discount(%)</label>
-                                                    <input type="number" class="form-control" id="discount-input" />
-                                                </div>
-                                                <div class="form-row mt-50">
-                                                    <div class="mb-1 col-md-6">
-                                                        <label for="tax-1-input" class="form-label">Tax 1</label>
-                                                        <select name="tax-1-input" id="tax-1-input" class="form-select tax-select">
-                                                            <option value="0%" selected>0%</option>
-                                                            <option value="1%">1%</option>
-                                                            <option value="10%">10%</option>
-                                                            <option value="18%">18%</option>
-                                                            <option value="40%">40%</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="mb-1 col-md-6">
-                                                        <label for="tax-2-input" class="form-label">Tax 2</label>
-                                                        <select name="tax-2-input" id="tax-2-input" class="form-select tax-select">
-                                                            <option value="0%" selected>0%</option>
-                                                            <option value="1%">1%</option>
-                                                            <option value="10%">10%</option>
-                                                            <option value="18%">18%</option>
-                                                            <option value="40%">40%</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="dropdown-divider my-1"></div>
-                                                <div class="d-flex justify-content-between">
-                                                    <button type="button" class="btn btn-outline-primary btn-apply-changes">Apply</button>
-                                                    <button type="button" class="btn btn-outline-secondary">Cancel</button>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -126,6 +118,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="card-footer">
                 <button type="button" @click="addItem" class="btn btn-primary btn-sm btn-add-new" data-repeater-create>
                     <i data-feather="plus" class="me-25"></i>
@@ -154,14 +147,28 @@
         items:[
             {
                 name:null,
+                service:null,
+                platform:null,
+                platforms:[],
+                features:[],
+                checkFeatrueds:[]
             }
         ]
     })
 
     const addItem = () =>{
         formData.items.push({
-            name:null,
-        })
+                name:null,
+                service:null,
+                platform:null,
+                platforms:[],
+                features:[],
+                checkFeatrueds:[]
+            })
+    }
+    const removeItem = (index) => {
+        alert("want to delete "+ index)
+        formData.items.splice(index, 1);
     }
 
 
@@ -174,39 +181,76 @@
 
 */
     const selected = ref(null)
-    const platforms = ref([])
+
+
+
     const loadPlatforms = (event) => {
+        const service = props.services.filter(item => {
+            return item.id === formData.items[event].service;
+        })[0];
+        const value = service.id === formData.items[event].service ? service.platforms.map(platform => {
+            return {name: platform.name, value: platform.id, features: platform.features}
+        }) : [];
 
-        console.log(this.selected)
-        console.log(event);
+        formData.items[event].platforms = value;
+    }
 
-        // const service = props.services.filter(item => {
-        //     return item.service.data.id === event;
-        // })[0];
-        // platforms.value = service.service.data.id === event ? service.service.platforms.map(platform => {
-        //     return {name: platform.data.name, value: platform.data.id}
-        // }) : [];
+    const loadPlatformFeatureds = (event) => {
+
+        const platform = formData.items[event].platforms.filter(item => {
+            return item.value === formData.items[event].platform.value;
+        })[0];
+
+        console.log()
+        const value = platform.value === formData.items[event].platform.value ? platform.features.map(fetures => {
+            return {...fetures, qty:1};
+        }) : [];
+        formData.items[event].features = value;
+    }
+
+    const reback = (index) => {
+        formData.items[index].platforms = [];
+        formData.items[index].features = [];
+    }
+
+    const qtyPlus = (iIndex, jIndex) =>{
+        formData.items[iIndex].checkFeatrueds[jIndex].qty++
+        $toast.success("Quantity Incrise")
+    }
+    const qtyMinus = (iIndex, jIndex) => {
+        if (formData.items[iIndex].checkFeatrueds[jIndex].qty > 1){
+            formData.items[iIndex].checkFeatrueds[jIndex].qty--
+            $toast.warning("Quantity Decrees")
+        }else{
+            $toast.warning("Minimum Quantity 1")
+        }
+    }
+    const itemRemove = (iIndex, jIndex) =>{
+        formData.items[iIndex].checkFeatrueds.splice(jIndex, 1);
+        $toast.error("Item Deleted")
     }
 
 
-    console.log()
+    const totalPrice = computed(()=>{
+        let total= 0;
+        formData.items.map(item =>{
+            item.checkFeatrueds.map(fes =>{
+                total += fes.price * fes.qty;
+            })
+        })
+        return total;
+    })
 
-    // const formattedPlatforms = computed(() =>{
-    //     return platforms.value.map(platform => {
-    //         return {name: platform.data.name, value: platform.data.id}
-    //
-    //     })
-    //
-    //     console.log(platform)
-    //
-    // })
-
-    // const reback = () => platforms.value = [];
 </script>
 
 
 <style lang="sass" scoped>
     @import "../../../sass/base/pages/app-invoice.scss"
-</style>
 
+</style>
+<style lang="css" scoped>
+.vs__dropdown-toggle{
+    border: none !important;
+}
+</style>
 

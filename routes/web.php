@@ -153,6 +153,9 @@ Route::get('/pdf', function(){
 });
 
 
+Route::get("/test", function(){
+    return inertia("ntest");
+});
 
 
 

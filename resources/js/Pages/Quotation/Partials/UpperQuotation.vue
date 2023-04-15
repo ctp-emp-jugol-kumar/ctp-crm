@@ -130,7 +130,7 @@
                                             <div class="invoice-total-wrapper">
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Subtotal:</p>
-                                                    <p class="invoice-total-amount">$1800</p>
+                                                    <p class="invoice-total-amount">{{ props.subtotal }} Tk</p>
                                                 </div>
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Discount:</p>
@@ -327,7 +327,13 @@ It was a pleasure working with you and your team. We hope you will keep us in mi
     <!-- END: Content-->
 </template>
 
-<script>
+<script setup>
+    const props = defineProps({
+        subtotal:{
+            type:Number,
+            default:0
+        }
+    })
 </script>
 
 <style lang="sass" scoped>

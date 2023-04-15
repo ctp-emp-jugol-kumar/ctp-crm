@@ -36,7 +36,7 @@
                                         <input type="text"
                                                class="form-control mb-1 rounded-start ms-1"
                                                placeholder="e.g Featured Name" v-model="formData.features[index].name" >
-                                    <input type="text"
+                                    <input type="number"
                                            class="form-control mb-1 rounded-start ms-1"
                                            placeholder="e.g Featured Price" v-model="formData.features[index].price" >
 

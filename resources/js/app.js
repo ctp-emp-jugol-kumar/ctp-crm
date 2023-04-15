@@ -20,6 +20,16 @@ import al from "@vuepic/vue-datepicker";
 
 import {moment} from "moment";
 
+import { createToaster } from "@meforma/vue-toaster";
+
+
+
+
+
+window.$toast = createToaster({
+    position: 'bottom'
+});
+
 
 
 createInertiaApp({

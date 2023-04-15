@@ -114,3 +114,63 @@
     border-radius: 15px !important;
 }
 
+.vs__dropdown-toggle{
+    border: none !important;
+}
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback){
+    padding: 0 !important;
+}
+.vs__search, .vs__search:focus{
+    margin: 7px 0 !important;
+}
+.showContentQuotation{
+    height: auto !important;
+    min-height: 100px;
+    margin-top: 10px;
+    max-height: 245px;
+    overflow-y: scroll;
+}
+.featruedOverflowStyle{
+    max-height: 300px;
+    height: auto !important;
+    overflow-y: scroll;
+    min-height: 100px;
+}
+
+.featruedOverflowStyle::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 15px;
+}
+
+/* Track */
+.featruedOverflowStyle::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.featruedOverflowStyle::-webkit-scrollbar-thumb {
+    background: var(--bs-primary);
+    border-radius: 15px;
+}
+
+// for content
+.showContentQuotation::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 15px;
+}
+
+/* Track */
+.showContentQuotation::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.showContentQuotation::-webkit-scrollbar-thumb {
+    background: var(--bs-primary);
+    border-radius: 15px;
+}
+.details-table tbody tr td{
+    font-size: 13px;
+    padding: 7px 0px;
+    padding-left: 0 !important;
+}

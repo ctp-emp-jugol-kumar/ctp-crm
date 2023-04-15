@@ -19,9 +19,27 @@
                         </div>
                     </div>
                 </section>
-
-                <div class="row">
+<!--
+                <div class="d-flex">
                     <div class="col-md-4" v-for="item in props.platforms.data" :key="item.id">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-title">{{ item.name }}</h2>
+                                <div>
+                                    <ul>
+                                        <li class="list-group-item" v-for="fea in item.featureds" :key="fea.id">
+                                            <vue-feather type="check-circle" size="12"/>
+                                            {{ fea.name }} ({{ fea.price }} Tk)
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -->
+                <div class="container_1">
+                    <div class="item col-md-4" v-for="item in props.platforms.data" :key="item.id">
                         <div class="card">
                             <div class="card-body">
                                 <h2 class="card-title">{{ item.name }}</h2>
@@ -46,14 +64,14 @@
 
 
 </template>
-<script>
 
-</script>
 <script setup>
 
     import {useAction} from "../../composables/useAction";
-    import {ref} from "vue";
+    import {ref, onMounted} from "vue";
     import {useForm} from "@inertiajs/inertia-vue3";
+
+    import MiniMasonry from "minimasonry";
 
     const {swalSuccess} = useAction()
 
@@ -84,6 +102,20 @@
             },
         })
     }
+
+
+    onMounted(() =>{
+
+        var masonry1 = new MiniMasonry({
+            container: '.container_1',
+            baseWidth: 400,
+            surroundingGutter: false,
+            gutterX: 10,
+            gutterY: 10
+        });
+    })
+
+
 
 /*
     let editData = ref([]);
@@ -177,6 +209,13 @@
 
 </script>
 
-<style lang="scss">
-
+<style lang="css">
+.container {
+    width: 100%;
+    position: relative;
+}
+.item {
+    position: absolute;
+    height: max-content;
+}
 </style>

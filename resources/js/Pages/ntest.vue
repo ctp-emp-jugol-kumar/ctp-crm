@@ -1,28 +1,35 @@
 <template>
-    <vue-select v-model="selected" :options="options" @update:modelValue="updateSelectedWithUniqueValue"></vue-select>
-</template>
+    <div>
+        <table>
+            <tr v-for="(row, rowIndex) in matrix" :key="rowIndex">
+                <td v-for="(cell, cellIndex) in row" :key="cellIndex">{{ cell }}</td>
+            </tr>
+        </table>
 
+        <input type="text" v-model="newCellValue">
+        <button @click="addRow">Add Row</button>
+    </div>
+</template>
 <script>
     export default {
-        data() {
-            return {
-                selected: null,
-                options: [
-                    { value: 'option1', label: 'Option 1' },
-                    { value: 'option2', label: 'Option 2' },
-                    { value: 'option3', label: 'Option 3' }
-                ],
-                uniqueValue: 'myUniqueValue'
-            };
-        },
-        methods: {
-            updateSelectedWithUniqueValue() {
-                this.updateSelected(this.uniqueValue);
-            },
-            updateSelected(uniqueValue) {
-                // Do something with the selected value and uniqueValue
-                console.log(this.selected, uniqueValue);
-            }
+        layout:null
+    }
+</script>
+<script setup>
+        import { ref } from 'vue';
+
+        const newCellValue = ref("")
+        // Define 2D array
+        const matrix = ref([
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
+        ]);
+
+
+        function addRow() {
+            const newRow = Array(matrix.value[0].length).fill(newCellValue);
+            matrix.value.push(newRow);
         }
-    };
+
 </script>
