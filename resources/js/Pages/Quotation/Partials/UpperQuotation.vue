@@ -53,7 +53,7 @@
                                                     <div class="input-group-text">
                                                         <i data-feather="hash"></i>
                                                     </div>
-                                                    <input type="text" class="form-control invoice-edit-input" placeholder="53634" />
+                                                    <input type="text" class="form-control invoice-edit-input" :value="`${moment(new Date()).format('YYYYMMD')}__`" />
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center mb-1">
@@ -328,7 +328,8 @@ It was a pleasure working with you and your team. We hope you will keep us in mi
 </template>
 
 <script setup>
-    const props = defineProps({
+import moment from 'moment/moment';
+const props = defineProps({
         subtotal:{
             type:Number,
             default:0

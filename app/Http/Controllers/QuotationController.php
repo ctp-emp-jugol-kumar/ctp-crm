@@ -134,11 +134,15 @@ class QuotationController extends Controller
 
 
     public function index(){
+
         $services = Searvice::all()->map(function ($service){
-             $service["platforms"] = Platform::whereIn('id', json_decode($service->platforms))->get()->map(function($platform){
-                 $platform["features"] = json_decode($platform->featureds);
-                 return collect($platform)->only(['id', 'name', 'features']);
-             });
+             $service["platforms"] = Platform::with("packages")
+                 ->whereIn('id', json_decode($service->platforms))
+                 ->get()
+                 ->map(function($platform){
+                     $platform["features"] = json_decode($platform->featureds);
+                     return collect($platform)->only(['id', 'name', 'features', 'packages']);
+                });
             return collect($service)->only(['service_name', 'id', 'platforms']);
         });
 

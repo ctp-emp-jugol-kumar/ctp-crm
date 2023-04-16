@@ -1,35 +1,24 @@
 <template>
     <div>
-        <table>
-            <tr v-for="(row, rowIndex) in matrix" :key="rowIndex">
-                <td v-for="(cell, cellIndex) in row" :key="cellIndex">{{ cell }}</td>
-            </tr>
-        </table>
+        <div class="container">
 
-        <input type="text" v-model="newCellValue">
-        <button @click="addRow">Add Row</button>
+            <h4>Tiny</h4>
+            <div class="btn-group btn-toggle">
+                <button class="btn btn-xs btn-default ">ON</button>
+                <button class="btn btn-xs btn-primary">OFF</button>
+            </div>
+            <hr>
+
+        </div>
     </div>
 </template>
-<script>
-    export default {
-        layout:null
-    }
+<script setup>
+
+    document.querySelector(".btn").addEventListner("click", function(){
+        alert("ok")
+    })
+
 </script>
 <script setup>
-        import { ref } from 'vue';
-
-        const newCellValue = ref("")
-        // Define 2D array
-        const matrix = ref([
-            [1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9]
-        ]);
-
-
-        function addRow() {
-            const newRow = Array(matrix.value[0].length).fill(newCellValue);
-            matrix.value.push(newRow);
-        }
 
 </script>

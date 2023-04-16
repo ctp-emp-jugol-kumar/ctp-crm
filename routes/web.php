@@ -28,7 +28,7 @@ use App\Http\Controllers\WorkController;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
-
+use App\Http\Controllers\PackageController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -67,6 +67,8 @@ Route::prefix('admin')->group(function(){
         Route::resource('services', SearviceController::class);
         // platforms management
         Route::resource('platforms', PlatformController::class);
+        // package management
+        Route::resource('package', PackageController::class);
         // features management
         Route::resource('features', FeatureController::class);
         // works management

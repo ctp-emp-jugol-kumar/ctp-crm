@@ -111,7 +111,7 @@
                         </a>
                         <ul class="menu-content">
                             <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('design.show') || this.$page.props.auth.user.role == 'Administrator' ">
-                                <Link preserve-scroll class="d-flex align-items-center" href="/admin/designs" >
+                                <Link preserve-scroll class="d-flex align-items-center" href="/admin/package" >
                                     <vue-feather type="circle" />
                                     <span class="menu-title text-truncate" data-i18n="Chat">Package</span>
                                 </Link>

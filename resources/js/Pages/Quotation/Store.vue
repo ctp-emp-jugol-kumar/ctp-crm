@@ -1,116 +1,128 @@
 <template>
-    <Layout>
-        <UpperQuotation :subtotal="totalPrice">
-            <!-- Product Details starts -->
-            <div class="card-body invoice-padding invoice-product-details" v-for="(item, index) in formData.items">
-                <div class="source-item">
-                    <div data-repeater-list="group-a" >
-                        <div class="repeater-wrapper">
-                            <div class="row">
-                                <div class="col-12 d-flex product-details-border position-relative pe-0">
-                                    <p class="card-text col-title mb-md-50 mb-0">Item</p>
-                                    <div class="row w-100 pe-lg-0 pe-1 py-2">
-                                        <div class="col-md-7">
-                                            <div class="input-group"
-                                                 v-if="!formData.items[index].platforms?.length > 0">
-                                                <v-select :options="services"
-                                                          class="form-control py-0"
-                                                          v-model="formData.items[index].service"
-                                                          label="service_name"
-                                                          :reduce="category => category.id"
-                                                          @update:modelValue="loadPlatforms(index)"
-                                                          placeholder="e.g Select Service">
-                                                    <template v-slot:option="option">
-                                                        <li class="d-flex align-items-start py-1">
-                                                            <div class="d-flex align-items-center justify-content-between w-100">
-                                                                <div class="me-1 d-flex flex-column" >
-                                                                    <h6 class="mb-25">{{ option.service_name }}</h6>
-                                                                </div>
+    <UpperQuotation :subtotal="totalPrice">
+        <!-- Product Details starts -->
+        <div class="card-body invoice-padding invoice-product-details" v-for="(item, index) in formData.items">
+            <div class="source-item">
+                <div data-repeater-list="group-a" >
+                    <div class="repeater-wrapper">
+                        <div class="row">
+                            <div class="col-12 d-flex product-details-border position-relative pe-0">
+                                <p class="card-text col-title mb-md-50 mb-0">Item</p>
+                                <div class="row w-100 pe-lg-0 pe-1 py-2">
+                                    <div class="col-md-7">
+                                        <div class="input-group"
+                                             v-if="!formData.items[index].platforms?.length > 0">
+                                            <v-select :options="services"
+                                                      class="form-control py-0"
+                                                      v-model="formData.items[index].service"
+                                                      label="service_name"
+                                                      :reduce="category => category.id"
+                                                      @update:modelValue="loadPlatforms(index)"
+                                                      placeholder="e.g Select Service">
+                                                <template v-slot:option="option">
+                                                    <li class="d-flex align-items-start py-1">
+                                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                                            <div class="me-1 d-flex flex-column" >
+                                                                <h6 class="mb-25">{{ option.service_name }}</h6>
                                                             </div>
-                                                        </li>
-                                                    </template>
-                                                </v-select>
-                                            </div>
-                                            <div class="input-group"
-                                                 v-if="formData.items[index].platforms?.length > 0">
-                                                <div class="input-group-prepend border-end-0 rounded-0">
-                                                    <div class="input-group-text cursor-pointer rounded-0 border-end-0" @click="reback(index)">
-                                                        <vue-feather type="arrow-left"/>
-                                                    </div>
-                                                </div>
-                                                <v-select
-                                                    :options="formData.items[index].platforms"
-                                                    label="name"
-                                                    class="form-control"
-                                                    v-model="formData.items[index].platform"
-                                                    @update:modelValue="loadPlatformFeatureds(index)"
-                                                    placeholder="e.g Select Platform">
-                                                    <template v-slot:option="option">
-                                                        <li class="d-flex align-items-start py-1">
-                                                            <div class="d-flex align-items-center justify-content-between w-100">
-                                                                <div class="me-1 d-flex flex-column" >
-                                                                    <h6 class="mb-25">{{ option.name }}</h6>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </template>
-                                                </v-select>
-                                            </div>
-
-                                            <div class="showContentQuotation border p-2">
-                                                <table class="table table-striped details-table">
-                                                    <thead>
-                                                        <th>Name</th>
-                                                        <th>Price</th>
-                                                        <th>Qty</th>
-                                                        <th>Total</th>
-                                                        <th>Action</th>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr v-for="(fes, j)  in formData.items[index].checkFeatrueds">
-                                                            <td>{{ fes.name }}</td>
-                                                            <td>{{ fes.price }}</td>
-                                                            <td>{{ fes.qty }} </td>
-                                                            <td>{{ fes.price * fes.qty }}</td>
-                                                            <td>
-                                                                <span class="badge bg-primary cursor-pointer" @click="qtyPlus(index, j)" style="padding: 3px !important;margin-right: 4px;">
-                                                                    <vue-feather type="plus" size="5"/>
-                                                                </span>
-                                                                <span class="badge bg-warning cursor-pointer" @click="qtyMinus(index, j)"  style="padding: 3px !important;margin-right: 4px;">
-                                                                    <vue-feather type="minus" size="5"/>
-                                                                </span>
-                                                                <span class="badge bg-danger cursor-pointer" @click="itemRemove(index, j)" style="padding: 3px !important;">
-                                                                    <vue-feather type="x" size="5"/>
-                                                                </span>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-
-                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </template>
+                                            </v-select>
                                         </div>
-                                        <div class="col-md-4 featruedOverflowStyle">
-                                            <div class="input-group" v-for="(fes, i)  in formData.items[index].features" >
+                                        <div class="input-group"
+                                             v-if="formData.items[index].platforms?.length > 0">
+                                            <div class="input-group-prepend border-end-0 rounded-0">
+                                                <div class="input-group-text cursor-pointer rounded-0 border-end-0" @click="reback(index)">
+                                                    <vue-feather type="arrow-left"/>
+                                                </div>
+                                            </div>
+                                            <v-select
+                                                :options="formData.items[index].platforms"
+                                                label="name"
+                                                class="form-control"
+                                                v-model="formData.items[index].platform"
+                                                @update:modelValue="loadPlatformFeatureds(index)"
+                                                placeholder="e.g Select Platform">
+                                                <template v-slot:option="option">
+                                                    <li class="d-flex align-items-start py-1">
+                                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                                            <div class="me-1 d-flex flex-column" >
+                                                                <h6 class="mb-25">{{ option.name }}</h6>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </template>
+                                            </v-select>
+                                        </div>
+                                        <div class="showContentQuotation border p-2" v-if="formData.items[index].isFeatured">
+                                            <table class="table table-striped details-table">
+                                                <thead>
+                                                    <th>Name</th>
+                                                    <th>Price</th>
+                                                    <th>Qty</th>
+                                                    <th>Total</th>
+                                                    <th>Action</th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(fes, j)  in formData.items[index].checkFeatrueds">
+                                                        <td>{{ fes.name }}</td>
+                                                        <td>{{ fes.price }}</td>
+                                                        <td>{{ fes.qty }} </td>
+                                                        <td>{{ fes.price * fes.qty }}</td>
+                                                        <td>
+                                                            <span class="badge bg-primary cursor-pointer" @click="qtyPlus(index, j)" style="padding: 3px !important;margin-right: 4px;">
+                                                                <vue-feather type="plus" size="5"/>
+                                                            </span>
+                                                            <span class="badge bg-warning cursor-pointer" @click="qtyMinus(index, j)"  style="padding: 3px !important;margin-right: 4px;">
+                                                                <vue-feather type="minus" size="5"/>
+                                                            </span>
+                                                            <span class="badge bg-danger cursor-pointer" @click="itemRemove(index, j)" style="padding: 3px !important;">
+                                                                <vue-feather type="x" size="5"/>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <div class="border" v-else>
+                                            <textarea class="form-control" rows="5" v-for="packs in formData.items[index].checkPackages">{{ packs?.descriptions }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="btn-group">
+                                            <button @click="getPlatItems(index)" :class="`featuredClass-${index}`" class="btn btn-primary btn-sm">Featureds</button>
+                                            <button @click="getPlatItems(index)" :class="`packageClass-${index}`" class="btn btn-sm">Packages</button>
+                                        </div>
+                                        <div class="featruedOverflowStyle" v-if="formData.items[index].isFeatured">
+                                            <div class="input-group" v-for="(fes, i)  in  formData.items[index].features" >
                                                 <div class="form-check form-check-primary">
                                                     <input type="checkbox" v-model="formData.items[index].checkFeatrueds" :value="fes" class="form-check-input" :id="`colorCheck-${index}-${i}`">
                                                     <label class="form-check-label" :for="`colorCheck-${index}-${i}`">{{ fes.name }} ({{ fes.price }})</label>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-
-                                    <div class="d-flex flex-column align-items-center justify-content-between border-start invoice-product-actions py-50 px-25">
-                                        <vue-feather type="x" class="cursor-pointer font-medium-3" @click="removeItem(index)"></vue-feather>
-                                        <div class="dropdown">
-                                            <vue-feather class="cursor-pointer more-options-dropdown me-0"
-                                                         type="settings"
-                                                         role="button" id="dropdownMenuButton"
-                                                         data-bs-toggle="dropdown"
-                                                         aria-haspopup="true"
-                                                         aria-expanded="false">
-                                            </vue-feather>
+                                        <div class="featruedOverflowStyle" v-else>
+                                            <div class="input-group" v-for="(pack, i)  in  formData.items[index].packages" >
+                                                <div class="form-check form-check-primary">
+                                                    <input type="checkbox" v-model="formData.items[index].checkPackages" :value="pack" class="form-check-input" :id="`colorCheck-${index}-${i}`">
+                                                    <label class="form-check-label" :for="`packageCheck-${index}-${i}`">{{ pack.name }} ({{ pack.price }})</label>
+                                                </div>
+                                            </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column align-items-center justify-content-between border-start invoice-product-actions py-50 px-25">
+                                    <vue-feather type="x" class="cursor-pointer font-medium-3" @click="removeItem(index)"></vue-feather>
+                                    <div class="dropdown">
+                                        <vue-feather class="cursor-pointer more-options-dropdown me-0"
+                                                     type="settings"
+                                                     role="button" id="dropdownMenuButton"
+                                                     data-bs-toggle="dropdown"
+                                                     aria-haspopup="true"
+                                                     aria-expanded="false">
+                                        </vue-feather>
                                     </div>
                                 </div>
                             </div>
@@ -118,21 +130,18 @@
                     </div>
                 </div>
             </div>
-
-            <div class="card-footer">
-                <button type="button" @click="addItem" class="btn btn-primary btn-sm btn-add-new" data-repeater-create>
-                    <i data-feather="plus" class="me-25"></i>
-                    <span class="align-middle">Add Item</span>
-                </button>
-            </div>
-            <!-- Product Details ends -->
-        </UpperQuotation>
-
-    </Layout>
+        </div>
+        <div class="card-footer">
+            <button type="button" @click="addItem" class="btn btn-primary btn-sm btn-add-new" data-repeater-create>
+                <i data-feather="plus" class="me-25"></i>
+                <span class="align-middle">Add Item</span>
+            </button>
+        </div>
+        <!-- Product Details ends -->
+    </UpperQuotation>
 </template>
 
 <script setup>
-    import Layout from '../../Shared/Layout.vue'
     import UpperQuotation from "./Partials/UpperQuotation.vue"
     import {useForm} from "@inertiajs/inertia-vue3";
     import {computed, ref} from "vue"
@@ -144,16 +153,17 @@
 
 
     const formData = useForm({
-        items:[
-            {
-                name:null,
-                service:null,
-                platform:null,
-                platforms:[],
-                features:[],
-                checkFeatrueds:[]
-            }
-        ]
+        items:[{
+            name:null,
+            service:null,
+            platform:null,
+            platforms:[],
+            features:[],
+            packages:[],
+            checkFeatrueds:[],
+            checkPackages:[],
+            isFeatured:true,
+        }]
     })
 
     const addItem = () =>{
@@ -163,7 +173,10 @@
                 platform:null,
                 platforms:[],
                 features:[],
-                checkFeatrueds:[]
+                packages:[],
+                checkFeatrueds:[],
+                checkPackages:[],
+                isFeatured:true
             })
     }
     const removeItem = (index) => {
@@ -171,15 +184,20 @@
         formData.items.splice(index, 1);
     }
 
+    // const isFeatured = ref(true)
 
-/*
-    const formattedServices = computed(() =>{
-        return props.services.map(service => {
-            return {name: service.service.data.service_name, value: service.service.data.id}
-        })
-    })
+    const getPlatItems=(index)=>{
+        if(formData.items[index].isFeatured){
+            formData.items[index].isFeatured = false;
+        }else{
+            formData.items[index].isFeatured = true;
+        }
+        document.querySelector(`.featuredClass-${index}`).classList.toggle('btn-primary')
+        document.querySelector(`.packageClass-${index}`).classList.toggle('btn-primary')
+    }
 
-*/
+
+
     const selected = ref(null)
 
 
@@ -189,23 +207,28 @@
             return item.id === formData.items[event].service;
         })[0];
         const value = service.id === formData.items[event].service ? service.platforms.map(platform => {
-            return {name: platform.name, value: platform.id, features: platform.features}
+            return {name: platform.name, value: platform.id, features: platform.features, packages:platform.packages}
         }) : [];
 
         formData.items[event].platforms = value;
     }
 
     const loadPlatformFeatureds = (event) => {
-
         const platform = formData.items[event].platforms.filter(item => {
             return item.value === formData.items[event].platform.value;
         })[0];
 
-        console.log()
         const value = platform.value === formData.items[event].platform.value ? platform.features.map(fetures => {
             return {...fetures, qty:1};
         }) : [];
+
+
+        const packageValue = platform.value === formData.items[event].platform.value ? platform.packages.map(packageItem => {
+            return {...packageItem, qty:1};
+        }) : [];
+
         formData.items[event].features = value;
+        formData.items[event].packages = packageValue;
     }
 
     const reback = (index) => {
@@ -215,7 +238,7 @@
 
     const qtyPlus = (iIndex, jIndex) =>{
         formData.items[iIndex].checkFeatrueds[jIndex].qty++
-        $toast.success("Quantity Incrise")
+        $toast.success("Quantity Increase")
     }
     const qtyMinus = (iIndex, jIndex) => {
         if (formData.items[iIndex].checkFeatrueds[jIndex].qty > 1){
@@ -236,6 +259,9 @@
         formData.items.map(item =>{
             item.checkFeatrueds.map(fes =>{
                 total += fes.price * fes.qty;
+            })
+            item.checkPackages.map(pac => {
+                total += pac.price * pac.qty;
             })
         })
         return total;
