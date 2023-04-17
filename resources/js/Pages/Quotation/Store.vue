@@ -143,8 +143,8 @@
 
 <script setup>
     import UpperQuotation from "./Partials/UpperQuotation.vue"
-    import {useForm} from "@inertiajs/inertia-vue3";
-    import {computed, ref} from "vue"
+    import {useForm, usePage} from "@inertiajs/inertia-vue3";
+    import {computed, ref, onMounted, inject } from "vue"
 
 
     const props = defineProps({
@@ -153,6 +153,7 @@
 
 
     const formData = useForm({
+        quotationId: inject('quotationId')
         items:[{
             name:null,
             service:null,
@@ -234,6 +235,7 @@
     const reback = (index) => {
         formData.items[index].platforms = [];
         formData.items[index].features = [];
+        formData.items[index].packages = [];
     }
 
     const qtyPlus = (iIndex, jIndex) =>{
@@ -266,6 +268,8 @@
         })
         return total;
     })
+
+
 
 </script>
 

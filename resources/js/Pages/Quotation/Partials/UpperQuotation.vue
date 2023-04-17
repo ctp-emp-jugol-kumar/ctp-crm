@@ -53,7 +53,8 @@
                                                     <div class="input-group-text">
                                                         <i data-feather="hash"></i>
                                                     </div>
-                                                    <input type="text" class="form-control invoice-edit-input" :value="`${moment(new Date()).format('YYYYMMD')}__`" />
+                                                    <input type="text" class="form-control invoice-edit-input"
+                                                           :value="quotationId+'__'"/>
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center mb-1">
@@ -329,12 +330,21 @@ It was a pleasure working with you and your team. We hope you will keep us in mi
 
 <script setup>
 import moment from 'moment/moment';
-const props = defineProps({
+import {ref, provide} from "vue";
+    const props = defineProps({
         subtotal:{
             type:Number,
             default:0
-        }
+        },
     })
+
+    const emit = defineEmits(["update:modelValue"])
+    const quotationId = ref(moment(new Date()).format('YYYYMMD'))
+
+    provide("quotationId", quotationId)
+
+
+
 </script>
 
 <style lang="sass" scoped>
