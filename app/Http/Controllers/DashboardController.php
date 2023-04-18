@@ -37,7 +37,7 @@ class DashboardController extends Controller
         if (!auth()->user()->can('dashboard.show')){
             abort(401);
         }
-
+/*
         // custom invoice total incomes
         $invoiceTotalSeals = CustomInvoice::sum('total_price');
         $invoiceTotalDiscount = CustomInvoice::sum('discount');
@@ -175,11 +175,13 @@ class DashboardController extends Controller
             $tranByExpanse[$exp->month - 1] = $exp->total;
         }
 
+*/
 
 
 
+        return Inertia::render('Test');
 
-        return Inertia::render('Test', [
+    /*    [
             "trans" => [
                 'clients' => Client::count(),
                 'packages' => Design::count(),
@@ -217,6 +219,6 @@ class DashboardController extends Controller
                 'tranByAmount' => $tranByAmount,
                 'tranByExp' => $tranByExpanse,
             ]
-        ]);
+        ]*/
     }
 }

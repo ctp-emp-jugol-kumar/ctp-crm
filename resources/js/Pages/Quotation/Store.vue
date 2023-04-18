@@ -1,5 +1,5 @@
 <template>
-    <UpperQuotation :subtotal="totalPrice">
+    <UpperQuotation :subtotal="totalPrice" :clients="props.clients" @handelQuotation="saveQuotation">
         <!-- Product Details starts -->
         <div class="card-body invoice-padding invoice-product-details" v-for="(item, index) in formData.items">
             <div class="source-item">
@@ -144,16 +144,23 @@
 <script setup>
     import UpperQuotation from "./Partials/UpperQuotation.vue"
     import {useForm, usePage} from "@inertiajs/inertia-vue3";
-    import {computed, ref, onMounted, inject } from "vue"
+    import {computed, ref, onMounted } from "vue"
+    import {useQuotationStore} from "../../Store/useQuotationStore";
 
+    const quotationStore = useQuotationStore()
 
     const props = defineProps({
         services: Array|[]|null,
+        clients:Array|[]|null,
+        main_url:String|null,
     })
 
 
     const formData = useForm({
-        quotationId: inject('quotationId')
+        quotationId: quotationStore.getQuotId,
+        clientId: quotationStore.getClientId,
+        qutDate: quotationStore.getQutDate,
+        subject: quotationStore.getSubject,
         items:[{
             name:null,
             service:null,
@@ -166,6 +173,20 @@
             isFeatured:true,
         }]
     })
+
+    const processing = ref(false)
+    const saveQuotation = (events) =>{
+        formData.clientId = events.clientId,
+        formData.qutDate = events.date,
+        formData.subject = events.subject,
+        formData.post(props.main_url,{
+            preserveState: true,
+                onStart: () =>{ processing.value = true},
+                onFinish: () => {processing.value = false},
+                onSuccess: ()=> {console.log("ok")},
+        })
+    }
+
 
     const addItem = () =>{
         formData.items.push({

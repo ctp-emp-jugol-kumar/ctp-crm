@@ -42,9 +42,7 @@
                                                 </svg>
                                                 <h3 class="text-primary invoice-logo">Vuexy</h3>
                                             </div>
-                                            <p class="card-text mb-25">Office 149, 450 South Brand Brooklyn</p>
-                                            <p class="card-text mb-25">San Diego County, CA 91905, USA</p>
-                                            <p class="card-text mb-0">+1 (123) 456 7891, +44 (876) 543 2198</p>
+                                            <p class="card-text mb-25">Office address</p>
                                         </div>
                                         <div class="invoice-number-date mt-md-0 mt-2">
                                             <div class="d-flex align-items-center justify-content-md-end mb-1">
@@ -54,17 +52,20 @@
                                                         <i data-feather="hash"></i>
                                                     </div>
                                                     <input type="text" class="form-control invoice-edit-input"
-                                                           :value="quotationId+'__'"/>
+                                                           :value="quotationStore.getQuotId+'__'"/>
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center mb-1">
                                                 <span class="title">Date:</span>
-                                                <input type="text" class="form-control invoice-edit-input date-picker" />
+                                                <Datepicker v-model="date" :monthChangeOnScroll="false"
+                                                            @update:modelValue="storeDate"
+                                                            placeholder="Select Date" autoApply></Datepicker>
                                             </div>
-                                            <div class="d-flex align-items-center">
+<!--                                            <div class="d-flex align-items-center">
                                                 <span class="title">Due Date:</span>
-                                                <input type="text" class="form-control invoice-edit-input due-date-picker" />
-                                            </div>
+                                                <Datepicker :monthChangeOnScroll="false"
+                                                            placeholder="Select Date" autoApply></Datepicker>
+                                            </div>-->
                                         </div>
                                     </div>
                                 </div>
@@ -77,59 +78,59 @@
                                     <div class="row invoice-spacing">
                                         <div class="col-xl-8 p-0">
                                             <h6 class="mb-2">Invoice To:</h6>
-                                            <h6 class="mb-25">Thomas shelby</h6>
-                                            <p class="card-text mb-25">Shelby Company Limited</p>
-                                            <p class="card-text mb-25">Small Heath, B10 0HF, UK</p>
-                                            <p class="card-text mb-25">718-986-6062</p>
-                                            <p class="card-text mb-0">peakyFBlinders@gmail.com</p>
-                                        </div>
-                                        <div class="col-xl-4 p-0 mt-xl-0 mt-2">
-                                            <h6 class="mb-2">Payment Details:</h6>
-                                            <table>
-                                                <tbody>
-                                                <tr>
-                                                    <td class="pe-1">Total Due:</td>
-                                                    <td><strong>$12,110.55</strong></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="pe-1">Bank name:</td>
-                                                    <td>American Bank</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="pe-1">Country:</td>
-                                                    <td>United States</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="pe-1">IBAN:</td>
-                                                    <td>ETD95476213874685</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="pe-1">SWIFT code:</td>
-                                                    <td>BR91905</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="input-group col-md-5">
+                                                        <v-select :options="props.clients"
+                                                                  class="form-control py-0"
+                                                                  label="name"
+                                                                  v-model="clientId"
+                                                                  :reduce="client => client.id"
+                                                                  @update:modelValue="loadClient"
+                                                                  :filter="fuseSearch"
+                                                                  placeholder="e.g Select Client">
+                                                            <template v-slot:option="option">
+                                                                <li class="d-flex align-items-start">
+                                                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                                                        <div class="me-1 d-flex flex-column" >
+                                                                            <strong class="mb-25">{{ option.name }}</strong>
+                                                                            <span >{{ option.email }}</span>
+                                                                            <span >{{ option.phone }}
+                                                                               <span v-if="option.secondary_phone">/ {{ option.secondary_phone}}</span>
+                                                                           </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </template>
+                                                        </v-select>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2 col-md-10" v-if="clientDetails">
+                                                    <h6 class="mb-25">{{ clientDetails.name }}</h6>
+                                                    <p class="card-text mb-25">{{ clientDetails.company }}</p>
+                                                    <p class="card-text mb-25">{{ clientDetails.address }}</p>
+                                                    <p class="card-text mb-25">{{ clientDetails.phone ?? clientDetails.secondary_phone }}</p>
+                                                    <p class="card-text mb-0">{{ clientDetails.email ??  clientDetails.secondary_email}}</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                    <input type="text" v-model="subject" @input="storeSubject" class="form-control mb-n2" style="margin-bottom:-20px" placeholder="e.g Quotation Subject...">
                                 </div>
                                 <!-- Address and Contact ends -->
-
-
                                 <slot/>
-
-
                                 <!-- Invoice Total starts -->
                                 <div class="card-body invoice-padding">
                                     <div class="row invoice-sales-total-wrapper">
                                         <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
                                             <div class="d-flex align-items-center mb-1">
-                                                <label for="salesperson" class="form-label">Salesperson:</label>
-                                                <input type="text" class="form-control ms-50" id="salesperson" placeholder="Edward Crowley" />
+                                                <label class="form-label">Salesperson:</label>
+                                                <input type="text" class="form-control ms-50" :value="$page.props.auth.user.username"/>
                                             </div>
                                         </div>
                                         <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">
                                             <div class="invoice-total-wrapper">
-                                                <div class="invoice-total-item">
+<!--                                                <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Subtotal:</p>
                                                     <p class="invoice-total-amount">{{ props.subtotal }} Tk</p>
                                                 </div>
@@ -140,11 +141,11 @@
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Tax:</p>
                                                     <p class="invoice-total-amount">21%</p>
-                                                </div>
+                                                </div>-->
                                                 <hr class="my-50" />
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Total:</p>
-                                                    <p class="invoice-total-amount">$1690</p>
+                                                    <p class="invoice-total-amount">{{ props.subtotal }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -160,8 +161,7 @@
                                         <div class="col-12">
                                             <div class="mb-2">
                                                 <label for="note" class="form-label fw-bold">Note:</label>
-                                                <textarea class="form-control" rows="2" id="note">
-It was a pleasure working with you and your team. We hope you will keep us in mind for future freelance projects. Thank You!</textarea>
+                                                <textarea class="form-control" rows="2" id="note" placeholder="keep your note"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -175,17 +175,17 @@ It was a pleasure working with you and your team. We hope you will keep us in mi
                         <div class="col-xl-3 col-md-4 col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <button class="btn btn-primary w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">
-                                        Send Invoice
+                                    <button class="btn btn-primary w-100 mb-75" @click="saveQuotation">
+                                        Save Quotation
                                     </button>
-                                    <a href="./app-invoice-preview.html" class="btn btn-outline-primary w-100 mb-75">Preview</a>
+<!--                                    <a href="./app-invoice-preview.html" class="btn btn-outline-primary w-100 mb-75">Preview</a>
                                     <button type="button" class="btn btn-outline-primary w-100 mb-75">Save</button>
                                     <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#add-payment-sidebar">
                                         Add Payment
-                                    </button>
+                                    </button>-->
                                 </div>
                             </div>
-                            <div class="mt-2">
+<!--                            <div class="mt-2">
                                 <p class="mb-50">Accept payments via</p>
                                 <select class="form-select">
                                     <option value="Bank Account">Bank Account</option>
@@ -215,7 +215,7 @@ It was a pleasure working with you and your team. We hope you will keep us in mi
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
                         <!-- Invoice Edit Right ends -->
                     </div>
@@ -330,18 +330,65 @@ It was a pleasure working with you and your team. We hope you will keep us in mi
 
 <script setup>
 import moment from 'moment/moment';
-import {ref, provide} from "vue";
+import {ref, computed } from "vue";
+import {useQuotationStore} from "../../../Store/useQuotationStore";
+import Fuse from "fuse.js";
+
+    const quotationStore = useQuotationStore();
+
     const props = defineProps({
         subtotal:{
             type:Number,
             default:0
         },
+        clients:{
+            type:Array,
+            default:[],
+            required:true
+        }
     })
 
-    const emit = defineEmits(["update:modelValue"])
-    const quotationId = ref(moment(new Date()).format('YYYYMMD'))
+    const clientId = ref(null)
+    const date = ref(null)
+    const subject = ref(null)
 
-    provide("quotationId", quotationId)
+    const storeDate = () =>{
+        quotationStore.setQutDate(date.value);
+    }
+    const storeSubject =(event) =>{
+        quotationStore.setSubject(event.target.value);
+    }
+
+    const fuseSearch = (options, search) => {
+        const fuse = new Fuse(options, {
+            keys: ['name', 'email', 'phone','secondary_email', 'secondary_phone', 'company', 'address', 'status'],
+            shouldSort: true,
+        })
+        return search.length
+            ? fuse.search(search).map(({ item }) => item)
+            : fuse.list
+    }
+
+    const clientDetails = ref(null)
+
+    const loadClient = (clientId)=>{
+        quotationStore.setClientId(clientId);
+        const alue = props.clients.filter(item => {
+            return item.id === clientId;
+        })[0];
+        clientDetails.value = alue
+    }
+
+    const emits = defineEmits(["handelQuotation"])
+    const saveQuotation=()=>{
+        emits("handelQuotation", {
+            clientId:clientId.value,
+            subject:subject.value,
+            date:date.value,
+        })
+    }
+
+
 
 
 

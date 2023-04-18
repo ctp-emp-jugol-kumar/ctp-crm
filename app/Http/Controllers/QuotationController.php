@@ -18,7 +18,6 @@ use App\Models\Work;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
-use http\Env\Response;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -134,7 +133,6 @@ class QuotationController extends Controller
 
 
     public function index(){
-
         $services = Searvice::all()->map(function ($service){
              $service["platforms"] = Platform::with("packages")
                  ->whereIn('id', json_decode($service->platforms))
@@ -146,9 +144,14 @@ class QuotationController extends Controller
             return collect($service)->only(['service_name', 'id', 'platforms']);
         });
 
+        $clients = Client::where('status', '=', 'Converted to Customer')
+            ->latest()->get();
+
 
         return inertia('Quotation/Store', [
-            'services' => $services
+            'services' => $services,
+            'clients' => $clients,
+            'main_url' => URL::route('quotations.store')
         ]);
     }
 
@@ -193,16 +196,41 @@ class QuotationController extends Controller
      * Store a newly created resource in storage.
      *
      */
-    public function store(Request $request)
-    {
-//
-        Request::validate([
-            'client_id'          => "required",
-            'subject'            => "required",
-            'valid_until'        => "required",
-            'date'               => "required",
-            'status'             => "required",
+
+    public function store(){
+        Quotation::create([
+            'quotation_id' => Request::input('quotationId'),
+            'client_id' => Request::input('clientId'),
+            'qut_date' => Request::input('qutDate'),
+            'subject' => Request::input('subject'),
+            'items' => json_encode(Request::input('items')),
+            'status' => true
         ]);
+        return back();
+    }
+
+
+
+/*    public function store()
+    {
+
+        return dd(Request::all());
+        exit();
+
+        Quotation::create([
+
+        ]);
+
+
+
+//
+//        Request::validate([
+//            'client_id'          => "required",
+//            'subject'            => "required",
+//            'valid_until'        => "required",
+//            'date'               => "required",
+//            'status'             => "required",
+//        ]);
 
 
         $price = 0;
@@ -311,7 +339,7 @@ class QuotationController extends Controller
 
 
 
-    }
+    }*/
 
 
     public function oldStoreMethod(){
