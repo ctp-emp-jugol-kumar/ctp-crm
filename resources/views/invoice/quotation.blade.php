@@ -6,12 +6,13 @@
     <title>Quotation Invoice PDF</title>
     <style>
         body {
-            font-size: 14px;
+            font-size: 12px;
+            font-family: Arial, serif !important;
         }
 
         p {
             margin: 2px 0;
-            font-size: 14px;
+            font-size: 10px;
         }
 
         h3 {
@@ -52,7 +53,7 @@
 
         .logo-img {
             max-width: 100%;
-            height: 80px;
+            height: 30px;
             padding-top: 15px;
         }
 
@@ -60,6 +61,7 @@
             width: 100%;
             border-spacing: 0;
             border-collapse: collapse;
+            border: 1px solid #e7e7e7;
         }
 
         .main-table {
@@ -76,11 +78,19 @@
         }
 
         td {
-            padding: 5px;
+            padding: 0 10px;
+            border-right: 1px solid #e7e7e7;
+        }
+
+        td:nth-child(2) {
+            border-right: 0 !important;
+        }
+        td:nth-child(3) {
+            border-right: 0 !important;
         }
 
         .main-table .border {
-            border: 1px solid #44423f;
+            /*border: 1px solid #44423f;*/
         }
 
         .no-border-btm {
@@ -101,7 +111,7 @@
 
         #inword {
             text-transform: capitalize;
-            margin-bottom: 50px;
+            margin-bottom: 20px;
         }
 
         .to {
@@ -128,146 +138,122 @@
     <div class="row">
         <div class="col-1">
             <div id="logo">
-                <img src="{{ public_path('creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img">
+                <img src="{{ public_path('creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img" height="30">
+{{--                <img src="{{ asset('images/creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img" height="30">--}}
             </div>
         </div>
         <div class="col-1"></div>
         <div class="col-1">
-            <div id="info">
+            <div id="info" style="text-align: right">
                 <h3>Creative Tech Park</h3>
                 <p>Imperial Irish Kingdom, Mo-03 <br>(3rd Floor), Merul Badda, Dhaka 1212</p>
                 <p>Phone: +8801639-200002</p>
                 <p>Email: info@creativetechpark.com</p>
-
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-2">
+        <div class="col-1">
             <div class="to">
-                <h3>Invoice To,</h3>
-                <h3>{{ $data["quotation_owner"]["client"]['name'] }}</h3>
-                <p>Phone: {{ $data["quotation_owner"]["client"]['phone'] }}</p>
-                <p>Email: {{ $data["quotation_owner"]["client"]['email'] }}</p>
-                @if ($data["quotation_owner"]["client"]['address'])
-                    <p>Company: {{ $data["quotation_owner"]["client"]['company'] }}</p>
+                <h3>Quotation To,</h3>
+                <h4 style="margin: 0; padding: 0">{{ $quotation->client->name }}</h4>
+                <p>Phone: {{ $quotation->client->phone }}</p>
+                <p>Email: {{ $quotation->client->email }}</p>
+                @if ($quotation->client->address)
+                    <p>Company: {{ $quotation->client->company }}</p>
                 @endif
-                @if ($data["quotation_owner"]["client"]['address'])
-                    <p>Address: {{ $data["quotation_owner"]["client"]['address'] }}</p>
+                @if ($quotation->client->address)
+                    <p>Address: {{ $quotation->client->name }}</p>
                 @endif
             </div>
         </div>
-        <div class="col-3">
-            <div class="to">
-                <h3> {{ $isQuotation ? "Quotation" : "Invoice" }} ID:
-                    CTP-{{ $data["quotation"]["u_id"].$data["quotation"]["id"] }}</h3>
-                <p>Date: {{ date('D, d F, Y', strtotime($data['quotation']['created_at'])) }}</p>
+
+        <div class="col-1"></div>
+        <div class="col-1">
+            <div class="to" style="text-align: right">
+                <h3> Quotation ID:
+                    CTP-{{ $quotation->quotation_id }}{{ $quotation->id }}</h3>
+                <p>Date: {{ $quotation->qut_date }}</p>
             </div>
         </div>
     </div>
 
+
+    <div class="row" style="margin: 0">
+        <h2 style="margin: 0">
+            Subject: {{ $quotation->subject }}
+        </h2>
+    </div>
     <div class="row">
         <div class="col-3">
             <table class="main-table">
                 <thead>
                 <tr>
-                    <th class="text-center">Description</th>
-                    <th class="text-center">Price</th>
-                    <th class="text-center">Discount</th>
+                    <th class="text-left">Description</th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
                     <th class="text-right">Total</th>
                 </tr>
                 </thead>
                 <tbody>
-                @php
-                    $total = 0
-                @endphp
-                @foreach ($data['others_info']['items'] as $item)
-                    <tr>
-                        <td class="border text-left">
-                            {!! $item['name'] !!}
+
+                @foreach ($pref as $item)
+                    <tr @if($loop->last) style="border-bottom:1px solid #e7e7e7" @endif>
+                        <td class="border text-left"  colspan="3" @if($loop->last) style="padding-bottom: 7px" @endif>
+                            {!! nl2br($item['name']) !!}
                         </td>
-                        <td class="border text-center">
-                            <strong>{{ $item['price']}} * {{ $item['quantity']  }}
-                                = {{  $item['price'] * $item['quantity'] }}Tk</strong>
-                        </td>
-                        <td class="border text-right">
-                            <strong>{{ $item['discount'] ?? 0 }} Tk</strong>
-                        </td>
-                        <td class="border text-right">
-                            <strong>{{ ($item['price'] * $item['quantity']) - $item['discount'] ?? 0 }} Tk</strong>
+                        <td class="border text-right" @if($loop->last) style="padding-bottom: 7px" @endif>
+                            <p>{{ ($item['price'] * $item['qty']) ?? 0 }}</p>
                         </td>
                     </tr>
                 @endforeach
-                @php
-                    $grand_total = $data['quotation']["price"] -  $data['quotation']["discount"];
-                @endphp
 
-                @if($isQuotation != true )
+
                     <tr>
                         <td class="text-right border" colspan="3">Sub Total</td>
-                        <td class="text-right border"><strong>{{ $data['invoice']["sub_total"]  }} Tk</strong></td>
+                        <td class="text-right border"><strong>{{ $quotation->total_price  }}</strong></td>
                     </tr>
                     <tr>
                         <td class="text-right border" colspan="3">Discount</td>
-                        <td class="text-right border"><strong> {{ $data['invoice']["discount"]  }} Tk</strong></td>
+                        <td class="text-right border"><strong> {{ $quotation->discount  }}</strong></td>
                     </tr>
-                    <tr>
-                        <td class="text-right border" colspan="3">Grand Total</td>
-                        <td class="text-right border"><strong>{{ $data['invoice']['grand_total'] }} Tk</strong></td>
-                    </tr>
-                    <tr>
-                        <td class="text-right border" colspan="3">Amount Paid</td>
-                        <td class="text-right border"><strong>{{ $data['invoice']['pay'] }} Tk</strong></td>
-                    </tr>
-                    <tr>
-                        <td class="text-right border" colspan="3">Total Due</td>
-                        <td class="text-right border"><strong>{{ $data['invoice']['due'] }}  Tk</strong></td>
-                    </tr>
-                @else
-                    <tr>
-                        <td class="text-right border" colspan="3">Sub Total</td>
-                        <td class="text-right border"><strong>{{ $data['quotation']["price"]  }} Tk</strong></td>
-                    </tr>
-                    <tr>
-                        <td class="text-right border" colspan="3">Discount</td>
-                        <td class="text-right border"><strong> {{ $data['quotation']["discount"]  }} Tk</strong></td>
-                    </tr>
-                    <tr>
-                        <td class="text-right border" colspan="3">Grand Total</td>
-                        <td class="text-right border"><strong>{{ $grand_total }} Tk</strong></td>
-                    </tr>
-                @endif
 
+                    <tr style="border-top: 1px solid #e7e7e7">
+                        <td class="text-right border" style="padding: 10px; font-weight: bolder; font-size: 18px" colspan="3">Grand Total</td>
+                        <td class="text-right border" style="padding: 10px; font-weight: bolder; font-size: 18px" ><strong>{{ $quotation->grand_total }}</strong></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
     <div class="row">
         <div class="col-3">
-
             @php
                 $numberToWords = new NumberToWords\NumberToWords;
                 $numberTransformer = $numberToWords->getNumberTransformer('en');
             @endphp
-            <p id="inword"><strong>Inword:</strong> {{ $numberTransformer->toWords($grand_total) }} Taka Only.</p>
+            <p id="inword">
+                <strong>Inword:</strong>
+                {{ $numberTransformer->toWords($quotation->grand_total) }} Taka Only.
+            </p>
         </div>
     </div>
-    {{--  <div class="row">
+
+    <div class="row">
           <div class="col-3">
               <h3>Note:</h3>
-              <span id="mb-20">
-                  Nots
+              <span style="margin-bottom: 20px">
+                  {!! nl2br($quotation->note ?? ' ') !!}
               </span>
               <br>
               <br>
-              <br>
           </div>
-      </div>--}}
+      </div>
 
     <div class="row mt-3">
         <div class="col-3 text-center">
-            <p class="text-center">{!! $data['quotation']["note"] ?? null !!}</p>
-            <p class="text-center">Created By {{ $data['quotation_owner']['creator']['name'] }}</p>
+            <p class="text-center">Created By {{ $quotation->user->name }}</p>
+
         </div>
     </div>
     <div class="page-break"></div>
@@ -322,7 +308,7 @@
             </h3>
         </div>
     </div>
-    @if ($data['quotation']['privicy_and_policy'])
+  {{--  @if ($data['quotation']['privicy_and_policy'])
         <div class="row">
             <div class="col-3">
                 <h3>Payment Policy:</h3>
@@ -337,7 +323,7 @@
                 {!! nl2br($data['quotation']['trams_and_condition']) !!}
             </div>
         </div>
-    @endif
+    @endif--}}
 </div>
 </body>
 </html>

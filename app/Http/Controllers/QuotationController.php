@@ -133,25 +133,68 @@ class QuotationController extends Controller
 
 
     public function index(){
-        $services = Searvice::all()->map(function ($service){
-             $service["platforms"] = Platform::with("packages")
-                 ->whereIn('id', json_decode($service->platforms))
-                 ->get()
-                 ->map(function($platform){
-                     $platform["features"] = json_decode($platform->featureds);
-                     return collect($platform)->only(['id', 'name', 'features', 'packages']);
-                });
-            return collect($service)->only(['service_name', 'id', 'platforms']);
-        });
-
-        $clients = Client::where('status', '=', 'Converted to Customer')
-            ->latest()->get();
-
-
-        return inertia('Quotation/Store', [
-            'services' => $services,
-            'clients' => $clients,
-            'main_url' => URL::route('quotations.store')
+        $quotation  = Quotation::query()
+            ->with('client')
+            ->latest()
+            ->when(Request::input('search'), function ($query, $search) {
+                $query->where('u_id', 'like', "%{$search}%")
+                    ->orWhere('u_id', 'like', "%{$search}%")
+                    ->orWhereHas('client', function ($client) use($search){
+                        $client
+                            ->where('name',    'like', "%{$search}%")
+                            ->orWhere('phone', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%")
+                        ;
+                    })
+                    ->orWhereHas('domains', function($hosting) use($search){
+                        $hosting->where('name', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('hostings', function($hosting) use($search){
+                        $hosting->where('name', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('works', function($hosting) use($search){
+                        $hosting->where('name', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('packages', function($hosting) use($search){
+                        $hosting->where('name', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('quotationItems', function($hosting) use($search){
+                        $hosting->where('item_name', 'like', "%{$search}%");
+                    });
+            })
+            ->when(Request::input('byStatus'), function ($query, $search){
+                $query->where('status', $search);
+            })
+            ->when(Request::input('dateRange'), function ($query, $search){
+                $start_date = $search[0];
+                $end_date =  $search[1];
+                if (!empty($start_date) && !empty($end_date)) {
+                    $query->whereDate('created_at', '>=', $start_date)
+                        ->whereDate('created_at', '<=', $end_date);
+                }
+                if (empty($start_date) && !empty($end_date)) {
+                    $query->whereDate('created_at', '<=', $end_date);
+                }
+            })
+            ->paginate(Request::input('perPage') ?? 10)
+            ->withQueryString()
+            ->through(fn($qot) => [
+                "id"           => $qot->id,
+                "qut_id"       => $qot->quotation_id,
+                "client"       => $qot->client,
+                "subject"      => $qot->subject,
+                "status"       => $qot->status,
+                "date"         => $qot->qut_date->format('M-d-Y'),
+                "created_at"   => $qot->created_at->format('Y-m-d'),
+                "show_url"     => URL::route('quotations.show', $qot->id),
+                "edit_url"     => URL::route('quotations.edit', $qot->id),
+                "invoice_url"  => URL::route('quotations.quotationInvoice', $qot->id)
+            ]);
+        return inertia('Quotation/Index', [
+            'quotations'  => $quotation,
+            'filters'     => Request::only(['search','perPage', 'byStatus', 'dateRange']),
+            'url'         => URL::route('quotations.index'),
+            'change_status_url'  => URL::route('chnageQuotationStatus'),
         ]);
     }
 
@@ -164,14 +207,23 @@ class QuotationController extends Controller
      * @return \Inertia\Response
      */
     public function create(){
-        return Inertia::render('Modules/Quotation/Create', [
-            "clients"   => Client::all(),
-            "services"  => Website::all(['id','name', 'price']),
-            "packages"  => Design::all(['id','name', 'price']),
-            "platforms" => Platform::all(['id','name', 'price']),
-            "domains"   => Domain::all(['id','name', 'price']),
-            "hostings"  => Hosting::all(['id','name', 'price']),
-            "works"     => Work::all(['id','name', 'price']),
+        $services = Searvice::all()->map(function ($service){
+            $service["platforms"] = Platform::with("packages")
+                ->whereIn('id', json_decode($service->platforms))
+                ->get()
+                ->map(function($platform){
+                    $platform["features"] = json_decode($platform->featureds);
+                    return collect($platform)->only(['id', 'name', 'features', 'packages']);
+                });
+            return collect($service)->only(['service_name', 'id', 'platforms']);
+        });
+
+        $clients = Client::where('status', '=', 'Converted to Customer')->latest()->get();
+
+        return inertia('Quotation/Store', [
+            'services' => $services,
+            'clients' => $clients,
+            'main_url' => URL::route('quotations.store')
         ]);
     }
 
@@ -197,16 +249,37 @@ class QuotationController extends Controller
      *
      */
 
-    public function store(){
+    public function store()
+    {
+
+        Request::validate([
+            'clientId' => 'required',
+            'qutDate' => 'required',
+            'subject' => 'required'
+        ],[
+            'clientId.required' => 'First Select An Client...',
+            'qutDate.required' => 'Please Select Quotation Date...',
+        ]);
+
+        $storeItems = [];
+        foreach (Request::input('items') as $item){
+            $storeItems[] = [
+                'checkFeatrueds' => $item['checkFeatrueds'],
+                'checkPackages' =>  $item['checkPackages']
+            ];
+        }
         Quotation::create([
             'quotation_id' => Request::input('quotationId'),
             'client_id' => Request::input('clientId'),
             'qut_date' => Request::input('qutDate'),
             'subject' => Request::input('subject'),
-            'items' => json_encode(Request::input('items')),
+            'created_by' => Auth::id(),
+            "total_price" => Request::input('totalPrice'),
+            "grand_total" => Request::input('totalPrice'),
+            'items' => json_encode($storeItems),
             'status' => true
         ]);
-        return back();
+        return Redirect::route('quotations.index');
     }
 
 
@@ -458,13 +531,63 @@ class QuotationController extends Controller
 
 
 
-
-
     public function show($id)
     {
-        $quotation = Quotation::with(['invoice', 'invoice.transactions', 'invoice.transactions.user', 'invoice.transactions.method'])->findOrFail($id);
+        $type = Request::only('type')["type"];
+        $quotation = Quotation::with(['client', 'user:id,name'])->findOrFail($id);
+        $pref = [];
+        foreach (json_decode($quotation->items) as $item){
+            if ($item->checkPackages){
+                foreach ($item->checkPackages as $package){
+                    $pref[] =[
+                        'name'=> $package->descriptions,
+                        'qty' => $package->qty,
+                        'price' => $package->price,
+                    ];
+                }
+            }
+            if ($item->checkFeatrueds){
+                foreach ($item->checkFeatrueds as $feared){
+                    $pref[] =[
+                        'name'=> $feared->name,
+                        'qty' => $feared->qty,
+                        'price' => $feared->price,
+                    ];
+                }
+            }
+        }
 
-//        return $quotation;
+        if ($type == 'download'){
+            $pdf = Pdf::loadView('invoice.quotation', compact('quotation', 'pref'));
+            return $pdf->download($quotation->client->name."_".now()->format('d_m_Y')."_".'quotation.pdf');
+        }
+
+        return Inertia::render('Quotation/Show',   [
+            "quotation" => $quotation,
+            "url" =>[
+                "show_url" => URL::route('quotations.show', $quotation->id),
+                "edit_url" => URL::route('quotations.edit', $quotation->id),
+                "add_discount" => URL::route('quotations.addDiscount', $quotation->id)
+            ]
+        ]);
+
+
+    }
+
+    public function givenDiscount($id){
+        $quotation = Quotation::findOrFail($id);
+        $quotation->discount = Request::input('discount');
+        $quotation->grand_total = $quotation->total_price - Request::input('discount');
+        $quotation->save();
+        return back();
+    }
+
+/*    public function show($id)
+    {
+
+        $quotation = Quotation::with('client')->findOrFail($id);
+
+        return $quotation;
 
         $mainarray = array();
         foreach ($quotation->domains as $item){
@@ -565,7 +688,7 @@ class QuotationController extends Controller
     ]);
 
 
-    }
+    }*/
 
 
     public function createInvoice($id){
@@ -685,95 +808,23 @@ class QuotationController extends Controller
     public function editQuotation($id){
         $quot = Quotation::with('client')->findOrFail($id);
 
-
-        $qWOrks = $quot->works;
-        $works = Work::all(['id','name', 'price']);
-        $editedWork = $works->map(function ($item) use($qWOrks){
-            $isTrue = false;
-            $data = null;
-            foreach ($qWOrks as $work){
-                if ($work->id == $item->id){
-                    $isTrue = true;
-                    $data = $work;
-                    $data['p'] = true;
-                    $data['quantity'] = $work->pivot->quantity;
-                    $data['discount'] = $work->pivot->discount;
-                    break;
-                }
-            }
-            return $isTrue ? $data : $item;
+        $services = Searvice::all()->map(function ($service){
+            $service["platforms"] = Platform::with("packages")
+                ->whereIn('id', json_decode($service->platforms))
+                ->get()
+                ->map(function($platform){
+                    $platform["features"] = json_decode($platform->featureds);
+                    return collect($platform)->only(['id', 'name', 'features', 'packages']);
+                });
+            return collect($service)->only(['service_name', 'id', 'platforms']);
         });
+        $clients = Client::where('status', '=', 'Converted to Customer')->latest()->get();
 
-        $hostings = Hosting::all(['id','name', 'price']);
-        $editHostings = $quot->hostings;
-        $editedHostings = $hostings->map(function ($item) use($editHostings){
-            $isTrue = false;
-            $data = null;
-            foreach ($editHostings as $eItem){
-                if ($eItem->id == $item->id){
-                    $isTrue = true;
-                    $data = $eItem;
-                    $data['p'] = true;
-                    $data['quantity'] = $eItem->pivot->quantity;
-                    $data['discount'] = $eItem->pivot->discount;
-                    break;
-                }
-            }
-            return $isTrue ? $data : $item;
-        });
-
-        $editedDomains = $quot->domains;
-        $domains = Domain::all(['id','name', 'price']);
-        $editedDomains = $domains->map(function ($item) use($editedDomains){
-            $isTrue = false;
-            $data = null;
-            foreach ($editedDomains as $eItem){
-                if ($eItem->id == $item->id){
-                    $isTrue = true;
-                    $data = $eItem;
-                    $data['p'] = true;
-                    $data['quantity'] = $eItem->pivot->quantity;
-                    $data['discount'] = $eItem->pivot->discount;
-                    break;
-                }
-            }
-            return $isTrue ? $data : $item;
-        });
-
-
-        $packages = Design::all(['id','name', 'price']);
-        $editPackages = $quot->packages;
-
-        $editPackages = $packages->map(function ($item) use($editPackages){
-            $isTrue = false;
-            $data = null;
-            foreach ($editPackages as $eItem){
-                if ($eItem->id == $item->id){
-                    $isTrue = true;
-                    $data = $eItem;
-                    $data['p'] = true;
-                    $data['quantity'] = $eItem->pivot->quantity;
-                    $data['discount'] = $eItem->pivot->discount;
-                    break;
-                }
-            }
-            return $isTrue ? $data : $item;
-        });
-
-
-        return Inertia::render('Modules/Quotation/EditQuot', [
-            "clients"   => Client::all(['id','name']),
-            "editable_works" => $editedWork,
-            "edited_hosting" => $editedHostings,
-            "edited_domains" => $editedDomains,
-            "edit_packages" => $editPackages,
-            "quotItems" => $quot->quotationItems,
-            "quotDetails"      => $quot,
-            "client"=> $quot->client,
-            "update_url"=> URL::route('quotations.update', $id),
+        return Inertia::render('Quotation/Edit',   [
+            'quotation' => $quot,
+            'services' => $services,
+            'clients' => $clients,
         ]);
-
-
     }
 
 

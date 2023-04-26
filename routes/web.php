@@ -79,6 +79,7 @@ Route::prefix('admin')->group(function(){
         Route::resource('hostings', HostingController::class);
         // quotations management
         Route::resource('quotations', QuotationController::class);
+        Route::post('quotations/given-discount/{id}', [QuotationController::class, 'givenDiscount'])->name('quotations.addDiscount');
 
         Route::get('download-quotation/{id}', [QuotationController::class, 'generateQuotationPDFFile'])
             ->name('quotations.generateQuotationPDFFile');

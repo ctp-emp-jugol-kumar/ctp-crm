@@ -7,7 +7,7 @@
 
     <script src="{{ mix('/js/app.js') }}" defer></script>
       <script src="{{ asset("/js/vendors.min.js") }}"></script>
-    @inertiaHead
+      @inertiaHead
   </head>
   <body>
      <div id="app" class="h-100" data-page="{{ json_encode($page) }}"></div>

@@ -11,4 +11,16 @@ class Quotation extends Model
 
     protected $guarded = ['id'];
 
+    protected $dates = ['qut_date'];
+
+    public function client(){
+        return $this->belongsTo(Client::class, 'client_id');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+
+
 }

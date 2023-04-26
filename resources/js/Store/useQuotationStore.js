@@ -20,6 +20,9 @@ export const useQuotationStore = defineStore('quotation', {
         },
         setSubject(subject){
             this.subject = subject;
+        },
+        setQuotId(qutId){
+            this.quotationId = qutId;
         }
     },
 

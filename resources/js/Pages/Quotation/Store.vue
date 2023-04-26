@@ -1,5 +1,5 @@
 <template>
-    <UpperQuotation :subtotal="totalPrice" :clients="props.clients" @handelQuotation="saveQuotation">
+    <UpperQuotation :subtotal="totalPrice" :clients="props.clients" :errors="props.errors" @handelQuotation="saveQuotation">
         <!-- Product Details starts -->
         <div class="card-body invoice-padding invoice-product-details" v-for="(item, index) in formData.items">
             <div class="source-item">
@@ -16,7 +16,7 @@
                                                       class="form-control py-0"
                                                       v-model="formData.items[index].service"
                                                       label="service_name"
-                                                      :reduce="category => category.id"
+                                                      :reduce="service => service.id"
                                                       @update:modelValue="loadPlatforms(index)"
                                                       placeholder="e.g Select Service">
                                                 <template v-slot:option="option">
@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="d-flex flex-column align-items-center justify-content-between border-start invoice-product-actions py-50 px-25">
                                     <vue-feather type="x" class="cursor-pointer font-medium-3" @click="removeItem(index)"></vue-feather>
-                                    <div class="dropdown">
+<!--                                    <div class="dropdown">
                                         <vue-feather class="cursor-pointer more-options-dropdown me-0"
                                                      type="settings"
                                                      role="button" id="dropdownMenuButton"
@@ -123,7 +123,7 @@
                                                      aria-haspopup="true"
                                                      aria-expanded="false">
                                         </vue-feather>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                         </div>
@@ -153,6 +153,7 @@
         services: Array|[]|null,
         clients:Array|[]|null,
         main_url:String|null,
+        errors:Object|Array|[],
     })
 
 
@@ -161,6 +162,7 @@
         clientId: quotationStore.getClientId,
         qutDate: quotationStore.getQutDate,
         subject: quotationStore.getSubject,
+        totalPrice:null,
         items:[{
             name:null,
             service:null,
@@ -179,11 +181,13 @@
         formData.clientId = events.clientId,
         formData.qutDate = events.date,
         formData.subject = events.subject,
+        formData.totalPrice = totalPrice,
         formData.post(props.main_url,{
-            preserveState: true,
-                onStart: () =>{ processing.value = true},
-                onFinish: () => {processing.value = false},
-                onSuccess: ()=> {console.log("ok")},
+        preserveState: true,
+            onStart: () =>{ processing.value = true},
+            onFinish: () => {processing.value = false},
+            onSuccess: ()=> { $toast.success('Quotation Created Successfully Done...') },
+            onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
         })
     }
 
@@ -198,7 +202,7 @@
                 packages:[],
                 checkFeatrueds:[],
                 checkPackages:[],
-                isFeatured:true
+                isFeatured:true,
             })
     }
     const removeItem = (index) => {

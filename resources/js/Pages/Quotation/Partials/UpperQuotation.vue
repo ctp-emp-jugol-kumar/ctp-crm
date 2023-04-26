@@ -12,54 +12,41 @@
                         <!-- Invoice Edit Left starts -->
                         <div class="col-xl-9 col-md-8 col-12">
                             <div class="card invoice-preview-card">
+                                <div class="card-header">
+                                    <ul>
+                                        <li class="text-danger" v-for="error in props.errors">{{ error }}</li>
+                                    </ul>
+                                </div>
+
                                 <!-- Header starts -->
                                 <div class="card-body invoice-padding pb-0">
                                     <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
-                                        <div>
+                                        <div class="col-md-5">
                                             <div class="logo-wrapper">
-                                                <svg viewBox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
-                                                    <defs>
-                                                        <linearGradient id="invoice-linearGradient-1" x1="100%" y1="10.5120544%" x2="50%" y2="89.4879456%">
-                                                            <stop stop-color="#000000" offset="0%"></stop>
-                                                            <stop stop-color="#FFFFFF" offset="100%"></stop>
-                                                        </linearGradient>
-                                                        <linearGradient id="invoice-linearGradient-2" x1="64.0437835%" y1="46.3276743%" x2="37.373316%" y2="100%">
-                                                            <stop stop-color="#EEEEEE" stop-opacity="0" offset="0%"></stop>
-                                                            <stop stop-color="#FFFFFF" offset="100%"></stop>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                        <g transform="translate(-400.000000, -178.000000)">
-                                                            <g transform="translate(400.000000, 178.000000)">
-                                                                <path class="text-primary" d="M-5.68434189e-14,2.84217094e-14 L39.1816085,2.84217094e-14 L69.3453773,32.2519224 L101.428699,2.84217094e-14 L138.784583,2.84217094e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L6.71554594,44.4188507 C2.46876683,39.9813776 0.345377275,35.1089553 0.345377275,29.8015838 C0.345377275,24.4942122 0.230251516,14.560351 -5.68434189e-14,2.84217094e-14 Z" style="fill: currentColor"></path>
-                                                                <path d="M69.3453773,32.2519224 L101.428699,1.42108547e-14 L138.784583,1.42108547e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L32.8435758,70.5039241 L69.3453773,32.2519224 Z" fill="url(#invoice-linearGradient-1)" opacity="0.2"></path>
-                                                                <polygon fill="#000000" opacity="0.049999997" points="69.3922914 32.4202615 32.8435758 70.5039241 54.0490008 16.1851325"></polygon>
-                                                                <polygon fill="#000000" opacity="0.099999994" points="69.3922914 32.4202615 32.8435758 70.5039241 58.3683556 20.7402338"></polygon>
-                                                                <polygon fill="url(#invoice-linearGradient-2)" opacity="0.099999994" points="101.428699 0 83.0667527 94.1480575 130.378721 47.0740288"></polygon>
-                                                            </g>
-                                                        </g>
-                                                    </g>
-                                                </svg>
-                                                <h3 class="text-primary invoice-logo">Vuexy</h3>
+                                                <img src="../../../../../public/creativeTechPark.png" alt="" height="30">
                                             </div>
-                                            <p class="card-text mb-25">Office address</p>
+                                            <h3>Creative Tech Park</h3>
+                                            <p class="card-text mb-25">
+                                                Imperial Irish Kingdom, Mo-03
+                                                (3rd Floor), Merul Badda, Dhaka 1212
+                                            </p>
+                                            <p class="p-0 m-0">Phone: +8801639-200002</p>
+                                            <p>Email: info@creativetechpark.com</p>
                                         </div>
                                         <div class="invoice-number-date mt-md-0 mt-2">
                                             <div class="d-flex align-items-center justify-content-md-end mb-1">
-                                                <h4 class="invoice-title">Invoice</h4>
                                                 <div class="input-group input-group-merge invoice-edit-input-group">
                                                     <div class="input-group-text">
-                                                        <i data-feather="hash"></i>
+                                                        <vue-feather type="hash" size="15"/>_id
                                                     </div>
                                                     <input type="text" class="form-control invoice-edit-input"
-                                                           :value="quotationStore.getQuotId+'__'"/>
+                                                           :value="quotationStore.getQuotId"/>
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center mb-1">
-                                                <span class="title">Date:</span>
                                                 <Datepicker v-model="date" :monthChangeOnScroll="false"
                                                             @update:modelValue="storeDate"
-                                                            placeholder="Select Date" autoApply></Datepicker>
+                                                            placeholder="Select Quotation Date" autoApply></Datepicker>
                                             </div>
 <!--                                            <div class="d-flex align-items-center">
                                                 <span class="title">Due Date:</span>
@@ -77,7 +64,7 @@
                                 <div class="card-body invoice-padding pt-0">
                                     <div class="row invoice-spacing">
                                         <div class="col-xl-8 p-0">
-                                            <h6 class="mb-2">Invoice To:</h6>
+                                            <h6 class="mb-2">Quotation To:</h6>
                                             <div class="row">
                                                 <div class="col-md-8">
                                                     <div class="input-group col-md-5">
@@ -90,9 +77,9 @@
                                                                   :filter="fuseSearch"
                                                                   placeholder="e.g Select Client">
                                                             <template v-slot:option="option">
-                                                                <li class="d-flex align-items-start">
+                                                                <li class="d-flex align-items-start border-bottom">
                                                                     <div class="d-flex align-items-center justify-content-between w-100">
-                                                                        <div class="me-1 d-flex flex-column" >
+                                                                        <div class="me-1 d-flex flex-column " >
                                                                             <strong class="mb-25">{{ option.name }}</strong>
                                                                             <span >{{ option.email }}</span>
                                                                             <span >{{ option.phone }}
@@ -125,7 +112,7 @@
                                         <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
                                             <div class="d-flex align-items-center mb-1">
                                                 <label class="form-label">Salesperson:</label>
-                                                <input type="text" class="form-control ms-50" :value="$page.props.auth.user.username"/>
+                                                <input type="text" class="form-control ms-50 " readonly :value="$page.props.auth.user.username"/>
                                             </div>
                                         </div>
                                         <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">
@@ -330,7 +317,7 @@
 
 <script setup>
 import moment from 'moment/moment';
-import {ref, computed } from "vue";
+import {ref, computed,onMounted  } from "vue";
 import {useQuotationStore} from "../../../Store/useQuotationStore";
 import Fuse from "fuse.js";
 
@@ -345,12 +332,16 @@ import Fuse from "fuse.js";
             type:Array,
             default:[],
             required:true
+        },
+        errors:{
+            type:Object,
+            default:[]
         }
     })
 
-    const clientId = ref(null)
-    const date = ref(null)
-    const subject = ref(null)
+    const clientId = ref(quotationStore.getClientId)
+    const date = ref(quotationStore.getQutDate)
+    const subject = ref(quotationStore.getSubject)
 
     const storeDate = () =>{
         quotationStore.setQutDate(date.value);
@@ -378,6 +369,13 @@ import Fuse from "fuse.js";
         })[0];
         clientDetails.value = alue
     }
+
+    onMounted(() =>{
+        const alue = props.clients.filter(item => {
+            return item.id === quotationStore.getClientId;
+        })[0];
+        clientDetails.value = alue
+    })
 
     const emits = defineEmits(["handelQuotation"])
     const saveQuotation=()=>{
