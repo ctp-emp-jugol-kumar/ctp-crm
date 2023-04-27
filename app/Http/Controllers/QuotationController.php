@@ -134,7 +134,7 @@ class QuotationController extends Controller
 
     public function index(){
         $quotation  = Quotation::query()
-            ->with('client')
+            ->with(['client', 'user'])
             ->latest()
             ->when(Request::input('search'), function ($query, $search) {
                 $query->where('u_id', 'like', "%{$search}%")
@@ -182,8 +182,12 @@ class QuotationController extends Controller
                 "id"           => $qot->id,
                 "qut_id"       => $qot->quotation_id,
                 "client"       => $qot->client,
+                "user"         => $qot->user,
                 "subject"      => $qot->subject,
                 "status"       => $qot->status,
+                "total_price"  => $qot->total_price,
+                "discount"     => $qot->discount,
+                "grand_total"  => $qot->grand_total,
                 "date"         => $qot->qut_date->format('M-d-Y'),
                 "created_at"   => $qot->created_at->format('Y-m-d'),
                 "show_url"     => URL::route('quotations.show', $qot->id),

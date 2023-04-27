@@ -152,9 +152,9 @@
                                     <a :href="props.url.show_url+'?print=true'"  class="btn btn-outline-primary w-100 mb-75">Print Quotation</a>
                                     <button type="button" class="btn btn-outline-primary w-100 mb-75" data-bs-toggle="modal"
                                             data-bs-target="#givenDiscount">Given Discount</button>
-<!--                                    <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">
-                                        Send Quotation
-                                    </button>-->
+                                    <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">
+                                        Get Invoices
+                                    </button>
                                 </div>
                             </div>
                             <!--                            <div class="mt-2">
