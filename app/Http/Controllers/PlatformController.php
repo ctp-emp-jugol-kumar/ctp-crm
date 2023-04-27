@@ -19,7 +19,7 @@ class PlatformController extends Controller
     public function index()
     {
 
-        return inertia('Modules/Platforms/Index', [
+        return inertia('Platforms/Index', [
             'platforms' => Platform::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('name', 'like', "%{$search}%");
@@ -29,10 +29,8 @@ class PlatformController extends Controller
                 ->through(fn($platform) => [
                     'id' => $platform->id,
                     'name' => $platform->name,
-                    'price' => $platform->price,
-                    'description' => $platform->description,
+                    'featureds' => json_decode($platform->featureds),
                     'created_at' => $platform->created_at->format('d M Y'),
-                    'show_url' => URL::route('platforms.show', $platform->id),
                 ]),
             'filters' => Request::only(['search','perPage']),
             'main_url' => URL::route('platforms.index'),
@@ -44,12 +42,25 @@ class PlatformController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function store(PlatformRequest $request)
+
+    public function create(){
+        return inertia('Platforms/Store', [
+            'main_url' => URL::route('platforms.index')
+        ]);
+    }
+
+
+    public function store()
     {
-        Platform::create($request->validated());
-        return redirect()->route('platforms.index');
+
+        Platform::create([
+            'name' => Request::input('platform'),
+            'featureds' => json_encode(Request::all("features")['features']),
+            'status' => true,
+        ]);
+        return back();
     }
 
     /**

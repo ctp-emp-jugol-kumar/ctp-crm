@@ -25,7 +25,7 @@ class DomainRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => ["required", "max:30", "min:3",  Rule::unique('domains', 'name')],
+            "name" => ["required", "min:3",  Rule::unique('domains', 'name')],
             "price" => ["required", "numeric"],
             "description" => ["nullable","string"],
         ];

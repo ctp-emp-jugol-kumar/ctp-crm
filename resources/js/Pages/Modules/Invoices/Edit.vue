@@ -30,8 +30,9 @@
                                                         <Required/>
                                                     </label>
                                                     <div class="">
-                                                        <select2 v-model="formData.client_id" :options="clients" :reduce="client => client.id"
-                                                                 label="name" placeholder="Select Client"></select2>
+                                                        <v-select v-model="formData.client_id" :options="clients"
+                                                                  :reduce="client => client.id" label="name"
+                                                                  placeholder="Select Client"></v-select>
                                                     </div>
                                                 </div>
                                                 <div class="col-md">
@@ -51,8 +52,10 @@
                                                         <Required/>
                                                     </label>
                                                     <div class="">
-                                                        <Datepicker v-model="formData.date" :monthChangeOnScroll="false"
-                                                                    placeholder="Select Date" autoApply></Datepicker>
+                                                        <Datepicker v-model="formData.date"
+                                                                    :monthChangeOnScroll="false"
+                                                                    placeholder="Select Date"
+                                                                    autoApply></Datepicker>
                                                         <InputFieldError :errors="errors.date"/>
                                                     </div>
                                                 </div>
@@ -118,8 +121,7 @@
                                                     <vue-feather type="plus"/>
                                                 </button>
                                                 <button
-                                                    v-else
-                                                    class="btn btn-danger btn-sm float-end mt-25"
+                                                    class="btn btn-danger btn-sm float-end mt-25 me-1"
                                                     @click="deleteRow(index)"
                                                     data-repeater-delete
                                                     type="button">
@@ -198,21 +200,32 @@
     })
 
     let formData = useForm({
-        quatations: props.info.invoice_item,
         status: props.info.invoice.status === 1 ? true : false,
         subject: props.info.invoice.subject,
         client_id: props.info.invoice.client_id,
         date: props.info.invoice.date,
         payment_policy:props.info.invoice.privicy_and_policy,
         trams_and_condition:props.info.invoice.trams_and_condition,
+
+        quatations: [
+            {
+                id:'',
+                item_name: '',
+                price: '',
+                discount: '',
+                quantity: ''
+            }
+        ],
+
+    });
+
+    props.info.invoice_item.forEach(function(item, index){
+        formData.quatations[index] = item;
     });
 
 
 
     let updateQutation = () => {
-
-        // console.log(props.info.update_url);
-
         Inertia.patch(props.info.update_url, formData,{
            onSuccess: () =>{
                formData.reset()

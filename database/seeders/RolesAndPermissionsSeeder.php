@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Module;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -17,43 +19,368 @@ class RolesAndPermissionsSeeder extends Seeder
     public function run()
     {
         $all = [
-            'list feature', 'create feature', 'update feature', 'delete feature',
-            'list platform', 'create platform', 'update platform', 'delete platform',
-            'list work', 'create work', 'update work', 'delete work',
-            'list client', 'create client', 'update client', 'delete client',
-            'list design', 'create design', 'update design', 'delete design',
-            'list website', 'create website', 'update website', 'delete website',
-            'list hosting', 'create hosting', 'update hosting', 'delete hosting',
-            'list domain', 'create domain', 'update domain', 'delete domain',
-            'list quotation', 'create quotation', 'update quotation', 'delete quotation',
-            'list invoice', 'create invoice', 'update invoice', 'delete invoice',
-            'list method', 'create method', 'update method', 'delete method',
-            'list purpose', 'create purpose', 'update purpose', 'delete purpose',
-            'list transaction', 'create transaction', 'update transaction', 'delete transaction',
-            'list project', 'create project', 'update project', 'delete project', 'progress project',
-            'list note', 'create note', 'update note', 'delete note',
-            'view all client', 'view all transaction', 'view all invoice', 'view all quotation', 'assign user',
-            'statement transaction', 'view all project', 'manage project description', 'manage project credential',
-            'bulk assign agent', 'manage project progress', 'assign project user', 'bulk status client',
-            'statement transaction', 'due report', 'sell report'
+            [
+                'module' => "Dashboard",
+                'permissions' => [
+                    'dashboard.show',
+                    'dashboard.edit',
+                ],
+                'name' => [
+                    'Show Dashboard',
+                    'Edit Dashboard',
+                ]
+            ],
+            [
+                'module' => "User",
+                'permissions' => [
+                    'user.show',
+                    'user.index',
+                    'user.create',
+                    'user.edit',
+                    'user.delete'
+                ],
+                'name' => [
+                    'Show User',
+                    'Manage User',
+                    'Create User',
+                    'Edit User',
+                    'Delete User'
+                ]
+            ],
+            [
+                'module' => "Authorizations",
+                'permissions' => [
+                    'authorization.show',
+                    'authorization.index',
+                    'authorization.create',
+                    'authorization.edit',
+                    'authorization.delete'
+                ],
+                'name' => [
+                    'Show Authorizations',
+                    'Manage Authorizations',
+                    'Create Authorizations',
+                    'Edit Authorizations',
+                    'Delete Authorizations'
+                ]
+            ],
+            [
+                'module' => "Leads",
+                'permissions' => [
+                    'leads.show',
+                    'leads.index',
+                    'leads.create',
+                    'leads.edit',
+                    'leads.delete',
+                    'leads.download'
+                ],
+                'name' => [
+                    'Show Leads',
+                    'Manage Leads',
+                    'Create Leads',
+                    'Edit Leads',
+                    'Delete Leads',
+                    'Download Leads'
+                ]
+            ],
+            [
+                'module' => "Feature",
+                'permissions' => [
+                    'feature.show',
+                    'feature.index',
+                    'feature.create',
+                    'feature.edit',
+                    'feature.delete'
+                ],
+                'name' => [
+                    'Show Feature',
+                    'Manage Feature',
+                    'Create Feature',
+                    'Edit Feature',
+                    'Delete Feature'
+                ]
+            ],
+            [
+                'module' => "Platform",
+                'permissions' => [
+                    'platform.show',
+                    'platform.index',
+                    'platform.create',
+                    'platform.edit',
+                    'platform.delete'
+                ],
+                'name' => [
+                    'Show Platform',
+                    'Manage Platform',
+                    'Create Platform',
+                    'Edit Platform',
+                    'Delete Platform'
+                ]
+            ],
+            [
+                'module' => "Work",
+                'permissions' => [
+                    'work.show',
+                    'work.index',
+                    'work.create',
+                    'work.edit',
+                    'work.delete'
+                ],
+                'name' => [
+                    'Show Work',
+                    'Manage Work',
+                    'Create Work',
+                    'Edit Work',
+                    'Delete Work'
+                ]
+            ],
+            [
+                'module' => "Design",
+                'permissions' => [
+                    'design.show',
+                    'design.index',
+                    'design.create',
+                    'design.edit',
+                    'design.delete'
+                ],
+                'name' => [
+                    'Show Design',
+                    'Manage Design',
+                    'Create Design',
+                    'Edit Design',
+                    'Delete Design'
+                ]
+            ],
+            [
+                'module' => "Website",
+                'permissions' => [
+                    'website.show',
+                    'website.index',
+                    'website.create',
+                    'website.edit',
+                    'website.delete'
+                ],
+                'name' => [
+                    'Show Website',
+                    'Manage Website',
+                    'Create Website',
+                    'Edit Website',
+                    'Delete Website'
+                ]
+            ],
+            [
+                'module' => "Hosting",
+                'permissions' => [
+                    'hosting.show',
+                    'hosting.index',
+                    'hosting.create',
+                    'hosting.edit',
+                    'hosting.delete'
+                ],
+                'name' => [
+                    'Show Hosting',
+                    'Manage Hosting',
+                    'Create Hosting',
+                    'Edit Hosting',
+                    'Delete Hosting'
+                ]
+            ],
+            [
+                'module' => "Domain",
+                'permissions' => [
+                    'domain.show',
+                    'domain.index',
+                    'domain.create',
+                    'domain.edit',
+                    'domain.delete'
+                ],
+                'name' => [
+                    'Show Domain',
+                    'Manage Domain',
+                    'Create Domain',
+                    'Edit Domain',
+                    'Delete Domain'
+                ]
+            ],
+            [
+                'module' => "Quotation",
+                'permissions' => [
+                    'quotation.show',
+                    'quotation.index',
+                    'quotation.create',
+                    'quotation.edit',
+                    'quotation.delete'
+                ],
+                'name' => [
+                    'Show Quotation',
+                    'Manage Quotation',
+                    'Create Quotation',
+                    'Edit Quotation',
+                    'Delete Quotation'
+                ]
+            ],
+            [
+                'module' => "Invoice",
+                'permissions' => [
+                    'invoice.show',
+                    'invoice.index',
+                    'invoice.create',
+                    'invoice.edit',
+                    'invoice.delete'
+                ],
+                'name' => [
+                    'Show Invoice',
+                    'Manage Invoice',
+                    'Create Invoice',
+                    'Edit Invoice',
+                    'Delete Invoice'
+                ]
+            ],
+            [
+                'module' => "Method",
+                'permissions' => [
+                    'method.show',
+                    'method.index',
+                    'method.create',
+                    'method.edit',
+                    'method.delete'
+                ],
+                'name' => [
+                    'Show Method',
+                    'Manage Method',
+                    'Create Method',
+                    'Edit Method',
+                    'Delete Method'
+                ]
+            ],
+            [
+                'module' => "Purpose",
+                'permissions' => [
+                    'purpose.show',
+                    'purpose.index',
+                    'purpose.create',
+                    'purpose.edit',
+                    'purpose.delete'
+                ],
+                'name' => [
+                    'Show Purpose',
+                    'Manage Purpose',
+                    'Create Purpose',
+                    'Edit Purpose',
+                    'Delete Purpose'
+                ]
+            ],
+            [
+                'module' => "Transaction",
+                'permissions' => [
+                    'transaction.show',
+                    'transaction.index',
+                    'transaction.create',
+                    'transaction.edit',
+                    'transaction.delete'
+                ],
+                'name' => [
+                    'Show Transaction',
+                    'Manage Transaction',
+                    'Create Transaction',
+                    'Edit Transaction',
+                    'Delete Transaction'
+                ]
+            ],
+            [
+                'module' => "Project",
+                'permissions' => [
+                    'project.show',
+                    'project.index',
+                    'project.create',
+                    'project.edit',
+                    'project.delete'
+                ],
+                'name' => [
+                    'Show Project',
+                    'Manage Project',
+                    'Create Project',
+                    'Edit Project',
+                    'Delete Project'
+                ]
+            ],
+            [
+                'module' => "Note",
+                'permissions' => [
+                    'note.show',
+                    'note.index',
+                    'note.create',
+                    'note.edit',
+                    'note.delete'
+                ],
+                'name' => [
+                    'Show Note',
+                    'Manage Note',
+                    'Create Note',
+                    'Edit Note',
+                    'Delete Note'
+                ]
+            ],
+            [
+                'module' => "Expanse",
+                'permissions' => [
+                    'expanse.show',
+                    'expanse.index',
+                    'expanse.create',
+                    'expanse.edit',
+                    'expanse.delete'
+                ],
+                'name' => [
+                    'Show Expanse',
+                    'Manage Expanse',
+                    'Create Expanse',
+                    'Edit Expanse',
+                    'Delete Expanse'
+                ]
+            ],
         ];
-//        foreach ($all as $item) {
-//            Permission::create([
-//                'name' => $item,
-//                'guard_name' => 'backpack'
-//            ]);
-//        };
-        $role = Role::create([
-            'name' => 'Administrator',
-            'guard_name' => 'backpack'
-        ]);
-//        foreach ($all as $item) {
-//            $role->givePermissionTo( $item );
-//        };
-        $user = User::create([
-            'name' => 'Creative Tech Park',
+
+        foreach ($all as $item) {
+            $module = Module::updateOrCreate([
+                'module_name' => $item['module'],
+                'slug' => Str::slug($item['module']),
+            ]);
+
+            foreach ($item['permissions'] as $key => $permission){
+                Permission::updateOrCreate([
+                    'name' => $permission,
+                    'show_name' => $item['name'][$key],
+                    'module_name' => $item['module'],
+                    'module_id' => $module->id,
+                ]);
+            }
+        };
+
+        Role::updateOrCreate(['name' => 'Administrator', 'is_delete' => false]);
+        $developer = Role::updateOrCreate(['name' => 'Developer']);
+
+        foreach ($all as $item) {
+            foreach ($item['permissions'] as $permission) {
+                $developer->givePermissionTo( $permission );
+            }
+        };
+
+        User::updateOrCreate([
+            'name' => 'Jugol Kumar',
+            'email' => 'jugol@creativetechpark.com',
+            'password' => bcrypt(12345678),
+        ])->assignRole('Developer');
+
+        User::updateOrCreate([
+        'name' => 'Creative Tech Park',
             'email' => 'info@creativetechpark.com',
             'password' => bcrypt('creativetechpark'),
+        ])->assignRole('Administrator');
+
+        User::updateOrCreate([
+            'name' => 'admin',
+            'email' => 'admin@admin.com',
+            'password' => bcrypt(12345678),
         ])->assignRole('Administrator');
     }
 }

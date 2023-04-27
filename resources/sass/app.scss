@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import './base/bootstrap';
 @import './base/bootstrap-extended';
 @import './base/colors';
@@ -7,7 +8,13 @@
 @import './base/plugins/tables/datatables';
 @import './base/pages/app-ecommerce';
 @import './base/pages/app-ecommerce-details';
+@import './base/pages/app-chat.scss';
+@import './base/pages/app-chat-list.scss';
 
+
+.scroll-area::-webkit-scrollbar{
+    width: 0 !important;
+}
 
 .select-search-area label {
     margin-top: 1rem;
@@ -33,4 +40,137 @@
 .main-menu .main-menu-content, .vertical-overlay-menu.menu-hide .main-menu .main-menu-content{
     height: calc(100vh - 4.45rem) !important;
     overflow-x: scroll !important;
+}
+
+
+
+[data-title]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 0.5s;
+    visibility: visible;
+}
+[data-title]:after {
+    content: attr(data-title);
+    background-color: #000000ba;
+    color: #fff;
+    font-size: 10px;
+    position: absolute;
+    padding: 7px 10px;
+    bottom: 17px;
+    left: 0;
+    border-radius: 5px 5px 5px 0px;
+    white-space: nowrap;
+    opacity: 0;
+    border: none !important;
+    z-index: 99999;
+    visibility: hidden;
+}
+[data-title] {
+    position: relative;
+}
+.btn-undefined{
+    border: none !important;
+    border-radius: 0 !important;
+}
+.ck.ck-editor__main>.ck-editor__editable:not(.ck-focused){
+    border: none !important;
+}
+.ck-editor{
+    border:1px solid #eae9ed !important;
+}
+.ck-reset_all :not(.ck-reset_all-excluded *), .ck.ck-reset, .ck.ck-reset_all{
+    background: #FFFFFF !important;
+}
+.ck.ck-toolbar{
+    border:none !important;
+}
+
+.badge-light-purple{
+    background: #ffe0ff;
+    color: purple;
+}
+
+//#vs1__listbox{
+//    overflow-x: hidden;
+//}
+
+.vs__dropdown-menu{
+    overflow-x: hidden;
+}
+
+.vs__dropdown-menu::-webkit-scrollbar {
+    width: 5px !important;
+    border-radius: 15px !important;
+}
+
+/* Track */
+.vs__dropdown-menu::-webkit-scrollbar-track {
+    background: #f1f1f1 !important;
+}
+
+/* Handle */
+.vs__dropdown-menu::-webkit-scrollbar-thumb {
+    background: var(--bs-primary) !important;
+    border-radius: 15px !important;
+}
+
+.vs__dropdown-toggle{
+    border: none !important;
+}
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback){
+    padding: 0 !important;
+}
+.vs__search, .vs__search:focus{
+    margin: 7px 0 !important;
+}
+.showContentQuotation{
+    height: auto !important;
+    min-height: 100px;
+    margin-top: 10px;
+    max-height: 245px;
+    overflow-y: scroll;
+}
+.featruedOverflowStyle{
+    max-height: 300px;
+    height: auto !important;
+    overflow-y: scroll;
+    min-height: 100px;
+}
+
+.featruedOverflowStyle::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 15px;
+}
+
+/* Track */
+.featruedOverflowStyle::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.featruedOverflowStyle::-webkit-scrollbar-thumb {
+    background: var(--bs-primary);
+    border-radius: 15px;
+}
+
+// for content
+.showContentQuotation::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 15px;
+}
+
+/* Track */
+.showContentQuotation::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.showContentQuotation::-webkit-scrollbar-thumb {
+    background: var(--bs-primary);
+    border-radius: 15px;
+}
+.details-table tbody tr td{
+    font-size: 13px;
+    padding: 7px 0px;
+    padding-left: 0 !important;
 }

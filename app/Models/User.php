@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -10,23 +12,27 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * @method static create(array $array)
+ * @method static updateOrCreate(array $array)
  */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
     use  HasRoles;
-
-    protected $guard_name = 'backpack';
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
+
+    protected $guarded = ['id'];
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'photo',
+        'address',
+        'phone'
     ];
 
     /**
@@ -49,6 +55,14 @@ class User extends Authenticatable
     ];
 
 
+    protected function photo(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? Storage::url($value) : '/images/avatar.png',
+        );
+    }
+
+
 
     public function quotations()
     {
@@ -59,8 +73,12 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\Client', 'client_user');
     }
 
+    public function invoices(){
+        return $this->hasMany(CustomInvoice::class, 'user_id');
+    }
+
     public function projects()
     {
-        return $this->belongsToMany('App\Models\Project', 'project_user');
+        return $this->belongsToMany(Project::class, 'project_user','project_id', 'user_id')->withTimestamps();
     }
 }

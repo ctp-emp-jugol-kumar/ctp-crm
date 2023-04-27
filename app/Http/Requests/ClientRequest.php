@@ -25,16 +25,16 @@ class ClientRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => ['required', 'max:30','string'],
+            "name" => ['required'],
             "email" => ['required', 'email', Rule::unique('clients', 'email')],
             "secondary_email" => ['nullable','email'],
             "phone" => ['required', 'regex:/(^([+]{1}[8]{2}|0088)?(01){1}[3-9]{1}\d{8})$/'],
             "secondary_phone" => ['nullable','regex:/(^([+]{1}[8]{2}|0088)?(01){1}[3-9]{1}\d{8})$/'],
-            "company" => ['nullable','string'],
-            "address" => ['nullable','string', 'max:150'],
-            "note" => ['nullable','string'],
-            "status" => ['nullable','string'],
-            "agents" => ['nullable','array']
+            "company" => ['nullable'],
+            "address" => ['nullable', 'max:150'],
+            "note" => ['nullable'],
+            "status" => ['nullable'],
+            "agents" => ['nullable']
         ];
     }
 }

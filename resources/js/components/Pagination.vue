@@ -1,10 +1,10 @@
 <template>
     <div class="d-flex justify-content-between mx-0 row my-1 pt-1">
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-5">
             <div class="text-shadow">
                 Showing {{ from }} to {{ to }} of {{ total }} entries</div>
         </div>
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-7">
             <ul class="pagination flex justify-content-end">
                 <li
                     class="paginate_button page-item"

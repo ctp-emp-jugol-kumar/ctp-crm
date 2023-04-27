@@ -16,12 +16,15 @@ class CreateProjectsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('client_id');
             $table->date('date');
             $table->date('start')->nullable();
             $table->date('end')->nullable();
             $table->longText('description')->nullable();
+            $table->longText('credential')->nullable();
             $table->string('status')->default('New');
-            $table->unsignedInteger('progress')->default(0);
+            $table->unsignedInteger('progress')->default(10);
+            $table->string('files')->nullable();
             $table->timestamps();
         });
     }

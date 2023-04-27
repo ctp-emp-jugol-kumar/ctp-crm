@@ -1,6 +1,6 @@
 <template>
     <div class="modal fade" :id="id" tabindex="-1" aria-hidden="true">
-        <div :class="`modal-dialog modal-${size.defalut} modal-dialog-${position}`">
+        <div :class="`modal-dialog modal-${size} modal-dialog-${position}`">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">{{ title }}</h4>

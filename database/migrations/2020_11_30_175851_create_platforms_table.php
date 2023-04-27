@@ -15,8 +15,8 @@ class CreatePlatformsTable extends Migration
         Schema::create('platforms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->unique();
-            $table->unsignedInteger('price')->default(0);
-            $table->text('description')->nullable();
+            $table->json("featureds")->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

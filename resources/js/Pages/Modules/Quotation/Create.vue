@@ -11,7 +11,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
-                                    <h4 class="card-title">Quotations Information's </h4>
+                                    <h4 class="card-title">Quotation #{{ moment(new Date()).format('YYYYMMD') }}__</h4>
                                     <Link href="/admin/quotations" class="dt-button add-new btn btn-primary">Manage
                                         Quotations
                                     </Link>
@@ -19,123 +19,70 @@
                             </div>
                         </div>
 
-                        <div class="col-md-11 mx-auto">
-                            <form @submit.prevent="createQutation">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="modal-body">
-                                            <div class="row mb-1">
-                                                <div class="col-md">
-                                                    <label>Client :
-                                                        <Required/>
-                                                    </label>
-                                                    <div class="">
-                                                        <select2 v-model="formData.client_id" :options="clients"
-                                                                 :reduce="client => client.id" label="name"
-                                                                 placeholder="Select Client"></select2>
-                                                        <InputFieldError :errors="errors.client_id"/>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md">
-                                                    <label>Subject :
-                                                        <Required/>
-                                                    </label>
-                                                    <div class="">
-                                                        <input type="text" placeholder="Subjects"
-                                                               v-model="formData.subject"
-                                                               class="form-control">
-                                                        <span class="error text-sm text-danger"></span>
-                                                        <InputFieldError :errors="errors.subject"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-1">
-                                                <div class="col-md">
-                                                    <label>Date :
-                                                        <Required/>
-                                                    </label>
-                                                    <div class="">
-                                                        <Datepicker v-model="formData.date" :monthChangeOnScroll="false"
-                                                                    placeholder="Select Date" autoApply></Datepicker>
-                                                        <InputFieldError :errors="errors.date"/>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md">
-                                                    <label>Valid until :
-                                                        <Required/>
-                                                    </label>
-
-                                                    <div class="">
-                                                        <Datepicker v-model="formData.valid_until"
-                                                                    :monthChangeOnScroll="false"
-                                                                    placeholder="Select Date" autoApply></Datepicker>
-                                                        <InputFieldError :errors="errors.valid_until"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
+                        <form class="row" @submit.prevent="createQutation">
+                            <div class="col-md-9">
                                 <!--works sections-->
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
                                         <h4 class="card-title">{{ worksTitle }}</h4>
+
+                                        <button @click="collupsWork" class="btn-icon rounded-circle btn bg-light-primary" type="button">
+                                            <vue-feather type="arrow-down"></vue-feather>
+                                        </button>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body collapse" id="collapseExample1">
                                         <div class="row">
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.works"
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in props.works"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
                                                     <div class="input-group border-0">
                                                         <div class="input-group-text border-0">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" v-model="option.p"
+                                                                <input class="form-check-input" v-model="formData.works[index].p"
                                                                        type="checkbox">
                                                             </div>
                                                         </div>
-                                                        <input type="hidden" v-model="option.price">
-                                                        <input type="hidden" v-model="option.id">
+                                                        <input type="hidden" v-model="formData.works[index].price">
+                                                        <input type="hidden" v-model="formData.works[index].id">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.quantity" placeholder="quantity">
+                                                               v-model="formData.works[index].quantity" placeholder="quantity">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.discount" placeholder="Discount">
+                                                               v-model="formData.works[index].discount" placeholder="Discount">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
 
                                 <!--domain sections-->
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
                                         <h4 class="card-title">{{ domainTitle }}</h4>
+
+                                        <button @click="collupsService" class="btn-icon rounded-circle btn bg-light-primary" type="button">
+                                            <vue-feather type="arrow-down"></vue-feather>
+                                        </button>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body collapse" id="collapseExample2">
                                         <div class="row">
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.domains"
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in props.domains"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
                                                     <div class="input-group border-0">
                                                         <div class="input-group-text border-0">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" v-model="option.p"
-                                                                       type="checkbox">
+                                                                <input class="form-check-input" v-model="formData.domains[index].p" type="checkbox">
                                                             </div>
                                                         </div>
-                                                        <input type="hidden" v-model="option.price">
-                                                        <input type="hidden" v-model="option.id">
+                                                        <input type="hidden" v-model="formData.domains[index].price">
+                                                        <input type="hidden" v-model="formData.domains[index].id">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.quantity" placeholder="quantity">
+                                                               v-model="formData.domains[index].quantity" placeholder="quantity">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.discount" placeholder="Discount">
+                                                               v-model="formData.domains[index].discount" placeholder="Discount">
                                                     </div>
                                                 </div>
                                             </div>
@@ -145,44 +92,50 @@
 
                                 <!--hosting sections-->
                                 <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">{{ HostingTitle }}</h4>
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <h4 class="card-title">Hosting</h4>
+
+                                        <button @click="collupsHosting" class="btn-icon rounded-circle btn bg-light-primary" type="button">
+                                            <vue-feather type="arrow-down"></vue-feather>
+                                        </button>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body collapse" id="collapseExample3">
                                         <div class="row">
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.hostings"
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in props.hostings"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
                                                     <div class="input-group border-0">
                                                         <div class="input-group-text border-0">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" v-model="option.p"
+                                                                <input class="form-check-input" v-model="formData.hostings[index].p"
                                                                        type="checkbox">
                                                             </div>
                                                         </div>
-                                                        <input type="hidden" v-model="option.price">
-                                                        <input type="hidden" v-model="option.id">
+                                                        <input type="hidden"  v-model="formData.hostings[index].price">
+                                                        <input type="hidden"  v-model="formData.hostings[index].id">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.quantity" placeholder="quantity">
+                                                               v-model="formData.hostings[index].quantity" placeholder="quantity">
                                                         <input type="number" class="form-control border-0"
-                                                               v-model="option.discount" placeholder="Discount">
+                                                               v-model="formData.hostings[index].discount" placeholder="Discount">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
 
                                 <!--package sections-->
                                 <div class="card">
                                     <div class="card-header">
                                         <h4 class="card-title">{{ packageTitle }}</h4>
+                                        <button @click="collupsPackage" class="btn-icon rounded-circle btn bg-light-primary" type="button">
+                                            <vue-feather type="arrow-down"></vue-feather>
+                                        </button>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body collapse" id="collapseExample4">
                                         <div class="row">
-                                            <div class="col-md-4 mb-1" v-for="(option , index) in formData.packages"
+                                            <div class="col-md-4 mb-1" v-for="(option , index) in props.packages"
                                                  :key="index">
                                                 <span>{{ option.name }} <strong>({{ option.price }} Tk)</strong></span>
                                                 <div class="border-1 border-light rounded-3 p-25">
@@ -206,25 +159,13 @@
                                     </div>
                                 </div>
 
-
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="modal-body">
-                                            <div class="row mb-1">
-                                                <div class="col-md">
-                                                    <label>Payment Policy :
-                                                        <Required/>
-                                                    </label>
-                                                    <div class="">
-                                                        <TextEditor v-model="formData.payment_policy"></TextEditor>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md">
-                                                    <label>Terms Of Service : </label>
-                                                    <div class="">
-                                                        <TextEditor v-model="formData.Trams_Services"></TextEditor>
-                                                    </div>
-                                                </div>
+                                        <h4 class="card-title">Note</h4>
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-12">
+                                                    <TextEditor v-model="formData.note"
+                                                                placeholder="Item Details"/>
                                             </div>
                                         </div>
                                     </div>
@@ -232,29 +173,26 @@
 
 
                                 <div class="row">
-                                    <div class="col-md-6" data-repeater-item
+                                    <div class="col-md-12" data-repeater-item
                                          v-for="(item, index) in formData.quatations">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h4 class="card-title">index: {{ index }} total:
-                                                    {{ formData.quatations.length - 1 }}</h4>
+                                                <h4 class="card-title">Custom Item's</h4>
                                                 <div class="row d-flex align-items-center">
                                                     <div class="col-12">
                                                         <div class="mb-1">
-                                                            <TextEditor v-model="item.itemname"
+                                                            <TextEditor v-model="formData.quatations[index].item_name"
                                                                         placeholder="Item Details"/>
                                                         </div>
                                                         <div class="input-group border-0 d-flex">
-                                                            <!-- <QtyButton/>-->
+
+                                                            <!--                                                            <QtyButton/>-->
 
                                                             <input type="number" class="form-control rounded-start"
-                                                                   placeholder="quantity" v-model="item.quantity">
-
-                                                            <input type="number" class="form-control rounded-start"
-                                                                   placeholder="Price" v-model="item.price">
+                                                                   placeholder="Price" v-model="formData.quatations[index].price">
 
                                                             <input type="number" class="form-control"
-                                                                   placeholder="Discount" v-model="item.discount">
+                                                                   placeholder="Discount" v-model="formData.quatations[index].discount" >
                                                         </div>
                                                     </div>
                                                 </div>
@@ -267,8 +205,7 @@
                                                     <vue-feather type="plus"/>
                                                 </button>
                                                 <button
-                                                    v-else
-                                                    class="btn btn-danger btn-sm float-end mt-25"
+                                                    class="btn btn-danger btn-sm float-end mt-25 me-1"
                                                     @click="deleteRow(index)"
                                                     data-repeater-delete
                                                     type="button">
@@ -281,36 +218,138 @@
 
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="d-flex align-item-center justify-content-between">
-                                            <div class="d-flex flex-column">
-                                                <label class="form-check-label mb-50"
-                                                       for="customSwitch10">Primary</label>
-                                                <div class="form-check form-switch form-check-primary">
-                                                    <input type="checkbox" class="form-check-input"
-                                                           v-model="formData.status" id="customSwitch10" checked/>
-                                                    <label class="form-check-label" for="customSwitch10">
-                                                        <span class="switch-icon-left"><i
-                                                            data-feather="check"></i></span>
-                                                        <span class="switch-icon-right"><i data-feather="x"></i></span>
-                                                    </label>
-                                                </div>
-                                            </div>
+                                        <div>
+                                            <button type="submit"
+                                                    class="btn btn-success waves-effect waves-float waves-light me-2">
+                                                Save & Back
+                                            </button>
+                                            <button type="submit"
+                                                    class="btn btn-primary waves-effect waves-float waves-light me-2">
+                                                Save & Send
+                                            </button>
+                                            <button type="reset" class="btn btn-outline-warning me-2"
+                                                    data-bs-dismiss="modal"
+                                                    aria-label="Close">Form Reset
+                                            </button>
+                                            <a href="/admin/quotations"
+                                                    class="btn btn-outline-secondary waves-effect waves-float waves-light me-2">
+                                                Go To Back
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                               <div class="card">
+                                   <div class="card-body">
+                                       <h2>Quotation Details</h2>
+                                       <div class="mb-1">
+                                           <label>Client <Required/></label>
+                                           <div class="">
+                                               <v-select
+                                                   v-model="formData.client_id"
+                                                   :options="clients"
+                                                   placeholder="Search Country Name"
+                                                   :reduce="client => client.id"
+                                                   :filter="fuseSearch"
+                                                   label="name">
+                                                   <template v-slot:option="option">
+                                                       <li class="d-flex align-items-start py-1">
+                                                           <div class="d-flex align-items-center justify-content-between w-100">
+                                                               <div class="me-1 d-flex flex-column">
+                                                                   <strong class="mb-25">{{ option.name }}</strong>
+                                                                   <span >{{ option.email }}</span>
+                                                                   <span >{{ option.phone }}
+                                                                       <span v-if="option.secondary_phone">/ {{ option.secondary_phone}}</span>
+                                                                   </span>
+                                                               </div>
+                                                           </div>
+                                                       </li>
+                                                   </template>
+                                               </v-select>
 
-                                            <div>
-                                                <button type="submit"
-                                                        class="btn btn-primary waves-effect waves-float waves-light me-2">
-                                                    Submit
-                                                </button>
-                                                <button type="reset" class="btn btn-outline-secondary"
-                                                        data-bs-dismiss="modal"
-                                                        aria-label="Close">Cancel
-                                                </button>
+
+
+
+
+                                               <InputFieldError :errors="errors.client_id"/>
+                                           </div>
+                                       </div>
+                                       <div class="mb-1">
+                                            <label>Subject <Required/></label>
+                                           <div class="">
+                                               <input type="text" placeholder="Subjects" v-model="formData.subject" class="form-control">
+                                               <InputFieldError :errors="errors.subject"/>
+                                           </div>
+                                       </div>
+                                       <div class="mb-1">
+                                           <label>Date <Required/></label>
+                                           <div class="">
+                                               <Datepicker v-model="formData.date" :monthChangeOnScroll="false"
+                                                           placeholder="Select Date" autoApply></Datepicker>
+                                               <InputFieldError :errors="errors.date"/>
+                                           </div>
+                                       </div>
+
+                                       <div class="mb-1">
+                                           <label>Valid until <Required/> </label>
+                                           <div class="">
+                                               <Datepicker v-model="formData.valid_until"
+                                                           :monthChangeOnScroll="false"
+                                                           placeholder="Select Date" autoApply></Datepicker>
+                                               <InputFieldError :errors="errors.valid_until"/>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3>Given Discount</h3>
+                                        <div class="col-md">
+                                            <div class="">
+                                                <input class="form-control" v-model="formData.discount" placeholder="e.g 0.00 Tk"/>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3>Quotation Status</h3>
+                                        <div class="col-md">
+                                            <div class="">
+                                                <v-select v-model="formData.status"
+                                                          width="100%"
+                                                          label="name"
+                                                          :options="status"
+                                                          placeholder="Select Quotation Status"></v-select>
+                                                <InputFieldError :errors="errors.status"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3>Payment Policy</h3>
+                                        <div class="col-md">
+                                            <div class="">
+                                                <TextEditor v-model="formData.payment_policy"></TextEditor>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h3>Terms Of Service</h3>
+                                        <div class="col-md">
+                                            <div class="">
+                                                <TextEditor v-model="formData.Trams_Services"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </section>
                 <!--/ Advanced Search -->
@@ -339,39 +378,43 @@
     import ServiceCard from "../../../components/ServiceCard";
     import InputFieldError from "../../../components/InputFieldError";
     import QtyButton from "../../../components/QtyButton";
+    import moment from 'moment'
+
+    import {paymentPolicy, tramsConditions} from '../chartConfig.js'
 
     let props = defineProps({
-        clients      : Object,
-        services     : Object,
-        packages     : Object,
-        platforms    : Object,
-        works        : Object,
-        filters      : Object,
-        domains      : Object,
-        hostings     : Object,
-        notification : Object,
-        errors       : Object,
+        clients      : null,
+        services     : null,
+        packages     : null,
+        platforms    : null,
+        works        : null,
+        filters      : null,
+        domains      : null,
+        hostings     : null,
+        notification : null,
+        errors       : null,
+        methods      : null,
     })
 
-
     let formData = useForm({
-        client_id     : "",
-        subject       : "",
-        date          : "",
-        valid_until   : "",
-        payment_policy: "",
-        Trams_Services: "",
-        status        : "",
+        client_id     : null,
+        subject       : null,
+        date          : null,
+        valid_until   : null,
+        payment_policy: paymentPolicy,
+        Trams_Services: tramsConditions,
+        discount      : null,
+        status        : null,
+        note          : null,
 
-
-        hostings      : props.hostings,
-        domains       : props.domains,
-        works         : props.works,
-        packages      : props.packages,
+        works         : [],
+        domains       : [],
+        hostings      : [],
+        packages      : [],
 
         quatations: [
             {
-                itemname: '',
+                item_name: '',
                 price: '',
                 discount: '',
                 quantity: ''
@@ -380,6 +423,40 @@
 
 
     });
+
+
+    const fuseSearch = (options, search) => {
+        const fuse = new Fuse(options, {
+            keys: ['name', 'email', 'phone','secondary_email', 'secondary_phone', 'company', 'address', 'status'],
+            shouldSort: true,
+        })
+        return search.length
+            ? fuse.search(search).map(({ item }) => item)
+            : fuse.list
+    }
+
+
+
+    let status = [
+        {"name":'New Quotation'}, {"name":'Sent'}, {"name":'Feedback'}
+    ]
+    props.works.forEach(function(item, index){
+        formData.works[index] = item;
+    });
+
+    props.domains.forEach(function(item, index){
+        formData.domains[index] = item;
+    });
+
+    props.hostings.forEach(function(item, index){
+        formData.hostings[index] = item;
+    });
+
+    props.packages.forEach(function(item, index){
+        formData.packages[index] = item;
+    });
+
+
 
     let worksTitle   = "Select work services"
     let domainTitle  = "Select domains"
@@ -437,12 +514,13 @@
     }
 
 
+
     let addRow = () => {
         formData.quatations.push({
-            itemname: '',
+            item_name: '',
             price: '',
+            quantity: '',
             discount: '',
-            quantity: ''
         })
     }
 
@@ -450,75 +528,32 @@
         formData.quatations.splice(index, 1)
     }
 
+    let collupsWork = () =>{
+        const element = document.getElementById("collapseExample1");
+        element.classList.toggle("show");
+    }
+
+    let collupsService = () =>{
+        const element = document.getElementById("collapseExample2");
+        element.classList.toggle("show");
+    }
+    let collupsHosting = () =>{
+        const element = document.getElementById("collapseExample3");
+        element.classList.toggle("show");
+    }
+    let collupsPackage = () =>{
+        const element = document.getElementById("collapseExample4");
+        element.classList.toggle("show");
+    }
 </script>
 
-<script>
-    /*export default {
+<style scoped>
 
-        el: '.container',
-
-        data() {
-            return {
-                data: {
-                    quatations: [
-                        {
-                            itemname: '',
-                            cost: '',
-                            quantity: ''
-                        }
-                    ],
-                    client_id: "",
-                    subject: "",
-                    valid_until: "",
-                    website_id: "",
-                    platform_id: "",
-                    design_id: "",
-                    domain_id: "",
-                    hosting_id: "",
-                    page: "",
-                    page_price: "",
-                    content_page: "",
-                    content_price: "",
-                    payment_policy: "",
-                    terms_of_service: "",
-                    date: "",
-                    woarks: [],
-                    status: "",
-                },
-            }
-        },
-
-        methods: {
-            addRow() {
-                this.data.quatations.push({
-                    itemname: '',
-                    cost: '',
-                    quantity: ''
-                })
-            },
-            deleteRow(index) {
-                this.data.quatations.splice(index, 1)
-            },
-            createQutation() {
-                Inertia.post('/admin/quotations', this.data, {
-                    preserveState: true,
-                    // onStart: () =>{ data.processing = true},
-                    // onFinish: () => { data.processing = false},
-                    onSuccess: () => {
-                        // document.getElementById('createDomains').$vb.modal.hide()
-                        this.data.quatations.reset()
-                        Swal.fire(
-                            'Saved!',
-                            'Your file has been Saved.',
-                            'success'
-                        )
-                    },
-                })
-            }
-        }
-    }*/
-</script>
-
-<style lang="scss">
-    /*@import "../../../../sass/base/plugins/tables/datatables";*/
+    .webkitTransaction{
+        -webkit-transition: all 5s ease-in-out;
+        -moz-transition: all 5s ease-in-out;
+        -ms-transition: all 5s ease-in-out;
+        -o-transition: all 5s ease-in-out;
+        transition: all 5s ease-in-out;
+    }
 </style>

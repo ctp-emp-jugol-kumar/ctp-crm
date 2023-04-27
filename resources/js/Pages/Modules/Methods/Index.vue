@@ -13,7 +13,7 @@
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Methods Information's </h4>
                                     <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#createMethods"
+                                            data-bs-target="#createData"
                                     >Add Method</button>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
@@ -79,9 +79,9 @@
         </div>
     </div>
 
-
-    <Modal id="createMethods" title="Add New Method" v-vb-is:modal :size="{defalut:'lg'}">
-        <form @submit.prevent="createMethods">
+<!--
+    <Modal id="createData" title="Create Hostings" v-vb-is:modal size="md">
+        <form @submit.prevent="createData">
             <div class="modal-body">
                 <div class="row mb-1">
                     <div class="col-md">
@@ -101,10 +101,33 @@
                         aria-label="Close">Cancel</button>
             </div>
         </form>
+    </Modal>-->
+
+    <Modal id="createData" title="Edit Hostings" v-vb-is:modal size="md">
+        <form @submit.prevent="createData">
+            <div class="modal-body">
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Method Name: <Required/></label>
+                        <div class="">
+                            <input v-model="updateForm.name" type="text" placeholder="Method Name" class="form-control">
+                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button :disabled="createForm.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit</button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel</button>
+            </div>
+        </form>
     </Modal>
+<!--
 
-
-    <Modal id="editData" title="Edit Hostings" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="editData" title="Edit Hostings" v-vb-is:modal size="md">
         <form @submit.prevent="updateData(editData.id)">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -126,6 +149,7 @@
             </div>
         </form>
     </Modal>
+-->
 
 
 </template>
@@ -196,24 +220,28 @@
     };
 
 
-    let createMethods  = ( )=>{
-        Inertia.post('methods', createForm, {
+    let createData = () => {
+        Inertia.post('methods/', updateForm,{
             preserveState: true,
-            onStart: () =>{ createForm.processing = true},
-            onFinish: () => {createForm.processing = false},
-            onSuccess: ()=> {
-                document.getElementById('createMethods').$vb.modal.hide()
+            onStart: () => {
+                createForm.processing = true
+            },
+            onFinish: () => {
+                createForm.processing = false
+            },
+            onSuccess: () => {
+                document.getElementById('createData').$vb.modal.hide()
                 createForm.reset()
                 Swal.fire(
                     'Saved!',
-                    'Your file has been Saved.',
+                    'Your file has been Updated.',
                     'success'
                 )
             },
         })
     }
 
-
+/*
     let editItem = (url) => {
         axios.get(url).then(res => {
             editData.value = res.data;
@@ -243,7 +271,7 @@
                 )
             },
         })
-    }
+    }*/
 
     let search = ref(props.filters.search);
     let perPage = ref(props.filters.perPage);

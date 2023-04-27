@@ -28,20 +28,22 @@
                                             <div class="row mb-1">
                                                 <div class="col-md">
                                                     <label>Client :
-<!--                                                        <Required/>-->
+                                                        <Required/>
                                                     </label>
                                                     <div class="">
-                                                        <select2 v-model="formData.client_id" :options="clients" :reduce="client => client.id"
-                                                                 label="name" placeholder="Select Client"></select2>
+                                                        <v-select v-model="formData.client_id" :options="clients" :reduce="client => client.id"
+                                                                 label="name" placeholder="Select Client"></v-select>
+                                                        <InputFieldError :errors="errors.client_id"/>
+
                                                     </div>
                                                 </div>
                                                 <div class="col-md">
-                                                    <label>Subject : </label>
+                                                    <label>Subject : <Required/></label>
                                                     <div class="">
                                                         <input type="text" placeholder="Subjects" v-model="formData.subject"
                                                                class="form-control">
                                                         <span class="error text-sm text-danger"></span>
-<!--                                                        <InputFieldError :errors="errors.subject"/>-->
+                                                        <InputFieldError :errors="errors.subject"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -49,12 +51,12 @@
                                             <div class="row mb-1">
                                                 <div class="col-md">
                                                     <label>Date :
-<!--                                                        <Required/>-->
+                                                        <Required/>
                                                     </label>
                                                     <div class="">
                                                         <Datepicker v-model="formData.date" :monthChangeOnScroll="false"
                                                                     placeholder="Select Date" autoApply></Datepicker>
-<!--                                                        <InputFieldError :errors="errors.date"/>-->
+                                                        <InputFieldError :errors="errors.date"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -69,16 +71,18 @@
                                             <div class="row mb-1">
                                                 <div class="col-md">
                                                     <label>Payment Policy :
-<!--                                                        <Required/>-->
+                                                        <Required/>
                                                     </label>
                                                     <div class="">
                                                         <TextEditor v-model="formData.payment_policy"></TextEditor>
+                                                        <InputFieldError :errors="errors.payment_policy"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md">
-                                                    <label>Terms Of Service : </label>
+                                                    <label>Terms Of Service : <Required/></label>
                                                     <div class="">
                                                         <TextEditor v-model="formData.trams_and_condition"></TextEditor>
+                                                        <InputFieldError :errors="errors.trams_and_condition"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -86,21 +90,22 @@
                                     </div>
                                 </div>
 
+
                                 <div class="row">
-                                    <div class="col-md-6" data-repeater-item
+                                    <div class="col-md-12" data-repeater-item
                                          v-for="(item, index) in formData.quatations">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h4 class="card-title">Item: {{ index + 1 }} </h4>
+                                                <h4 class="card-title">Custom Item's</h4>
                                                 <div class="row d-flex align-items-center">
                                                     <div class="col-12">
                                                         <div class="mb-1">
-                                                            <TextEditor v-model="formData.quatations[index].itemname"
+                                                            <TextEditor v-model="formData.quatations[index].item_name"
                                                                         placeholder="Item Details"/>
                                                         </div>
                                                         <div class="input-group border-0 d-flex">
 
-<!--                                                            <QtyButton/>-->
+                                                            <!--                                                            <QtyButton/>-->
 
                                                             <input type="number" class="form-control rounded-start"
                                                                    placeholder="Price" v-model="formData.quatations[index].price">
@@ -119,8 +124,7 @@
                                                     <vue-feather type="plus"/>
                                                 </button>
                                                 <button
-                                                    v-else
-                                                    class="btn btn-danger btn-sm float-end mt-25"
+                                                    class="btn btn-danger btn-sm float-end mt-25 me-1"
                                                     @click="deleteRow(index)"
                                                     data-repeater-delete
                                                     type="button">
@@ -130,6 +134,8 @@
                                         </div>
                                     </div>
                                 </div>
+
+
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex align-item-center justify-content-between">
@@ -190,26 +196,28 @@
     import ServiceCard from "../../../components/ServiceCard";
     import InputFieldError from "../../../components/InputFieldError";
     import QtyButton from "../../../components/QtyButton";
+    import {paymentPolicy, tramsConditions} from '../chartConfig.js'
 
     let props = defineProps({
         clients: Object,
+        errors: null,
     })
 
     let formData = useForm({
         quatations: [
             {
-                itemname: '',
+                item_name: '',
                 price: '',
-                quantity: '',
-                discount: ''
+                discount: '',
+                quantity: ''
             }
         ],
-        status:'',
-        subject:'',
-        client_id:'',
-        date:'',
-        payment_policy:'',
-        trams_and_condition:'',
+        status:null,
+        subject:null,
+        client_id:null,
+        date:null,
+        payment_policy:paymentPolicy,
+        trams_and_condition:tramsConditions,
     });
 
     let worksTitle = "Select work services"
@@ -265,7 +273,7 @@
 
     let addRow = () => {
         formData.quatations.push({
-            itemname: '',
+            item_name: '',
             price: '',
             quantity: '',
             discount: '',

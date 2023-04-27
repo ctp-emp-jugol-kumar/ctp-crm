@@ -12,9 +12,13 @@
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Feature Information's </h4>
 
-                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#createFeature"
-                                    >Add Feature</button>
+                                    <button
+                                        class="dt-button add-new btn btn-primary"
+                                        @click="addDataModal"
+                                    >
+                                        Add Feature
+                                    </button>
+
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -56,10 +60,14 @@
                                             <td>{{ feature.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <button @click="editItem(feature.show_url)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
-                                                        <Icon title="eye" />
+                                                    <button @click="editItem(feature.show_url)"
+                                                            type="button"
+                                                            class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
+                                                        <Icon title="pencil" />
                                                     </button>
-                                                    <button @click="deleteItemModal(feature.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+                                                    <button @click="deleteItemModal(feature.id)"
+                                                            type="button"
+                                                            class="btn btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash" />
                                                     </button>
                                                 </div>
@@ -82,7 +90,7 @@
 
 
 
-    <Modal id="createFeature" title="Add New Feature" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="createFeature" title="Add New Feature" v-vb-is:modal size="lg">
         <form @submit.prevent="createFeature">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -122,7 +130,7 @@
     </Modal>
 
 
-    <Modal id="editData" title="Edit Feature" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="editData" title="Edit Feature" v-vb-is:modal size="lg">
         <form @submit.prevent="updateData(editData.id)">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -210,8 +218,8 @@
             text: "You won't be able to revert this!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#7d30d6',
+            cancelButtonColor: '#ea5455',
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -233,6 +241,10 @@
         })
     };
 
+
+    let addDataModal = () => {
+        document.getElementById('createFeature').$vb.modal.show()
+    }
 
     let createFeature = ( )=>{
         Inertia.post('features', createForm, {

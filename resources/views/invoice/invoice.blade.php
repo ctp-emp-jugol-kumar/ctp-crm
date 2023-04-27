@@ -1,9 +1,13 @@
+{{--https://docraptor.com/try_it_out--}}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Invoice PDF</title>
+    <link rel="stylesheet" href="{{ ltrim(elixir('css/pdf-invoice.css'), '/') }}" />
+
     <style>
         body {
             font-size: 14px;
@@ -16,9 +20,9 @@
             margin: 4px 0;
             font-size: 18px;
         }
-        .container {
-            box-sizing: border-box;
-        }
+        /*.container {*/
+        /*    box-sizing: border-box;*/
+        /*}*/
         .row {
             width: 100%;
             display: flex;
@@ -183,20 +187,20 @@
                 </tr>
                 <tr>
                     <td class="text-right border" colspan="3">Discount</td>
-                    <td class="text-right border"><strong> -{{ $discount }} Tk</strong></td>
+                    <td class="text-right border"><strong> - {{ $discount }} Tk</strong></td>
                 </tr>
                 <tr>
                     <td class="text-right border" colspan="3">Grand Total</td>
                     <td class="text-right border"><strong>{{ $subTotal - $discount }} Tk</strong></td>
                 </tr>
-            {{--    <tr>
+                 <tr>
                     <td class="text-right border" colspan="3">Amount Paid</td>
-                    <td class="text-right border"><strong>{{ isset($paid) }}</strong></td>
+                    <td class="text-right border"><strong>- {{ $data['total_pay']  }} Tk</strong></td>
                 </tr>
                 <tr>
                     <td class="text-right border" colspan="3">Total Due</td>
-                    <td class="text-right border"><strong>{{ $grandTotal - isset($paid) }}</strong></td>
-                </tr>--}}
+                    <td class="text-right border"><strong>{{ $grandTotal - $data['total_pay'] }} Tk</strong></td>
+                </tr>
                 </tbody>
             </table>
         </div>

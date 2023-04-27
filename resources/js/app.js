@@ -11,9 +11,27 @@ import { Alert, Button, Carousel, Collapse, Dropdown, Modal, Offcanvas, Popover,
 let vbPlugin = createVbPlugin({ Alert, Button, Carousel, Collapse, Dropdown, Modal, Offcanvas, Popover, ScrollSpy, Tab, Toast, Tooltip  })
 import 'vue-select/dist/vue-select.css';
 import vSelect from 'vue-select'
+import CoreuiVue from "@coreui/vue";
+import { VTooltip, VPopover, VClosePopover } from 'v-tooltip'
+import {createPinia} from "pinia";
 
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import al from "@vuepic/vue-datepicker";
+
+import {moment} from "moment";
+
+import { createToaster } from "@meforma/vue-toaster";
+
+
+
+
+
+window.$toast = createToaster({
+    position: 'bottom'
+});
+
+
 
 createInertiaApp({
   resolve: name => {
@@ -29,13 +47,17 @@ createInertiaApp({
     createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(vbPlugin)
+      .use(CoreuiVue)
       .use(store)
+        .directive('tooltip', VTooltip)
       .use(CKEditor)
+        .use(createPinia())
+        .use(moment)
       .component("Link", Link)
       .component("Head", Head)
       .component(VueFeather.name, VueFeather)
       .component("Required", Required)
-      .component("select2", vSelect)
+      .component("v-select", vSelect)
       .component("Datepicker", Datepicker)
       .mount(el);
   },
@@ -47,3 +69,4 @@ InertiaProgress.init({
   color: "red",
   showSpinner: true,
 });
+

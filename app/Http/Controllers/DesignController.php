@@ -18,7 +18,6 @@ class DesignController extends Controller
      */
     public function index()
     {
-
         return inertia('Modules/Package/Index', [
             'packages' => Design::query()
                 ->when(Request::input('search'), function ($query, $search) {

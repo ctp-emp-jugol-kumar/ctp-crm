@@ -25,44 +25,6 @@
                                     <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
                                         <div>
                                             <div class="logo-wrapper">
-                                                <svg viewBox="0 0 139 95" version="1.1"
-                                                     xmlns="http://www.w3.org/2000/svg"
-                                                     xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
-                                                    <defs>
-                                                        <linearGradient id="invoice-linearGradient-1" x1="100%"
-                                                                        y1="10.5120544%"
-                                                                        x2="50%" y2="89.4879456%">
-                                                            <stop stop-color="#000000" offset="0%"></stop>
-                                                            <stop stop-color="#FFFFFF" offset="100%"></stop>
-                                                        </linearGradient>
-                                                        <linearGradient id="invoice-linearGradient-2" x1="64.0437835%"
-                                                                        y1="46.3276743%" x2="37.373316%" y2="100%">
-                                                            <stop stop-color="#EEEEEE" stop-opacity="0"
-                                                                  offset="0%"></stop>
-                                                            <stop stop-color="#FFFFFF" offset="100%"></stop>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                        <g transform="translate(-400.000000, -178.000000)">
-                                                            <g transform="translate(400.000000, 178.000000)">
-                                                                <path class="text-primary"
-                                                                      d="M-5.68434189e-14,2.84217094e-14 L39.1816085,2.84217094e-14 L69.3453773,32.2519224 L101.428699,2.84217094e-14 L138.784583,2.84217094e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L6.71554594,44.4188507 C2.46876683,39.9813776 0.345377275,35.1089553 0.345377275,29.8015838 C0.345377275,24.4942122 0.230251516,14.560351 -5.68434189e-14,2.84217094e-14 Z"
-                                                                      style="fill: currentColor"></path>
-                                                                <path
-                                                                    d="M69.3453773,32.2519224 L101.428699,1.42108547e-14 L138.784583,1.42108547e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L32.8435758,70.5039241 L69.3453773,32.2519224 Z"
-                                                                    fill="url(#invoice-linearGradient-1)"
-                                                                    opacity="0.2"></path>
-                                                                <polygon fill="#000000" opacity="0.049999997"
-                                                                         points="69.3922914 32.4202615 32.8435758 70.5039241 54.0490008 16.1851325"></polygon>
-                                                                <polygon fill="#000000" opacity="0.099999994"
-                                                                         points="69.3922914 32.4202615 32.8435758 70.5039241 58.3683556 20.7402338"></polygon>
-                                                                <polygon fill="url(#invoice-linearGradient-2)"
-                                                                         opacity="0.099999994"
-                                                                         points="101.428699 0 83.0667527 94.1480575 130.378721 47.0740288"></polygon>
-                                                            </g>
-                                                        </g>
-                                                    </g>
-                                                </svg>
                                                 <h3 class="text-primary invoice-logo">Creative Tech Park</h3>
                                             </div>
                                             <p>Imperial Irish Kingdom, Mo-03 <br>(3rd Floor), Merul Badda, Dhaka 1212</p>
@@ -106,7 +68,7 @@
 
                                 <!-- Invoice Description starts -->
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table class="table table-striped">
                                         <thead>
                                         <tr>
                                             <th class="py-1">Task description</th>
@@ -124,7 +86,7 @@
                                                     <span class="fw-bold">{{ item.price }} Tk</span>
                                                 </td>
                                                 <td class="py-1">
-                                                    <span class="fw-bold">{{ item.discount ?? 0 }} Tk</span>
+                                                    <span class="fw-bold">- {{ item.discount ?? 0 }} Tk</span>
                                                 </td>
                                                 <td class="py-1">
                                                     <span class="fw-bold">{{ item.total }} Tk</span>
@@ -145,22 +107,42 @@
                                         <div class="col-md-4">
                                             <table class="table table-borderless table-striped">
                                                 <tr>
-                                                    <th class="py-25">Sub Total</th>
+                                                    <td class="py-25">Sub Total</td>
                                                     <td class="py-25 text-end">{{ subTotal }} Tk</td>
                                                 </tr>
                                                 <tr class="border-bottom pb-1">
                                                     <td class="py-25">Total Discount</td>
-                                                    <td class="py-25 text-end">{{ totalDiscount }} Tk</td>
+                                                    <td class="py-25 text-end">- {{ totalDiscount }} Tk</td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="py-1 pt-0">Grand Total</td>
+                                                    <th class="py-1 pt-0">Grand Total</th>
                                                     <td class="py-1 text-end">{{ grandTotal }} Tk</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="row invoice-sales-total-wrapper">
+                                        <div class="col-md-8">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <table class="table table-borderless table-striped">
+                                                <tr class="border-bottom pb-1">
+                                                    <td class="py-25">Total Pay</td>
+                                                    <td class="py-25 text-end">- {{ info.total_pay }} Tk</td>
+                                                </tr>
+                                                <tr class="pb-1">
+                                                    <th class="py-25">Total Due</th>
+                                                    <td class="py-25 text-end"> {{ grandTotal - info.total_pay }} Tk</td>
                                                 </tr>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Invoice Description ends -->
+
+                                <!--  invoice transactions  -->
+
 
                                 <hr class="invoice-spacing">
 
@@ -177,93 +159,99 @@
 
                                     <div class="row mt-5">
                                         <div class="col-12">
-                                            <p id="inword"><strong>Inword:</strong> 1200 Taka Only.</p>
+                                            <p id="inword"><strong>Inword:</strong> {{ grandTotal }} Tk Only.</p>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-3">
                                             <h3>Note:</h3>
                                             <span id="mb-20">
-                notes
-            </span>
+                                                notes
+                                            </span>
                                             <br>
                                             <br>
                                             <br>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col-12">
-                                            <p class="text-center">This is an electronically generated document, no signature is
-                                                required.</p>
-                                            <p class="text-center">Created By {{ info.creator.name }}</p>
-                                        </div>
-                                    </div>
-                                    <div class="page-break"></div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <h3>Payment Mehod:</h3>
-                                            <p>Pay Direct to Our Corporate Bank Account</p>
-                                            <table class="table" width="100%">
-                                                <thead>
-                                                <tr>
-                                                    <th>Bank Name</th>
-                                                    <th>Account Name</th>
-                                                    <th>Account No</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>EASTERN BANK LTD</td>
-                                                    <td>CREATIVE TECH PARK</td>
-                                                    <td>1241070056170</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>THE CITY BANK LTD</td>
-                                                    <td>CREATIVE TECH PARK</td>
-                                                    <td>1502467424001</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>DUTCH BANGLA BANK LTD</td>
-                                                    <td>CREATIVE TECH PARK</td>
-                                                    <td>246.110.0005044</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>PREMIER BANK LTD</td>
-                                                    <td>CREATIVE TECH PARK</td>
-                                                    <td>13611100000331</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            <p><strong>Pay Using Our Merchant Mobile Banking Account:</strong></p>
-                                            <p><strong>Bkash: 01639200002 (Payment)</strong></p>
-                                            <ul>
-                                                <li>Go to Your bKash Mobile Menu by dialing *247#</li>
-                                                <li>Choose "Payment"</li>
-                                                <li>Enter Merchant bKash Account Number 01639200002</li>
-                                                <li>Enter the amount (Invoice Amount)</li>
-                                                <li>Enter a reference (Invoice No/ Your Name)</li>
-                                                <li>Enter Counter Number 0</li>
-                                                <li>Now enter your bKash Mobile Menu PIN to Confirm!</li>
-                                                <li>Done! You will receive a confirmation message from bKash*</li>
-                                            </ul>
-                                            <h3>Direct Payment Bill Online at <a href="https://creativetechpark.com/pay" target="_blank">https://creativetechpark.com/pay</a>
-                                            </h3>
                                         </div>
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <h3>Payment Policy:</h3>
-                                            <p v-html="info.invoice.privicy_and_policy"></p>
-                                        </div>
-                                    </div>
 
-                                    <div class="row mb-50">
-                                        <div class="col-6">
-                                            <h3>Terms of Service:</h3>
-                                            <p v-html="info.invoice.trams_and_condition"></p>
+<!--                                    <div>
+                                        <div class="row mt-3">
+                                            <div class="col-12">
+                                                <p class="text-center">This is an electronically generated document, no signature is
+                                                    required.</p>
+                                                <p class="text-center">Created By {{ info.creator.name }}</p>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="page-break"></div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h3>Payment Mehod:</h3>
+                                                <p>Pay Direct to Our Corporate Bank Account</p>
+                                                <table class="table" width="100%">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Bank Name</th>
+                                                        <th>Account Name</th>
+                                                        <th>Account No</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>EASTERN BANK LTD</td>
+                                                        <td>CREATIVE TECH PARK</td>
+                                                        <td>1241070056170</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>THE CITY BANK LTD</td>
+                                                        <td>CREATIVE TECH PARK</td>
+                                                        <td>1502467424001</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>DUTCH BANGLA BANK LTD</td>
+                                                        <td>CREATIVE TECH PARK</td>
+                                                        <td>246.110.0005044</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>PREMIER BANK LTD</td>
+                                                        <td>CREATIVE TECH PARK</td>
+                                                        <td>13611100000331</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                                <p><strong>Pay Using Our Merchant Mobile Banking Account:</strong></p>
+                                                <p><strong>Bkash: 01639200002 (Payment)</strong></p>
+                                                <ul>
+                                                    <li>Go to Your bKash Mobile Menu by dialing *247#</li>
+                                                    <li>Choose "Payment"</li>
+                                                    <li>Enter Merchant bKash Account Number 01639200002</li>
+                                                    <li>Enter the amount (Invoice Amount)</li>
+                                                    <li>Enter a reference (Invoice No/ Your Name)</li>
+                                                    <li>Enter Counter Number 0</li>
+                                                    <li>Now enter your bKash Mobile Menu PIN to Confirm!</li>
+                                                    <li>Done! You will receive a confirmation message from bKash*</li>
+                                                </ul>
+                                                <h3>Direct Payment Bill Online at <a href="https://creativetechpark.com/pay" target="_blank">https://creativetechpark.com/pay</a>
+                                                </h3>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h3>Payment Policy:</h3>
+                                                <p v-html="info.invoice.privicy_and_policy"></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-50">
+                                            <div class="col-6">
+                                                <h3>Terms of Service:</h3>
+                                                <p v-html="info.invoice.trams_and_condition"></p>
+                                            </div>
+                                        </div>
+                                    </div>-->
+
+
                                 </div>
                                 <!-- Invoice Note ends -->
                             </div>
@@ -281,8 +269,8 @@
 <!--                                    </button>-->
                                     <a :href="info.download_url" class="btn btn-outline-secondary w-100 btn-download-invoice mb-75">Download</a>
 <!--                                    <a class="btn btn-outline-secondary w-100 mb-75" href="./app-invoice-print.html" target="_blank"> Print </a>-->
-<!--                                    <a class="btn btn-outline-secondary w-100 mb-75" href="./app-invoice-edit.html"> Edit </a>-->
-<!--                                    <button class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#add-payment-sidebar">Add Payment</button>-->
+                                    <button type="button" class="btn btn-primary w-100 mb-75" data-bs-toggle="modal" data-bs-target="#showTransactions">Payment History</button>
+                                    <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#add-payment-sidebar">Add Payment</button>
                                 </div>
                             </div>
                         </div>
@@ -300,23 +288,41 @@
                                         </h5>
                                     </div>
                                     <div class="modal-body flex-grow-1">
-                                        <form>
+                                        <form @submit.prevent="addPayment">
                                             <div class="mb-1">
-                                                <input id="balance" class="form-control" type="text" value="Invoice Balance: 5000.00" disabled />
+                                                <input id="balance" class="form-control" type="text" :value="`Grand Total: `+grandTotal+` TK`" disabled />
+                                            </div>
+
+                                            <div class="mb-1">
+                                                <label class="form-label" for="amount">Given Discount</label>
+                                                <input class="form-control"
+                                                       v-model="createForm.discount"
+                                                       @input="createForm.discount = $event.target.value"
+                                                       type="number" placeholder="Enter Discount Amount"/>
                                             </div>
                                             <div class="mb-1">
                                                 <label class="form-label" for="amount">Payment Amount</label>
-                                                <input id="amount" class="form-control" type="number" placeholder="$1000" />
+                                                <input id="amount" class="form-control"
+                                                       v-model="createForm.pay_amount"
+                                                       @input="createForm.pay_amount = $event.target.value"
+                                                       type="number" placeholder="Enter Payment Amount"/>
+                                                <small class="text-danger"> Total Due: {{ grandTotal - createForm.pay_amount - createForm.discount - info.total_pay  }} TK</small>
+                                            </div>
+
+                                            <div class="mb-1">
+                                                <label class="form-label"></label>
+                                                <v-select v-model="createForm.payment_id" :options="props.info.payment_methods" :reduce="payment => payment.id"
+                                                         label="name"  placeholder="Select Payment Method"></v-select>
                                             </div>
 
                                             <div class="mb-1">
                                                 <label class="form-label" for="payment-note">Internal Payment Note</label>
-                                                <textarea class="form-control" id="payment-note" rows="5" placeholder="Internal Payment Note"></textarea>
+                                                <textarea class="form-control" id="payment-note" v-model="createForm.payment_note" rows="5" placeholder="Internal Payment Note"></textarea>
                                             </div>
 
                                             <div class="d-flex flex-wrap mb-0">
-                                                <button type="button" class="btn btn-primary me-1" data-bs-dismiss="modal">Send</button>
-                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-primary me-1" data-bs-dismiss="modal">Submit</button>
+                                                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                                             </div>
                                         </form>
                                     </div>
@@ -353,13 +359,14 @@
                                             <div class="mb-1">
                                                 <label for="invoice-message" class="form-label">Message</label>
                                                 <textarea class="form-control" name="invoice-message" id="invoice-message" cols="3" rows="11" placeholder="Message...">
-Dear Queen Consolidated,
+                                                    Dear Queen Consolidated,
 
-Thank you for your business, always a pleasure to work with you!
+                                                    Thank you for your business, always a pleasure to work with you!
 
-We have generated a new invoice in the amount of $95.59
+                                                    We have generated a new invoice in the amount of $95.59
 
-We would appreciate payment of this invoice by 05/11/2019</textarea>
+                                                    We would appreciate payment of this invoice by 05/11/2019
+                                                </textarea>
                                             </div>
                                             <div class="mb-1">
                                         <span class="badge badge-light-primary">
@@ -378,6 +385,72 @@ We would appreciate payment of this invoice by 05/11/2019</textarea>
                         </div>
                         <!-- /Send Invoice Sidebar -->
 
+
+                        <!-- Show Transactions Modal -->
+                        <div class="modal fade" id="showTransactions" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-xl modal-dialog-centered modal-edit-user">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-transparent">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body pb-5 px-sm-5 pt-50">
+                                        <div class="text-center mb-2">
+                                            <h1 class="mb-1">{{ info.invoice.client.name }}</h1>
+                                            <p>All Payment lists</p>
+                                        </div>
+
+                                        <table class="table table-striped table-borderless">
+                                            <thead>
+                                            <tr>
+                                                <th class="py-1">Taken By</th>
+                                                <th class="py-1">Transaction Date</th>
+                                                <th class="py-1">Amount</th>
+                                                <th class="py-1">Discount</th>
+                                                <th class="py-1">Pay Total</th>
+                                                <th class="py-1">Sub Total</th>
+                                                <th class="py-1">Total Due</th>
+                                                <th class="py-1">Payment Method</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr v-for="(item, index) in info.transactions" :key="item.id">
+                                                <td class="py-1">
+                                                    <Link href="#" class="text-decoration-none">
+                                                        {{ item.user.name }}
+                                                    </Link>
+                                                </td>
+                                                <td>
+                                                    {{ item.date }}
+                                                </td>
+                                                <td class="py-1">
+                                                    <span class="fw-bold">{{ item.amount }} Tk</span>
+                                                </td>
+                                                <td class="py-1">
+                                                    <span class="fw-bold">{{ item.discount ?? 0 }} Tk</span>
+                                                </td>
+                                                <td class="py-1">
+                                                    <span class="fw-bold">{{ item.pay_amount }} Tk</span>
+                                                </td>
+                                                <td class="py-1">
+                                                    <span class="fw-bold">{{ item.old_total_pay }} Tk</span>
+                                                </td>
+                                                <td class="py-1">
+                                                    <span class="fw-bold">{{ grandTotal - item.old_total_pay }} Tk</span>
+                                                </td>
+                                                <td class="py-1">
+                                                    <span>{{ item.method }}</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ Show Transactions Modal -->
+
+
                     </div>
                 </section>
             </div>
@@ -390,10 +463,38 @@ We would appreciate payment of this invoice by 05/11/2019</textarea>
 
 </script>
 <script setup>
-    import { computed } from "vue";
+    import { computed, ref } from "vue";
+    import {useForm} from "@inertiajs/inertia-vue3";
+    import {Inertia} from "@inertiajs/inertia";
+
     let props = defineProps({
         info: Object,
     });
+
+    let createForm = useForm({
+        grandTotal: null,
+        payment_id:null,
+        pay_amount:null,
+        discount:null,
+        payment_note:null,
+        invoice_id:props.info.invoice.id,
+    })
+
+    let addPayment = () => {
+
+        Inertia.post(props.info.payment_url, createForm, {
+            onSuccess: () => {
+                Swal.fire(
+                    'Added!',
+                    'Transition Added Successfully Done',
+                    'success'
+                )
+            }
+        })
+
+        console.log(createForm);
+    }
+
 
     let itemsWithTotal = computed(() => {
         return props.info.invoice_item.map(a =>{
@@ -409,6 +510,7 @@ We would appreciate payment of this invoice by 05/11/2019</textarea>
         return sum;
     })
 
+    const paymentAmount = ref(0)
 
     let totalDiscount = computed(()=>{
         let sum = 0;
@@ -423,6 +525,7 @@ We would appreciate payment of this invoice by 05/11/2019</textarea>
         props.info.invoice_item.map(a =>{
             sum = sum + (a.price - a.discount)
         })
+        createForm.grandTotal = sum
         return sum;
     })
 

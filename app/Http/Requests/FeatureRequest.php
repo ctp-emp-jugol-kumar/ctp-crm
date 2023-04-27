@@ -24,7 +24,7 @@ class FeatureRequest extends FormRequest
     public function rules()
     {
         return [
-            "name" => ["required", "max:30", "min:3"],
+            "name" => ["required", "min:3"],
             "price" => ["required", "numeric"],
             "platform_id" => ["required", "integer"],
         ];

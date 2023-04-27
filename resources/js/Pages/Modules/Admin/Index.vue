@@ -35,8 +35,13 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Advanced Search</h4>
-                                    <a class="btn btn-primary btn-sm"> Add User</a>
-                                </div>
+                                    <button
+                                        v-if="this.$page.props.auth.user.can.includes('user.create') || this.$page.props.auth.user.role == 'Administrator' "
+                                        class="dt-button add-new btn btn-primary"
+                                        @click="addDataModal"
+                                    >
+                                        Add User
+                                    </button>                                </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
                                         <div class="col-sm-12 col-lg-4 d-flex justify-content-center justify-content-lg-start">
@@ -74,7 +79,7 @@
                                                 <div class="d-flex justify-content-left align-items-center">
                                                     <div class="avatar-wrapper">
                                                         <div class="avatar  me-1">
-                                                            <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d"
+                                                            <img :src="user.photo"
                                                                  alt="{{ user.username }}" height="32" width="32">
                                                         </div>
                                                     </div>
@@ -86,14 +91,30 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>{{ user.username }}</td>
+
+                                            <td>
+                                                <span v-for="role in user.roles" class="badge bg-primary" style="margin-right: 3px">{{ role }} </span>
+                                            </td>
                                             <td>{{ user.is_active }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <button type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
+                                                    <Link :href="user.show_url"
+                                                          v-if="this.$page.props.auth.user.can.includes('user.show') || this.$page.props.auth.user.role == 'Administrator' "
+                                                          type="button"
+                                                        class="btn btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
                                                         <Icon title="eye" />
+                                                    </Link>
+                                                    <button
+                                                        v-if="this.$page.props.auth.user.can.includes('user.edit') || this.$page.props.auth.user.role == 'Administrator' "
+                                                        type="button"
+                                                        @click="editUser(user.show_url)"
+                                                        class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
+                                                        <Icon title="pencil" />
                                                     </button>
-                                                    <button @click="deleteItemModal(user.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+                                                    <button @click="deleteItemModal(user.id)"
+                                                            v-if="this.$page.props.auth.user.can.includes('user.delete') || this.$page.props.auth.user.role == 'Administrator' "
+                                                            type="button"
+                                                            class="btn btn-icon btn-icon rounded-circle aves-effect waves-float waves-light bg-light-danger">
                                                         <Icon title="trash" />
                                                     </button>
                                                 </div>
@@ -113,26 +134,262 @@
             </div>
         </div>
     </div>
-</template>
-<script>
 
-</script>
+
+
+    <Modal id="addItemModal" title="Add New User" v-vb-is:modal size="lg">
+        <form @submit.prevent="createUserForm">
+            <div class="modal-body">
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Name:
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <input v-model="createForm.name" type="text" placeholder="Name" class="form-control">
+                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <label>Email: <span class="text-danger">*</span></label>
+                        <div class="">
+                            <input v-model="createForm.email" type="email" placeholder="eg.example@creativetechpark.com"
+                                   class="form-control">
+                            <span v-if="errors.email" class="error text-sm text-danger">{{ errors.email }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Phone: <span class="text-danger">*</span></label>
+                        <input v-model="createForm.phone" type="text" placeholder="+88017********" class="form-control">
+                        <span v-if="errors.phone" class="error text-sm text-danger">{{ errors.phone }}</span>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Password: </label>
+                        <input v-model="createForm.password" type="text" placeholder="********" class="form-control">
+                        <span v-if="errors.password" class="error text-sm text-danger">{{errors.password}}</span>
+                    </div>
+                    <div class="col-md">
+                        <label>Conform Password: </label>
+                        <input v-model="createForm.password_confirmation" type="text" placeholder="********" class="form-control">
+                        <span v-if="errors.password_confirmation" class="error text-sm text-danger">{{ errors.password_confirmation }}</span>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <Image  label="Profile Picture" v-model="createForm.photo"/>
+                    </div>
+                    <div class="col-md">
+                        <v-select
+                            multiple
+                            v-model="createForm.roles_name"
+                            :options="roles"
+                            placeholder="Search Country Name"
+                            :reduce="role => role.id"
+                            label="name">
+                        </v-select>
+
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Address: </label>
+                        <textarea v-model="createForm.address" type="text" placeholder="Enter Full Address" rows="5" class="form-control"></textarea>
+                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.address }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button :disabled="createForm.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit
+                </button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel
+                </button>
+            </div>
+        </form>
+    </Modal>
+
+
+    <Modal id="editItemModal" title="Edit User" v-vb-is:modal size="lg">
+        <form @submit.prevent="updateUser(editData.id)">
+            <div class="modal-body">
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Name:
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <input v-model="updateForm.name" type="text" placeholder="Name" class="form-control">
+                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <label>Email: <span class="text-danger">*</span></label>
+                        <div class="">
+                            <input v-model="updateForm.email" type="email" placeholder="eg.example@creativetechpark.com"
+                                   class="form-control">
+                            <span v-if="errors.email" class="error text-sm text-danger">{{ errors.email }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Phone: <span class="text-danger">*</span></label>
+                        <input v-model="updateForm.phone" type="text" placeholder="+88017********" class="form-control">
+                        <span v-if="errors.phone" class="error text-sm text-danger">{{ errors.phone }}</span>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <Image  label="Profile Picture" v-model="updateForm.photo"/>
+                    </div>
+                    <div class="col-md">
+                        <v-select
+                            multiple
+                            v-model="updateForm.roles_name"
+                            :options="roles"
+                            placeholder="Search Country Name"
+                            :reduce="role => role.id"
+                            label="name">
+                        </v-select>
+
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Address: </label>
+                        <textarea v-model="updateForm.address" type="text" placeholder="Enter Full Address" rows="5" class="form-control"></textarea>
+                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.address }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button :disabled="createForm.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit
+                </button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel
+                </button>
+            </div>
+        </form>
+    </Modal>
+
+
+
+</template>
+
+
 <script setup>
     import Pagination from "../../../components/Pagination"
     import Icon from '../../../components/Icon'
+    import Modal from '../../../components/Modal'
+    import Image from '../../../components/ImageUploader'
     import {ref, watch} from "vue";
     import debounce from "lodash/debounce";
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
+    import {useForm} from "@inertiajs/inertia-vue3";
+    import axios from "axios";
 
     let props = defineProps({
         users: Object,
         filters: Object,
         //   can: Object,
         notification:Object,
+        errors: Object,
+        roles:Object,
     });
 
+    let createForm = useForm({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        photo:"",
+        password:"",
+        password_confirmation:"",
+        roles_name:[],
 
+        processing: Boolean,
+    })
+
+
+    let updateForm = useForm({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        photo:"",
+        password:"",
+        password_confirmation:"",
+        roles_name:[],
+
+        processing: Boolean,
+    })
+    let addDataModal = () => {
+        document.getElementById('addItemModal').$vb.modal.show()
+    }
+    let createUserForm = () => {
+        Inertia.post('users', createForm, {
+            preserveState: true,
+            onStart: () => {
+                createForm.processing = true
+            },
+            onFinish: () => {
+                createForm.processing = false
+            },
+            onSuccess: () => {
+                document.getElementById('addItemModal').$vb.modal.hide()
+                createForm.reset()
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Saved.',
+                    'success'
+                )
+            },
+        })
+    }
+
+    const editData = ref(null);
+    const editUser = (url) =>{
+        axios.get(url+"?api=true").then((res) =>{
+            editData.value = res.data
+            updateForm.name  = res.data.name;
+            updateForm.email = res.data.email;
+            updateForm.phone = res.data.phone;
+            updateForm.address = res.data.address;
+            res.data.roles.map(item => updateForm.roles_name = item.id);
+            document.getElementById('editItemModal').$vb.modal.show();
+        }).catch((err) => console.log(err))
+    }
+
+
+    const updateUser = (id) => {
+        Inertia.post(`users/${id}`, updateForm, {
+            preserveState: true,
+            onStart: () => {
+                createForm.processing = true
+            },
+            onFinish: () => {
+                createForm.processing = false
+            },
+            onSuccess: () => {
+                document.getElementById('addItemModal').$vb.modal.hide()
+                createForm.reset()
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Saved.',
+                    'success'
+                )
+            },
+        })
+    }
     let deleteItemModal = (id) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -144,20 +401,23 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Inertia.delete(adminPath.value + '/users/' + id, { preserveState: true, replace: true, onSuccess: page => {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
-                        )
-                    },
-                    onError: errors => {
-                        Swal.fire(
-                            'Oops...',
-                            'Something went wrong!',
-                            'error'
-                        )
-                    }})
+                Inertia.delete(adminPath.value + '/users/' + id, {
+                preserveState: true,
+                replace: true,
+                onSuccess: page => {
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                },
+                onError: errors => {
+                    Swal.fire(
+                        'Oops...',
+                        'Something went wrong!',
+                        'error'
+                    )
+                }})
             }
         })
     };
