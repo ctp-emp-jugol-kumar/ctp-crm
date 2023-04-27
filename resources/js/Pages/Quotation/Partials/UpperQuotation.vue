@@ -40,19 +40,20 @@
                                                         <vue-feather type="hash" size="15"/>_id
                                                     </div>
                                                     <input type="text" class="form-control invoice-edit-input"
-                                                           :value="quotationStore.getQuotId" readonly/>
+                                                           :value="props.quotation.quotation_id+''+props.quotation.id" readonly/>
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center mb-1">
-                                                <Datepicker v-model="date" :monthChangeOnScroll="false"
-                                                            @update:modelValue="storeDate"
-                                                            placeholder="Select Quotation Date" autoApply></Datepicker>
+                                                <Datepicker v-model="formData.date"
+                                                            :monthChangeOnScroll="false"
+                                                            placeholder="Select Quotation Date"
+                                                            autoApply></Datepicker>
                                             </div>
-<!--                                            <div class="d-flex align-items-center">
-                                                <span class="title">Due Date:</span>
-                                                <Datepicker :monthChangeOnScroll="false"
-                                                            placeholder="Select Date" autoApply></Datepicker>
-                                            </div>-->
+                                            <!--                                            <div class="d-flex align-items-center">
+                                                                                            <span class="title">Due Date:</span>
+                                                                                            <Datepicker :monthChangeOnScroll="false"
+                                                                                                        placeholder="Select Date" autoApply></Datepicker>
+                                                                                        </div>-->
                                         </div>
                                     </div>
                                 </div>
@@ -71,7 +72,7 @@
                                                         <v-select :options="props.clients"
                                                                   class="form-control py-0"
                                                                   label="name"
-                                                                  v-model="clientId"
+                                                                  v-model="formData.clientId"
                                                                   :reduce="client => client.id"
                                                                   @update:modelValue="loadClient"
                                                                   :filter="fuseSearch"
@@ -102,7 +103,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="text" v-model="subject" @input="storeSubject" class="form-control mb-n2" style="margin-bottom:-20px" placeholder="e.g Quotation Subject...">
+                                    <input type="text" v-model="formData.subject" class="form-control mb-n2" style="margin-bottom:-20px" placeholder="e.g Quotation Subject...">
                                 </div>
                                 <!-- Address and Contact ends -->
                                 <slot/>
@@ -117,18 +118,18 @@
                                         </div>
                                         <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">
                                             <div class="invoice-total-wrapper">
-<!--                                                <div class="invoice-total-item">
-                                                    <p class="invoice-total-title">Subtotal:</p>
-                                                    <p class="invoice-total-amount">{{ props.subtotal }} Tk</p>
-                                                </div>
-                                                <div class="invoice-total-item">
-                                                    <p class="invoice-total-title">Discount:</p>
-                                                    <p class="invoice-total-amount">$28</p>
-                                                </div>
-                                                <div class="invoice-total-item">
-                                                    <p class="invoice-total-title">Tax:</p>
-                                                    <p class="invoice-total-amount">21%</p>
-                                                </div>-->
+                                                <!--                                                <div class="invoice-total-item">
+                                                                                                    <p class="invoice-total-title">Subtotal:</p>
+                                                                                                    <p class="invoice-total-amount">{{ props.subtotal }} Tk</p>
+                                                                                                </div>
+                                                                                                <div class="invoice-total-item">
+                                                                                                    <p class="invoice-total-title">Discount:</p>
+                                                                                                    <p class="invoice-total-amount">$28</p>
+                                                                                                </div>
+                                                                                                <div class="invoice-total-item">
+                                                                                                    <p class="invoice-total-title">Tax:</p>
+                                                                                                    <p class="invoice-total-amount">21%</p>
+                                                                                                </div>-->
                                                 <hr class="my-50" />
                                                 <div class="invoice-total-item">
                                                     <p class="invoice-total-title">Total:</p>
@@ -148,7 +149,7 @@
                                         <div class="col-12">
                                             <div class="mb-2">
                                                 <label for="note" class="form-label fw-bold">Note:</label>
-                                                <textarea class="form-control" rows="2" id="note" placeholder="keep your note"></textarea>
+                                                <textarea class="form-control" rows="2" v-model="formData.note" id="note" placeholder="keep your note"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -162,47 +163,42 @@
                         <div class="col-xl-3 col-md-4 col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <button class="btn btn-primary w-100 mb-75" @click="saveQuotation">
-                                        Save Quotation
+                                    <button class="btn btn-primary w-100 mb-75" @click="updateQuotation">
+                                        Update Quotation
                                     </button>
-<!--                                    <a href="./app-invoice-preview.html" class="btn btn-outline-primary w-100 mb-75">Preview</a>
-                                    <button type="button" class="btn btn-outline-primary w-100 mb-75">Save</button>
-                                    <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#add-payment-sidebar">
-                                        Add Payment
-                                    </button>-->
+<!--                                    <button type="button" class="btn btn-outline-primary w-100 mb-75" data-bs-toggle="modal"
+                                            data-bs-target="#givenDiscount">Given Discount</button>-->
+                                    <!--                                    <a href="./app-invoice-preview.html" class="btn btn-outline-primary w-100 mb-75">Preview</a>
+                                                                        <button type="button" class="btn btn-outline-primary w-100 mb-75">Save</button>
+                                                                        <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#add-payment-sidebar">
+                                                                            Add Payment
+                                                                        </button>-->
                                 </div>
                             </div>
-<!--                            <div class="mt-2">
-                                <p class="mb-50">Accept payments via</p>
-                                <select class="form-select">
-                                    <option value="Bank Account">Bank Account</option>
-                                    <option value="Paypal">Paypal</option>
-                                    <option value="UPI Transfer">UPI Transfer</option>
-                                </select>
+                            <div class="mt-2">
                                 <div class="invoice-terms mt-1">
                                     <div class="d-flex justify-content-between">
-                                        <label class="invoice-terms-title mb-0" for="paymentTerms">Payment Terms</label>
+                                        <label class="invoice-terms-title mb-0" for="paymentTerms">Payment Policy</label>
                                         <div class="form-check form-switch">
-                                            <input type="checkbox" class="form-check-input" checked id="paymentTerms" />
+                                            <input v-model="formData.attachPaymentPolicy" type="checkbox" class="form-check-input" checked id="paymentTerms" />
                                             <label class="form-check-label" for="paymentTerms"></label>
+                                            <vue-feather type="edit" size="20" class="cursor-pointer" v-c-tooltip="'Edit This Payment Policy'"
+                                                         @click="editPaymentPolicy"/>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-between py-1">
-                                        <label class="invoice-terms-title mb-0" for="clientNotes">Client Notes</label>
-                                        <div class="form-check form-switch">
-                                            <input type="checkbox" class="form-check-input" checked id="clientNotes" />
-                                            <label class="form-check-label" for="clientNotes"></label>
-                                        </div>
-                                    </div>
+
                                     <div class="d-flex justify-content-between">
-                                        <label class="invoice-terms-title mb-0" for="paymentStub">Payment Stub</label>
+                                        <label class="invoice-terms-title mb-0" for="paymentStub">Service Policy</label>
                                         <div class="form-check form-switch">
-                                            <input type="checkbox" class="form-check-input" id="paymentStub" />
+                                            <input v-model="formData.attachServicePolicy" type="checkbox" class="form-check-input" id="paymentStub" />
                                             <label class="form-check-label" for="paymentStub"></label>
+                                            <vue-feather type="edit" size="20" class="cursor-pointer" v-c-tooltip="'Edit This Service Policy'"
+                                                         @click="editServicePolicy"/>
                                         </div>
                                     </div>
+
                                 </div>
-                            </div>-->
+                            </div>
                         </div>
                         <!-- Invoice Edit Right ends -->
                     </div>
@@ -308,6 +304,69 @@
                         </div>
                     </div>
                     <!-- /Add Payment Sidebar -->
+
+                    <Modal id="paymentPolicy" title="Edit Payment Policy" v-vb-is:modal size="lg">
+                        <div class="modal-body">
+                            <div class="row mb-1">
+                                <div class="col-md">
+                                    <textarea v-model="formData.paymentPolicy" type="text"
+                                              placeholder="Domain Full Description"
+                                              rows="5" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary waves-effect waves-float waves-light" data-bs-dismiss="modal">ok</button>
+                        </div>
+                    </Modal>
+                    <Modal id="servicePolicy" title="Edit Service Policy" v-vb-is:modal size="lg">
+                        <div class="modal-body">
+                            <div class="row mb-1">
+                                <div class="col-md">
+                                    <textarea v-model="formData.servicePolicy" type="text"
+                                              placeholder="Domain Full Description"
+                                              rows="5" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary waves-effect waves-float waves-light" data-bs-dismiss="modal">ok</button>
+                        </div>
+                    </Modal>
+
+                    <div class="modal modal-slide-in fade" id="givenDiscount" aria-hidden="true">
+                        <div class="modal-dialog sidebar-lg">
+                            <div class="modal-content p-0">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
+                                <div class="modal-header mb-1">
+                                    <h5 class="modal-title">
+                                        <span class="align-middle">Given Discount</span>
+                                    </h5>
+                                </div>
+                                <div class="modal-body flex-grow-1">
+                                    <form>
+                                        <div class="mb-1">
+                                            <input class="form-control" type="text" :value="'Grand Total Price:'+props.subtotal" disabled />
+                                        </div>
+                                        <div class="mb-1">
+                                            <label class="form-label" for="amount">Discount Amount</label>
+                                            <input class="form-control" type="number" v-model="formData.discount" @input="discountInput" placeholder="e.g 1000 ৳" />
+                                        </div>
+                                        <div class="mb-1">
+                                            <input class="form-control" type="text" :value="'New Price:'+afterDiscount ?? subtotal" disabled />
+                                        </div>
+
+                                        <div class="d-flex flex-wrap mb-0">
+                                            <button type="button" class="btn btn-primary me-1" data-bs-dismiss="modal" @click="addDiscount">Send</button>
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </section>
             </div>
         </div>
@@ -320,75 +379,69 @@ import moment from 'moment/moment';
 import {ref, computed,onMounted  } from "vue";
 import {useQuotationStore} from "../../../Store/useQuotationStore";
 import Fuse from "fuse.js";
+import {usePolicyStore} from "../../../Store/usePolicyStore";
+import {useForm} from "@inertiajs/inertia-vue3";
+import Modal from "../../../components/Modal.vue";
 
-    const quotationStore = useQuotationStore();
+const quotationStore = useQuotationStore();
+const policyStore = usePolicyStore()
 
-    const props = defineProps({
-        subtotal:{
-            type:Number,
-            default:0
-        },
-        clients:{
-            type:Array,
-            default:[],
-            required:true
-        },
-        errors:{
-            type:Object,
-            default:[]
-        }
+const props = defineProps({
+    subtotal:{
+        type:Number,
+        default:0
+    },
+    clients:{
+        type:Array,
+        default:[],
+        required:true
+    },
+    errors:{
+        type:Object,
+        default:{}
+    },
+    quotation:{
+        type:Object,
+        default:{}
+    }
+})
+
+const formData = useForm({
+    clientId:props.quotation.client_id,
+    date:props.quotation.qut_date,
+    subject:props.quotation.subject,
+    note:props.quotation.note,
+    paymentPolicy:props.quotation.payment_policy,
+    servicePolicy:props.quotation.trams_of_service,
+
+    attachPaymentPolicy:props.quotation.payment_policy !== null,
+    attachServicePolicy:props.quotation.trams_of_service !== null,
+})
+
+
+const fuseSearch = (options, search) => {
+    const fuse = new Fuse(options, {
+        keys: ['name', 'email', 'phone','secondary_email', 'secondary_phone', 'company', 'address', 'status'],
+        shouldSort: true,
     })
+    return search.length
+        ? fuse.search(search).map(({ item }) => item)
+        : fuse.list
+}
 
-    const clientId = ref(quotationStore.getClientId)
-    const date = ref(quotationStore.getQutDate)
-    const subject = ref(quotationStore.getSubject)
+const clientDetails = ref(null)
+const loadClient = (clientId)=> clientDetails.value = props.clients.filter(item => item.id === clientId)[0];
 
-    const storeDate = () =>{
-        quotationStore.setQutDate(date.value);
-    }
-    const storeSubject =(event) =>{
-        quotationStore.setSubject(event.target.value);
-    }
+const editPaymentPolicy = () => document.getElementById('paymentPolicy').$vb.modal.show()
+const editServicePolicy = () => document.getElementById('servicePolicy').$vb.modal.show()
 
-    const fuseSearch = (options, search) => {
-        const fuse = new Fuse(options, {
-            keys: ['name', 'email', 'phone','secondary_email', 'secondary_phone', 'company', 'address', 'status'],
-            shouldSort: true,
-        })
-        return search.length
-            ? fuse.search(search).map(({ item }) => item)
-            : fuse.list
-    }
+let afterDiscount = ref(0);
+const discountInput = (event) =>{
+    afterDiscount.value = props.subtotal - event.target.value
+}
 
-    const clientDetails = ref(null)
-
-    const loadClient = (clientId)=>{
-        quotationStore.setClientId(clientId);
-        const alue = props.clients.filter(item => {
-            return item.id === clientId;
-        })[0];
-        clientDetails.value = alue
-    }
-
-    onMounted(() =>{
-        const alue = props.clients.filter(item => {
-            return item.id === quotationStore.getClientId;
-        })[0];
-        clientDetails.value = alue
-    })
-
-    const emits = defineEmits(["handelQuotation"])
-    const saveQuotation=()=>{
-        emits("handelQuotation", {
-            clientId:clientId.value,
-            subject:subject.value,
-            date:date.value,
-        })
-    }
-
-
-
-
+const emits = defineEmits(["handleQuotation"])
+const updateQuotation =()=> emits("handleQuotation", formData)
 
 </script>
 

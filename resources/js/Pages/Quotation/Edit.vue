@@ -2,7 +2,8 @@
     <UpperQuotation :subtotal="totalPrice"
                     :clients="props.clients"
                     :errors="props.errors"
-                    @handelQuotation="saveQuotation">
+                    :quotation="props.quotation"
+                    @handleQuotation="updateQuotation">
         <!-- Product Details starts -->
         <div class="card-body invoice-padding invoice-product-details" v-for="(item, index) in formData.items">
             <div class="source-item">
@@ -152,6 +153,7 @@
     import {useForm, usePage} from "@inertiajs/inertia-vue3";
     import {computed, ref, onMounted } from "vue"
     import {useQuotationStore} from "../../Store/useQuotationStore";
+    import {Inertia} from "@inertiajs/inertia";
 
     const quotationStore = useQuotationStore()
 
@@ -159,21 +161,13 @@
         quotation:Object|Array|null,
         services: Array|[]|null,
         clients:Array|[]|null,
-        main_url:String|null,
+        update_url:String|null,
         errors:Object|Array|[],
     })
 
-    quotationStore.setQuotId(props.quotation.quotation_id+""+props.quotation.id)
-    quotationStore.setClientId(props.quotation.client_id)
-    quotationStore.setQutDate(props.quotation.qut_date)
-    quotationStore.setSubject(props.quotation.subject)
 
     const formData = useForm({
-        quotationId: props.quotation.quotation_id+""+props.quotation.id,
-        clientId: props.quotation.client_id,
-        qutDate: quotationStore.getQutDate,
-        subject: quotationStore.getSubject,
-        totalPrice:null,
+        totalPrice:props.quotation.total_price,
         items:[{
             name:null,
             service:null,
@@ -188,16 +182,12 @@
     })
 
     const processing = ref(false)
-    const saveQuotation = (events) =>{
-        formData.clientId = events.clientId,
-        formData.qutDate = events.date,
-        formData.subject = events.subject,
-        formData.totalPrice = totalPrice,
-        formData.post(props.main_url,{
-        preserveState: true,
+    const updateQuotation = (events) =>{
+        Inertia.put(props.update_url, {...formData, ...events}, {
+            preserveState: true,
             onStart: () =>{ processing.value = true},
             onFinish: () => {processing.value = false},
-            onSuccess: ()=> { $toast.success('Quotation Created Successfully Done...') },
+            onSuccess: ()=> { $toast.success('Quotation Updated Successfully Done...') },
             onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
         })
     }
@@ -304,6 +294,7 @@
                 total += pac.price * pac.qty;
             })
         })
+        formData.totalPrice = total
         return total;
     })
 
@@ -313,7 +304,6 @@
             item['isFeatured'] = false
             return item;
         })
-
         formData.items = allItems;
         console.log(allItems)
     })

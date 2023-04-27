@@ -835,6 +835,7 @@ class QuotationController extends Controller
             'quotation' => $quot,
             'services' => $services,
             'clients' => $clients,
+            'update_url' => URL::route('quotations.update', $quot->id),
         ]);
     }
 
@@ -848,7 +849,43 @@ class QuotationController extends Controller
      */
     public function update(Request $request, Quotation $quotation)
     {
+        Request::validate([
+            'clientId' => 'required',
+            'date' => 'required',
+            'subject' => 'required'
+        ],[
+            'clientId.required' => 'First Select An Client...',
+            'qutDate.required' => 'Please Select Quotation Date...',
+        ]);
 
+        $storeItems = [];
+        foreach (Request::input('items') as $item){
+            $storeItems[] = [
+                'checkFeatrueds' => $item['checkFeatrueds'],
+                'checkPackages' =>  $item['checkPackages']
+            ];
+        }
+
+        $quotation->update([
+            'client_id' => Request::input('clientId'),
+            'qut_date' => Request::input('date'),
+            'subject' => Request::input('subject'),
+            'created_by' => Auth::id(),
+            "total_price" => Request::input('totalPrice'),
+            'discount' => 0,
+            'grand_total' => Request::input('totalPrice'),
+            'items' => json_encode($storeItems),
+            'status' => true,
+            'note' => Request::input('note'),
+            'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
+            'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
+        ]);
+
+        return Redirect::route('quotations.index');
+
+    }
+
+/*    public function oldUpdate(){
 
         if(is_integer(Request::input("client_id"))){
             $clientId = Request::input('client_id');
@@ -971,7 +1008,8 @@ class QuotationController extends Controller
             }
         }
         return Redirect::route('quotations.index');
-    }
+    }*/
+
 
     /**
      * Remove the specified resource from storage.
