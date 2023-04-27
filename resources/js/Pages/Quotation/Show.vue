@@ -153,6 +153,9 @@
                                     <button type="button" class="btn btn-outline-primary w-100 mb-75" data-bs-toggle="modal"
                                             data-bs-target="#givenDiscount">Given Discount</button>
                                     <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">
+                                        Generate Invoices
+                                    </button>
+                                    <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">
                                         Get Invoices
                                     </button>
                                 </div>
