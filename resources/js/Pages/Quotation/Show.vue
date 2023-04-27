@@ -148,7 +148,8 @@
                                     <a :href="props.url.edit_url" class="btn btn-primary w-100 mb-75">
                                         Edit Quotation
                                     </a>
-                                    <a :href="props.url.show_url+'?type=download'"  class="btn btn-outline-primary w-100 mb-75">Download PDF</a>
+                                    <a :href="props.url.show_url+'?download=true'"  class="btn btn-outline-primary w-100 mb-75">Download PDF</a>
+                                    <a :href="props.url.show_url+'?print=true'"  class="btn btn-outline-primary w-100 mb-75">Print Quotation</a>
                                     <button type="button" class="btn btn-outline-primary w-100 mb-75" data-bs-toggle="modal"
                                             data-bs-target="#givenDiscount">Given Discount</button>
 <!--                                    <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">

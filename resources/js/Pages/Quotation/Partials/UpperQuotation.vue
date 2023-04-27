@@ -40,7 +40,7 @@
                                                         <vue-feather type="hash" size="15"/>_id
                                                     </div>
                                                     <input type="text" class="form-control invoice-edit-input"
-                                                           :value="quotationStore.getQuotId"/>
+                                                           :value="quotationStore.getQuotId" readonly/>
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center mb-1">

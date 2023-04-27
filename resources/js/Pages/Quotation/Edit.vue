@@ -62,7 +62,7 @@
                                             <table class="table table-striped details-table">
                                                 <thead>
                                                     <th width="20%">Name</th>
-                                                    <th>Price</th>
+                                                    <th width="20%">Price</th>
                                                     <th>Qty</th>
                                                     <th>Total</th>
                                                     <th>Action</th>
@@ -70,7 +70,7 @@
                                                 <tbody>
                                                     <tr v-for="(fes, j)  in formData.items[index].checkFeatrueds">
                                                         <td>{{ fes.name }}</td>
-                                                        <td>{{ fes.price }}</td>
+                                                        <td style="text-align: center">{{ fes.price }}</td>
                                                         <td>{{ fes.qty }} </td>
                                                         <td>{{ fes.price * fes.qty }}</td>
                                                         <td>
@@ -89,8 +89,11 @@
                                             </table>
 
                                         </div>
-                                        <div class="border" v-else>
-                                            <textarea class="form-control" rows="5" v-for="packs in formData.items[index].checkPackages">{{ packs?.descriptions }}</textarea>
+                                        <div v-else>
+                                            <div class="position-relative mt-1" v-for="(packs, k) in formData.items[index].checkPackages">
+                                                <textarea class="form-control" rows="5" >{{ packs?.descriptions }}</textarea>
+                                                <vue-feather type="x" class="packDelete" size="15" @click="packItemRemove(index, k)"/>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -285,6 +288,10 @@
         formData.items[iIndex].checkFeatrueds.splice(jIndex, 1);
         $toast.error("Item Deleted")
     }
+    const packItemRemove = (iIndex, kIndex) =>{
+        formData.items[iIndex].checkPackages.splice(kIndex, 1);
+        $toast.error("Item Deleted")
+    }
 
 
     const totalPrice = computed(()=>{
@@ -324,6 +331,15 @@
 <style lang="css" scoped>
 .vs__dropdown-toggle{
     border: none !important;
+}
+.packDelete{
+    position: absolute;
+    right: -19px;
+    cursor: pointer;
+    background: #e7e7e7;
+    padding: 1px;
+    top: -7px;
+    border-radius: 50px;
 }
 </style>
 

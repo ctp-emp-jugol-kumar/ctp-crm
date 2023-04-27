@@ -1,5 +1,5 @@
 <template>
-    <UpperQuotation :subtotal="totalPrice" :clients="props.clients" :errors="props.errors" @handelQuotation="saveQuotation">
+    <UpperQuotation :subtotal="totalPrice" :clients="props.clients" :errors="props.errors" @handleQuotation="saveQuotation">
         <!-- Product Details starts -->
         <div class="card-body invoice-padding invoice-product-details" v-for="(item, index) in formData.items">
             <div class="source-item">
@@ -142,10 +142,11 @@
 </template>
 
 <script setup>
-    import UpperQuotation from "./Partials/UpperQuotation.vue"
+    import UpperQuotation from "./Partials/StoreUpperQuotation.vue"
     import {useForm, usePage} from "@inertiajs/inertia-vue3";
     import {computed, ref, onMounted } from "vue"
     import {useQuotationStore} from "../../Store/useQuotationStore";
+    import {Inertia} from "@inertiajs/inertia";
 
     const quotationStore = useQuotationStore()
 
@@ -159,10 +160,7 @@
 
     const formData = useForm({
         quotationId: quotationStore.getQuotId,
-        clientId: quotationStore.getClientId,
-        qutDate: quotationStore.getQutDate,
-        subject: quotationStore.getSubject,
-        totalPrice:null,
+        totalPrice:0,
         items:[{
             name:null,
             service:null,
@@ -178,12 +176,8 @@
 
     const processing = ref(false)
     const saveQuotation = (events) =>{
-        formData.clientId = events.clientId,
-        formData.qutDate = events.date,
-        formData.subject = events.subject,
-        formData.totalPrice = totalPrice,
-        formData.post(props.main_url,{
-        preserveState: true,
+        Inertia.post(props.main_url, {...formData, ...events}, {
+            preserveState: true,
             onStart: () =>{ processing.value = true},
             onFinish: () => {processing.value = false},
             onSuccess: ()=> { $toast.success('Quotation Created Successfully Done...') },
@@ -291,6 +285,8 @@
                 total += pac.price * pac.qty;
             })
         })
+
+        formData.totalPrice = total
         return total;
     })
 
