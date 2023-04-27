@@ -134,7 +134,7 @@ class QuotationController extends Controller
 
     public function index(){
         $quotation  = Quotation::query()
-            ->with('client')
+            ->with(['client', 'user'])
             ->latest()
             ->when(Request::input('search'), function ($query, $search) {
                 $query->where('u_id', 'like', "%{$search}%")
@@ -182,8 +182,12 @@ class QuotationController extends Controller
                 "id"           => $qot->id,
                 "qut_id"       => $qot->quotation_id,
                 "client"       => $qot->client,
+                "user"         => $qot->user,
                 "subject"      => $qot->subject,
                 "status"       => $qot->status,
+                "total_price"  => $qot->total_price,
+                "discount"     => $qot->discount,
+                "grand_total"  => $qot->grand_total,
                 "date"         => $qot->qut_date->format('M-d-Y'),
                 "created_at"   => $qot->created_at->format('Y-m-d'),
                 "show_url"     => URL::route('quotations.show', $qot->id),
@@ -207,6 +211,7 @@ class QuotationController extends Controller
      * @return \Inertia\Response
      */
     public function create(){
+
         $services = Searvice::all()->map(function ($service){
             $service["platforms"] = Platform::with("packages")
                 ->whereIn('id', json_decode($service->platforms))
@@ -219,6 +224,7 @@ class QuotationController extends Controller
         });
 
         $clients = Client::where('status', '=', 'Converted to Customer')->latest()->get();
+
 
         return inertia('Quotation/Store', [
             'services' => $services,
@@ -251,10 +257,9 @@ class QuotationController extends Controller
 
     public function store()
     {
-
         Request::validate([
             'clientId' => 'required',
-            'qutDate' => 'required',
+            'date' => 'required',
             'subject' => 'required'
         ],[
             'clientId.required' => 'First Select An Client...',
@@ -268,16 +273,21 @@ class QuotationController extends Controller
                 'checkPackages' =>  $item['checkPackages']
             ];
         }
+
+
         Quotation::create([
             'quotation_id' => Request::input('quotationId'),
             'client_id' => Request::input('clientId'),
-            'qut_date' => Request::input('qutDate'),
+            'qut_date' => Request::input('date'),
             'subject' => Request::input('subject'),
             'created_by' => Auth::id(),
             "total_price" => Request::input('totalPrice'),
             "grand_total" => Request::input('totalPrice'),
             'items' => json_encode($storeItems),
-            'status' => true
+            'status' => true,
+            'note' => Request::input('note'),
+            'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
+            'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
         ]);
         return Redirect::route('quotations.index');
     }
@@ -533,7 +543,6 @@ class QuotationController extends Controller
 
     public function show($id)
     {
-        $type = Request::only('type')["type"];
         $quotation = Quotation::with(['client', 'user:id,name'])->findOrFail($id);
         $pref = [];
         foreach (json_decode($quotation->items) as $item){
@@ -557,9 +566,15 @@ class QuotationController extends Controller
             }
         }
 
-        if ($type == 'download'){
-            $pdf = Pdf::loadView('invoice.quotation', compact('quotation', 'pref'));
+        if (Request::input('download')) {
+            $isPrint = false;
+            $pdf = Pdf::loadView('invoice.quotation', compact('quotation', 'pref', 'isPrint'));
             return $pdf->download($quotation->client->name."_".now()->format('d_m_Y')."_".'quotation.pdf');
+        }
+
+        if (Request::input('print')){
+            $isPrint = true;
+            return view('invoice.quotation', compact('quotation', 'pref', 'isPrint'));
         }
 
         return Inertia::render('Quotation/Show',   [
@@ -824,6 +839,7 @@ class QuotationController extends Controller
             'quotation' => $quot,
             'services' => $services,
             'clients' => $clients,
+            'update_url' => URL::route('quotations.update', $quot->id),
         ]);
     }
 
@@ -837,7 +853,43 @@ class QuotationController extends Controller
      */
     public function update(Request $request, Quotation $quotation)
     {
+        Request::validate([
+            'clientId' => 'required',
+            'date' => 'required',
+            'subject' => 'required'
+        ],[
+            'clientId.required' => 'First Select An Client...',
+            'qutDate.required' => 'Please Select Quotation Date...',
+        ]);
 
+        $storeItems = [];
+        foreach (Request::input('items') as $item){
+            $storeItems[] = [
+                'checkFeatrueds' => $item['checkFeatrueds'],
+                'checkPackages' =>  $item['checkPackages']
+            ];
+        }
+
+        $quotation->update([
+            'client_id' => Request::input('clientId'),
+            'qut_date' => Request::input('date'),
+            'subject' => Request::input('subject'),
+            'created_by' => Auth::id(),
+            "total_price" => Request::input('totalPrice'),
+            'discount' => 0,
+            'grand_total' => Request::input('totalPrice'),
+            'items' => json_encode($storeItems),
+            'status' => true,
+            'note' => Request::input('note'),
+            'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
+            'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
+        ]);
+
+        return Redirect::route('quotations.index');
+
+    }
+
+/*    public function oldUpdate(){
 
         if(is_integer(Request::input("client_id"))){
             $clientId = Request::input('client_id');
@@ -960,7 +1012,8 @@ class QuotationController extends Controller
             }
         }
         return Redirect::route('quotations.index');
-    }
+    }*/
+
 
     /**
      * Remove the specified resource from storage.

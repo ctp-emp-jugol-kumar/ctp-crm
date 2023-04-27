@@ -2,7 +2,8 @@
     <UpperQuotation :subtotal="totalPrice"
                     :clients="props.clients"
                     :errors="props.errors"
-                    @handelQuotation="saveQuotation">
+                    :quotation="props.quotation"
+                    @handleQuotation="updateQuotation">
         <!-- Product Details starts -->
         <div class="card-body invoice-padding invoice-product-details" v-for="(item, index) in formData.items">
             <div class="source-item">
@@ -62,7 +63,7 @@
                                             <table class="table table-striped details-table">
                                                 <thead>
                                                     <th width="20%">Name</th>
-                                                    <th>Price</th>
+                                                    <th width="20%">Price</th>
                                                     <th>Qty</th>
                                                     <th>Total</th>
                                                     <th>Action</th>
@@ -70,7 +71,7 @@
                                                 <tbody>
                                                     <tr v-for="(fes, j)  in formData.items[index].checkFeatrueds">
                                                         <td>{{ fes.name }}</td>
-                                                        <td>{{ fes.price }}</td>
+                                                        <td style="text-align: center">{{ fes.price }}</td>
                                                         <td>{{ fes.qty }} </td>
                                                         <td>{{ fes.price * fes.qty }}</td>
                                                         <td>
@@ -89,8 +90,11 @@
                                             </table>
 
                                         </div>
-                                        <div class="border" v-else>
-                                            <textarea class="form-control" rows="5" v-for="packs in formData.items[index].checkPackages">{{ packs?.descriptions }}</textarea>
+                                        <div v-else>
+                                            <div class="position-relative mt-1" v-for="(packs, k) in formData.items[index].checkPackages">
+                                                <textarea class="form-control" rows="5" >{{ packs?.descriptions }}</textarea>
+                                                <vue-feather type="x" class="packDelete" size="15" @click="packItemRemove(index, k)"/>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -149,6 +153,7 @@
     import {useForm, usePage} from "@inertiajs/inertia-vue3";
     import {computed, ref, onMounted } from "vue"
     import {useQuotationStore} from "../../Store/useQuotationStore";
+    import {Inertia} from "@inertiajs/inertia";
 
     const quotationStore = useQuotationStore()
 
@@ -156,21 +161,13 @@
         quotation:Object|Array|null,
         services: Array|[]|null,
         clients:Array|[]|null,
-        main_url:String|null,
+        update_url:String|null,
         errors:Object|Array|[],
     })
 
-    quotationStore.setQuotId(props.quotation.quotation_id+""+props.quotation.id)
-    quotationStore.setClientId(props.quotation.client_id)
-    quotationStore.setQutDate(props.quotation.qut_date)
-    quotationStore.setSubject(props.quotation.subject)
 
     const formData = useForm({
-        quotationId: props.quotation.quotation_id+""+props.quotation.id,
-        clientId: props.quotation.client_id,
-        qutDate: quotationStore.getQutDate,
-        subject: quotationStore.getSubject,
-        totalPrice:null,
+        totalPrice:props.quotation.total_price,
         items:[{
             name:null,
             service:null,
@@ -185,16 +182,12 @@
     })
 
     const processing = ref(false)
-    const saveQuotation = (events) =>{
-        formData.clientId = events.clientId,
-        formData.qutDate = events.date,
-        formData.subject = events.subject,
-        formData.totalPrice = totalPrice,
-        formData.post(props.main_url,{
-        preserveState: true,
+    const updateQuotation = (events) =>{
+        Inertia.put(props.update_url, {...formData, ...events}, {
+            preserveState: true,
             onStart: () =>{ processing.value = true},
             onFinish: () => {processing.value = false},
-            onSuccess: ()=> { $toast.success('Quotation Created Successfully Done...') },
+            onSuccess: ()=> { $toast.success('Quotation Updated Successfully Done...') },
             onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
         })
     }
@@ -285,6 +278,10 @@
         formData.items[iIndex].checkFeatrueds.splice(jIndex, 1);
         $toast.error("Item Deleted")
     }
+    const packItemRemove = (iIndex, kIndex) =>{
+        formData.items[iIndex].checkPackages.splice(kIndex, 1);
+        $toast.error("Item Deleted")
+    }
 
 
     const totalPrice = computed(()=>{
@@ -297,6 +294,7 @@
                 total += pac.price * pac.qty;
             })
         })
+        formData.totalPrice = total
         return total;
     })
 
@@ -306,7 +304,6 @@
             item['isFeatured'] = false
             return item;
         })
-
         formData.items = allItems;
         console.log(allItems)
     })
@@ -324,6 +321,15 @@
 <style lang="css" scoped>
 .vs__dropdown-toggle{
     border: none !important;
+}
+.packDelete{
+    position: absolute;
+    right: -19px;
+    cursor: pointer;
+    background: #e7e7e7;
+    padding: 1px;
+    top: -7px;
+    border-radius: 50px;
 }
 </style>
 

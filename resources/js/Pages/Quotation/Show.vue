@@ -48,7 +48,7 @@
                                         <div class="col-xl-8 p-0">
                                             <h6 class="">Quotation To:</h6>
                                             <div class="row">
-                                                <div class="col-md-10" v-if=" props.quotation.client">
+                                                <div class="col-md-10" v-if="props.quotation.client">
                                                     <h6 class="mb-25">{{ props.quotation.client.name }}</h6>
                                                     <p class="card-text mb-25">{{ props.quotation.client.company }}</p>
                                                     <p class="card-text mb-25">{{ props.quotation.client.address }}</p>
@@ -58,7 +58,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <h4 class="subject-line">Subject: THis si my subject</h4>
+                                    <h4 class="subject-line">Subject: {{ props.quotation.subject }}</h4>
                                 </div>
                                 <!-- Address and Contact ends -->
                                 <table class="table">
@@ -148,12 +148,13 @@
                                     <a :href="props.url.edit_url" class="btn btn-primary w-100 mb-75">
                                         Edit Quotation
                                     </a>
-                                    <a :href="props.url.show_url+'?type=download'"  class="btn btn-outline-primary w-100 mb-75">Download PDF</a>
+                                    <a :href="props.url.show_url+'?download=true'"  class="btn btn-outline-primary w-100 mb-75">Download PDF</a>
+                                    <a :href="props.url.show_url+'?print=true'"  class="btn btn-outline-primary w-100 mb-75">Print Quotation</a>
                                     <button type="button" class="btn btn-outline-primary w-100 mb-75" data-bs-toggle="modal"
                                             data-bs-target="#givenDiscount">Given Discount</button>
-<!--                                    <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">
-                                        Send Quotation
-                                    </button>-->
+                                    <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">
+                                        Get Invoices
+                                    </button>
                                 </div>
                             </div>
                             <!--                            <div class="mt-2">

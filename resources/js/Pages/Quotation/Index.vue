@@ -28,13 +28,13 @@
                                                     Add Quotations
                                                 </span>
                                             </Link>
-                                            <div class="ml-2">
+<!--                                            <div class="ml-2">
                                                 <select v-model="searchByStatus" class="select2 form-select select w-100">
                                                     <option selected disabled :value="undefined">Filter By Quotation Status</option>
                                                     <option :value="null">All</option>
                                                     <option v-for="item in status" :value="item.name" >{{ item.name }}</option>
                                                 </select>
-                                            </div>
+                                            </div>-->
                                             <div v-if="!isCustom">
                                                 <select v-model="dateRange" @update:modelValue="changeDateRange" class="select2 form-select select w-100 ms-1" id="select2-basic">
                                                     <option selected disabled :value="undefined">Filter By Date</option>
@@ -69,7 +69,9 @@
                                         <tr class="">
                                             <th class="sorting bg-white py-1">#id</th>
                                             <th class="sorting bg-white py-1">Client Info</th>
+                                            <th class="sorting bg-white py-1">Total Price</th>
                                             <th class="sorting bg-white py-1">Created by</th>
+                                            <th class="sorting bg-white py-1">Created Date</th>
                                             <th class="sorting bg-white py-1">Actions</th>
                                         </tr>
                                         </thead>
@@ -79,33 +81,40 @@
                                                 <a :href="qut.show_url" target="_blank">#{{ moment(new Date()).format('YYYYMMD')+qut.id}}</a>
                                             </td>
 
-<!--                                            <td>
-                                                <div class="cursor-pointer">
-                                                    {{ qut.client.name ?? " " }}
-                                                    <span class="text-info cursor-pointer"
-                                                          v-if="qut.status === 'Converted To Invoice'"
-                                                          v-c-tooltip="`
-                                                          Invoice Id : #${qut.invoice?.u_id}${qut.invoice?.id}
-                                                          Client Name: ${qut.client.name}
-                                                          Phone : ${qut.client.phone ?? null}
-                                                          Total Amount: ${qut.invoice?.grand_total}
-                                                          Total pay: ${qut.invoice?.pay}
-                                                          Total Due: ${qut.invoice?.due}`"
-                                                    >
-                                                    <vue-feather type="info" size="15"/>
-                                                </span>
+                                            <td>
+                                                <div class="d-flex justify-content-left align-items-center">
+                                                    <div class="avatar-wrapper">
+                                                        <div class="avatar  me-1">
+                                                            <img
+                                                                src="#"
+                                                                alt="{{ qut.client.username }}" height="32" width="32">
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <div class="user_name text-truncate text-body">
+                                                            <span class="fw-bolder">{{ qut.client.name }}</span>
+                                                        </div>
+                                                        <small class="emp_post text-muted">{{ qut.client.email }}</small>
+                                                    </div>
                                                 </div>
-                                            </td>-->
+                                            </td>
+
+                                            <td>
+                                                <span class="cursor-pointer" v-c-tooltip="'Total Price: '+qut.total_price+'\nDiscount: '+qut.discount">{{ qut.grand_total }}</span>
+                                            </td>
 
                                             <td class="cursor-pointer">
-                                                <span>{{ qut.date }}</span>
+                                                <span>{{ qut.user.name }}</span>
+                                            </td>
+                                            <td>
+                                                {{ qut.created_at }}
                                             </td>
 
 
                                             <td class="d-flex align-items-center">
-                                                <span class="text-info cursor-pointer" v-c-tooltip="'Click for change quotation status'" @click="changeStatus(qut.id)">
+<!--                                                <span class="text-info cursor-pointer" v-c-tooltip="'Click for change quotation status'" @click="changeStatus(qut.id)">
                                                     <vue-feather type="refresh-ccw" size="20"/>
-                                                </span>
+                                                </span>-->
                                                 <span class="text-secondery mx-1 cursor-pointer" @click="changeStatus(qut.id)" v-c-tooltip="'Send invoice by email'">
                                                     <vue-feather type="mail" size="20"/>
                                                 </span>
@@ -114,7 +123,7 @@
                                                         <vue-feather type="more-vertical" />
                                                     </CDropdownToggle>
                                                     <CDropdownMenu>
-                                                        <CDropdownItem :href="qut.show_url+'?type=download'" >
+                                                        <CDropdownItem :href="qut.show_url+'?download=true'" >
                                                             <vue-feather type="download" size="15"/>
                                                             <span class="ms-1">Download</span>
                                                         </CDropdownItem>

@@ -138,8 +138,11 @@
     <div class="row">
         <div class="col-1">
             <div id="logo">
-                <img src="{{ public_path('creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img" height="30">
-{{--                <img src="{{ asset('images/creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img" height="30">--}}
+                @if($isPrint)
+                    <img src="{{ asset('images/creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img" height="30">
+                @else
+                    <img src="{{ public_path('creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img" height="30">
+                @endif
             </div>
         </div>
         <div class="col-1"></div>
@@ -308,23 +311,35 @@
             </h3>
         </div>
     </div>
-  {{--  @if ($data['quotation']['privicy_and_policy'])
+  @if (!is_null($quotation->payment_policy))
         <div class="row">
             <div class="col-3">
                 <h3>Payment Policy:</h3>
-                {!! nl2br($data['quotation']['privicy_and_policy']) !!}
+                {!! nl2br($quotation->payment_policy) !!}
             </div>
         </div>
     @endif
-    @if ($data['quotation']['trams_and_condition'])
+
+    @if (!is_null($quotation->trams_of_service))
         <div class="row mb-50">
             <div class="col-3">
                 <h3>Terms of Service:</h3>
-                {!! nl2br($data['quotation']['trams_and_condition']) !!}
+                {!! nl2br($quotation->trams_of_service) !!}
             </div>
         </div>
-    @endif--}}
+    @endif
 </div>
+
+
+<script>
+    if ({{ $isPrint }}){
+        document.addEventListener('DOMContentLoaded', function() {
+            window.print();
+        });
+    }
+</script>
+
+
 </body>
 </html>
 
