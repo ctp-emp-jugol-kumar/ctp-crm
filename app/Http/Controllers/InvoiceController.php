@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
+use function PHPUnit\Framework\isEmpty;
+use function PHPUnit\Framework\isNull;
 use function Symfony\Component\Mime\toString;
 
 class InvoiceController extends Controller
@@ -30,8 +32,9 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        return inertia('Modules/Invoices/Index', [
-            'invoices' => CustomInvoice::query()
+
+        return inertia('Invoice/Index',[
+            'invoices' => Invoice::query()
                 ->latest()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('subject', 'like', "%{$search}%")
@@ -41,32 +44,39 @@ class InvoiceController extends Controller
                         ->orWhereHas('user', function ($user) use($search){
                             $user->where('name', 'like', "%{$search}%");
                         })
-                        ->orWhereHas('invoiceItems', function ($invoiceItem) use($search){
-                            $invoiceItem->where('item_name', 'like', "%{$search}%");
-                        })
                     ;
                 })
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
                 ->through(fn($invoice) => [
                     'id' => $invoice->id,
-                    'invoice' => $invoice,
-                    'name' =>  $invoice->client ? $invoice->client->name : 'unknown',
-                    'creator' => $invoice->user ? $invoice->user->name : 'unknown',
+                    'invoice_id' => $invoice->invoice_id,
+                    'client' => $invoice->client ?? $invoice->quotation?->client,
+                    'user' => $invoice->user,
+                    'total_amount' => $invoice->total_price,
+                    'discount' => $invoice->discount,
+                    'grand_total' => $invoice->grand_total,
+                    'pay' => $invoice->pay,
+                    'due' => $invoice->due,
+                    'invoice_type' => $invoice->invoice_type,
                     'created_at' => $invoice->created_at->format('d M Y'),
-                    'invice_url' => URL::route('invoices.show', $invoice->id),
                     'edit_url' => URL::route('invoices.edit', $invoice->id),
-                    'delete_url' => URL::route('invoices.delete', $invoice->id)
+                    'show_url' => URL::route('invoices.show', $invoice->id),
+                    'invoice_url' => URL::route('invoices.downloadInvoice', $invoice->id),
                 ]),
             'filters' => Request::only(['search','perPage']),
             'main_url' => URL::route('invoices.index'),
         ]);
+
     }
 
     public function create()
     {
-        return Inertia::render('Modules/Invoices/Create', [
-            "clients"   => Client::all(['id','name']),
+        return Inertia::render('Invoice/Create', [
+            "quotations" => Quotation::all(),
+            "clients"   => Client::all(),
+            "paymentMethods" => Method::all(),
+            "store_url" => URL::route('invoices.store')
         ]);
     }
     /**
@@ -77,51 +87,28 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-
         Request::validate([
-           'client_id' => 'required|integer',
-           'subject' => 'required',
-           'date' => 'required',
-           'trams_and_condition' => 'required',
-           'payment_policy' => 'required'
+            'clientId' => 'required',
+            'date' => 'required',
+        ],[
+            'clientId.required' => 'First Select An Client...',
+            'qutDate.required' => 'Please Select Quotation Date...',
         ]);
 
-
-
-        $invoice = CustomInvoice::create([
-            'u_id' => date('Yd', strtotime(now())),
-            'user_id'       => Auth::id(),
-            'client_id'        => Request::input('client_id'),
-            'subject'          => Request::input('subject'),
-            'date'               => Request::input('date'),
-            'status'           => filled(Request::input('status')),
-            'trams_and_condition' => Request::input('trams_and_condition'),
-            'privicy_and_policy'  => Request::input('payment_policy'),
+        Invoice::create([
+            'invoice_id' => now()->format('Ymd'),
+            'client_id' => Request::input('clientId'),
+            'user_id' => Auth::id(),
+            'invoice_type' => 'custom',
+            'items' => json_encode(Request::input('items')),
+            'total_price' => Request::input('totalPrice'),
+            'discount' => Request::input('discount') ?? 0,
+            'grand_total' => Request::input('totalPrice'),
+            'due' => Request::input('totalPrice'),
+            'note' => Request::input('note')
         ]);
 
-
-        $totalPrice = 0;
-        $totalDiscount = 0;
-        foreach (Request::input('quatations') as $item){
-            $totalPrice += $item['price'];
-            $totalDiscount += $item['discount'];
-            InvoiceItem::create([
-                'invoice_id' => $invoice->id,
-                'item_name'  => $item['item_name'],
-                'price'      => $item['price'] ?? 0,
-                'discount'   => $item['discount'] ?? 0,
-            ]);
-        }
-
-        $total = $totalPrice - $totalDiscount;
-
-        $invoice->total_price =  $totalPrice ?? 0;
-        $invoice->discount = $totalDiscount ?? 0;
-        $invoice->grand_total = $total;
-        $invoice->due =  $total;
-        $invoice->save();
-
-        return redirect()->route('invoices.index');
+        return back();
     }
 
     /**
@@ -130,51 +117,54 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Inertia\Response
      */
-    public function show(CustomInvoice $invoice)
+    public function show(Invoice $invoice)
     {
-        $transactions = [];
-        foreach($invoice->transactions as $item){
-            $transactions[] = [
-                "amount"     => $item->amount ?? 0,
-                "user"       => $item->user,
-                "method"     => $item->method->name,
-
-                "pay_amount" => $item->pay_amount ?? 0,
-                "discount"   => $item->discount ?? 0,
-                "total_due"  => $item->total_due ?? 0,
-                "old_total_pay" => $item->old_total_pay ?? 0,
-                "date"       => $item->date->format('d M,y'),
-                "note"       => $item->note,
-
-            ];
+        $invoice = $invoice->load('user', 'client', 'quotation');
+        $pref = [];
+        if (!is_null($invoice) && !is_null($invoice->quotation_id)){
+            foreach (json_decode($invoice->quotation?->items) as $item){
+                if ($item->checkPackages){
+                    foreach ($item->checkPackages as $package){
+                        $pref[] =[
+                            'name'=> $package->descriptions,
+                            'qty' => $package->qty,
+                            'price' => $package->price,
+                        ];
+                    }
+                }
+                if ($item->checkFeatrueds){
+                    foreach ($item->checkFeatrueds as $feared){
+                        $pref[] =[
+                            'name'=> $feared->name,
+                            'qty' => $feared->qty,
+                            'price' => $feared->price,
+                        ];
+                    }
+                }
+            }
+        }else{
+            foreach(json_decode($invoice->items) as $item){
+                $pref[] =[
+                    'name'=> $item->description,
+                    'qty' => 1,
+                    'price' => $item->price,
+                ];
+            }
         }
 
-         $totalPay = $invoice->transactions->sum('pay_amount') + $invoice->transactions->sum('discount');
-
-        $invoiceLastTransaction = $invoice->transactions->last() ?? [
-            'pay_amount' => 0,
-            'discount' => 0
-            ];
 
 
-        return Inertia::render('Modules/Invoices/Show', [
-
-            "info" => [
-                "invoice"         => $invoice,
-                "client"          => $invoice->client,
-                "invoice_item"    => $invoice->invoiceItems,
-                'transactions'    => $transactions,
-                "total_pay"       => $totalPay,
-                "last_payment"    => $invoiceLastTransaction,
-                'invoice_id'      => $invoice->created_at->format('Ymd').$invoice->id,
-                'creator'         => $invoice->user,
-                'payment_methods' => Method::all(),
-                "created"         => $invoice->created_at->format('D, d F, Y'),
-                'download_url'    => URL::route('invoices.generateInvoicePDFFile', $invoice->id),
-                'payment_url'     => URL::route('saveInvoiceTransaction'),
+        return Inertia::render('Invoice/Show',   [
+            "invoice" =>$invoice,
+            "pref" => $pref,
+            "paymentMethods" => Method::all(),
+            $downloadInvoiceUrl =
+            "url" =>[
+                "edit_url" => URL::route('invoices.edit', $invoice->id),
+                "add_discount" => URL::route('quotations.addDiscount', $invoice->id),
+                "invoice_url" => URL::route('invoices.downloadInvoice', $invoice->id),
             ]
         ]);
-
     }
 
 
@@ -182,8 +172,80 @@ class InvoiceController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
+
+
+    public function createInvoice($id)
+    {
+
+        if (Request::input("pay") != null){
+            Request::validate([
+                'payment_method' => 'required'
+            ]);
+        }
+
+        $grandTotal = (int)Request::input('totalPrice') - (int)Request::input('discount');
+        $due = $grandTotal - (int)Request::input('pay');
+        Invoice::create([
+            'invoice_id' => now()->format('Ymd'),
+            'quotation_id' => Request::input('quotationId'),
+            'user_id' => Auth::id(),
+            'invoice_type' => 'quotation',
+            'total_price' => Request::input('totalPrice'),
+            'discount' => Request::input('discount') ?? 0,
+            'grand_total' => $grandTotal,
+            'pay' => Request::input('pay'),
+            'due' => $due,
+            'note' => Request::input('note')
+        ]);
+
+        return back();
+    }
+
+    public function downloadInvoice($id){
+        $invoice = Invoice::with(['user', 'quotation', 'client'])->findOrFail($id);
+        $pref = [];
+
+        if (!is_null($invoice) && !is_null($invoice->quotation_id)){
+            foreach (json_decode($invoice->quotation?->items) as $item){
+                if ($item->checkPackages){
+                    foreach ($item->checkPackages as $package){
+                        $pref[] =[
+                            'name'=> $package->descriptions,
+                            'qty' => $package->qty,
+                            'price' => $package->price,
+                        ];
+                    }
+                }
+                if ($item->checkFeatrueds){
+                    foreach ($item->checkFeatrueds as $feared){
+                        $pref[] =[
+                            'name'=> $feared->name,
+                            'qty' => $feared->qty,
+                            'price' => $feared->price,
+                        ];
+                    }
+                }
+            }
+        }else{
+            foreach(json_decode($invoice->items) as $item){
+                $pref[] =[
+                    'name'=> $item->description,
+                    'qty' => 1,
+                    'price' => $item->price,
+                ];
+            }
+        }
+
+        $clientName = $invoice->quotation?->client?->name ?? $invoice->client?->name;
+        $isPrint = false;
+
+
+        $pdf = Pdf::loadView('invoice.quotationInvoice', compact('invoice','pref', 'isPrint'));
+        return $pdf->download($clientName."_".now()->format('d_m_Y')."_".'quotation.pdf');
+    }
+
     public function generateInvoicePDFFile($id){
         $invoice = CustomInvoice::findOrFail($id);
 
@@ -341,12 +403,13 @@ class InvoiceController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Invoice  $invoice
-     * @return Invoice
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        $invoice = CustomInvoice::findOrFail($id);
+        $invoice = Invoice::findOrFail($id);
         $invoice->delete();
+        return back();
     }
 
 
