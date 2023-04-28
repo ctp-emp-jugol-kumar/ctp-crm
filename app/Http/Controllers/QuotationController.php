@@ -134,7 +134,7 @@ class QuotationController extends Controller
 
     public function index(){
         $quotation  = Quotation::query()
-            ->with(['client', 'user'])
+            ->with(['client', 'user', 'invoice'])
             ->latest()
             ->when(Request::input('search'), function ($query, $search) {
                 $query->where('u_id', 'like', "%{$search}%")
@@ -543,7 +543,7 @@ class QuotationController extends Controller
 
     public function show($id)
     {
-        $quotation = Quotation::with(['client', 'user:id,name'])->findOrFail($id);
+        $quotation = Quotation::with(['client', 'user:id,name', 'invoice'])->findOrFail($id);
         $pref = [];
         foreach (json_decode($quotation->items) as $item){
             if ($item->checkPackages){
@@ -579,10 +579,14 @@ class QuotationController extends Controller
 
         return Inertia::render('Quotation/Show',   [
             "quotation" => $quotation,
+            "paymentMethods" => Method::all(),
+            $downloadInvoiceUrl = $quotation->invoice ? URL::route('invoices.downloadInvoice', $quotation->invoice?->id) : null,
             "url" =>[
                 "show_url" => URL::route('quotations.show', $quotation->id),
                 "edit_url" => URL::route('quotations.edit', $quotation->id),
-                "add_discount" => URL::route('quotations.addDiscount', $quotation->id)
+                "add_discount" => URL::route('quotations.addDiscount', $quotation->id),
+                "create_invoice" => URL::route('invoices.createInvoice', $quotation->id),
+                "invoice_url" => $downloadInvoiceUrl,
             ]
         ]);
 

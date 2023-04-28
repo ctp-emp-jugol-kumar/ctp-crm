@@ -24615,10 +24615,6 @@ div.dataTables_wrapper .dataTables_info {
   border-radius: 15px !important;
 }
 
-.vs__dropdown-toggle {
-  border: none !important;
-}
-
 .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
   padding: 0 !important;
 }

@@ -12,6 +12,12 @@
                         <!-- Invoice Edit Left starts -->
                         <div class="col-xl-9 col-md-8 col-12">
                             <div class="card invoice-preview-card">
+                                <div class="card-header">
+                                    <ul>
+                                        <li class="text-danger" v-for="error in props.errors">{{ error }}</li>
+                                    </ul>
+                                </div>
+
                                 <!-- Header starts -->
                                 <div class="card-body invoice-padding pb-0">
                                     <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
@@ -152,12 +158,12 @@
                                     <a :href="props.url.show_url+'?print=true'"  class="btn btn-outline-primary w-100 mb-75">Print Quotation</a>
                                     <button type="button" class="btn btn-outline-primary w-100 mb-75" data-bs-toggle="modal"
                                             data-bs-target="#givenDiscount">Given Discount</button>
-                                    <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">
+                                    <button v-if="props.quotation.invoice === null" class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#createInvoice">
                                         Generate Invoices
                                     </button>
-                                    <button class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#send-invoice-sidebar">
+                                    <a :href="props.url.invoice_url" v-else target="_blank" class="btn btn-success w-100 mb-75">
                                         Get Invoices
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                             <!--                            <div class="mt-2">
@@ -196,49 +202,62 @@
                     </div>
 
                     <!-- Send Invoice Sidebar -->
-                    <div class="modal modal-slide-in fade" id="send-invoice-sidebar" aria-hidden="true">
+                    <div class="modal modal-slide-in fade" id="createInvoice" aria-hidden="true">
                         <div class="modal-dialog sidebar-lg">
                             <div class="modal-content p-0">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
                                 <div class="modal-header mb-1">
                                     <h5 class="modal-title">
-                                        <span class="align-middle">Send Invoice</span>
+                                        <span class="align-middle">Create Invoice</span>
                                     </h5>
                                 </div>
                                 <div class="modal-body flex-grow-1">
-                                    <form>
+                                    <form @submit.prevent="createInvoice">
                                         <div class="mb-1">
-                                            <label for="invoice-from" class="form-label">From</label>
-                                            <input type="text" class="form-control" id="invoice-from" value="shelbyComapny@email.com" placeholder="company@email.com" />
+                                            <label class="form-label">Total Price</label>
+                                            <input type="text" class="form-control" :value="props.quotation.grand_total" readonly disabled/>
                                         </div>
-                                        <div class="mb-1">
-                                            <label for="invoice-to" class="form-label">To</label>
-                                            <input type="text" class="form-control" id="invoice-to" value="qConsolidated@email.com" placeholder="company@email.com" />
-                                        </div>
-                                        <div class="mb-1">
-                                            <label for="invoice-subject" class="form-label">Subject</label>
-                                            <input type="text" class="form-control" id="invoice-subject" value="Invoice of purchased Admin Templates" placeholder="Invoice regarding goods" />
-                                        </div>
-                                        <div class="mb-1">
-                                            <label for="invoice-message" class="form-label">Message</label>
-                                            <textarea class="form-control" name="invoice-message" id="invoice-message" cols="3" rows="11">
-                                            Dear Queen Consolidated,
 
-                                            Thank you for your business, always a pleasure to work with you!
 
-                                            We have generated a new invoice in the amount of $95.59
-
-                                            We would appreciate payment of this invoice by 05/11/2019
-                                            </textarea>
-                                        </div>
                                         <div class="mb-1">
-                                            <span class="badge badge-light-primary">
-                                                <i data-feather="link" class="me-25"></i>
-                                                <span class="align-middle">Invoice Attached</span>
-                                            </span>
+                                            <label class="form-label">Given Discount</label>
+                                            <input type="text" v-model="invoiceFormData.discount" @input="invoiceDiscount" class="form-control" placeholder="If want to given again discount..."/>
                                         </div>
+
+                                        <div class="mb-1">
+                                            <label class="form-label">Payable Amount</label>
+                                            <input type="text" class="form-control" :value="payableAmount" readonly disabled/>
+                                        </div>
+
+
+                                        <div class="mb-1">
+                                            <label class="form-label">Total pay</label>
+                                            <input type="text" v-model="invoiceFormData.pay" @input="payAmount" class="form-control" placeholder="If want to given again discount..."/>
+                                        </div>
+
+                                        <div class="mb-1">
+                                            <label class="form-label">Total Due</label>
+                                            <input type="text" class="form-control" :value="dueAmount" readonly disabled/>
+                                        </div>
+
+                                        <div class="mb-1">
+                                            <label class="form-label"></label>
+                                            <v-select :options="props.paymentMethods"
+                                                      :reduce="payment => payment.id"
+                                                      v-model="invoiceFormData.payment_method"
+                                                      label="name"  placeholder="Select Payment Method"></v-select>
+                                        </div>
+
+
+                                        <div class="mb-1">
+                                            <label class="form-label">Note</label>
+                                            <textarea class="form-control"
+                                                      v-model="invoiceFormData.note"
+                                                      cols="3" rows="5" placeholder="Want to Say Something...?"></textarea>
+                                        </div>
+
                                         <div class="mb-1 d-flex flex-wrap mt-2">
-                                            <button type="button" class="btn btn-primary me-1" data-bs-dismiss="modal">Send</button>
+                                            <button type="submit" class="btn btn-primary me-1" data-bs-dismiss="modal">Create</button>
                                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                                         </div>
                                     </form>
@@ -345,16 +364,40 @@
 
     const props = defineProps({
         quotation:Object|[]|null,
-        url:Array|[]|null
+        paymentMethods:Object|[]|null,
+        url:Array|[]|null,
+        errors:Object|{}|null,
     })
 
     const formData = useForm({
         discount:0
     })
 
+    const invoiceFormData = useForm({
+        quotationId:props.quotation.id,
+        totalPrice:props.quotation.grand_total,
+        discount:null,
+        pay:null,
+        payment_method:null,
+        note:null,
+    })
+
     const newPrice= ref(props.quotation.total_price)
+    const payableAmount = ref(props.quotation.grand_total)
+    const dueAmount = ref(payableAmount.value)
     const discountInput = (event) =>{
         newPrice.value = props.quotation.total_price - event.target.value
+    }
+
+    const invoiceDiscount = (event) =>{
+        invoiceFormData.pay = null;
+        let amount = props.quotation.grand_total - event.target.value
+        payableAmount.value = amount;
+        dueAmount.value = amount;
+    }
+
+    const payAmount = (event) =>{
+        dueAmount.value = payableAmount.value - event.target.value
     }
 
     const processing=ref(false);
@@ -364,6 +407,16 @@
             onStart: () =>{ processing.value = true},
             onFinish: () => {processing.value = false},
             onSuccess: ()=> { $toast.success('Quotation Discount Done...') },
+            onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
+        })
+    }
+
+    const createInvoice =()=>{
+        invoiceFormData.post(props.url.create_invoice ,{
+            preserveState: true,
+            onStart: () =>{ processing.value = true},
+            onFinish: () => {processing.value = false},
+            onSuccess: ()=> { $toast.success('Invoice Created Successfully Done...') },
             onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
         })
     }
@@ -404,10 +457,13 @@
 
 </style>
 
-<style lang="css" scoped>
+<style lang="css">
 
 .newlineStringStyle {
     white-space: pre-wrap;
     font-size: 11px;
+}
+.vs__dropdown-toggle{
+    border: 1px solid;
 }
 </style>

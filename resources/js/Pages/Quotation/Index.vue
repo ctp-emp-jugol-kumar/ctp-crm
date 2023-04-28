@@ -83,13 +83,13 @@
 
                                             <td>
                                                 <div class="d-flex justify-content-left align-items-center">
-                                                    <div class="avatar-wrapper">
+<!--                                                    <div class="avatar-wrapper">
                                                         <div class="avatar  me-1">
                                                             <img
                                                                 src="#"
                                                                 alt="{{ qut.client.username }}" height="32" width="32">
                                                         </div>
-                                                    </div>
+                                                    </div>-->
                                                     <div class="d-flex flex-column">
                                                         <div class="user_name text-truncate text-body">
                                                             <span class="fw-bolder">{{ qut.client.name }}</span>
