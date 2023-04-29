@@ -20,9 +20,13 @@ class ProjectController extends Controller
      */
     public function index()
     {
+//        return  Project::query()
+//            ->with(['client', 'client', 'users', 'users'])->get();
 
-        return inertia('Modules/Projects/Index', [
-            'projects' => Project::query()->with(['client', 'client:id,name,phone,email', 'users', 'users:id,name,photo'])
+        return inertia('Projects/Index', [
+            'projects' => Project::query()
+                ->with(['client', 'client', 'users', 'users'])
+                ->latest()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query
                     ->where('name', 'like', "%{$search}%")
@@ -54,8 +58,8 @@ class ProjectController extends Controller
                     "edit_url"      => URL::route('projects.edit', $project->id),
                     "show_url"      => URL::route('projects.show', $project->id),
                 ]),
-            'clients'  => Client::all(['id','name', 'email', 'phone', 'photo']),
-            'users'    => User::all(['id','name', 'photo', 'email']),
+            'clients'  => Client::all(['id','name', 'email', 'phone']),
+            'users'    => User::all(['id','name', 'email']),
             'filters'  => Request::only(['search','perPage']),
             'main_url' => URL::route('projects.index'),
         ]);
@@ -134,7 +138,7 @@ class ProjectController extends Controller
         $project = Project::with(['user', 'users', 'clients', 'client'])->findOrFail($id);
 
 
-        return inertia('Modules/Projects/Show', [
+        return inertia('Projects/Show', [
             "info" =>  $project,
             "dates" =>[
                 "end_date" => $project->end->format("d M, y"),

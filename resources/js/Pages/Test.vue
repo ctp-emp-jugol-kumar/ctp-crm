@@ -21,6 +21,7 @@
                     </div>
             </section>
 
+
         <!--        <section id="dashboard-ecommerce">
                     <div class="row match-height">
                         <div class="col-md-4 col-sm-12">
@@ -246,13 +247,15 @@
         </section>
 -->
 
+
+
     </div>
     <!-- Dashboard Ecommerce ends -->
 </template>
 
 
 <script setup>
-
+import ProgressChart from "../components/ProgressChart.vue";
 import {
     Chart as ChartJS,
     Title,
@@ -262,7 +265,7 @@ import {
     CategoryScale,
     LinearScale
 } from 'chart.js'
-import { Bar } from 'vue-chartjs'
+import { Bar} from 'vue-chartjs'
 import {options} from './Modules/chartConfig'
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 

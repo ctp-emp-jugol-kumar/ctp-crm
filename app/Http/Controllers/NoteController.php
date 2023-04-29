@@ -23,7 +23,7 @@ class NoteController extends Controller
             abort(401 );
         }
 
-        return inertia('Modules/Notes/Notes', [
+        return inertia('Notes/Notes', [
             $search = Request::input('search'),
             'notes' => Note::query()
                 ->with('noteCategory')
