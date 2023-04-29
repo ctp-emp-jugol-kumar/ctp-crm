@@ -119,7 +119,8 @@ class InvoiceController extends Controller
      */
     public function show(Invoice $invoice)
     {
-        $invoice = $invoice->load('user', 'client', 'quotation');
+        $invoice = $invoice->load('user', 'client', 'quotation', 'transactions', 'transactions.receivedBy:id,name', 'transactions.method:id,name');
+
         $pref = [];
         if (!is_null($invoice) && !is_null($invoice->quotation_id)){
             foreach (json_decode($invoice->quotation?->items) as $item){
@@ -161,10 +162,22 @@ class InvoiceController extends Controller
             $downloadInvoiceUrl =
             "url" =>[
                 "edit_url" => URL::route('invoices.edit', $invoice->id),
-                "add_discount" => URL::route('quotations.addDiscount', $invoice->id),
+                "add_discount" => URL::route('invoices.addDiscount', $invoice->id),
                 "invoice_url" => URL::route('invoices.downloadInvoice', $invoice->id),
+                "payment_url" => URL::route('transaction.store')
             ]
         ]);
+    }
+
+    public function addDiscount($id){
+        $invoice = Invoice::findOrFail($id);
+
+//        return dd($invoice);
+        $invoice->discount = $invoice->discount + (int)Request::input('discount');
+        $invoice->grand_total = $invoice->total_price - $invoice->discount;
+        $invoice->due = $invoice->grand_total - $invoice->pay;
+        $invoice->save();
+        return back();
     }
 
 
@@ -190,6 +203,7 @@ class InvoiceController extends Controller
         Invoice::create([
             'invoice_id' => now()->format('Ymd'),
             'quotation_id' => Request::input('quotationId'),
+            'client_id' => Request::input('clientId'),
             'user_id' => Auth::id(),
             'invoice_type' => 'quotation',
             'total_price' => Request::input('totalPrice'),
