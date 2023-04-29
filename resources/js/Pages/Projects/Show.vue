@@ -144,70 +144,43 @@
                                             </div>
                                         </div>
 
-
-                                        <div class="col-md-12 mb-2">
+                                        <div class="col-md-12 mb-2" v-if="props.info.invoice">
                                             <!-- card -->
                                             <div class="card">
                                                 <div class="card-header">
                                                     <h4 class="mb-0">Budget </h4>
-
                                                 </div>
                                                 <!-- card body -->
-
+{{ props.info.invoice }}
                                                 <!-- row -->
                                                 <div class="row">
-
                                                     <!-- col -->
-                                                    <div class="col-lg-4 col-md-12 col-12">
+                                                    <div class="col-lg-4 col-md-12 col-12 bg-">
                                                         <div class="d-flex align-items-center justify-content-between p-4">
                                                             <div>
-                                                                <h2 class="h1 fw-bold mb-0">$52,000</h2>
+                                                                <h2 class="h1 fw-bold mb-0">{{ props.info.invoice?.grand_total }} ৳</h2>
                                                                 <p class="mb-0">Total Budget</p>
-
                                                             </div>
-                                                            <div class="ms-3">
-                                                                <div class="icon-shape icon-lg bg-light-primary text-primary rounded-circle">
-                                                                    <i class="fe fe-dollar-sign fs-3"></i>
-                                                                </div>
 
-                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <!-- col -->
-                                                    <div class="col-lg-4 col-md-12 col-12 border-start-md">
+                                                    <div class="col-lg-4 col-md-12 col-12 bg-">
                                                         <div class="d-flex align-items-center justify-content-between p-4">
                                                             <div>
-                                                                <h2 class="h1 fw-bold mb-0">$43,230</h2>
-                                                                <p class="mb-0">Total Spent</p>
-
+                                                                <h2 class="h1 fw-bold mb-0">{{ props.info.invoice }} ৳</h2>
+                                                                <p class="mb-0">Total Pay</p>
                                                             </div>
-                                                            <div class="ms-3">
-                                                                <div class="icon-shape icon-lg bg-light-danger text-danger rounded-circle">
-                                                                    <i class="fe fe-shopping-cart fs-3"></i>
-                                                                </div>
 
-                                                            </div>
                                                         </div>
-
                                                     </div>
-                                                    <!-- col -->
-                                                    <div class="col-lg-4 col-md-12 col-12 border-start-md">
+                                                    <div class="col-lg-4 col-md-12 col-12 bg-">
                                                         <div class="d-flex align-items-center justify-content-between p-4">
                                                             <div>
-                                                                <h2 class="h1 fw-bold mb-0">$8,770
-                                                                </h2>
-                                                                <p class="mb-0">Remaining</p>
-
-                                                            </div>
-                                                            <div class="ms-3">
-                                                                <div class="icon-shape icon-lg bg-light-success text-success rounded-circle">
-                                                                    <i class="fe fe-pie-chart fs-3"></i>
-                                                                </div>
-
+                                                                <h2 class="h1 fw-bold mb-0">{{ props.info.invoice?.due }} Tk</h2>
+                                                                <p class="mb-0">Due Payment</p>
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
 
                                             </div>

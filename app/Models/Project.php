@@ -26,6 +26,7 @@ class Project extends Model
         'name',
         'user_id',
         'client_id',
+        'invoice_id',
         'date',
         'start',
         'end',
@@ -43,13 +44,13 @@ class Project extends Model
         'end',
     ];
 
-    protected function files(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value ? Storage::url($value) : '/images/creativeTechPark.png'
-//            set: fn ($value) => $value->store('image', 'public'),
-        );
-    }
+//    protected function files(): Attribute
+//    {
+//        return Attribute::make(
+//            get: fn ($value) => $value ? Storage::url($value) : '/images/creativeTechPark.png'
+////            set: fn ($value) => $value->store('image', 'public'),
+//        );
+//    }
 
     /*
     |--------------------------------------------------------------------------
@@ -80,6 +81,9 @@ class Project extends Model
         return $this->belongsTo(Client::class, 'client_id');
     }
 
+    public function invoice(){
+        return $this->belongsTo(Invoice::class, 'invoice_id');
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
