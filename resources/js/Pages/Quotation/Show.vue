@@ -376,6 +376,7 @@
     const invoiceFormData = useForm({
         quotationId:props.quotation.id,
         totalPrice:props.quotation.grand_total,
+        clientId:props.quotation.client_id,
         discount:null,
         pay:null,
         payment_method:null,

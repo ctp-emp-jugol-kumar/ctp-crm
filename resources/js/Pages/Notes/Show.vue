@@ -39,9 +39,9 @@
 
 
 <script setup>
-import Pagination from "../../../components/Pagination"
-import Icon from '../../../components/Icon'
-import Modal from '../../../components/Modal'
+import Pagination from "../../components/Pagination"
+import Icon from '../../components/Icon'
+import Modal from '../../components/Modal'
 import {ref, watch} from "vue";
 import debounce from "lodash/debounce";
 import {Inertia} from "@inertiajs/inertia";

@@ -118,8 +118,17 @@
                                                 </div>
                                                 <hr class="my-50" />
                                                 <div class="invoice-total-item">
-                                                    <strong class="invoice-total-title">Grand Total:</strong>
-                                                    <strong class="invoice-total-amount">{{ props.invoice.grand_total }}.00</strong>
+                                                    <p class="invoice-total-title">Grand Total:</p>
+                                                    <p class="invoice-total-amount">{{ props.invoice.grand_total }}.00</p>
+                                                </div>
+                                                <div class="invoice-total-item">
+                                                    <p class="invoice-total-title">Total Pay:</p>
+                                                    <p class="invoice-total-amount">{{ props.invoice.pay }}.00</p>
+                                                </div>
+                                                <hr class="my-50">
+                                                <div class="invoice-total-item">
+                                                    <strong class="invoice-total-title">Total Due:</strong>
+                                                    <strong class="invoice-total-amount">{{ props.invoice.due }}.00</strong>
                                                 </div>
                                             </div>
                                         </div>
@@ -150,16 +159,16 @@
                         <div class="col-xl-3 col-md-4 col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <a :href="props.url.edit_url" class="btn btn-primary w-100 mb-75">
+<!--                                    <a :href="props.url.edit_url" class="btn btn-primary w-100 mb-75">
                                         Edit Invoice
-                                    </a>
+                                    </a>-->
                                     <a :href="props.url.invoice_url"  class="btn btn-outline-primary w-100 mb-75">Download PDF</a>
-                                    <a :href="props.url.show_url+'?print=true'"  class="btn btn-outline-primary w-100 mb-75">Print Invoice</a>
+<!--                                    <a :href="props.url.show_url+'?print=true'"  class="btn btn-outline-primary w-100 mb-75">Print Invoice</a>-->
                                     <button type="button" class="btn btn-outline-primary w-100 mb-75" data-bs-toggle="modal"
                                             data-bs-target="#givenDiscount">Given Discount</button>
 
                                     <button type="button" class="btn btn-outline-primary w-100 mb-75" data-bs-toggle="modal"
-                                            data-bs-target="#givenDiscount">Payment History</button>
+                                            data-bs-target="#paymentHistory">Payment History</button>
 
                                     <button type="button" class="btn btn-success w-100 mb-75" data-bs-toggle="modal"
                                             data-bs-target="#addPayment">Add Payment</button>
@@ -200,73 +209,8 @@
                         <!-- Invoice Edit Right ends -->
                     </div>
 
-                    <!-- Send Invoice Sidebar -->
-                    <div class="modal modal-slide-in fade" id="createInvoice" aria-hidden="true">
-                        <div class="modal-dialog sidebar-lg">
-                            <div class="modal-content p-0">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
-                                <div class="modal-header mb-1">
-                                    <h5 class="modal-title">
-                                        <span class="align-middle">Create Invoice</span>
-                                    </h5>
-                                </div>
-                                <div class="modal-body flex-grow-1">
-                                    <form @submit.prevent="createInvoice">
-                                        <div class="mb-1">
-                                            <label class="form-label">Total Price</label>
-                                            <input type="text" class="form-control" :value="props.invoice.grand_total" readonly disabled/>
-                                        </div>
 
 
-                                        <div class="mb-1">
-                                            <label class="form-label">Given Discount</label>
-                                            <input type="text" v-model="invoiceFormData.discount" @input="invoiceDiscount" class="form-control" placeholder="If want to given again discount..."/>
-                                        </div>
-
-                                        <div class="mb-1">
-                                            <label class="form-label">Payable Amount</label>
-                                            <input type="text" class="form-control" :value="payableAmount" readonly disabled/>
-                                        </div>
-
-
-                                        <div class="mb-1">
-                                            <label class="form-label">Total pay</label>
-                                            <input type="text" v-model="invoiceFormData.pay" @input="payAmount" class="form-control" placeholder="If want to given again discount..."/>
-                                        </div>
-
-                                        <div class="mb-1">
-                                            <label class="form-label">Total Due</label>
-                                            <input type="text" class="form-control" :value="dueAmount" readonly disabled/>
-                                        </div>
-
-                                        <div class="mb-1">
-                                            <label class="form-label"></label>
-                                            <v-select :options="props.paymentMethods"
-                                                      :reduce="payment => payment.id"
-                                                      v-model="invoiceFormData.payment_method"
-                                                      label="name"  placeholder="Select Payment Method"></v-select>
-                                        </div>
-
-
-                                        <div class="mb-1">
-                                            <label class="form-label">Note</label>
-                                            <textarea class="form-control"
-                                                      v-model="invoiceFormData.note"
-                                                      cols="3" rows="5" placeholder="Want to Say Something...?"></textarea>
-                                        </div>
-
-                                        <div class="mb-1 d-flex flex-wrap mt-2">
-                                            <button type="submit" class="btn btn-primary me-1" data-bs-dismiss="modal">Create</button>
-                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /Send Invoice Sidebar -->
-
-                    <!-- Add Payment Sidebar -->
                     <div class="modal modal-slide-in fade" id="addPayment" aria-hidden="true">
                         <div class="modal-dialog sidebar-lg">
                             <div class="modal-content p-0">
@@ -277,44 +221,43 @@
                                     </h5>
                                 </div>
                                 <div class="modal-body flex-grow-1">
-                                    <form>
+                                    <form @submit.prevent="savePayment">
                                         <div class="mb-1">
-                                            <input id="balance" class="form-control" type="text" value="Invoice Balance: 5000.00" disabled />
+                                            <input id="balance" class="form-control" type="text"
+                                                   :value="`Invoice Balance: ${props.invoice.due}`" disabled />
                                         </div>
                                         <div class="mb-1">
                                             <label class="form-label" for="amount">Payment Amount</label>
-                                            <input id="amount" class="form-control" type="number" placeholder="$1000" />
+                                            <input id="amount" v-model="paymentFormData.pay" class="form-control" @input="payAmount" type="number" placeholder="Payable Amount" />
+                                            <small class="text-danger">Total Due: {{ dueAmount }}</small>
                                         </div>
                                         <div class="mb-1">
-                                            <label class="form-label" for="payment-date">Payment Date</label>
-                                            <input id="payment-date" class="form-control date-picker" type="text" />
+                                            <label class="form-label">Payment Date</label>
+                                            <Datepicker :monthChangeOnScroll="false"
+                                                        v-model="paymentFormData.date"
+                                                        placeholder="Select Payment Date"
+                                                        autoApply></Datepicker>
                                         </div>
                                         <div class="mb-1">
-                                            <label class="form-label" for="payment-method">Payment Method</label>
-                                            <select class="form-select" id="payment-method">
-                                                <option value="" selected disabled>Select payment method</option>
-                                                <option value="Cash">Cash</option>
-                                                <option value="Bank Transfer">Bank Transfer</option>
-                                                <option value="Debit">Debit</option>
-                                                <option value="Credit">Credit</option>
-                                                <option value="Paypal">Paypal</option>
-                                            </select>
+                                            <label class="form-label"></label>
+                                            <v-select :options="props.paymentMethods"
+                                                      :reduce="payment => payment.id"
+                                                      v-model="paymentFormData.payment_method"
+                                                      label="name"  placeholder="Select Payment Method"></v-select>
                                         </div>
                                         <div class="mb-1">
                                             <label class="form-label" for="payment-note">Internal Payment Note</label>
-                                            <textarea class="form-control" id="payment-note" rows="5" placeholder="Internal Payment Note"></textarea>
+                                            <textarea v-model="paymentFormData.note" class="form-control" id="payment-note" rows="5" placeholder="Internal Payment Note"></textarea>
                                         </div>
                                         <div class="d-flex flex-wrap mb-0">
-                                            <button type="button" class="btn btn-primary me-1" data-bs-dismiss="modal">Send</button>
-                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary me-1" data-bs-dismiss="modal">Save Payment</button>
+                                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- /Add Payment Sidebar -->
-                    <!-- Add Payment Sidebar -->
                     <div class="modal modal-slide-in fade" id="givenDiscount" aria-hidden="true">
                         <div class="modal-dialog sidebar-lg">
                             <div class="modal-content p-0">
@@ -327,7 +270,7 @@
                                 <div class="modal-body flex-grow-1">
                                     <form>
                                         <div class="mb-1">
-                                            <input class="form-control" type="text" :value="'Grand Total Price:'+props.invoice.total_price" disabled />
+                                            <input class="form-control" type="text" :value="'Grand Total Price:'+props.invoice.due" disabled />
                                         </div>
                                         <div class="mb-1">
                                             <label class="form-label" for="amount">Discount Amount</label>
@@ -346,7 +289,33 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /Add Payment Sidebar -->
+                    <Modal id="paymentHistory" title="Add New Client" v-vb-is:modal size="xl">
+                        <table class="table table-striped table-borderless">
+                            <thead>
+                                <tr>
+                                <th class="py-1">Payment Id</th>
+                                <th class="py-1">Taken By</th>
+                                <th class="py-1">Transaction Date</th>
+                                <th class="py-1">Amount</th>
+                                <th class="py-1">Pay Total</th>
+                                <th class="py-1">Total Due</th>
+                                <th class="py-1">Payment Method</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item, index) in props.invoice.transactions" :key="item.id">
+                                    <td>{{ 'Tran_#'+item.transaction_id }}</td>
+                                    <td>{{ item.received_by?.name }}</td>
+                                    <td>{{ moment(item.payment_date).format('ll') }}</td>
+                                    <td>{{ item.amount }}</td>
+                                    <td>{{ item.pay }}</td>
+                                    <td>{{ item.due }}</td>
+                                    <td>{{ item.method.name }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </Modal>
+
                 </section>
             </div>
         </div>
@@ -360,6 +329,7 @@
 import moment from "moment";
 import {computed, ref} from "vue";
 import {useForm} from "@inertiajs/inertia-vue3";
+import Modal from "../../components/Modal.vue"
 
 const props = defineProps({
     invoice:Object|[]|null,
@@ -373,34 +343,32 @@ const formData = useForm({
     discount:0
 })
 
-const invoiceFormData = useForm({
-    quotationId:null,
-    totalPrice:null,
-    discount:null,
+const paymentFormData = useForm({
+    invoiceId:props.invoice.id,
+    totalPrice:props.invoice.due,
+    clientId:props.invoice.client_id,
     pay:null,
     payment_method:null,
     note:null,
+    date:null,
 })
 
-const newPrice= ref(0)
-const payableAmount = ref(0)
-const dueAmount = ref(0)
-const discountInput = (event) =>{
-    newPrice.value = props.invoice.total_price - event.target.value
-}
-
-const invoiceDiscount = (event) =>{
-    invoiceFormData.pay = null;
-    let amount = props.invoice.grand_total - event.target.value
-    payableAmount.value = amount;
-    dueAmount.value = amount;
-}
-
-const payAmount = (event) =>{
-    dueAmount.value = payableAmount.value - event.target.value
-}
+const newPrice = ref(props.invoice.due)
+const dueAmount = ref(props.invoice.due)
+const payAmount = (event) => dueAmount.value = props.invoice.due - event.target.value
+const discountInput = (event) => newPrice.value = props.invoice.due - event.target.value
 
 const processing=ref(false);
+const savePayment = () =>{
+    paymentFormData.post(props.url.payment_url ,{
+        preserveState: true,
+        onStart: () =>{ processing.value = true},
+        onFinish: () => {processing.value = false},
+        onSuccess: ()=> { $toast.success('Quotation Discount Done...') },
+        onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
+    })
+}
+
 const addDiscount = () =>{
     formData.post(props.url.add_discount ,{
         preserveState: true,
@@ -410,17 +378,6 @@ const addDiscount = () =>{
         onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
     })
 }
-
-const createInvoice =()=>{
-    invoiceFormData.post(props.url.create_invoice ,{
-        preserveState: true,
-        onStart: () =>{ processing.value = true},
-        onFinish: () => {processing.value = false},
-        onSuccess: ()=> { $toast.success('Invoice Created Successfully Done...') },
-        onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
-    })
-}
-
 
 
 const preparedForShow = computed(()=>{
