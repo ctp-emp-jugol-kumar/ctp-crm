@@ -104,9 +104,8 @@
                                 </div>
                                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"
                                      v-if="this.$page.props.auth.user.can.includes('note.create') || this.$page.props.auth.user.role == 'Administrator' ">
-
                                 <div class="row match-height">
-                                        <form class="row" @submit.prevent="createNote">
+                                        <form class="row match-height" @submit.prevent="createNote">
                                             <div class="col-md-6">
                                                 <div class="card">
                                                     <div class="card-body">
@@ -178,7 +177,7 @@
                                                         <div class="row mb-1">
                                                             <label>Name: <Required/> </label>
                                                             <div>
-                                                                <TextEditor v-model="createForm.notes"></TextEditor>
+                                                                <textarea v-model="createForm.notes" rows="10" class="form-control" placeholder="e.g what's you want to write here ?"></textarea>
                                                                 <span v-if="errors.notes" class="error text-sm text-danger">{{ errors.notes }}</span>
                                                             </div>
                                                         </div>
