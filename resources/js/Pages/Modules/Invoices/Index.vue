@@ -48,7 +48,7 @@
                                         </thead>
                                         <tbody>
                                         <tr v-for="invoice in invoices.data" :key="invoice.id">
-                                            <td>{{ invoice.id }}</td>
+                                            <td>{{ invoice.invoice_id+''+invoice.id }}</td>
                                             <td>{{ invoice.name }}</td>
                                             <td>{{ invoice.creator }}</td>
                                             <td>{{ invoice.invoice.subject }} </td>

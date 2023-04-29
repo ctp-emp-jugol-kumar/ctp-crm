@@ -131,7 +131,7 @@
                                 </Link>
                             </li>
 
-                            <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('feature.show') || this.$page.props.auth.user.role == 'Administrator' ">
+<!--                            <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('feature.show') || this.$page.props.auth.user.role == 'Administrator' ">
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/features">
                                     <vue-feather type="circle" />
                                     <span class="menu-title text-truncate" data-i18n="Chat">Feature</span>
@@ -156,7 +156,7 @@
                                     <vue-feather type="circle" />
                                     <span class="menu-title text-truncate" data-i18n="Chat">Hostings</span>
                                 </Link>
-                            </li>
+                            </li>-->
                         </ul>
                     </li>
 
@@ -173,12 +173,22 @@
                         </Link>
                     </li>
 
-                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('invoice.show') || this.$page.props.auth.user.role == 'Administrator' ">
+
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('chat.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/invoices">
+                            <vue-feather type="archive" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Invoices</span>
+                        </Link>
+                    </li>
+
+
+
+<!--                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('invoice.show') || this.$page.props.auth.user.role == 'Administrator' ">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/invoices">
                             <vue-feather type="archive" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Custom Invoice</span>
                         </Link>
-                    </li>
+                    </li>-->
 
 
                     <li class=" nav-item has-sub" :class="{'open' : clickMenu === 4}"  @click="toggleSubMenu(4)"

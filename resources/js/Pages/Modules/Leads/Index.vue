@@ -103,7 +103,7 @@
                                                     <div class="avatar-wrapper">
                                                         <div class="avatar  me-1">
                                                             <img
-                                                                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d"
+                                                                src="#"
                                                                 alt="{{ user.username }}" height="32" width="32">
                                                         </div>
                                                     </div>

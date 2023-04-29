@@ -58,9 +58,8 @@
                                 </div>
                                 <div class="d-flex flex-wrap mb-0">
                                     <button @click="savePlatform" class="btn btn-primary me-1">Save</button>
-                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <a :href="props.main_url" class="btn btn-outline-secondary">Back</a>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -96,13 +95,10 @@
         })
     }
 
-    const deleteRow = (index) => formData.items.splice(index, 1)
+    const deleteRow = (index) => formData.features.splice(index, 1)
 
     const processing= ref(false)
     const savePlatform = () =>{
-        console.log("call here");
-
-
         Inertia.post(props.main_url,formData,{
             preserveState: true,
             onStart: () =>{ processing.value = true},
