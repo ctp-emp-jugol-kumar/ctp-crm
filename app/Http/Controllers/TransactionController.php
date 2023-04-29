@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use App\Models\TransactionLine;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Dotenv\Repository\Adapter\ReaderInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
@@ -22,11 +23,10 @@ class TransactionController extends Controller
      */
     public function index()
     {
-//        return Request::input('dateRange');
-        $search = Request::input('search');
+
         $transactions = Transaction::query()
             ->latest()
-            ->with(['user', 'method'])
+            ->with(['receivedBy', 'paymentBy', 'method'])
             ->when(Request::input('search'), function ($query, $search) {
                 $query->where('subject', 'like', "%{$search}%");
             })
@@ -38,13 +38,6 @@ class TransactionController extends Controller
                 $start_date = date('Y-m-d H:i:s', strtotime($search[0]));
                 $end_date = date('Y-m-d H:i:s', strtotime( $search[1]));
                 $query->whereBetween('created_at', [$start_date, $end_date]);
-//                if (!empty($start_date) && !empty($end_date)) {
-//                    $query->whereDate('created_at', '>=', $start_date)
-//                        ->whereDate('created_at', '<=', $end_date);
-//                }
-//                if (empty($start_date) && !empty($end_date)) {
-//                    $query->whereDate('created_at', '<=', $end_date);
-//                }
             })
             ->latest()
             ->paginate(Request::input('perPage') ?? 10)
@@ -61,10 +54,10 @@ class TransactionController extends Controller
         }
 
 
-        $credited = Transaction::where('type', 'in')->sum('total_pay');
-        $debided = Transaction::where('type', 'out')->sum('total_pay');
+        $credited = Transaction::where('transaction_type', 'Credited')->sum('pay');
+        $debided = Transaction::where('transaction_type', 'Credited')->sum('pay');
 
-        return inertia('Modules/Transaction/Index', [
+        return inertia('Transaction/Index', [
             'transactions' => $transactions,
             'filters'     => Request::only(['search','perPage', 'byStatus', 'dateRange']),
             "main_url" => Url::route('transaction.index'),
@@ -101,47 +94,24 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
 
-        $invoice = CustomInvoice::with('client')->findOrFail(Request::input('invoice_id'));
-        $grandTotal = Request::input('grandTotal') ?? 0;
-        $discount   = Request::input('discount') ?? 0;
-        $payAmount  = Request::input('pay_amount') ?? 0;
-        $oldTotalPay = CustomInvoice::findOrFail(Request::input('invoice_id'))->transactions->sum('total_pay') + $payAmount + $discount;
-
-
-//        return ["pay_amount" => $payAmount, "discount" => $discount, "grand total" => $grandTotal, "old pay" => $oldTotalPay];
-
-        TransactionLine::create([
-            'u_id' => 'Transaction_'.rand(73862, 5632625),
-            'user_id' => Auth::id(),
-            'type' => 'in',
-            'subject_model' => "App\\Models\\CustomInvoice",
-            'subject_id' => $invoice->id,
-            'note' => Request::input('payment_note'),
-            'amount' => $payAmount + $discount,
-            'discount' => $discount,
-            'method_id' =>Request::input('payment_id'),
-            'date' => now()
-        ]);
-
-
-
         Transaction::create([
-            'method_id'  => Request::input('payment_id'),
-            'user_id'    => Auth::id(),
-            'client_id'  => $invoice->client->id,
-            'invoice_id' => $invoice->id ?? Request::input('invoice_id'),
-
-            'amount'     => $grandTotal,
-            'total_pay'  => $payAmount + $discount,
-            'old_total_pay' => $oldTotalPay,
-            'pay_amount' => $payAmount,
-            'discount'   => $discount,
-            'total_due'  => ($grandTotal - ($payAmount + $discount)) ?? 0,
-
-
-            'date'       => now(),
-            'note'       => Request::input('payment_note')
+            'transaction_id' =>  now()->format('Ymd'),
+            'transactionable_id' => Request::input('invoiceId'),
+            'transactionable_type' => "App\\Models\\Invoice",
+            'received_by' => Auth::id(),
+            'payment_by' => Request::input('clientId'),
+            "transaction_type" => "Credited",
+            "amount" => Request::input("totalPrice"),
+            "pay" => Request::input("pay"),
+            "due" => (int)Request::input("totalPrice") - (int)Request::input("pay"),
+            "payment_date" => Request::input('date'),
+            "method_id" => Request::input('payment_method')
         ]);
+
+        $invoice = Invoice::findOrFail(Request::input('invoiceId'));
+        $invoice->pay = $invoice->pay + (int)Request::input("pay");
+        $invoice->due = (int)Request::input("totalPrice") - (int)Request::input("pay");
+        $invoice->update();
 
         return back();
     }

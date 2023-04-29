@@ -150,7 +150,6 @@
                 <thead>
                 <tr>
                     <th class="text-center">Id</th>
-                    <th class="text-center">Module</th>
                     <th class="text-center">Amount</th>
                     <th class="text-center">Type</th>
                     <th class="text-center">Receive By</th>
@@ -164,20 +163,20 @@
                 @endphp
                 @foreach($data as $key => $item)
                     @php
-                        if($item['tran']?->type === 'in'){
-                            $credit += $item['tran']?->total_pay;
+                        if($item['tran']?->transaction_type === 'Credited'){
+                            $credit += $item['tran']?->pay;
                         }else{
-                            $debit += $item['tran']?->total_pay;
+                            $debit += $item['tran']?->pay;
                         }
                     @endphp
                     <tr style="background:{{ $key %2 == 0 ? "#f1f1f1" : "#ffffff" }} ">
-                        <td>#{{ $item['tran']?->u_id ?? ''  }}{{ $item['tran']?->id ?? ''  }}</td>
-                        <td>{{ $item['tran']?->transaction_model ?? ''  }}::find({{ $item['tran']->id ?? '' }})</td>
-                        <td>{{ $item['tran']?->total_pay }} Tk</td>
-                        <td style="color: {{ $item['tran']?->type === 'in' ? '#16cd00' : 'red' }}">
-                            {{ $item['tran']?->type === 'in' ? "Credited" : "Debited" }}
+
+                        <td>#{{ $item['tran']?->transaction_id ?? ''  }}{{ $item['tran']?->id ?? ''  }}</td>
+                        <td>{{ $item['tran']?->pay }} Tk</td>
+                        <td style="color: {{ $item['tran']?->transaction_type === 'Credited' ? '#16cd00' : 'red' }}">
+                            {{ $item['tran']?->transaction_type === 'Credited' ? "Credited" : "Debited" }}
                         </td>
-                        <td>{{ $item['tran']?->user?->name ?? '' }}</td>
+                        <td>{{ $item["tran"]["receivedBy"]["name"] ?? '' }}</td>
                         <td>{{ date('Y-m-d H:i:s',strtotime($item['created_at'])) }}</td>
                     </tr>
                 @endforeach

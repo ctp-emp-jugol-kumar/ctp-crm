@@ -96,6 +96,7 @@ Route::prefix('admin')->group(function(){
         Route::resource('invoices', InvoiceController::class);
         Route::post('invoice/quotation/{id}', [InvoiceController::class, 'createInvoice'])->name('invoices.createInvoice');
         Route::get('invoice/download/{id}', [InvoiceController::class, 'downloadInvoice'])->name('invoices.downloadInvoice');
+        Route::post('invoices/given-discount/{id}', [InvoiceController::class, 'addDiscount'])->name('invoices.addDiscount');
 
 
         Route::get('edit/invoice/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
