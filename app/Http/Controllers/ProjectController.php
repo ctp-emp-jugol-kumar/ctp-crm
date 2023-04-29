@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\CustomInvoice;
+use App\Models\invoice;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Strong;
 
 class ProjectController extends Controller
 {
@@ -60,6 +63,7 @@ class ProjectController extends Controller
                 ]),
             'clients'  => Client::all(['id','name', 'email', 'phone']),
             'users'    => User::all(['id','name', 'email']),
+            'invoice' => Invoice::with(['quotation', 'client'])->get(),
             'filters'  => Request::only(['search','perPage']),
             'main_url' => URL::route('projects.index'),
         ]);
@@ -95,35 +99,35 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
+//        return dd(Request::all());
         $filePath = "";
 
         if (Request::hasFile('files')) {
-            $filePath = Request::file('files')->store('image', 'public');
+            $path = Storage::putFile('public/project', Request::file('files'));
         }
 
         $project = Project::create([
             "name"        => Request::input('name'),
+            "invoice_id"  => Request::input('invoiceId'),
             "user_id"     => Auth::id(),
-            "client_id"   => Request::input('client_id'),
+            "client_id"   => Request::input('clientId'),
             "date"        => Request::input('date'),
             "start"       => Request::input('start_date'),
             "end"         => Request::input('end_date'),
             "description" => Request::input('project_details'),
             "credential"  => Request::input('credintials'),
             "status"      => Request::input('status'),
-            "files"       => $filePath,
+            "files"       => $path,
         ]);
 
 
-        $project->clients()->sync(Request::all('client_id'));
+        $project->clients()->sync(Request::all('clientId'));
         $agents            = Request::input('agents');
         if (count($agents)) {
             $project->users()->sync($this->createArrayGroups($agents));
         }
 
-
-        return "saved";
-
+        return back();
     }
 
     /**
@@ -135,8 +139,7 @@ class ProjectController extends Controller
     public function show($id)
     {
 
-        $project = Project::with(['user', 'users', 'clients', 'client'])->findOrFail($id);
-
+        $project = Project::with(['user', 'users', 'clients', 'client', 'invoice'])->findOrFail($id);
 
         return inertia('Projects/Show', [
             "info" =>  $project,
@@ -173,8 +176,11 @@ class ProjectController extends Controller
         $filePath = "";
 
         if (Request::hasFile('files')) {
-            $filePath = Request::file('files')->store('image', 'public');
-            $project->files = $filePath;
+
+            $path = Storage::putFile('public/project', Request::file('files'));
+//            $filePath = Request::file('files')->store('image', 'public');
+
+            $project->files = $path;
             $project->save();
         }
 
@@ -203,10 +209,15 @@ class ProjectController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        //
+        $project = Project::findOrFail($id);
+        if(Storage::exists($project->files)){
+            Storage::delete($project->files);
+        }
+        $project->delete();
+        return  back();
     }
 }

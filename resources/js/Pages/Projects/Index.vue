@@ -130,7 +130,7 @@
                                                             <Icon title="eye" />
                                                             <span class="ms-1">Show</span>
                                                         </CDropdownItem>
-                                                        <CDropdownItem @click="deleteItemModal(projects.id)">
+                                                        <CDropdownItem @click="deleteItem(props.main_url, projects.id)">
                                                             <Icon title="trash" />
                                                             <span class="ms-1">Delete</span>
                                                         </CDropdownItem>
@@ -168,12 +168,25 @@
                         </div>
                     </div>
                     <div class="col-md">
-                        <label>Client: <span class="text-danger">*</span></label>
+                        <label>Invoice: <span class="text-danger">*</span></label>
                         <div class="">
-                            <v-select v-model="createForm.client_id" :options="clients"
-                                      :reduce="client => client.id" label="name"
-                                      placeholder="Select Client"></v-select>
-
+                            <v-select v-model="createForm.invoiceId" :options="preparedInvoices"
+                                      @update:modelValue="setClientId"
+                                      :reduce="invoice => invoice.id" label="invoiceId"
+                                      placeholder="Select Client">
+                                <template v-slot:option="option">
+                                    <li class="d-flex align-items-start py-1">
+                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                            <div class="me-1 d-flex flex-column">
+                                                <strong class="mb-25">{{ 'Invoice Id: #_'+option.invoiceId }}</strong>
+                                                <span>{{ option.clientName }}</span>
+                                                <span>{{ option.clientEmail ?? ''}}</span>
+                                                <span>{{ option.clientPhone ?? ''}}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </template>
+                            </v-select>
                             <InputFieldError :errors="errors.client_id"/>
                         </div>
                     </div>
@@ -225,13 +238,13 @@
                             <Required/>
                         </label>
                         <div class="">
-                            <textarea v-model="createForm.credintials" class="form-control" rows="6" placeholder="e.g Project description explain here help for developer..."></textarea>
+                            <textarea v-model="createForm.project_details" class="form-control" rows="6" placeholder="e.g Project description explain here help for developer..."></textarea>
                         </div>
                     </div>
                     <div class="col-md-12 mt-2">
                         <label>Project Credential's : </label>
                         <div class="">
-                            <textarea v-model="createForm.project_details" class="form-control" rows="6" placeholder="e.g Details explain about this project credentials..."></textarea>
+                            <textarea v-model="createForm.credintials" class="form-control" rows="6" placeholder="e.g Details explain about this project credentials..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -303,6 +316,7 @@
             </div>
         </form>
     </Modal>
+
 
 
     <Modal id="editItemModal" title="Update Project" v-vb-is:modal size="lg">
@@ -469,7 +483,6 @@
         </form>
     </Modal>
 
-
 </template>
 
 
@@ -481,22 +494,24 @@
     import InputFieldError from "../../components/InputFieldError";
     import TextEditor from "../../components/TextEditor";
     import ImageUploader from "../../components/ImageUploader"
-    import {ref, watch} from "vue";
+    import {ref, watch, computed} from "vue";
     import debounce from "lodash/debounce";
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
     import axios from 'axios';
     import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
+    import {useAction} from "../../composables/useAction";
 
+    const {deleteItem} = useAction();
 
     const props = defineProps({
         projects: Object,
         filters: Object,
         errors: Object,
         clients:Object,
-        main_url:"",
-
+        invoice:Object|null,
+        main_url:String|null,
         users:Object,
     });
 
@@ -511,13 +526,12 @@
         start_date:null,
         end_date:null,
         agents:null,
-        client_id:null,
+        clientId:null,
+        invoiceId:null,
         descriptions:null,
         credintials:null,
         project_details:null,
-
         files:null,
-
         processing: Boolean,
     })
 
@@ -548,49 +562,14 @@
         'Canceled'
     ]
 
-    const deleteItemModal = (id) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#6418b1',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Inertia.delete('clients/' + id, {
-                    preserveState: true, replace: true, onSuccess: page => {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
-                        )
-                    },
-                    onError: errors => {
-                        Swal.fire(
-                            'Oops...',
-                            'Something went wrong!',
-                            'error'
-                        )
-                    }
-                })
-            }
-        })
-    };
-
     const addDataModal = () => {
         document.getElementById('addItemModal').$vb.modal.show()
     }
     const createProject = () => {
         Inertia.post('projects', createForm, {
             preserveState: true,
-            onStart: () => {
-                createForm.processing = true
-            },
-            onFinish: () => {
-                createForm.processing = false
-            },
+            onStart: () => {createForm.processing = true},
+            onFinish: () => {createForm.processing = false},
             onSuccess: () => {
                 document.getElementById('addItemModal').$vb.modal.hide()
                 createForm.reset()
@@ -650,11 +629,20 @@
     }
 
 
-    // const showProject = (url) =>{
-    //     Inertia.get(url, {
-    //
-    //     })
-    // }
+    const preparedInvoices = computed(()=>{
+        return props.invoice.map(item =>{
+            return {
+                id:item.id,
+                invoiceId:item.invoice_id+''+item.id,
+                clientId:item.client?.id,
+                clientName:item.client?.name,
+                clientEmail:item.client?.email ?? item.client?.secondary_email,
+                clientPhone:item.client?.phone ?? item.client?.secondary_phone,
+            }
+        })
+    })
+    const setClientId =(event)=>createForm.clientId = preparedInvoices.value.filter(item => item.id === event)[0].clientId;
+
 
     const search = ref(props.filters.search);
     const perPage = ref(props.filters.perPage);
