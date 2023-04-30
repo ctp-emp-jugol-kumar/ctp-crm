@@ -20,7 +20,7 @@
                     </div>
                 </section>
                 <!-- Advanced Search -->
-                <section id="advanced-search-datatable">
+                <section>
                     <div class="row">
                         <div class="col-md-4" v-for="pac in props.packages.data" :key="pac.id">
                             <div class="card">
@@ -36,7 +36,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 
@@ -47,15 +46,10 @@
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
     import axios from "axios";
-
     const props = defineProps({
         packages:Array|null,
         main_url:String|null,
     })
-
-
-
-
 
 
 </script>
