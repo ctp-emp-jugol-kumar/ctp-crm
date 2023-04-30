@@ -112,7 +112,11 @@ Route::prefix('admin')->group(function(){
         Route::resource('purposes', PurposeController::class);
         // projects management
         Route::resource('projects', ProjectController::class);
+        Route::post('project/assign-developers', [ProjectController::class, 'assignDevelopers'])->name('projects.assignDevelopers');
+        Route::get('project/remove-user', [ProjectController::class, 'removeUser'])->name('projects.removeUser');
         Route::post('projects/{id}', [ProjectController::class, 'update']);
+        Route::get('project/employee-projects', [ProjectController::class, 'employeeProjects'])->name('employeeProject');
+
         // transaction management
         Route::resource('transaction', TransactionController::class);
         Route::post('quotation/transaction', [TransactionController::class, 'saveQuotationTransaction'])->name('saveQuotationTransaction');

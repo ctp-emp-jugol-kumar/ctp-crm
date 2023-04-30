@@ -24645,7 +24645,7 @@ div.dataTables_wrapper .dataTables_info {
 
 /* Track */
 .featruedOverflowStyle::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #ffffff;
 }
 
 /* Handle */
@@ -24661,7 +24661,7 @@ div.dataTables_wrapper .dataTables_info {
 
 /* Track */
 .showContentQuotation::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #ffffff;
 }
 
 /* Handle */

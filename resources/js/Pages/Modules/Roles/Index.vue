@@ -17,7 +17,6 @@
                                 <div class="d-flex justify-content-between">
                                     <span>Total {{ role.users_count }} users</span>
                                     <ul class="list-unstyled d-flex align-items-center avatar-group mb-0">
-
                                         <li data-bs-toggle="tooltip"
                                             data-popup="tooltip-custom"
                                             data-bs-placement="top"
@@ -66,6 +65,11 @@
                         </div>
                     </div>
                 </div>
+
+                <form @submit.prevent="onSubmit">
+                    <button class="btn btn-primary" type="submit">ok</button>
+                </form>
+
                 <!--/ Role cards -->
                 <h3 class="mt-50">Module Wise All permissions</h3>
                 <!-- table -->
@@ -116,6 +120,8 @@
     </div>
 
 
+
+
     <Modal id="addRoleModal" :title="editRoleRef ? 'Edit This Role' : 'Add New Role'" v-vb-is:modal size="lg">
         <div class="modal-body px-5 pb-5">
             <div class="text-center mb-4">
@@ -123,7 +129,8 @@
                 <p>Set role permissions</p>
             </div>
             <!-- Add role form -->
-            <form @submit.prevent="editRoleRef ? updateThisRole(editRoleRef.edited.id) : createNewRole" id="addRoleForm" class="row" onsubmit="return false">
+            <form @submit.prevent="onSubmit"
+                  id="addRoleForm" class="row">
                 <div class="col-12">
                     <label class="form-label" for="modalRoleName">Role Name</label>
                     <input type="text"
@@ -180,7 +187,7 @@
                     <!-- Permission table -->
                 </div>
                 <div class="col-12 text-center mt-2">
-                    <button type="submit" class="btn btn-primary me-1">{{ editRoleRef ? "Update" : "Submit" }}</button>
+                    <button type="submit" class="btn btn-primary me-1">{{ editRoleRef !== null ? "Update" : "Save Role" }}</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">
                         Discard
                     </button>
@@ -257,13 +264,16 @@
         }
     }
 
-    const editRoleRef = ref(null);
+    const editRoleRef = ref(false);
+
     const addNewRoleModal = () =>{
         createRole.reset();
         editRoleRef.value = null;
         document.getElementById('addRoleModal').$vb.modal.show()
     }
-    let createNewRole = () =>{
+    const onSubmit = () => editRoleRef.value ? updateThisRole(editRoleRef.value?.edited.id) : createNewRole();
+
+    const createNewRole = () =>{
         createRole.post(props.create_url, {
             onSuccess: (res) =>{
                 createRole.reset()
@@ -293,7 +303,6 @@
             console.log(err)
         })
     }
-
     const updateThisRole = (id) =>{
         createRole.put(`authorizations/${id}`, {
             onSuccess: (res) =>{

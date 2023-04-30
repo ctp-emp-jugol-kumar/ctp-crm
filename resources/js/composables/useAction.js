@@ -1,5 +1,6 @@
 import * as Swal from "sweetalert2";
 import {Inertia} from "@inertiajs/inertia";
+import {ref} from "vue";
 
 export function useAction(){
 
@@ -48,7 +49,9 @@ export function useAction(){
         })
     };
 
+    const isShow = ref(false);
+    const changeIsShow = (value) => isShow.value = value;
 
 
-    return {swalSuccess, swalError, deleteItem}
+    return {swalSuccess, swalError, deleteItem, isShow, changeIsShow}
 }
