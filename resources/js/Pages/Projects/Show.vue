@@ -65,9 +65,16 @@
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link"
-                                    id="action-tab" data-bs-toggle="tab"
-                                    data-bs-target="#action" type="button"
-                                    role="tab" aria-controls="action"
+                                    id="progress-tab" data-bs-toggle="tab"
+                                    data-bs-target="#progress" type="button"
+                                    role="tab" aria-controls="progress"
+                                    aria-selected="false">Progressment</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                    id="operation-tab" data-bs-toggle="tab"
+                                    data-bs-target="#operation" type="button"
+                                    role="tab" aria-controls="operation"
                                     aria-selected="false">Operation</button>
                         </li>
                     </ul>
@@ -88,8 +95,11 @@
                         <div class="tab-pane fade" id="mambers" role="tabpanel" aria-labelledby="mambers-tab">
                             <Mambers :info="props.info" :urls="props.urls"/>
                         </div>
-                        <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
+                        <div class="tab-pane fade" id="progress" role="tabpanel" aria-labelledby="progress-tab">
                             <Progressment/>
+                        </div>
+                        <div class="tab-pane fade" id="operation" role="tabpanel" aria-labelledby="operation-tab">
+                            <Action/>
                         </div>
                     </div>
                 </div>
@@ -164,6 +174,7 @@ import Overview from "../Package/Partials/Overview.vue";
 import Billing from "../Package/Partials/Billing.vue";
 import Mambers from "../Package/Partials/Mambers.vue";
 import Progressment from "../Package/Partials/Progressment.vue";
+import Action from "../Package/Partials/Action.vue";
 
 let props = defineProps({
     info: Object,

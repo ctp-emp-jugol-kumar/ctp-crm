@@ -140,7 +140,6 @@
                                         </tr>
                                         </tbody>
                                     </table>
-
                                     <Pagination :links="projects.links" :from="projects.from" :to="projects.to" :total="projects.total"/>
                                 </div>
                             </div>
