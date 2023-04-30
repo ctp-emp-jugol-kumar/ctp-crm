@@ -12,6 +12,10 @@
         progress:{
             type:Number,
             default:0
+        },
+        height:{
+            type:Number,
+            default:300,
         }
     })
     let color = null;
@@ -27,7 +31,7 @@
     onMounted(() => {
             const options = {
                 chart: {
-                    height: 300,
+                    height: props.height,
                     type: 'radialBar',
                 },
                 fill: {

@@ -234,6 +234,13 @@
                             <span class="menu-title text-truncate" data-i18n="Chat">Projects</span>
                         </Link>
                     </li>
+                    <li class=" nav-item" v-else>
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/project/employee-projects">
+                            <vue-feather type="package" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Projects</span>
+                        </Link>
+                    </li>
+
                     <li class="nav-item has-sub" :class="{'open' : clickMenu === 5}"  @click="toggleSubMenu(5)"
                         v-if="this.$page.props.auth.user.can.includes('note.index') || this.$page.props.auth.user.role == 'Administrator' ">
                         <a preserve-scroll class="d-flex align-items-center">
@@ -257,6 +264,7 @@
                             </li>
                         </ul>
                     </li>
+
                     <li class="nav-item" v-else>
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/employee-notes">
                             <vue-feather type="file-text" />

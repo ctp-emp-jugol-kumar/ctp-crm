@@ -104,14 +104,14 @@ class NoteController extends Controller
 
         $note = Note::with(["noteCategory", "users"])->findOrFail($id);
         if(Request::input("satus") === 'edit'){
-            return inertia('Modules/Notes/Edit', [
+            return inertia('Notes/Edit', [
                 "note" => $note,
                 "users" => User::all(),
                 "categories" => NoteCategory::all(),
                 "update_url" => URL::route('notes.update')
             ]);
         }else{
-            return inertia('Modules/Notes/Show', [
+            return inertia('Notes/Show', [
                 'note' => $note
             ]);
         }
@@ -178,7 +178,7 @@ class NoteController extends Controller
 
 
     public function employeeNotes(){
-        return inertia('Modules/Notes/EmployeeNotes', [
+        return inertia('Notes/EmployeeNotes', [
             'notes' => Note::with(['noteCategory', 'users'])->get()
         ]);
     }

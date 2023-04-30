@@ -99,7 +99,6 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
-//        return dd(Request::all());
         $filePath = "";
 
         if (Request::hasFile('files')) {
@@ -122,8 +121,8 @@ class ProjectController extends Controller
 
 
         $project->clients()->sync(Request::all('clientId'));
-        $agents            = Request::input('agents');
-        if (count($agents)) {
+        $agents = Request::input('agents');
+        if ($agents && count($agents)) {
             $project->users()->sync($this->createArrayGroups($agents));
         }
 
@@ -139,14 +138,34 @@ class ProjectController extends Controller
     public function show($id)
     {
 
-        $project = Project::with(['user', 'users', 'clients', 'client', 'invoice'])->findOrFail($id);
+        $project = Project::with(['user', 'users', 'users','users.roles', 'clients',
+            'client', 'invoice', 'invoice.client',
+            'invoice.transactions.method:id,name', 'invoice.transactions.receivedBy:id,name',
+            'invoice.transactions.paymentBy:id,name', 'invoice.quotation', 'invoice.user'])->findOrFail($id);
+
+//        $project->users->map(function ($user){
+//           return $user->role = $user->getRoleNames();
+//        });
+
+
+
+        $invObj = new InvoiceController();
+        $pref = $invObj->invoiceItemsGenerate($project->invoice);
+
 
         return inertia('Projects/Show', [
             "info" =>  $project,
+            "pref" => $pref,
+            "users" => User::with('roles')->get(),
             "dates" =>[
                 "end_date" => $project->end->format("d M, y"),
                 "start_date" => $project->start->format("d M, y"),
                 "created_at" => $project->created_at->diffForHumans(),
+            ],
+            "urls" =>[
+                "main_url" => URL::route('projects.index'),
+                "assign_url" => URL::route('projects.assignDevelopers'),
+                "remove_user" => URL::route('projects.removeUser'),
             ]
         ]);
     }
@@ -220,4 +239,70 @@ class ProjectController extends Controller
         $project->delete();
         return  back();
     }
+
+    public function assignDevelopers(){
+        $project = Project::findOrFail(Request::input('projectId'));
+        $project->users()->sync(Request::input('users'));
+        return back();
+    }
+
+    public function removeUser(){
+        $query = Request::only(['project_id', 'user_id']);
+            if ($query){
+                $project = Project::with('users')->findOrFail($query["project_id"]);
+                $user = $project->users->find($query['user_id']);
+                $project->users()->detach($user);// $user->delete();
+                return back();
+            }
+        return back();
+    }
+
+    public function employeeProjects(){
+        return inertia('Projects/EmployeeProjects',[
+            'projects' => Project::query()
+                ->with(['client', 'client', 'users', 'users'])
+                ->latest()
+                ->whereHas('users', function($user){
+                    $user->id = Auth::id();
+                })
+                ->when(Request::input('search'), function ($query, $search) {
+                    $query
+                        ->where('name', 'like', "%{$search}%")
+                        ->orWhere('status', 'like', "%{$search}%")
+                        ->orWhereHas('client', function ($client) use($search){
+                            $client
+                                ->where('name',    'like', "%{$search}%")
+                                ->orWhere('phone', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%")
+                            ;
+                        })
+                        ->orWhereHas('user', function ($user) use($search){
+                            $user->where('name', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('users', function ($developer) use($search){
+                            $developer->where('name', 'like', "%{$search}%");
+                        });
+                })
+                ->paginate(Request::input('perPage') ?? 10)
+                ->withQueryString()
+                ->through(fn($project) => [
+                    'id'            => $project->id,
+                    'project'       => $project,
+                    'creator'       => $project->user ? $project->user->name : "asdfasdf",
+                    'project_date'  => $project->date->format('d M Y'),
+                    'start_date'    => $project->start->format('d M'),
+                    'end_date'      => $project->end->format('d M Y'),
+                    'create_at'     => $project->created_at->format('d M Y'),
+                    "edit_url"      => URL::route('projects.edit', $project->id),
+                    "show_url"      => URL::route('projects.show', $project->id),
+                ]),
+            'clients'  => Client::all(['id','name', 'email', 'phone']),
+            'users'    => User::all(['id','name', 'email']),
+            'invoice' => Invoice::with(['quotation', 'client'])->get(),
+            'filters'  => Request::only(['search','perPage']),
+            'main_url' => URL::route('projects.employeeProject'),
+        ]);
+    }
+
+
 }

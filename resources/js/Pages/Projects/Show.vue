@@ -15,7 +15,7 @@
                             <div class="d-flex align-items-center">
                                 <!-- avatar group -->
 
-                                <div class="avatar-group mt-50">
+                                <div class="avatar-group">
                                     <div v-c-tooltip="developer.name"
                                         title=""
                                         class="avatar pull-up"
@@ -23,9 +23,10 @@
                                         v-for="(developer, index) in info.users" :key="developer.id">
                                         <img :src="developer.photo" alt="Avatar" height="30" width="30">
                                     </div>
-                                    <div class="avatar pull-up add-new-user"  v-c-tooltip="'Assign New User'">
-                                        +
-                                    </div>
+                                </div>
+                                <div class="pull-up add-new-user ms-2"  v-c-tooltip="'Assign New User'" data-bs-toggle="modal"
+                                     data-bs-target="#assignedDeveloper">
+                                    +
                                 </div>
                             </div>
                         </div>
@@ -36,347 +37,113 @@
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" data-bs-toggle="tab"
-                                    data-bs-target="#home"
+                                    data-bs-target="#overview"
                                     type="button" role="tab"
-                                    aria-controls="home"
+                                    aria-controls="overview"
                                     aria-selected="true">Overview</button>
+                        </li>
+                        <li class="nav-item" role="presentation" v-if="props.info.invoice">
+                            <button class="nav-link"
+                                    id="billing-tab" data-bs-toggle="tab"
+                                    data-bs-target="#billing" type="button"
+                                    role="tab" aria-controls="billing"
+                                    aria-selected="false">Billing History</button>
+                        </li>
+                        <li class="nav-item" role="presentation" v-if="props.info.invoice">
+                            <button class="nav-link"
+                                    id="invoice-tab" data-bs-toggle="tab"
+                                    data-bs-target="#invoice" type="button"
+                                    role="tab" aria-controls="invoice"
+                                    aria-selected="false">Invoice</button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link"
-                                    id="profile-tab" data-bs-toggle="tab"
-                                    data-bs-target="#profile" type="button"
-                                    role="tab" aria-controls="profile"
-                                    aria-selected="false">Create Notes</button>
+                                    id="mambers-tab" data-bs-toggle="tab"
+                                    data-bs-target="#mambers" type="button"
+                                    role="tab" aria-controls="mambers"
+                                    aria-selected="false">Team</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                    id="action-tab" data-bs-toggle="tab"
+                                    data-bs-target="#action" type="button"
+                                    role="tab" aria-controls="action"
+                                    aria-selected="false">Operation</button>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <div class="row">
-
-                                <div class="col-md-12 col-xl-8 col-12">
-                                    <div class="row">
-                                        <div class="col-12 mb-2">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h4 class="mb-0">Project Summary</h4>
-                                                </div>
-                                                <div class="card-body">
-                                                    <p class="newlineStringStyle">{{ info.description }}</p>
-
-                                                    <ul class="list-group list-group-flush">
-                                                        <li class="list-group-item px-0">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <div class="d-flex align-items-center">
-                                                                    <vue-feather type="calendar"/>
-                                                                    <div class="ms-2">
-                                                                        <h5 class="mb-0 text-body">Start Date</h5>
-                                                                    </div>
-                                                                </div>
-                                                                <div>
-                                                                    <div>
-                                                                        <p class="text-dark mb-0 fw-semibold">{{ moment(info.start).format('D MMM  YYYY') }}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li class="list-group-item px-0">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <div class="d-flex align-items-center">
-                                                                    <vue-feather type="calendar"/>
-                                                                    <div class="ms-2">
-                                                                        <h5 class="mb-0 text-body">End Date</h5>
-                                                                    </div>
-                                                                </div>
-                                                                <div>
-                                                                    <div>
-                                                                        <p class="text-dark mb-0 fw-semibold">{{ moment(info.end).format('D MMM  YYYY') }}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li class="list-group-item  px-0">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <div class="d-flex align-items-center">
-                                                                    <vue-feather type="clock"/>
-                                                                    <div class="ms-2">
-                                                                        <h5 class="mb-0 text-body">Estimate
-                                                                            Time</h5>
-                                                                    </div>
-                                                                </div>
-                                                                <div>
-                                                                    <div>
-                                                                        <p class="text-dark mb-0 fw-semibold">{{ estimateTimes }}Days</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li class="list-group-item px-0 pb-0">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <div class="d-flex align-items-center">
-                                                                    <vue-feather type="dollar-sign"/>
-                                                                    <div class="ms-2">
-                                                                        <h5 class="mb-0 text-body">Cost</h5>
-                                                                    </div>
-                                                                </div>
-                                                                <div>
-                                                                    <div>
-                                                                        <p class="text-dark mb-0 fw-semibold">$18,000</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 mb-2">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h4 class="mb-0">Project Credintials</h4>
-                                                    <span class="cursor-pointer" @click="viewCredintials">
-                                                        <vue-feather :type="showCredintials ? 'eye' : 'eye-off'"/>
-                                                    </span>
-                                                </div>
-                                                <div class="card-body" v-if="showCredintials">
-                                                    <p class="newlineStringStyle">{{ info.credential }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-12 mb-2" v-if="props.info.invoice">
-                                            <!-- card -->
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h4 class="mb-0">Budget </h4>
-                                                </div>
-                                                <!-- card body -->
-{{ props.info.invoice }}
-                                                <!-- row -->
-                                                <div class="row">
-                                                    <!-- col -->
-                                                    <div class="col-lg-4 col-md-12 col-12 bg-">
-                                                        <div class="d-flex align-items-center justify-content-between p-4">
-                                                            <div>
-                                                                <h2 class="h1 fw-bold mb-0">{{ props.info.invoice?.grand_total }} ৳</h2>
-                                                                <p class="mb-0">Total Budget</p>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-4 col-md-12 col-12 bg-">
-                                                        <div class="d-flex align-items-center justify-content-between p-4">
-                                                            <div>
-                                                                <h2 class="h1 fw-bold mb-0">{{ props.info.invoice }} ৳</h2>
-                                                                <p class="mb-0">Total Pay</p>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-4 col-md-12 col-12 bg-">
-                                                        <div class="d-flex align-items-center justify-content-between p-4">
-                                                            <div>
-                                                                <h2 class="h1 fw-bold mb-0">{{ props.info.invoice?.due }} Tk</h2>
-                                                                <p class="mb-0">Due Payment</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12 mb-2">
-                                            <!-- card -->
-                                            <div class="card">
-                                                <!-- card body -->
-
-                                                <div class="card-header">
-                                                    <h4 class="mb-0">Upcoming Deadlines
-                                                    </h4>
-
-                                                </div>
-                                                <!-- table -->
-                                                <div class="table-responsive overflow-y-hidden">
-                                                    <table class="table mb-0 text-nowrap table-hover table-centered">
-                                                        <thead class="table-light">
-                                                        <tr>
-                                                            <th scope="col">member</th>
-                                                            <th scope="col">Task</th>
-                                                            <th scope="col">Deadline </th>
-                                                            <th scope="col">Workload</th>
-
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="d-flex align-items-center">
-                                                                    <div class="avatar avatar-sm">
-                                                                        <img src="" alt="" class="rounded-circle">
-                                                                    </div>
-                                                                    <div class="ms-2">
-                                                                        <h5 class="mb-0">Eleanor Pena </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                Design a Geeks UI Figma
-                                                            </td>
-                                                            <td>
-                                                                30 Aug, 2021
-                                                            </td>
-                                                            <td>
-                                                                <div class="d-flex align-items-center">
-
-                                                                    <div class="progress flex-auto" style="height: 6px;">
-                                                                        <div class="progress-bar bg-success " role="progressbar" style="width: 62%;" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100">
-
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="ms-2"> <span>62%</span></div>
-                                                                </div>
-                                                            </td>
-
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-12 col-xl-4 col-12">
-                                    <!-- card  -->
-                                    <div class="card mb-4 bg-primary border-primary">
-                                        <!-- card body  -->
-                                        <div class="card-body">
-
-                                            <h4 class="card-title text-white">Launch Date </h4>
-                                            <!-- dropdown  -->
-                                            <div class="d-flex justify-content-between align-items-center mt-8">
-                                                <div>
-                                                    <h1 class="display-4 text-white mb-1">{{ estimateTimes }} Days</h1>
-                                                    <p class="mb-0 text-white">{{ launchDate }}</p>
-                                                </div>
-                                                <div>
-                                                    <i class="fe fe-flag fs-1 text-light-primary"></i>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                    <!-- card  -->
-                                    <div class="card mb-4">
-                                        <!-- card body  -->
-                                        <div class="card-body">
-                                            <h4 class=" card-title ">Overall Progress </h4>
-                                            <ProgressChart :progress="20"/>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <!-- Card header -->
-                                        <div class="card-header card-header-height d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <h4 class="mb-0">Recent Activity
-                                                </h4>
-                                            </div>
-                                            <div><a href="#">View All</a></div>
-                                        </div>
-                                        <!-- Card body -->
-                                        <div class="card-body">
-                                            <!-- List group -->
-                                            <ul class="list-group list-group-flush list-timeline-activity">
-                                                <li class="list-group-item px-0 pt-0 border-0 pb-6">
-                                                    <div class="row position-relative">
-                                                        <div class="col-auto">
-                                                            <div class="icon-shape icon-md bg-light-primary text-primary rounded-circle">
-                                                                <i class="fe fe-check"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col ms-n3">
-                                                            <h4 class="mb-0 h5">Task Finished</h4>
-                                                            <p class="mb-0 text-body">Paula finished figma task</p>
-
-                                                        </div>
-                                                        <div class="col-auto">
-                                                            <span class="text-muted fs-6">2 mins ago</span>
-
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item px-0 pt-0 border-0 pb-6">
-                                                    <div class="row position-relative">
-                                                        <div class="col-auto">
-                                                            <div class="icon-shape icon-md bg-light-primary text-primary rounded-circle">
-                                                                <i class="fe fe-message-square"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col ms-n3">
-                                                            <h4 class="mb-0 h5">New Comment</h4>
-                                                            <p class="mb-0 text-body">Georg commented on task.</p>
-
-                                                        </div>
-                                                        <div class="col-auto">
-                                                            <span class="text-muted fs-6">1 hour ago</span>
-
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item px-0 pt-0 border-0 pb-6">
-                                                    <div class="row position-relative">
-                                                        <div class="col-auto">
-                                                            <div class="icon-shape icon-md bg-light-primary text-primary rounded-circle">
-                                                                <i class="fe fe-alert-triangle"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col ms-n3">
-                                                            <h4 class="mb-0 h5">Task Overdue</h4>
-                                                            <p class="mb-0 text-body">Task <a href="#"><u>status updatd for board</u></a>
-                                                                is overdue.</p>
-
-                                                        </div>
-                                                        <div class="col-auto">
-                                                            <span class="text-muted fs-6">1 day</span>
-
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item px-0 pt-0 border-0">
-                                                    <div class="row position-relative">
-                                                        <div class="col-auto">
-                                                            <div class="icon-shape icon-md bg-light-primary text-primary rounded-circle">
-                                                                <i class="fe fe-mail"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col ms-n3">
-                                                            <h4 class="mb-0 h5">Update Send to Client</h4>
-                                                            <p class="mb-0 text-body">Jitu send email to update design
-                                                                for client Geeks UI.</p>
-
-                                                        </div>
-                                                        <div class="col-auto">
-                                                            <span class="text-muted fs-6">1 day</span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+                            <Overview :info="props.info"/>
                         </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            This is my content one
+                        <div class="tab-pane fade" id="billing" role="tabpanel" aria-labelledby="billing-tab">
+                            <Billing :info="props.info"/>
+                        </div>
+                        <div class="tab-pane fade" id="invoice" role="tabpanel" aria-labelledby="invoice-tab" v-if="props.info.invoice">
+                            <section class="invoice-edit-wrapper">
+                                <div class="row invoice-edit">
+                                    <InvoiceContent :pref="props.pref" :invoice="props.info.invoice" :isShowSidebar="false"/>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="tab-pane fade" id="mambers" role="tabpanel" aria-labelledby="mambers-tab">
+                            <Mambers :info="props.info"/>
+                        </div>
+                        <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
+                            <Progressment/>
                         </div>
                     </div>
                 </div>
-
             </section>
+        </div>
+    </div>
+
+
+
+    <div class="modal modal-slide-in fade" id="assignedDeveloper" aria-hidden="true">
+        <div class="modal-dialog sidebar-lg">
+            <div class="modal-content p-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title">
+                        <span class="align-middle">Assigned Developer</span>
+                    </h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <form @submit.prevent="assignDevelopers">
+                        <div class="add-client-note">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor doloribus facilis iste quasi repudiandae. Ab accusamus blanditiis dolor doloribus dolorum eligendi eum fugiat illum, ipsam necessitatibus nemo nihil numquam unde.
+                        </div>
+
+                        <div class="mt-2">
+                            <label>Select Developers</label>
+                            <v-select :options="props.users"
+                                      v-model="formData.users"
+                                      label="name"
+                                      :reduce="user => user.id"
+                                      multiple
+                                      placeholder="e.g Select User">
+                                <template v-slot:option="option">
+                                    <li class="d-flex align-items-start py-1">
+                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                            <div class="me-1 d-flex flex-column" >
+                                                <h6 class="mb-25">{{ option.name }}</h6>
+                                                <span>{{ option.email }}</span>
+                                                <span>{{ option.phone }}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </template>
+                            </v-select>
+
+                        </div>
+
+                        <div class="d-flex flex-wrap mb-0 mt-5">
+                            <button type="submit" class="btn btn-primary me-1" data-bs-dismiss="modal">Send</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -384,40 +151,94 @@
 
 <script setup>
 import moment from "moment";
-import {computed, ref} from "vue"
+import {computed, ref, onMounted} from "vue"
 import ProgressChart from "../../components/ProgressChart.vue";
+import Show from "../Invoice/Show.vue";
+import {useAction} from "../../composables/useAction";
+import InvoiceContent from "../../components/modules/InvoiceContent.vue";
+import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
+
+import {useForm} from "@inertiajs/inertia-vue3";
+import {Inertia} from "@inertiajs/inertia";
+import Overview from "../Package/Partials/Overview.vue";
+import Billing from "../Package/Partials/Billing.vue";
+import Mambers from "../Package/Partials/Mambers.vue";
+import Progressment from "../Package/Partials/Progressment.vue";
 
 let props = defineProps({
     info: Object,
-    dates:"",
+    dates:null,
+    users:Array|[]|null,
+    pref:Array|[]|Object|null,
+    urls:Array|[]|Object|null,
 });
 
 
-const showCredintials = ref(false)
-const viewCredintials =()=> showCredintials.value = !showCredintials.value;
+const formData = useForm({
+    projectId:props.info.id,
+    users:props.info.users,
+});
+
+const assignDevelopers = ()=> {
+    formData.post(props.urls.assign_url ,{
+        preserveState: true,
+        onSuccess: ()=> { $toast.success('User Assigned Successfully Done...') },
+        onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
+    })
+}
+
+
+const removeUser = (url)=> {
+    Inertia.get(url ,{
+        preserveState: true,
+        onSuccess: ()=> { $toast.success('User Removed Successfully Done...') },
+        onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
+    })
+}
 
 
 
 
-const estimateTimes = computed(()=>{
-    var a = moment(props.info.start);
-    var b = moment(props.info.end);
-    return b.diff(a, 'days') // 1
-})
-
-const launchDate  = computed(()=> moment(props.info.start).add(1,'days').format('LL , dddd'))
 
 </script>
 
-<style scoped>
-    .add-new-user{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 5px 11px;
-    }
-
-    .newlineStringStyle {
-        white-space: pre-wrap;
-    }
+<style lang="sass">
+@import "../../../sass/base/pages/app-invoice.scss"
 </style>
+
+<style lang="css">
+
+.newlineStringStyle {
+    white-space: pre-wrap;
+    font-size: 11px;
+}
+.vs__dropdown-toggle{
+    border: 1px solid;
+}
+.add-new-user{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 11px;
+    border: 2px dashed gray;
+    border-radius: 50%;
+    background: none;
+    transition: 0.3s all ease;
+    cursor:pointer;
+}
+.add-new-user:hover{
+    border-color: var(--bs-primary);
+}
+
+.newlineStringStyle {
+    white-space: pre-wrap;
+}
+.add-client-note{
+    text-align: justify;
+    background: #f2f2ff;
+    padding: 12px;
+    border-radius: 10px;
+    color: black;
+}
+</style>
+

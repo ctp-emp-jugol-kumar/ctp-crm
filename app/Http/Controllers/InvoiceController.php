@@ -117,10 +117,8 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Inertia\Response
      */
-    public function show(Invoice $invoice)
-    {
-        $invoice = $invoice->load('user', 'client', 'quotation', 'transactions', 'transactions.receivedBy:id,name', 'transactions.method:id,name');
 
+    public function invoiceItemsGenerate($invoice){
         $pref = [];
         if (!is_null($invoice) && !is_null($invoice->quotation_id)){
             foreach (json_decode($invoice->quotation?->items) as $item){
@@ -144,15 +142,24 @@ class InvoiceController extends Controller
                 }
             }
         }else{
-            foreach(json_decode($invoice->items) as $item){
-                $pref[] =[
-                    'name'=> $item->description,
-                    'qty' => 1,
-                    'price' => $item->price,
-                ];
+            if (json_decode($invoice?->items)){
+                foreach(json_decode($invoice->items) as $item){
+                    $pref[] =[
+                        'name'=> $item->description,
+                        'qty' => 1,
+                        'price' => $item->price,
+                    ];
+                }
             }
         }
 
+        return $pref;
+    }
+
+    public function show(Invoice $invoice)
+    {
+        $invoice = $invoice->load('user', 'client', 'quotation', 'transactions', 'transactions.receivedBy:id,name', 'transactions.method:id,name');
+        $pref = $this->invoiceItemsGenerate($invoice);
 
 
         return Inertia::render('Invoice/Show',   [
