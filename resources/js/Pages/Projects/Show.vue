@@ -86,7 +86,7 @@
                             </section>
                         </div>
                         <div class="tab-pane fade" id="mambers" role="tabpanel" aria-labelledby="mambers-tab">
-                            <Mambers :info="props.info"/>
+                            <Mambers :info="props.info" :urls="props.urls"/>
                         </div>
                         <div class="tab-pane fade" id="action" role="tabpanel" aria-labelledby="action-tab">
                             <Progressment/>

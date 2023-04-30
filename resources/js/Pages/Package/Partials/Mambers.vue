@@ -16,10 +16,10 @@
                         </div>
                     </div>
                     <div class="mt-1 lh-1 d-flex align-items-center">
-                        <a href="#" class="me-1 text-muted texttooltip" data-template="phone">
+                        <a :href="`tel:${developer.phone}`" class="me-1 text-muted texttooltip" data-template="phone">
                             <vue-feather type="phone-call" size="15"/>
                         </a>
-                        <a href="#" class="me-1 text-muted texttooltip" data-template="video">
+                        <a href="#" class="me-1 text-muted texttooltip" data-template="video" v-c-tooltip="'Video Call Coming Soon'">
                             <vue-feather type="video" size="15"/>
                         </a>
                         <CDropdown>
@@ -45,12 +45,44 @@
 </template>
 
 <script setup>
+
+    import {useAction} from "../../../composables/useAction";
+    import {Inertia} from "@inertiajs/inertia";
+    import Swal from "sweetalert2";
+    import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
+
     const props = defineProps({
         info:{
             type:Object,
             required:true,
+        },
+        urls:{
+            type:Array,
         }
     })
+
+
+    const removeUser = (url)=> {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#2e0080',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                   Inertia.get(url, {
+                       preserveState: true, replace: true,
+                       onSuccess: ()=> { $toast.success('Remove User Form This Project...') },
+                       onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
+                   })
+                console.log("call here");
+            }
+        })
+    }
+
 </script>
 
 <style scoped>
