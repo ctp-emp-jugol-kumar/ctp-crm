@@ -9,154 +9,13 @@
             <div class="content-body">
                 <section class="invoice-edit-wrapper">
                     <div class="row invoice-edit">
-                        <!-- Invoice Edit Left starts -->
-                        <div class="col-xl-9 col-md-8 col-12">
-                            <div class="card invoice-preview-card">
-                                <div class="card-header">
-                                    <ul>
-                                        <li class="text-danger" v-for="error in props.errors">{{ error }}</li>
-                                    </ul>
-                                </div>
-
-                                <!-- Header starts -->
-                                <div class="card-body invoice-padding pb-0">
-                                    <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
-                                        <div class="col-md-5">
-                                            <div class="logo-wrapper">
-                                                <img src="../../../../public/creativeTechPark.png" alt="" height="30">
-                                            </div>
-                                            <h3>Creative Tech Park</h3>
-                                            <p class="card-text mb-25">
-                                                Imperial Irish Kingdom, Mo-03
-                                                (3rd Floor), Merul Badda, Dhaka 1212
-                                            </p>
-                                            <p class="p-0 m-0">Phone: +8801639-200002</p>
-                                            <p>Email: info@creativetechpark.com</p>
-                                        </div>
-                                        <div class="invoice-number-date mt-md-0 mt-2">
-
-                                            <div class="d-flex align-items-center justify-content-md-end mb-1">
-                                                Quotation Id:  <vue-feather type="hash" size="15"/>_{{  props.invoice.invoice_id }}{{ props.invoice.id }}
-                                            </div>
-                                            <div class="d-flex align-items-center mb-1">
-                                                <p>Valid Date: {{moment(props.invoice.created_at).format('D/M/Y')  }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Header ends -->
-
-                                <hr class="invoice-spacing" />
-
-                                <!-- Address and Contact starts -->
-                                <div class="card-body invoice-padding pt-0">
-                                    <div class="row invoice-spacing">
-                                        <div class="col-xl-8 p-0">
-                                            <h6 class="">Quotation To:</h6>
-                                            <div class="row">
-                                                <div class="col-md-10" v-if="props.invoice.client">
-                                                    <h6 class="mb-25">{{ props.invoice.client.name }}</h6>
-                                                    <p class="card-text mb-25">{{ props.invoice.client.company }}</p>
-                                                    <p class="card-text mb-25">{{ props.invoice.client.address }}</p>
-                                                    <p class="card-text mb-25">{{ props.invoice.client.phone ?? props.invoice.client.secondary_phone }}</p>
-                                                    <p class="card-text mb-0">{{ props.invoice.client.email ??  props.invoice.client.secondary_email}}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Address and Contact ends -->
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th>Details</th>
-                                        <th class="text-end">Price</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="(item) in props.pref" v-if="props.pref.length">
-                                        <td>
-                                            <span class="newlineStringStyle">{{ item.name }}</span>
-                                        </td>
-                                        <td class="text-end price_qty">{{ item.price }} * {{ item.qty }}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-
-
-
-                                <!-- Invoice Total starts -->
-                                <div class="card-body invoice-padding">
-                                    <div class="row invoice-sales-total-wrapper">
-                                        <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
-                                            <div class="d-flex align-items-center mb-1">
-                                                <label class="form-label">Salesperson: {{ props.invoice.user.name }}</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 d-flex justify-content-end order-md-2 order-1">
-                                            <div class="invoice-total-wrapper">
-                                                <!--                                                <div class="invoice-total-item">
-                                                                                                    <p class="invoice-total-title">Subtotal:</p>
-                                                                                                    <p class="invoice-total-amount">{{ props.subtotal }} Tk</p>
-                                                                                                </div>
-                                                                                                <div class="invoice-total-item">
-                                                                                                    <p class="invoice-total-title">Discount:</p>
-                                                                                                    <p class="invoice-total-amount">$28</p>
-                                                                                                </div>
-                                                                                                <div class="invoice-total-item">
-                                                                                                    <p class="invoice-total-title">Tax:</p>
-                                                                                                    <p class="invoice-total-amount">21%</p>
-                                                                                                </div>-->
-                                                <div class="invoice-total-item">
-                                                    <p class="invoice-total-title">Total:</p>
-                                                    <p class="invoice-total-amount">{{ props.invoice.total_price }}.00</p>
-                                                </div>
-                                                <div class="invoice-total-item">
-                                                    <p class="invoice-total-title">Discount:</p>
-                                                    <p class="invoice-total-amount">{{ props.invoice.discount }}.00</p>
-                                                </div>
-                                                <hr class="my-50" />
-                                                <div class="invoice-total-item">
-                                                    <p class="invoice-total-title">Grand Total:</p>
-                                                    <p class="invoice-total-amount">{{ props.invoice.grand_total }}.00</p>
-                                                </div>
-                                                <div class="invoice-total-item">
-                                                    <p class="invoice-total-title">Total Pay:</p>
-                                                    <p class="invoice-total-amount">{{ props.invoice.pay }}.00</p>
-                                                </div>
-                                                <hr class="my-50">
-                                                <div class="invoice-total-item">
-                                                    <strong class="invoice-total-title">Total Due:</strong>
-                                                    <strong class="invoice-total-amount">{{ props.invoice.due }}.00</strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Invoice Total ends -->
-
-                                <hr class="invoice-spacing mt-0" />
-
-                                <div class="card-body invoice-padding py-0">
-                                    <!-- Invoice Note starts -->
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="mb-2">
-                                                <label for="note" class="form-label fw-bold">Note:</label>
-                                                <p id="note">{{ props.invoice.note }}</p>
-                                                <p class="text-justify"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Invoice Note ends -->
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Invoice Edit Left ends -->
+                        <InvoiceContent :isShowSidebar="props.isShowSidebar"
+                                        :errors="props.errors"
+                                        :invoice="props.invoice"
+                                        :pref="props.pref"/>
 
                         <!-- Invoice Edit Right starts -->
-                        <div class="col-xl-3 col-md-4 col-12">
+                        <div class="col-xl-3 col-md-4 col-12" v-if="props.isShowSidebar">
                             <div class="card">
                                 <div class="card-body">
 <!--                                    <a :href="props.url.edit_url" class="btn btn-primary w-100 mb-75">
@@ -208,10 +67,7 @@
                         </div>
                         <!-- Invoice Edit Right ends -->
                     </div>
-
-
-
-                    <div class="modal modal-slide-in fade" id="addPayment" aria-hidden="true">
+                    <div v-if="props.isShowSidebar" class="modal modal-slide-in fade" id="addPayment" aria-hidden="true">
                         <div class="modal-dialog sidebar-lg">
                             <div class="modal-content p-0">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
@@ -258,7 +114,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal modal-slide-in fade" id="givenDiscount" aria-hidden="true">
+                    <div v-if="props.isShowSidebar" class="modal modal-slide-in fade" id="givenDiscount" aria-hidden="true">
                         <div class="modal-dialog sidebar-lg">
                             <div class="modal-content p-0">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
@@ -289,7 +145,7 @@
                             </div>
                         </div>
                     </div>
-                    <Modal id="paymentHistory" title="Add New Client" v-vb-is:modal size="xl">
+                    <Modal v-if="props.isShowSidebar" id="paymentHistory" title="Add New Client" v-vb-is:modal size="xl">
                         <table class="table table-striped table-borderless">
                             <thead>
                                 <tr>
@@ -315,7 +171,6 @@
                             </tbody>
                         </table>
                     </Modal>
-
                 </section>
             </div>
         </div>
@@ -330,14 +185,23 @@ import moment from "moment";
 import {computed, ref} from "vue";
 import {useForm} from "@inertiajs/inertia-vue3";
 import Modal from "../../components/Modal.vue"
-
+import {useAction} from "../../composables/useAction";
+import {useActionStore} from "../../Store/useActionStore";
+import InvoiceContent from "../../components/modules/InvoiceContent.vue"
 const props = defineProps({
     invoice:Object|[]|null,
     pref:Array|[]|null,
     paymentMethods:Object|[]|null,
     url:Array|[]|null,
     errors:Object|{}|null,
+    isShowSidebar:{
+        type:Boolean,
+        default:true
+    },
 })
+
+const {isShow} = useAction();
+const actionStore = useActionStore();
 
 const formData = useForm({
     discount:0
@@ -408,13 +272,11 @@ const preparedForShow = computed(()=>{
 
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @import "../../../sass/base/pages/app-invoice.scss"
 
 </style>
-
 <style lang="css">
-
 .newlineStringStyle {
     white-space: pre-wrap;
     font-size: 11px;
