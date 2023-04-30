@@ -166,6 +166,7 @@ class ProjectController extends Controller
                 "main_url" => URL::route('projects.index'),
                 "assign_url" => URL::route('projects.assignDevelopers'),
                 "remove_user" => URL::route('projects.removeUser'),
+                "update_status" => URL::route('projects.updateProgress')
             ]
         ]);
     }
@@ -257,6 +258,14 @@ class ProjectController extends Controller
         return back();
     }
 
+    public function updateProgress(){
+        $project = Project::findOrFail(Request::input('projectId'));
+        $project->status = Request::input('status');
+        $project->progress = Request::input('progress');
+        $project->update();
+        return back();
+    }
+
     public function employeeProjects(){
         return inertia('Projects/EmployeeProjects',[
             'projects' => Project::query()
@@ -303,6 +312,7 @@ class ProjectController extends Controller
             'main_url' => URL::route('projects.employeeProject'),
         ]);
     }
+
 
 
 }

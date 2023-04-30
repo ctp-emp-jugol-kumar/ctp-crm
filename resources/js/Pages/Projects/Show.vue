@@ -99,7 +99,7 @@
                             <Progressment/>
                         </div>
                         <div class="tab-pane fade" id="operation" role="tabpanel" aria-labelledby="operation-tab">
-                            <Action/>
+                            <Action :info="props.info" :updateUrl="props.urls.update_status"/>
                         </div>
                     </div>
                 </div>
@@ -170,11 +170,11 @@ import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/v
 
 import {useForm} from "@inertiajs/inertia-vue3";
 import {Inertia} from "@inertiajs/inertia";
-import Overview from "../Package/Partials/Overview.vue";
-import Billing from "../Package/Partials/Billing.vue";
-import Mambers from "../Package/Partials/Mambers.vue";
-import Progressment from "../Package/Partials/Progressment.vue";
-import Action from "../Package/Partials/Action.vue";
+import Overview from "./Partials/Overview.vue";
+import Billing from "./Partials/Billing.vue";
+import Mambers from "./Partials/Mambers.vue";
+import Progressment from "./Partials/Progressment.vue";
+import Action from "./Partials/Action.vue";
 
 let props = defineProps({
     info: Object,

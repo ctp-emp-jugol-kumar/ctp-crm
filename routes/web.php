@@ -116,6 +116,7 @@ Route::prefix('admin')->group(function(){
         Route::get('project/remove-user', [ProjectController::class, 'removeUser'])->name('projects.removeUser');
         Route::post('projects/{id}', [ProjectController::class, 'update']);
         Route::get('project/employee-projects', [ProjectController::class, 'employeeProjects'])->name('employeeProject');
+        Route::post('project/change-status', [ProjectController::class, 'updateProgress'])->name('projects.updateProgress');
 
         // transaction management
         Route::resource('transaction', TransactionController::class);
