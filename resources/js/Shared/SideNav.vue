@@ -36,7 +36,7 @@
                 <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
                     <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('dashboard.show') || this.$page.props.auth.user.role == 'Administrator' ">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/dashboard">
-                            <vue-feather type="home" />
+                            <vue-feather type="home" size="8"/>
                             <span class="menu-title text-truncate" data-i18n="Dashboards">Dashboards</span>
                         </Link>
                     </li>
@@ -57,7 +57,7 @@
                     <li class=" nav-item has-sub" :class="{'open' : clickMenu === 1}"  @click="toggleSubMenu(1)"
                         v-if="this.$page.props.auth.user.can.includes('user.show') || this.$page.props.auth.user.role == 'Administrator' ">
                         <a preserve-scroll class="d-flex align-items-center">
-                            <vue-feather type="users" />
+                            <vue-feather type="users" size="8"/>
                             <span class="menu-title text-truncate"
                                   data-i18n="Authentication">User Management</span>
                         </a>
@@ -80,7 +80,7 @@
                     <li class=" nav-item has-sub" :class="{'open' : clickMenu === 2}"  @click="toggleSubMenu(2)"
                         v-if="this.$page.props.auth.user.can.includes('client.show') || this.$page.props.auth.user.can.includes('leads.show') || this.$page.props.auth.user.role == 'Administrator' ">
                         <a preserve-scroll class="d-flex align-items-center">
-                            <vue-feather type="radio" />
+                            <vue-feather type="radio" size="8"/>
                             <span class="menu-title text-truncate"
                                   data-i18n="Authentication">Lead Source</span>
                         </a>

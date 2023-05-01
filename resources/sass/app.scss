@@ -11,7 +11,9 @@
 @import './base/pages/app-chat.scss';
 @import './base/pages/app-chat-list.scss';
 
-
+.vertical-layout.vertical-menu-modern .main-menu .navigation > li > a svg, .vertical-layout.vertical-menu-modern .main-menu .navigation > li > a i{
+    width: 15px !important;
+}
 .scroll-area::-webkit-scrollbar{
     width: 0 !important;
 }
@@ -88,6 +90,10 @@
 .badge-light-purple{
     background: #ffe0ff;
     color: purple;
+}
+.badge-light-indego{
+    background: #a4f9ff;
+    color: #008a96;
 }
 
 //#vs1__listbox{

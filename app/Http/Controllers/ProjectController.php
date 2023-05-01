@@ -103,7 +103,7 @@ class ProjectController extends Controller
         $filePath = "";
 
         if (Request::hasFile('files')) {
-            $path = Storage::putFile('public/project', Request::file('files'));
+            $filePath = Storage::putFile('public/project', Request::file('files'));
         }
 
         $project = Project::create([
@@ -117,7 +117,7 @@ class ProjectController extends Controller
             "description" => Request::input('project_details'),
             "credential"  => Request::input('credintials'),
             "status"      => Request::input('status'),
-            "files"       => $path,
+            "files"       => $filePath,
         ]);
 
 
@@ -198,10 +198,10 @@ class ProjectController extends Controller
 
         if (Request::hasFile('files')) {
 
-            $path = Storage::putFile('public/project', Request::file('files'));
+            $filePath = Storage::putFile('public/project', Request::file('files'));
 //            $filePath = Request::file('files')->store('image', 'public');
 
-            $project->files = $path;
+            $project->files = $filePath;
             $project->save();
         }
 

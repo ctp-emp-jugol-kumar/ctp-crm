@@ -99,6 +99,12 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
+        Request::validate([
+            'invoiceId' => 'required',
+            'clientId' => 'required',
+            'payment_method' => 'required',
+            'date' => 'required'
+        ]);
 
         Transaction::create([
             'transaction_id' =>  now()->format('Ymd'),

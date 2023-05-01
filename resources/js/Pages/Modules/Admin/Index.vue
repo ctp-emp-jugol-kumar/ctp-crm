@@ -111,7 +111,7 @@
                                                         class="btn btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
                                                         <Icon title="pencil" />
                                                     </button>
-                                                    <button @click="deleteItemModal(user.id)"
+                                                    <button @click="deleteItem(props.main_url, user.id)"
                                                             v-if="this.$page.props.auth.user.can.includes('user.delete') || this.$page.props.auth.user.role == 'Administrator' "
                                                             type="button"
                                                             class="btn btn-icon btn-icon rounded-circle aves-effect waves-float waves-light bg-light-danger">
@@ -296,7 +296,8 @@
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
     import axios from "axios";
-
+    import {useAction} from "../../../composables/useAction";
+    const {deleteItem} = useAction();
     let props = defineProps({
         users: Object,
         filters: Object,
@@ -304,6 +305,7 @@
         notification:Object,
         errors: Object,
         roles:Object,
+        main_url:String,
     });
 
     let createForm = useForm({

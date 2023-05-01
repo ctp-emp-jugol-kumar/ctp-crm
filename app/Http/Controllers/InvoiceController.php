@@ -35,14 +35,23 @@ class InvoiceController extends Controller
 
         return inertia('Invoice/Index',[
             'invoices' => Invoice::query()
+                ->with(['client', 'user', 'quotation', 'transactions'])
                 ->latest()
                 ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('subject', 'like', "%{$search}%")
-                        ->orWhereHas('client', function ($client) use($search){
-                            $client->where('name', 'like', "%{$search}%");
+                    $query->whereHas('client', function ($client) use($search){
+                            $client
+                                ->where('name',    'like', "%{$search}%")
+                                ->orWhere('phone', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
                         })
                         ->orWhereHas('user', function ($user) use($search){
-                            $user->where('name', 'like', "%{$search}%");
+                            $user
+                                ->where('name',    'like', "%{$search}%")
+                                ->orWhere('phone', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('quotation', function ($user) use($search){
+                            $user->where('subject', 'like', "%{$search}%");
                         })
                     ;
                 })

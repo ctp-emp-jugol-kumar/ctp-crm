@@ -137,30 +137,18 @@ class QuotationController extends Controller
             ->with(['client', 'user', 'invoice'])
             ->latest()
             ->when(Request::input('search'), function ($query, $search) {
-                $query->where('u_id', 'like', "%{$search}%")
-                    ->orWhere('u_id', 'like', "%{$search}%")
-                    ->orWhereHas('client', function ($client) use($search){
-                        $client
-                            ->where('name',    'like', "%{$search}%")
-                            ->orWhere('phone', 'like', "%{$search}%")
-                            ->orWhere('email', 'like', "%{$search}%")
-                        ;
-                    })
-                    ->orWhereHas('domains', function($hosting) use($search){
-                        $hosting->where('name', 'like', "%{$search}%");
-                    })
-                    ->orWhereHas('hostings', function($hosting) use($search){
-                        $hosting->where('name', 'like', "%{$search}%");
-                    })
-                    ->orWhereHas('works', function($hosting) use($search){
-                        $hosting->where('name', 'like', "%{$search}%");
-                    })
-                    ->orWhereHas('packages', function($hosting) use($search){
-                        $hosting->where('name', 'like', "%{$search}%");
-                    })
-                    ->orWhereHas('quotationItems', function($hosting) use($search){
-                        $hosting->where('item_name', 'like', "%{$search}%");
-                    });
+                $query->where('subject', 'like', "%{$search}%")
+                ->orWhereHas('client', function ($client) use($search){
+                    $client
+                        ->where('name',    'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                })->orWhereHas('user', function ($user) use($search){
+                    $user
+                        ->where('name',    'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
             })
             ->when(Request::input('byStatus'), function ($query, $search){
                 $query->where('status', $search);
@@ -194,6 +182,7 @@ class QuotationController extends Controller
                 "edit_url"     => URL::route('quotations.edit', $qot->id),
                 "invoice_url"  => URL::route('quotations.quotationInvoice', $qot->id)
             ]);
+
         return inertia('Quotation/Index', [
             'quotations'  => $quotation,
             'filters'     => Request::only(['search','perPage', 'byStatus', 'dateRange']),
@@ -201,6 +190,7 @@ class QuotationController extends Controller
             'change_status_url'  => URL::route('chnageQuotationStatus'),
         ]);
     }
+
 
 
 

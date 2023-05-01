@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
@@ -40,6 +41,7 @@ class AdminController extends Controller
                 ]),
             'filters' => Request::only(['search','perPage']),
             'roles'=> Role::all(['id','name']),
+            'main_url' =>  URL::route('users.index'),
         ]);
 
 
@@ -127,8 +129,19 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function updateCredentials($id){
+        $user = User::findOrFail($id);
+        $user->email = Request::input('email');
+        $user->password = Hash::make(Request::integer('password'));
+        $user->update();
+    }
+
+
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+        return back();
     }
 }

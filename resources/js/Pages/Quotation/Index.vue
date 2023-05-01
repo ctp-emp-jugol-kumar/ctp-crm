@@ -55,7 +55,7 @@
                                             <div class="select-search-area">
                                                 <label>Search
                                                     <input v-model="search"
-                                                           type="search"
+                                                           type="text"
                                                            class="form-control"
                                                            placeholder="What You Find ?"
                                                            aria-controls="DataTables_Table_0">
@@ -72,7 +72,7 @@
                                             <th class="sorting bg-white py-1">Total Price</th>
                                             <th class="sorting bg-white py-1">Created by</th>
                                             <th class="sorting bg-white py-1">Created Date</th>
-                                            <th class="sorting bg-white py-1">Actions</th>
+                                            <th class="sorting bg-white py-1"></th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -109,15 +109,7 @@
                                             <td>
                                                 {{ qut.created_at }}
                                             </td>
-
-
-                                            <td class="d-flex align-items-center">
-<!--                                                <span class="text-info cursor-pointer" v-c-tooltip="'Click for change quotation status'" @click="changeStatus(qut.id)">
-                                                    <vue-feather type="refresh-ccw" size="20"/>
-                                                </span>-->
-                                                <span class="text-secondery mx-1 cursor-pointer" @click="changeStatus(qut.id)" v-c-tooltip="'Send invoice by email'">
-                                                    <vue-feather type="mail" size="20"/>
-                                                </span>
+                                            <td>
                                                 <CDropdown>
                                                     <CDropdownToggle class="p-0">
                                                         <vue-feather type="more-vertical" />
@@ -144,6 +136,7 @@
                                                     </CDropdownMenu>
                                                 </CDropdown>
                                             </td>
+
                                         </tr>
                                         </tbody>
                                     </table>
