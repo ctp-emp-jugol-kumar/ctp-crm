@@ -100,34 +100,34 @@
                     <div class="col mb-1">
                         <label>Purpose <Required/></label>
                         <v-select v-model="createForm.purpose_id" :options="purposes" :reduce="item => item.id" label="name" placeholder="Select Expanse Purpose"></v-select>
-                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        <span v-if="errors.purpose_id" class="error text-sm text-danger">{{ errors.purpose_id }}</span>
                     </div>
 
                     <div class="col mb-1">
                         <label>Expanse Subject <Required/></label>
                         <input v-model="createForm.subject" type="text" placeholder="e.g expanse subject" class="form-control">
-                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        <span v-if="errors.subject" class="error text-sm text-danger">{{ errors.subject }}</span>
                     </div>
                     <div class="col mb-1">
                         <label>Expanse Amount <Required/></label>
                         <input v-model="createForm.amount" type="text" placeholder="e.g 00.00 Tk" class="form-control">
-                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        <span v-if="errors.amount" class="error text-sm text-danger">{{ errors.amount }}</span>
                     </div>
                     <div class="col mb-1">
                         <label>Payment Method <Required/></label>
                         <v-select v-model="createForm.method_id" :options="methods" :reduce="item => item.id" label="name" placeholder="Select Expanse Purpose"></v-select>
-                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        <span v-if="errors.method_id" class="error text-sm text-danger">{{ errors.method_id }}</span>
                     </div>
                     <div class="col-md mb-1">
                         <label>Expanse Date <Required/></label>
                         <Datepicker v-model="createForm.expanse_date"
                                     :monthChangeOnScroll="false"
                                     placeholder="Select Date" autoApply></Datepicker>
-                        <InputFieldError :errors="errors.valid_until"/>
+                        <span v-if="errors.expanse_date" class="error text-sm text-danger">{{ errors.expanse_date }}</span>
                     </div>
                     <div class="col mb-1">
                         <ImageUploader v-model="createForm.document" label="Expanse Document" type="text" class="form-control"/>
-                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        <span v-if="errors.document" class="error text-sm text-danger">{{ errors.document }}</span>
                     </div>
                     <div class="col-md-12">
                         <Textarea v-model="createForm.details" label="Expanse Note" placeholder="e.g explain here about more details in this expanse."></Textarea>
@@ -152,7 +152,7 @@
                     <div class="col mb-1">
                         <label>Purpose <Required/></label>
                         <v-select v-model="updateForm.purpose_id" :options="purposes" :reduce="item => item.id" label="name" placeholder="Select Expanse Purpose"></v-select>
-                        <span v-if="errors.purpose_id" class="error text-sm text-danger">{{ errors.purpose_id }}</span>
+                        <span v-if="errors.purpose_id" class="error text-sm text-danger">{{ errors }}</span>
                     </div>
 
                     <div class="col mb-1">
@@ -258,6 +258,9 @@ let createData = () => {
                 'success'
             )
         },
+        onError: (error) =>{
+            console.log(error);
+        }
     })
 }
 

@@ -31,6 +31,7 @@ class PlatformController extends Controller
                     'name' => $platform->name,
                     'featureds' => json_decode($platform->featureds),
                     'created_at' => $platform->created_at->format('d M Y'),
+                    'edit_url' => URL::route('platforms.edit', $platform->id),
                 ]),
             'filters' => Request::only(['search','perPage']),
             'main_url' => URL::route('platforms.index'),
@@ -54,7 +55,6 @@ class PlatformController extends Controller
 
     public function store()
     {
-
         Platform::create([
             'name' => Request::input('platform'),
             'featureds' => json_encode(Request::all("features")['features']),
@@ -69,9 +69,19 @@ class PlatformController extends Controller
      * @param  \App\Models\Platform  $platform
      * @return Platform
      */
+
+
+
     public function show(Platform $platform)
     {
         return $platform;
+    }
+
+    public function edit(Platform $platform){
+        return inertia('Platforms/Edit',[
+           "platform" => $platform,
+            "update_url" =>URL::route('platforms.update', $platform->id)
+        ]);
     }
 
     /**
@@ -81,9 +91,13 @@ class PlatformController extends Controller
      * @param  \App\Models\Platform  $platform
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(PlatformRequest $request, Platform $platform)
+    public function update(Request $request, Platform $platform)
     {
-        $platform->update($request->validated());
+        $platform->update([
+            'name' => Request::input('platform'),
+            'featureds' => json_encode(Request::all("features")['features']),
+            'status' => true,
+        ]);
         return redirect()->route('platforms.index');
 
     }

@@ -75,7 +75,7 @@
                                                     <div class="avatar-wrapper">
                                                         <div class="avatar  me-1">
                                                             <img
-                                                                src="#"
+                                                                :src="user.photo"
                                                                 alt="{{ user.username }}" height="32" width="32">
                                                         </div>
                                                     </div>

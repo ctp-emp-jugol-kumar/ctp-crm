@@ -1,5 +1,6 @@
 <template>
     <div>
+<!--
         <div class="row mt-5">
             <div class="col">
                 <div class="card-title">
@@ -70,6 +71,7 @@
             </div>
 
         </div>
+-->
 
         <!-- Project table -->
         <div class="card">
@@ -77,44 +79,24 @@
                 <table class="table table-striped table-borderless">
                     <thead>
                     <tr>
+                        <th class="py-1">Payment Id</th>
                         <th class="py-1">Taken By</th>
                         <th class="py-1">Transaction Date</th>
                         <th class="py-1">Amount</th>
-                        <th class="py-1">Discount</th>
                         <th class="py-1">Pay Total</th>
-                        <th class="py-1">Sub Total</th>
                         <th class="py-1">Total Due</th>
                         <th class="py-1">Payment Method</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(item, index) in transactions" :key="item.id">
-                        <td class="py-1">
-                            <Link href="#" class="text-decoration-none">
-                                {{ item?.user?.name }}
-                            </Link>
-                        </td>
-                        <td>
-                            {{ formatted(item.date) }}
-                        </td>
-                        <td class="py-1">
-                            <span class="fw-bold">{{ item.amount }} Tk</span>
-                        </td>
-                        <td class="py-1">
-                            <span class="fw-bold">{{ item.discount ?? 0 }} Tk</span>
-                        </td>
-                        <td class="py-1">
-                            <span class="fw-bold">{{ item.pay_amount }} Tk</span>
-                        </td>
-                        <td class="py-1">
-                            <span class="fw-bold">{{ item.old_total_pay }} Tk</span>
-                        </td>
-                        <td class="py-1">
-                            <span class="fw-bold">{{ item.total_due }} Tk</span>
-                        </td>
-                        <td class="py-1">
-                            <span>{{ item.method.name }}</span>
-                        </td>
+                    <tr v-for="(item, index) in props.transactions" :key="item.id">
+                        <td>{{ 'Tran_#'+item.transaction_id }}</td>
+                        <td>{{ item.received_by?.name }}</td>
+                        <td>{{ moment(item.payment_date).format('ll') }}</td>
+                        <td>{{ item.amount }}</td>
+                        <td>{{ item.pay }}</td>
+                        <td>{{ item.due }}</td>
+                        <td>{{ item.method.name }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -125,6 +107,7 @@
 </template>
 <script setup>
 import {useDate} from '../../composables/useDate.js'
+import moment from "moment";
 import {computed, ref} from 'vue'
     const props = defineProps({
         transactions:[]
@@ -134,57 +117,7 @@ let {formatted} = useDate();
 
 
 
-let subTotal = computed(()=>{
-    let sum = 0;
-    props.transactions.map(a =>{
-        sum = sum + a.total_due + a.pay_amount
-    })
-    return sum;
-})
 
-let payTotal = computed(()=>{
-    let sum = 0;
-    props.transactions.map(a =>{
-        sum = sum + a.pay_amount
-    })
-    return sum;
-})
-
-let dueTotal = computed(()=>{
-    let sum = 0;
-    props.transactions.map(a =>{
-        sum = sum + a.total_due
-    })
-    return sum;
-})
-let doscountTotal = computed(()=>{
-    let sum = 0;
-    props.transactions.map(a =>{
-        sum = sum + a.discount
-    })
-    return sum;
-})
-
-// const paymentAmount = ref(0)
-//
-// let totalDiscount = computed(()=>{
-//     let sum = 0;
-//     props.info.invoice_item.map(a =>{
-//         sum = sum + a.discount
-//     })
-//     return sum;
-// })
-//
-// let grandTotal = computed(()=>{
-//     let sum = 0;
-//     props.info.invoice_item.map(a =>{
-//         sum = sum + (a.price - a.discount)
-//     })
-//     createForm.grandTotal = sum
-//     return sum;
-// })
-//
-//
 
 
 </script>

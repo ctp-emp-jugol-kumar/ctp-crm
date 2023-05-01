@@ -11,8 +11,7 @@
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Services Information's </h4>
                                     <button class="dt-button add-new btn btn-primary"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#addServices">
+                                    @click="addServiceModal">
                                         Add Service
                                     </button>
                                 </div>
@@ -20,11 +19,35 @@
                         </div>
                     </div>
                 </section>
-                <div class="row">
+                <div class="row match-height">
+
+                    <div>
+                        <ul>
+                            <li class="text-danger" v-for="error in formData.errors" v-text="error"></li>
+                        </ul>
+                    </div>
                     <div class="col-md-3" v-for="item in props.services.data" :key="item.id">
                         <div class="card">
                             <div class="card-body">
-                                <h2 class="card-title">{{ item.name }}</h2>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h2 class="card-title">{{ item.name }}</h2>
+                                    <CDropdown>
+                                        <CDropdownToggle class="p-0">
+                                            <vue-feather type="more-vertical" />
+                                        </CDropdownToggle>
+                                        <CDropdownMenu>
+                                            <CDropdownItem @click="editService(item.edit_url)">
+                                                <vue-feather type="edit" size="15"/>
+                                                <span class="ms-1">Edit</span>
+                                            </CDropdownItem>
+
+                                            <CDropdownItem @click="deleteItem(props.main_url, item.id)">
+                                                <vue-feather type="trash-2" size="15"/>
+                                                <span class="ms-1">Delete</span>
+                                            </CDropdownItem>
+                                        </CDropdownMenu>
+                                    </CDropdown>
+                                </div>
                                 <span class="badge bg-primary"  style="margin-right:5px;" v-for="plat in item.platforms">
                                     {{ plat.name }}
                                 </span>
@@ -39,17 +62,17 @@
 
 
     <!-- Add Payment Sidebar -->
-    <div class="modal modal-slide-in fade" id="addServices" aria-hidden="true">
+    <div class="modal modal-slide-in fade" id="addServices" aria-hidden="true" v-vb-is:modal>
         <div class="modal-dialog sidebar-lg">
             <div class="modal-content p-0">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
                 <div class="modal-header mb-1">
                     <h5 class="modal-title">
-                        <span class="align-middle">Add New Service</span>
+                        <span class="align-middle">{{ serviceId ? 'Edit This Service' : 'Add New Service' }}</span>
                     </h5>
                 </div>
                 <div class="modal-body flex-grow-1">
-                    <form @submit.prevent="addService">
+                    <form @submit.prevent="saveService">
                         <div class="mb-1">
                             <label class="form-label" for="amount">Service Name</label>
                             <input class="form-control"
@@ -83,8 +106,11 @@
 
 
 
+
+
 </template>
 <script>
+import Modal from "../../components/Modal";
 
 </script>
 <script setup>
@@ -92,8 +118,11 @@
     import {useAction} from "../../composables/useAction";
     import {ref} from "vue";
     import {useForm} from "@inertiajs/inertia-vue3";
+    import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
+    import {Inertia} from "@inertiajs/inertia";
+    import axios from "axios";
 
-    const {swalSuccess} = useAction()
+    const {swalSuccess, deleteItem} = useAction()
 
     const props = defineProps({
         services: [],
@@ -107,112 +136,62 @@
 
     const processing = ref(false);
     const formData = useForm({
-        serviceName:"",
+        serviceId:null,
+        serviceName:null,
         platforms:[],
+        errors:Object,
     })
 
+
+    const serviceId = ref(null);
+    const saveService =()=> {
+        if (serviceId.value !== null){
+            updateService();
+        }else{
+            addService()
+        }
+    }
+
+    const addServiceModal =()=>{
+        formData.reset();
+        serviceId.value = null
+        document.getElementById('addServices').$vb.modal.show()
+    }
     const addService = ( )=>{
         formData.post(props.main_url,{
             preserveState: true,
             onStart: () =>{ processing.value = true},
             onFinish: () => {processing.value = false},
-            onSuccess: ()=> {
+            onSuccess: (data)=> {
                 document.getElementById('addServices').$vb.modal.hide()
-                createForm.reset()
-                swalSuccess()
             },
         })
     }
 
-/*
-    let editData = ref([]);
-
-    let updateForm = useForm({
-        name:"",
-        price:"",
-        description:"",
-
-    })
-
-    let deleteItemModal = (id) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Inertia.delete( 'services/' + id, { preserveState: true, replace: true, onSuccess: page => {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
-                        )
-                    },
-                    onError: errors => {
-                        Swal.fire(
-                            'Oops...',
-                            'Something went wrong!',
-                            'error'
-                        )
-                    }})
-            }
-        })
-    };
-
-    let addDataModal = () => {
-        document.getElementById('createServices').$vb.modal.show()
-    }
-
-
-    let editItem = (url) => {
-        axios.get(url).then(res => {
-
-            editData.value = res.data;
-
-            updateForm.name = res.data.name;
-            updateForm.price = res.data.price;
-            updateForm.description = res.data.description;
-            document.getElementById('editData').$vb.modal.show();
-        }).catch(err => {
-            console.log(err);
-        });
-    }
-
-    let updateData = (id) => {
-        Inertia.put('services/' + id, updateForm, {
+    const updateService = ( )=>{
+        formData.put(props.main_url+'/'+serviceId.value,{
             preserveState: true,
-            onStart: () => {
-                createForm.processing = true
-            },
-            onFinish: () => {
-                createForm.processing = false
-            },
-            onSuccess: () => {
-                document.getElementById('editData').$vb.modal.hide()
-                createForm.reset()
-                Swal.fire(
-                    'Saved!',
-                    'Your file has been Updated.',
-                    'success'
-                )
+            onStart: () =>{ processing.value = true},
+            onFinish: () => {processing.value = false},
+            onSuccess: (data)=> {
+                document.getElementById('addServices').$vb.modal.hide()
             },
         })
     }
 
-    let search = ref(props.filters.search);
-    let perPage = ref(props.filters.perPage);
 
-    watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get(props.main_url, { search: val, perPage: val2 }, { preserveState: true, replace: true });
-    }, 300));
+    const editDataId = ref(null)
+    const editService = (url) => {
+        axios.get(url).then((res)=>{
+            serviceId.value = res.data.id;
+            formData.serviceId = res.data.id,
+            formData.serviceName = res.data.service_name;
+            formData.platforms = JSON.parse(res.data.platforms)
+            document.getElementById('addServices').$vb.modal.show()
+        })
 
+    }
 
-
-*/
 
 </script>
 

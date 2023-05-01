@@ -20,7 +20,16 @@
 
                         <div class="row match-height">
                             <div class="col-md-6">
+
                                 <div class="card">
+
+                                    <div class="card-header">
+                                        <ul>
+                                            <li class="text-danger" v-for="error in props.errors">{{ error }}</li>
+                                        </ul>
+                                    </div>
+
+
                                     <div class="card-body">
                                         <h2 class="card-title">Package Information </h2>
                                         <div class="mb-1">
@@ -45,7 +54,7 @@
                                         <div class="input-group">
                                         <v-select
                                             :options="props.platforms"
-                                            class="form-control py-0"
+                                            style="width:100%"
                                             label="name"
                                             v-model="formData.platformId"
                                             :reduce="item => item.id"
@@ -106,6 +115,7 @@ import axios from "axios";
     const props = defineProps({
         platforms:Array|null,
         main_url:String|null,
+        errors:[],
     })
 
     const formData = useForm({

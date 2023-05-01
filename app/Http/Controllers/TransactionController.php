@@ -28,15 +28,21 @@ class TransactionController extends Controller
             ->latest()
             ->with(['receivedBy', 'paymentBy', 'method'])
             ->when(Request::input('search'), function ($query, $search) {
-                $query->where('subject', 'like', "%{$search}%");
+                $query->where('id', 'like', "%{$search}%")
+                ->orWherehas('receivedBy', function ($query)use($search){
+                    $query->where('name',    'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                })->orWherehas('method', function ($query)use($search){
+                    $query->where('name',    'like', "%{$search}%");
+                });
             })
             ->when(Request::input('byStatus'), function ($query, $search){
-                $query->where('type', $search);
+                $query->where('transaction_type', $search);
             })
             ->when(Request::input('dateRange'), function ($query, $search){
-
                 $start_date = date('Y-m-d H:i:s', strtotime($search[0]));
-                $end_date = date('Y-m-d H:i:s', strtotime( $search[1]));
+                $end_date = date('Y-m-d H:i:s', strtotime($search[1]));
                 $query->whereBetween('created_at', [$start_date, $end_date]);
             })
             ->latest()
@@ -55,7 +61,7 @@ class TransactionController extends Controller
 
 
         $credited = Transaction::where('transaction_type', 'Credited')->sum('pay');
-        $debided = Transaction::where('transaction_type', 'Credited')->sum('pay');
+        $debided = Transaction::where('transaction_type', 'Debited')->sum('pay');
 
         return inertia('Transaction/Index', [
             'transactions' => $transactions,

@@ -11,4 +11,8 @@ class Searvice extends Model
 
     protected $fillable = ['service_name', 'platforms'];
 
+    public function platforms(){
+        return $this->hasMany(Platform::class, 'platform_id');
+    }
+
 }

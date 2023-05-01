@@ -17,7 +17,7 @@
                                         <div class="input-group"
                                              v-if="!formData.items[index].platforms?.length > 0">
                                             <v-select :options="services"
-                                                      class="form-control py-0"
+                                                      style="width:100%"
                                                       v-model="formData.items[index].service"
                                                       label="service_name"
                                                       :reduce="service => service.id"
@@ -34,7 +34,7 @@
                                                 </template>
                                             </v-select>
                                         </div>
-                                        <div class="input-group"
+                                        <div class="d-flex"
                                              v-if="formData.items[index].platforms?.length > 0">
                                             <div class="input-group-prepend border-end-0 rounded-0">
                                                 <div class="input-group-text cursor-pointer rounded-0 border-end-0" @click="reback(index)">
@@ -44,7 +44,7 @@
                                             <v-select
                                                 :options="formData.items[index].platforms"
                                                 label="name"
-                                                class="form-control"
+                                                style="width:100%"
                                                 v-model="formData.items[index].platform"
                                                 @update:modelValue="loadPlatformFeatureds(index)"
                                                 placeholder="e.g Select Platform">

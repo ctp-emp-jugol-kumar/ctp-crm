@@ -19,7 +19,7 @@
                                     >
                                         Add Lead
                                     </button>
-                                    <div>
+<!--                                    <div>
                                         <CDropdown>
                                             <CDropdownToggle class="p-0">
                                                 <button class="btn bg-light-secondary d-flex align-items-center">
@@ -30,16 +30,16 @@
                                             </CDropdownToggle>
                                             <CDropdownMenu>
                                                 <CDropdownItem @click="exportPDF">
-                                                    <!--                                                    <vue-feather type="download" size="15"/>-->
+                                                    &lt;!&ndash;                                                    <vue-feather type="download" size="15"/>&ndash;&gt;
                                                     <span class="ms-1">PDF</span>
                                                 </CDropdownItem>
-<!--                                                <CDropdownItem target="_blank">
+&lt;!&ndash;                                                <CDropdownItem target="_blank">
                                                     &lt;!&ndash;                                                    <vue-feather type="download" size="15"/>&ndash;&gt;
                                                     <span class="ms-1">EXCEL</span>
-                                                </CDropdownItem>-->
+                                                </CDropdownItem>&ndash;&gt;
                                             </CDropdownMenu>
                                         </CDropdown>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <div class="card-datatable table-responsive pt-0 px-2">
                                     <div class="d-flex align-items-center justify-content-between border-bottom">
@@ -103,7 +103,7 @@
                                                     <div class="avatar-wrapper">
                                                         <div class="avatar  me-1">
                                                             <img
-                                                                src="#"
+                                                                :src="user.photo"
                                                                 alt="{{ user.username }}" height="32" width="32">
                                                         </div>
                                                     </div>

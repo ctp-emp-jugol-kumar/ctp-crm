@@ -50,8 +50,8 @@
                                                 <select v-model="searchByStatus" class="select2 form-select select w-100">
                                                     <option selected disabled :value="undefined">Filter By Type</option>
                                                     <option :value="null">All</option>
-                                                    <option value="in" >Credited</option>
-                                                    <option value="out" >Deviated</option>
+                                                    <option value="Credited" >Credited</option>
+                                                    <option value="Debited" >Deviated</option>
                                                 </select>
                                             </div>
                                             <div v-if="!isCustom">

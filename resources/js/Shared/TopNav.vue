@@ -54,7 +54,7 @@
                             <span class="user-status">{{ this.$page.props.auth.user.role[0]  }}</span>
                         </div>
                         <span class="avatar">
-                            <img class="round" src="#" alt="avatar" height="40" width="40">
+                            <img class="round" :src="this.$page.props.auth.user.photo" alt="avatar" height="40" width="40">
                             <span class="avatar-status-online"></span>
                         </span>
                     </a>

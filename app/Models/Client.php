@@ -57,7 +57,7 @@ class Client extends Model
     protected function photo(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => $value ? Storage::url($value) : config('app.url').'/images/avatar.png',
+            get: fn ($value) => $value ? Storage::url($value) : '/images/avatar.png',
         );
     }
 
@@ -84,7 +84,7 @@ class Client extends Model
     }
 
     public function transactions() {
-        return $this->hasMany(Transaction::class, 'client_id');
+        return $this->hasMany(Transaction::class, 'payment_by');
     }
 
     public function customeInvoices(){

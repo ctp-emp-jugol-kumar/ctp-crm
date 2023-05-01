@@ -52,6 +52,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => [
                     'username' => $user->name,
                     'role' => $user->getRoleNames(),
+                    'photo' => $user->photo,
                     'can' => $can
                 ],
                 'ADMIN_URL' => 'http://127.0.0.1:8000/admin',

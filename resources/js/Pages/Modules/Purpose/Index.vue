@@ -54,13 +54,8 @@
                                             <td>{{ purpose.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <button type="button" @click="editItem(purpose.show_url)"
-                                                            class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light">
-                                                        <Icon title="eye"/>
-                                                    </button>
-                                                    <button @click="deleteItemModal(purpose.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
-                                                        <Icon title="trash" />
-                                                    </button>
+                                                    <vue-feather class="cursor-pointer text-info" size="15" type="edit" @click="editItem(purpose.show_url)"/>
+                                                    <vue-feather class="cursor-pointer text-danger" size="15" type="trash-2" @click="deleteItem(props.main_url, purpose.id)"/>
                                                 </div>
                                             </td>
                                         </tr>
@@ -106,7 +101,7 @@
     </Modal>
 
 
-    <Modal id="editData" title="Edit Hostings" v-vb-is:modal :size="{defalut:'lg'}">
+    <Modal id="editData" title="Edit Purpose" v-vb-is:modal :size="{defalut:'lg'}">
         <form @submit.prevent="updateData(editData.id)">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -144,6 +139,9 @@
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
     import axios from "axios";
+    import {useAction} from "../../../composables/useAction";
+
+    const {deleteItem} = useAction();
 
     let props = defineProps({
         purposes: Object,
@@ -169,34 +167,6 @@
         name:"",
     })
 
-    let deleteItemModal = (id) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Inertia.delete( 'purposes/' + id, { preserveState: true, replace: true, onSuccess: page => {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
-                        )
-                    },
-                    onError: errors => {
-                        Swal.fire(
-                            'Oops...',
-                            'Something went wrong!',
-                            'error'
-                        )
-                    }})
-            }
-        })
-    };
 
 
     let createPurpose  = ( )=>{

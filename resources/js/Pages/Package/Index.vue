@@ -25,7 +25,25 @@
                         <div class="col-md-4" v-for="pac in props.packages.data" :key="pac.id">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="text-capitalize">{{ pac.name }}</h5>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h5 class="text-capitalize">{{ pac.name }}</h5>
+                                        <CDropdown>
+                                            <CDropdownToggle class="p-0">
+                                                <vue-feather type="more-vertical" />
+                                            </CDropdownToggle>
+                                            <CDropdownMenu>
+                                                <CDropdownItem :href="pac.edit_url">
+                                                    <vue-feather type="edit" size="15"/>
+                                                    <span class="ms-1">Edit</span>
+                                                </CDropdownItem>
+
+                                                <CDropdownItem @click="deleteItem(props.main_url, pac.id)">
+                                                    <vue-feather type="trash-2" size="15"/>
+                                                    <span class="ms-1">Delete</span>
+                                                </CDropdownItem>
+                                            </CDropdownMenu>
+                                        </CDropdown>
+                                    </div>
                                     <p class="text-capitalize">platform: {{ pac.platform.name }}</p>
                                     <p v-html="pac.description"></p>
                                 </div>
@@ -46,6 +64,10 @@
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
     import axios from "axios";
+    import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
+    import {useAction} from "../../composables/useAction";
+
+    const {deleteItem} = useAction();
     const props = defineProps({
         packages:Array|null,
         main_url:String|null,
