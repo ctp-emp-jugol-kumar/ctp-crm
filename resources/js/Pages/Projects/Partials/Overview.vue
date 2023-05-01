@@ -193,7 +193,7 @@
                 <!-- card body  -->
                 <div class="card-body">
                     <h4 class=" card-title ">Overall Progress </h4>
-                    <ProgressChart :progress="20"/>
+                    <ProgressChart :progress="props.info.progress" :status="props.info.status"/>
                 </div>
             </div>
             <div class="card">

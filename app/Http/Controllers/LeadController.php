@@ -49,6 +49,7 @@ class LeadController extends Controller
                 'name' => $client->name,
                 'phone' => $client->phone,
                 'email' => $client->email,
+                'photo' => '/images/avatar.png',
                 'status' => $client->status,
                 'created_at' => $client?->created_at?->format('d M Y'),
                 'show_url' => URL::route('leads.show', $client->id)

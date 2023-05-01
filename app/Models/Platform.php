@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use const http\Client\Curl\FEATURES;
 
 
 class Platform extends Model
@@ -18,4 +19,9 @@ class Platform extends Model
     public function packages(){
         return $this->hasMany(Package::class, 'platform_id');
     }
+
+    public function featureds(){
+        return $this->hasMany(Feature::class, 'featured_id');
+    }
+
 }

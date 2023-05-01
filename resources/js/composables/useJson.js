@@ -21,3 +21,50 @@ var result = result1.filter(function(o1){
         return newo;
     }, {});
 });
+
+
+export function useJson(){
+
+    const status = [
+        'New Project',
+        'Development',
+        'In Process',
+        'Testing',
+        'Revision',
+        'Complete',
+        'Canceled'
+    ]
+
+    const color = (progress) =>{
+        let color = null;
+        if (progress < 10){
+            color = "#ac66fc";
+        }else if(progress < 20){
+            color = "#7d66fc"
+        }else if(progress < 30){
+            color = "#66d2fc"
+        }else if(progress < 40){
+            color = "#66fcc8"
+        }else if(progress < 50){
+            color = "#66fc68"
+        }else if(progress < 60){
+            color = "#e1fc66"
+        }else if(progress < 70){
+            color = "#fcdc66"
+        }else if(progress < 80){
+            color = "#fca266"
+        }else if(progress < 90){
+            color = "#fc7c66"
+        }else if(progress < 100){
+            color = "#66fc87"
+        }else{
+            color = "#fc6684"
+        }
+        return color;
+    }
+
+
+    return {status, color}
+
+
+}

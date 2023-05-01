@@ -24,7 +24,25 @@
                     <div class="col-md-3" v-for="item in props.services.data" :key="item.id">
                         <div class="card">
                             <div class="card-body">
-                                <h2 class="card-title">{{ item.name }}</h2>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h2 class="card-title">{{ item.name }}</h2>
+                                    <CDropdown>
+                                        <CDropdownToggle class="p-0">
+                                            <vue-feather type="more-vertical" />
+                                        </CDropdownToggle>
+                                        <CDropdownMenu>
+                                            <CDropdownItem :href="item.edit_url">
+                                                <vue-feather type="edit" size="15"/>
+                                                <span class="ms-1">Edit</span>
+                                            </CDropdownItem>
+
+                                            <CDropdownItem @click="deleteItem(props.main_url, item.id)">
+                                                <vue-feather type="trash-2" size="15"/>
+                                                <span class="ms-1">Delete</span>
+                                            </CDropdownItem>
+                                        </CDropdownMenu>
+                                    </CDropdown>
+                                </div>
                                 <span class="badge bg-primary"  style="margin-right:5px;" v-for="plat in item.platforms">
                                     {{ plat.name }}
                                 </span>
@@ -92,8 +110,10 @@
     import {useAction} from "../../composables/useAction";
     import {ref} from "vue";
     import {useForm} from "@inertiajs/inertia-vue3";
+    import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
 
-    const {swalSuccess} = useAction()
+
+    const {swalSuccess, deleteItem} = useAction()
 
     const props = defineProps({
         services: [],
@@ -124,95 +144,6 @@
         })
     }
 
-/*
-    let editData = ref([]);
-
-    let updateForm = useForm({
-        name:"",
-        price:"",
-        description:"",
-
-    })
-
-    let deleteItemModal = (id) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Inertia.delete( 'services/' + id, { preserveState: true, replace: true, onSuccess: page => {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
-                        )
-                    },
-                    onError: errors => {
-                        Swal.fire(
-                            'Oops...',
-                            'Something went wrong!',
-                            'error'
-                        )
-                    }})
-            }
-        })
-    };
-
-    let addDataModal = () => {
-        document.getElementById('createServices').$vb.modal.show()
-    }
-
-
-    let editItem = (url) => {
-        axios.get(url).then(res => {
-
-            editData.value = res.data;
-
-            updateForm.name = res.data.name;
-            updateForm.price = res.data.price;
-            updateForm.description = res.data.description;
-            document.getElementById('editData').$vb.modal.show();
-        }).catch(err => {
-            console.log(err);
-        });
-    }
-
-    let updateData = (id) => {
-        Inertia.put('services/' + id, updateForm, {
-            preserveState: true,
-            onStart: () => {
-                createForm.processing = true
-            },
-            onFinish: () => {
-                createForm.processing = false
-            },
-            onSuccess: () => {
-                document.getElementById('editData').$vb.modal.hide()
-                createForm.reset()
-                Swal.fire(
-                    'Saved!',
-                    'Your file has been Updated.',
-                    'success'
-                )
-            },
-        })
-    }
-
-    let search = ref(props.filters.search);
-    let perPage = ref(props.filters.perPage);
-
-    watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get(props.main_url, { search: val, perPage: val2 }, { preserveState: true, replace: true });
-    }, 300));
-
-
-
-*/
 
 </script>
 

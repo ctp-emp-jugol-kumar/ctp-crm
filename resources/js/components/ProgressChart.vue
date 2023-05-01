@@ -7,6 +7,9 @@
 <script setup>
     import { onMounted, ref } from 'vue';
     import ApexCharts from 'apexcharts';
+    import {useJson} from "../composables/useJson";
+    const jsonData = useJson()
+
 
     const props = defineProps({
         progress:{
@@ -16,16 +19,42 @@
         height:{
             type:Number,
             default:300,
+        },
+        status:{
+            type:String,
+            default:"Progress",
         }
     })
+
+
     let color = null;
-    if (props.progress < 10){
-        color = "#66fc66";
-    }else if(props.progress < 20){
-        color = "#9b66fc"
-    }else{
-        color = "#fc6684"
+    switch (props.status){
+        case "New Project":
+            color = '#ac66fc';
+            break
+        case "Development":
+            color = '#fca766';
+            break
+        case "In Process":
+            color = '#9afc66';
+            break
+        case "Testing":
+            color = '#66fcef';
+            break
+        case "Revision":
+            color = '#fc66c5';
+            break
+        case "Complete":
+            color = '#70fc66';
+            break
+        case "Canceled":
+            color = '#f51919';
+            break
+        default:
+            color = "#66fcbb"
     }
+
+
 
     const chart = ref(null);
     onMounted(() => {
@@ -45,7 +74,7 @@
                         opacityTo: 1,
                         stops: [0, 100]
                     },
-                    colors:[color]
+                    colors:[props.status === 'Progress' ? jsonData.color(props.progress) : color]
                 },
                 series: [props.progress],
                 plotOptions: {
@@ -78,7 +107,7 @@
                 stroke: {
                     lineCap: 'round',
                 },
-                labels: ['Progress'],
+                labels: [props.status],
             };
 
 

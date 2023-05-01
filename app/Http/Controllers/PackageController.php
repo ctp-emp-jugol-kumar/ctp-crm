@@ -32,6 +32,7 @@ class PackageController extends Controller
                     'description' => nl2br($package->descriptions),
                     'created_at' => $package->created_at->format('d M Y'),
                     'show_url' => URL::route('package.show', $package->id),
+                    'edit_url' => URL::route('package.edit', $package->id),
                 ]),
             'filters' => Request::only(['search','perPage']),
             'main_url' => URL::route('package.index'),
@@ -65,6 +66,12 @@ class PackageController extends Controller
      */
     public function store()
     {
+        Request::validate([
+           'platformId' => 'required',
+            'name' => 'required',
+            'price' => 'required'
+        ]);
+
         Package::create([
             'platform_id' => Request::input('platformId'),
             'name' => Request::input('name'),
@@ -90,11 +97,22 @@ class PackageController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Package  $package
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
     public function edit(Package $package)
     {
-        //
+
+        $platforms = Platform::all()->map(function($platform){
+            $platform->featureds = json_decode($platform->featureds);
+            return $platform;
+        });
+
+
+        return inertia('Package/Edit',[
+           'package' => $package->load('platform'),
+           'platforms' => $platforms,
+           'update_url' => URL::route('package.update', $package->id)
+        ]);
     }
 
     /**
@@ -102,21 +120,33 @@ class PackageController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Package  $package
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Package $package)
     {
-        //
+        Request::validate([
+            'platformId' => 'required',
+            'name' => 'required',
+            'price' => 'required'
+        ]);
+        $package->update([
+            'platform_id' => Request::input('platformId'),
+            'name' => Request::input('name'),
+            'price' => Request::input('price'),
+            'descriptions' => Request::input('descriptions')
+        ]);
+        return redirect()->route('package.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Package  $package
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Package $package)
     {
-        //
+        $package->delete();
+        return back();
     }
 }

@@ -37,7 +37,7 @@
                                                 class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
                                                 <div class="select-search-area">
                                                     <label>Search:<input v-model="search" type="search"
-                                                                         class="form-control" placeholder=""
+                                                                         class="form-control" placeholder="what you find ?"
                                                                          aria-controls="DataTables_Table_0"></label>
                                                 </div>
                                             </div>

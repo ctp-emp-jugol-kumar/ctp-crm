@@ -23,16 +23,13 @@ class ProjectController extends Controller
      */
     public function index()
     {
-//        return  Project::query()
-//            ->with(['client', 'client', 'users', 'users'])->get();
-
         return inertia('Projects/Index', [
             'projects' => Project::query()
-                ->with(['client', 'client', 'users', 'users'])
+                ->with(['user', 'users', 'client', 'invoice'])
                 ->latest()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query
-                    ->where('name', 'like', "%{$search}%")
+                        ->where('name', 'like', "%{$search}%")
                         ->orWhere('status', 'like', "%{$search}%")
                     ->orWhereHas('client', function ($client) use($search){
                         $client
@@ -42,10 +39,14 @@ class ProjectController extends Controller
                         ;
                     })
                     ->orWhereHas('user', function ($user) use($search){
-                        $user->where('name', 'like', "%{$search}%");
+                        $user->where('name',    'like', "%{$search}%")
+                            ->orWhere('phone', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
                     })
                     ->orWhereHas('users', function ($developer) use($search){
-                        $developer->where('name', 'like', "%{$search}%");
+                        $developer->where('name', 'like', "%{$search}%")
+                            ->orWhere('phone', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
                     });
                 })
                 ->paginate(Request::input('perPage') ?? 10)
@@ -261,7 +262,7 @@ class ProjectController extends Controller
     public function updateProgress(){
         $project = Project::findOrFail(Request::input('projectId'));
         $project->status = Request::input('status');
-        $project->progress = Request::input('progress');
+        $project->progress = Request::input('progressData');
         $project->update();
         return back();
     }

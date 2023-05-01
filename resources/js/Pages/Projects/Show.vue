@@ -42,6 +42,14 @@
                                     aria-controls="overview"
                                     aria-selected="true">Overview</button>
                         </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                    id="client-tab" data-bs-toggle="tab"
+                                    data-bs-target="#client" type="button"
+                                    role="tab" aria-controls="client"
+                                    aria-selected="false">Client</button>
+                        </li>
                         <li class="nav-item" role="presentation" v-if="props.info.invoice">
                             <button class="nav-link"
                                     id="billing-tab" data-bs-toggle="tab"
@@ -81,6 +89,30 @@
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
                             <Overview :info="props.info"/>
+                        </div>
+                        <div class="tab-pane fade" id="client" role="tabpanel" aria-labelledby="client-tab">
+                            <div class="row">
+                                <div class="col-md-6 mx-auto">
+                                    <div class="card mb-4">
+                                        <!-- Card body -->
+                                        <div class="card-body">
+                                            <div class="text-center">
+                                                <img :src="props.info.client?.photo ?? '/images/avatar.png'" height="150" class="rounded-circle avatar-xl mb-3" alt="">
+                                                <h4 class="mb-0">{{ props.info.client?.name ?? '---'}}</h4>
+                                                <h5 class="mb-0">{{ props.info.client?.company }}</h5>
+                                                <p class="mb-0">{{ props.info.client?.email ?? '' }}</p>
+                                                <p class="mb-0">{{ props.info.client?.secondary_email ?? '' }}</p>
+                                                <p class="mb-0">{{ props.info.client?.phone ?? '' }}</p>
+                                                <p class="mb-0">{{ props.info.client?.secondary_phone ?? '' }}</p>
+                                                <p class="mb-0">{{ props.info.client?.address }}</p>
+                                                <a :href="`/admin/clients/${ props.info.client?.id}`" class="btn btn-primary mt-3">Profile</a>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="billing" role="tabpanel" aria-labelledby="billing-tab">
                             <Billing :info="props.info"/>

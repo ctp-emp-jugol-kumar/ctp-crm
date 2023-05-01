@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row match-height">
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
@@ -23,11 +23,10 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card mb-4">
-                <!-- card body  -->
+            <div class="card">
                 <div class="card-body">
                     <h4 class=" card-title ">Overall Progress </h4>
-                    <ProgressChart :progress="20"/>
+                    <ProgressChart :progress="props.info.progress" :height="250" :status="props.info.status"/>
                 </div>
             </div>
         </div>
@@ -41,6 +40,7 @@ import {useForm} from "@inertiajs/inertia-vue3";
 import {ref} from "vue"
 import Swal from "sweetalert2";
 import ProgressChart from "../../../components/ProgressChart.vue";
+import {useJson} from "../../../composables/useJson";
 
 const props = defineProps({
     info:{
@@ -52,24 +52,17 @@ const props = defineProps({
         required:true
     }
 })
-const status = [
-    'New Project',
-    'Development',
-    'In Process',
-    'Testing',
-    'Revision',
-    'Complete',
-    'Canceled'
-]
+
+const {status} = useJson()
 
 const formData = useForm({
     projectId:props.info.id,
     status:props.info.status,
-    progress:0,
+    progressData:props.info.progress,
 })
 const reange = ref(props.info.progress);
 const progress = (event) =>{
-    formData.progress = event.target.value;
+    formData.progressData = event.target.value;
     reange.value = event.target.value;
 }
 const processing = ref(false)

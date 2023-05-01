@@ -69,7 +69,7 @@ class ClientsController extends Controller
                     'email' => $client->email,
                     'secondary_email' => $client->secondary_email,
                     'company' => $client->company,
-                    'photo' => $client->photo,
+                    'photo' => '/images/avatar.png',
                     'address' => $client->address,
                     'note' => $client->note,
                     'created_at' => $client->created_at->format('d M Y'),
@@ -131,10 +131,11 @@ class ClientsController extends Controller
             abort(401 );
         }
 
-        $user = Client::findOrFail($id)->load('users','transactions','transactions.user',
-            'transactions.method','customeInvoices',
+        $user = Client::findOrFail($id)->load('users','transactions','transactions.receivedBy',
+            'transactions.method',
             'quotations','quotations.user', 'projects',
-            'projects.users', 'customeInvoices', 'customeInvoices.user');
+            'projects.users');
+
 
         if(Request::input('edit')){
             return $user;

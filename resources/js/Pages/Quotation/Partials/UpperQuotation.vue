@@ -70,7 +70,7 @@
                                                 <div class="col-md-8">
                                                     <div class="input-group col-md-5">
                                                         <v-select :options="props.clients"
-                                                                  class="form-control py-0"
+                                                                  style="width:100%"
                                                                   label="name"
                                                                   v-model="formData.clientId"
                                                                   :reduce="client => client.id"

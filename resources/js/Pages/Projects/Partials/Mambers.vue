@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row match-height">
         <div class="col-xl-3 col-lg-6 col-12" v-for="(developer, index) in info.users" :key="developer.id">
             <div class="card mb-4">
                 <!-- card body  -->

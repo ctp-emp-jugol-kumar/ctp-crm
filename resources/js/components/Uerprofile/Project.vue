@@ -8,13 +8,13 @@
                 <table class="user-list-table table table-striped">
                     <thead class="table-light">
                     <tr class="">
-                        <th class="sorting">Project Id</th>
-                        <th class="sorting">Project Name</th>
-                        <th class="sorting">Delivery Date</th>
-                        <th class="sorting">Developers</th>
-                        <th class="sorting">Project Status</th>
-                        <th class="sorting">Project Progress</th>
-                        <th class="sorting">Created At</th>
+                        <th class="sorting py-1">Project Id</th>
+                        <th class="sorting py-1">Project Name</th>
+                        <th class="sorting py-1">Delivery Date</th>
+                        <th class="sorting py-1">Project Status</th>
+                        <th class="sorting py-1">Project Progress</th>
+                        <th class="sorting py-1">Created At</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -25,19 +25,6 @@
                         <td>{{ projects.name  }}</td>
 
                         <td>{{ formatted(projects.start) + " - " + formatted(projects.end) }} </td>
-                        <th>
-                            <div class="avatar-group mt-50">
-                                <div data-bs-toggle="tooltip"
-                                     data-popup="tooltip-custom"
-                                     data-bs-placement="bottom"
-                                     title=""
-                                     class="avatar pull-up"
-                                     data-bs-original-title="Elicia Rieske"
-                                     v-for="(developer, index) in projects.users" :key="developer.id">
-                                    <img :src="projects.files" alt="Avatar" height="30" width="30">
-                                </div>
-                            </div>
-                        </th>
                         <td>
                             <span
                                 class="badge"
@@ -72,6 +59,11 @@
                         </td>
 
                         <td>{{ formatted(projects.created_at) }}</td>
+                        <td v-c-tooltip="'View This Project'">
+                            <a :href="`/admin/projects/${projects.id}`">
+                                <vue-feather type="eye"/>
+                            </a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

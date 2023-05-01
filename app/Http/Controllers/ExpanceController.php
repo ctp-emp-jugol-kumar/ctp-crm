@@ -28,7 +28,16 @@ class ExpanceController extends Controller
             $search = Request::input('search'),
             'expanses' => Expanse::query()->with(['purpse', 'user','method'])
                 ->when(Request::input('search'), function ($query, $search) {
-                    $query->where('subject', 'like', "%{$search}%");
+                    $query->where('subject', 'like', "%{$search}%")
+                            ->orWherehas('purpse', function ($query)use($search){
+                                $query->where('name', 'like', "%{$search}%");
+                            })->orWherehas('method', function ($query)use($search){
+                                $query->where('name',    'like', "%{$search}%");
+                            }) ->orWherehas('user', function ($query)use($search){
+                            $query->where('name', 'like', "%{$search}%")
+                                ->orWhere('phone', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
+                            });
                 })->latest()
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
@@ -92,31 +101,20 @@ class ExpanceController extends Controller
             'details' => Request::input('details'),
             'document' => $filePath
         ]);
-//        TransactionLine::create([
-//            'u_id' => date('Yd', strtotime(now())),
-//            'user_id' => Auth::id(),
-//            'type' => 'out',
-//            'subject_model' => "App\\Models\\Expanse",
-//            'subject_id' => $expanse->id,
-//            'note' => Request::input('details'),
-//            'amount' => Request::input('amount'),
-//            'method_id' =>Request::input('method_id'),
-//            'date' => Request::input('expanse_date')
-//        ]);
-        Transaction::create([
-            'u_id'       => date('Yd', strtotime(now())),
-            'transaction_model' => 'App\\Models\\Expanse',
-            'transaction_model_id' => $expanse->id,
-            'method_id'  => Request::input('method_id'),
-            'user_id'    => Auth::id(),
-            'expanse_id' => $expanse->id,
-            'total_pay'  => Request::input('amount'),
-            'amount'     => Request::input('amount'),
-            'date'       => Request::input('expanse_date'),
-            'note'       => Request::input('details'),
-            'type'       => 'out'
-        ]);
 
+        Transaction::create([
+            'transaction_id' =>  now()->format('Ymd'),
+            'transactionable_id' => $expanse->id,
+            'transactionable_type' => "App\\Models\\Expanse",
+            'received_by' => Auth::id(),
+            "transaction_type" => "Debited",
+            "amount" => Request::input('amount'),
+            "pay" => Request::input('amount'),
+            "due" => 0,
+            "payment_date" => Request::input('expanse_date'),
+            "method_id" => Request::input('method_id'),
+            "note" => Request::input('details'),
+        ]);
         return back();
     }
 
@@ -150,7 +148,7 @@ class ExpanceController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\expanse  $expance
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update($id)
     {
@@ -171,7 +169,9 @@ class ExpanceController extends Controller
             }
             $filePath = Request::file('document')->store('expanses', 'public');
         }
+
         $expance->update([
+            'u_id' => date('Yd', strtotime(now())),
             'purpose_id' => Request::input('purpose_id'),
             'subject' => Request::input('subject'),
             'amount' => Request::input('amount'),
@@ -182,17 +182,20 @@ class ExpanceController extends Controller
             'document' => $filePath
         ]);
 
-        $transaction = TransactionLine::findOrfail($expance->id);
+        $transaction = Transaction::where('transactionable_type', "App\\Models\\Expanse")->where('transactionable_id', $expance->id)->first();
         $transaction->update([
-            'user_id' => Auth::id(),
-            'type' => 'out',
-            'subject_id' => $expance->id,
-            'note' => Request::input('details'),
-            'amount' => Request::input('amount'),
-            'method_id' =>Request::input('method_id'),
-            'date' => Request::input('expanse_date')
+            'transaction_id' =>  now()->format('Ymd'),
+            'transactionable_id' => $expance->id,
+            'transactionable_type' => "App\\Models\\Expanse",
+            'received_by' => Auth::id(),
+            "transaction_type" => "Debited",
+            "amount" => Request::input('amount'),
+            "pay" => Request::input('amount'),
+            "due" => 0,
+            "payment_date" => Request::input('expanse_date'),
+            "method_id" => Request::input('method_id'),
+            "note" => Request::input('details'),
         ]);
-
 
         return back();
     }
@@ -205,7 +208,10 @@ class ExpanceController extends Controller
      */
     public function destroy($id)
     {
-        Expanse::findOrFail($id)->delete();
+        $expance = Expanse::findOrFail($id);
+        $transaction = Transaction::where('transactionable_type', "App\\Models\\Expanse")->where('transactionable_id', $expance->id)->first();
+        $transaction->delete();
+        $expance->delete();
         return back();
     }
 

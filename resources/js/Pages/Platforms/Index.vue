@@ -42,7 +42,19 @@
                     <div class="item col-md-4" v-for="item in props.platforms.data" :key="item.id">
                         <div class="card">
                             <div class="card-body">
-                                <h2 class="card-title">{{ item.name }}</h2>
+
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h2 class="card-title text-capitalize">{{ item.name }}</h2>
+
+                                    <div>
+                                        <a :href="item.edit_url">
+                                            <vue-feather  type="edit" size="15" class="text-info cursor-pointer"/>
+                                        </a>
+                                        <vue-feather @click="deleteItem(props.main_url, item.id)" type="trash-2" size="15" class="text-danger cursor-pointer"/>
+                                    </div>
+                                </div>
+
+
                                 <div>
                                     <ul>
                                         <li class="list-group-item" v-for="fea in item.featureds" :key="fea.id">
@@ -73,7 +85,7 @@
 
     import MiniMasonry from "minimasonry";
 
-    const {swalSuccess} = useAction()
+    const {swalSuccess, deleteItem} = useAction()
 
     const props = defineProps({
         platforms: [],
