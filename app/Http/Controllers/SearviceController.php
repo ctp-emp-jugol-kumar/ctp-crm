@@ -30,6 +30,7 @@ class SearviceController extends Controller
                     'name' => $service->service_name,
                     'platforms' => Platform::whereIn('id', json_decode($service->platforms))->get(),
                     'created_at' => $service->created_at->format('d M Y'),
+                    'edit_url' =>  URL::route('services.edit', $service->id)
                 ]),
             "platforms" => Platform::all(),//->get(),
             'main_url' => URL::route('services.index')
@@ -53,6 +54,9 @@ class SearviceController extends Controller
      */
     public function store()
     {
+        Request::validate([
+            'serviceName' => 'required|unique:searvices,service_name'
+        ]);
         Searvice::create([
             'service_name' => Request::input('serviceName'),
             'platforms' => json_encode(Request::input('platforms'))
@@ -72,14 +76,15 @@ class SearviceController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified resource. c
      *
      * @param  \App\Models\Searvice  $searvice
-     * @return \Illuminate\Http\Response
+     * @return Searvice
      */
-    public function edit(Searvice $searvice)
+    public function edit($id)
     {
-        //
+        $service = Searvice::findOrFail($id);
+        return $service;
     }
 
     /**
@@ -87,21 +92,32 @@ class SearviceController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Searvice  $searvice
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Searvice $searvice)
+    public function update(Request $request, $id)
     {
-        //
+        Request::validate([
+            'serviceName' => 'required|unique:searvices,service_name,'.$id
+        ]);
+
+        $service = Searvice::findOrFail(Request::input('serviceId'));
+        $service->update([
+            'service_name' => Request::input('serviceName'),
+            'platforms' => json_encode(Request::input('platforms'))
+        ]);
+        return back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Searvice  $searvice
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Searvice $searvice)
+    public function destroy($id)
     {
-        //
+        $service = Searvice::findOrFail($id);
+        $service->delete();
+        return back();
     }
 }
