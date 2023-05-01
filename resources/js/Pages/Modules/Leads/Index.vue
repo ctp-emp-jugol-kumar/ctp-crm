@@ -122,6 +122,7 @@
                                                 'badge-light-warning' : user.status === 'Quote Sent',
                                                 'badge-light-purple' : user.status === 'Qualified',
                                                 'badge-light-danger' : user.status === 'Disqualified',
+                                                'badge-light-indego' : user.status === 'New Lead',
                                             }">{{ user.status }}</span></td>
                                             <td>{{ user.created_at }}</td>
                                             <td>

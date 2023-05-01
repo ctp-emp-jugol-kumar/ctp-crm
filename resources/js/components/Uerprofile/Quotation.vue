@@ -6,35 +6,37 @@
         <div class="table-responsive">
             <table class="user-list-table table">
                 <thead class="table-light">
-                    <tr class="">
-                        <th class="sorting">#id</th>
-                        <th class="sorting">Date</th>
-                        <th class="sorting">Created by</th>
-                        <th class="sorting">Status</th>
-                        <th class="sorting">Actions</th>
-                    </tr>
+                <tr class="">
+                    <th class="sorting bg-white py-1">#id</th>
+                    <th class="sorting bg-white py-1">Subject</th>
+                    <th class="sorting bg-white py-1">Total Price</th>
+                    <th class="sorting bg-white py-1">Created by</th>
+                    <th class="sorting bg-white py-1">Created Date</th>
+                    <th class="sorting bg-white py-1"></th>
+                </tr>
                 </thead>
                 <tbody>
                 <tr v-for="qut in quotations" :key="qut.id">
-                    <td>{{ qut.id }}</td>
-                    <td>{{ formatted(qut.date) }}</td>
-                    <td>{{ qut.user.name ?? " " }} </td>
                     <td>
-                        <span class="badge badge-light-primary text-capitalize"
-                              :class="{
-                                    'badge-light-success' : qut.status === 'Converted To Invoice',
-                                    'badge-light-info' : qut.status === 'Feedback',
-                                     'badge-light-dark' : qut.status === 'Sent',
-                                    'badge-light-danger' : qut.status === 'Disqualified'
-                        }">
-                            {{ qut.status }}
-                        </span>
+                        <a :href="qut.show_url" target="_blank">#{{ moment(new Date()).format('YYYYMMD')+qut.id}}</a>
+                    </td>
+                    <td>{{ qut.subject }}</td>
+                    <td>
+                        <span class="cursor-pointer" v-c-tooltip="'Total Price: '+qut.total_price+'\nDiscount: '+qut.discount">{{ qut.grand_total }}</span>
+                    </td>
+
+                    <td class="cursor-pointer">
+                        <span>{{ qut.user.name }}</span>
                     </td>
                     <td>
-                        <a class="btn bg-light-warning" :href="`/admin/quotations/${qut.id}`" target="_blank">
-                            <Icon title="pencil" />
+                        {{ moment(qut.created_at).format('lll') }}
+                    </td>
+                    <td>
+                        <a :href="`/admin/quotations/${qut.id}`">
+                            <vue-feather class="text-info" type="eye" size="15"/>
                         </a>
                     </td>
+
                 </tr>
                 </tbody>
             </table>
@@ -45,6 +47,7 @@
 
 <script setup>
 import Icon from '../Icon'
+import moment from "moment";
 import {useDate} from '../../composables/useDate.js'
     defineProps({
         quotations: Object

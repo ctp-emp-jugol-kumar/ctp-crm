@@ -109,6 +109,7 @@
                                                                 'bg-success'   : projects.project.status === 'Complete',
                                                                 'bg-secandery' : projects.project.status === 'Revision',
                                                                 'bg-danger'    : projects.project.status === 'Canceled',
+                                                                'bg-indego'    : projects.project.status === 'Development',
                                                             }"
                                                          :style="{ width: `${projects.project.progress}%`}">
                                                     </div>
@@ -655,5 +656,8 @@
 <style scoped>
     .ck.ck-editor__main>.ck-editor__editable.ck-rounded-corners{
         min-height: 15rem !important;
+    }
+    .bg-indego{
+        background: #fdb568;
     }
 </style>

@@ -54,6 +54,7 @@ Route::prefix('admin')->group(function(){
         // user management
         Route::resource('users', AdminController::class);
         Route::post('users/{id}', [AdminController::class, 'update']);
+        Route::post('user/update-pass/{id}', [AdminController::class, 'updateCredentials'])->name('updateCredentials');
         // user authorizations
         Route::resource('authorizations', AutorizaitonController::class);
         // clients management

@@ -111,7 +111,7 @@ class ClientsController extends Controller
        $data['status'] = $request->status["name"];
 
        $client = Client::create($data);
-       if ($request->agents){
+       if ($request->agents != null){
             $client->users()->attach($request->input('agents'));
        }
        return back();
@@ -132,6 +132,7 @@ class ClientsController extends Controller
         }
 
         $user = Client::findOrFail($id)->load('users','transactions','transactions.receivedBy',
+            'invoices','invoices.user',
             'transactions.method',
             'quotations','quotations.user', 'projects',
             'projects.users');
@@ -175,11 +176,13 @@ class ClientsController extends Controller
         }
 
         $agents = [];
-        foreach (Request::input("agents") as $item){
-            if (is_int($item)){
-                $agents[] = $item;
-            }else{
-                $agents[] = $item["id"];
+        if (Request::input('agents') != null){
+            foreach (Request::input("agents") as $item){
+                if (is_int($item)){
+                    $agents[] = $item;
+                }else{
+                    $agents[] = $item["id"];
+                }
             }
         }
 

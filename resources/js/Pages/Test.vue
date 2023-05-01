@@ -14,7 +14,7 @@
                         <div class="col-md-4 col-sm-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h1>Welcome Admin</h1>
+                                    <h1 class="text-capitalize">Welcome {{ this.$page.props.auth.user.username }}</h1>
                                 </div>
                             </div>
                         </div>

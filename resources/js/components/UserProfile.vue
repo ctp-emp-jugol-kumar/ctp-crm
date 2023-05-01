@@ -144,7 +144,7 @@
                                    :transactions="user.transactions"
                                    :project="user.projects"
                                    :quotations="user.quotations"
-                                   :invoices="user.custome_invoices"
+                                   :invoices="user.invoices"
                         />
 
                     </div>

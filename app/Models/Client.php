@@ -87,8 +87,8 @@ class Client extends Model
         return $this->hasMany(Transaction::class, 'payment_by');
     }
 
-    public function customeInvoices(){
-        return $this->hasMany(CustomInvoice::class, 'client_id');
+    public function invoices(){
+        return $this->hasMany(Invoice::class, 'client_id');
     }
 
 
