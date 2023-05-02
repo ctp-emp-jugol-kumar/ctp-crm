@@ -21,6 +21,7 @@ use App\Http\Controllers\PurposeController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\QuotationInvoice;
 use App\Http\Controllers\SearviceController;
+use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
@@ -132,6 +133,8 @@ Route::prefix('admin')->group(function(){
         Route::resource('notes', NoteController::class);
         Route::post('notes-update', [NoteController::class, 'update'])->name('notes.update');
         Route::get('employee-notes', [NoteController::class, 'employeeNotes'])->name('notes.empNots');
+
+        Route::resource('todos', TodoController::class);
     });
 
     Route::post('/logout', [LoginController::class, 'destroy']);
