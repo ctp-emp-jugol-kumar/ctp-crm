@@ -26,11 +26,18 @@ class AutorizaitonController extends Controller
         }
 //        return Role::with(["users"])->withCount("users")->get();
 
+        $roles = Role::with(["users"])->withCount("users")->get();
+
+        $roles->map(function ($item){
+           $item->is_delete = $item->is_delete == 0 ? false : true;
+           return $item;
+        });
+
 
         return inertia('Modules/Roles/Index', [
             'permissions' => Permission::with(['roles', 'users'])->get()->groupBy('module_name'),
             'all_permissions' => Permission::with("roles", "users")->get(),
-            'roles'       => Role::with(["users"])->withCount("users")->get(),
+            'roles'       => $roles,
             'can'         => null,
             'create_url'  => URL::route('authorizations.store')
         ]);

@@ -187,11 +187,9 @@ class InvoiceController extends Controller
 
     public function addDiscount($id){
         $invoice = Invoice::findOrFail($id);
-
-//        return dd($invoice);
         $invoice->discount = $invoice->discount + (int)Request::input('discount');
         $invoice->grand_total = $invoice->total_price - $invoice->discount;
-        $invoice->due = $invoice->grand_total - $invoice->pay;
+        $invoice->due = $invoice->due - (int)Request::input('discount');
         $invoice->save();
         return back();
     }
@@ -214,16 +212,23 @@ class InvoiceController extends Controller
             ]);
         }
 
-        $grandTotal = (int)Request::input('totalPrice') - (int)Request::input('discount');
+        $quotation = Quotation::findOrFail(Request::input('quotationId'));
+        $discount = $quotation->discount + Request::input('discount') ?? 0;
+
+
+        $grandTotal = $quotation->total_price - $discount;
+
+
         $due = $grandTotal - (int)Request::input('pay');
+
         Invoice::create([
             'invoice_id' => now()->format('Ymd'),
-            'quotation_id' => Request::input('quotationId'),
+            'quotation_id' => $quotation->id,
             'client_id' => Request::input('clientId'),
             'user_id' => Auth::id(),
             'invoice_type' => 'quotation',
-            'total_price' => Request::input('totalPrice'),
-            'discount' => Request::input('discount') ?? 0,
+            'total_price' => $quotation->total_price,
+            'discount' => $discount,
             'grand_total' => $grandTotal,
             'pay' => Request::input('pay'),
             'due' => $due,

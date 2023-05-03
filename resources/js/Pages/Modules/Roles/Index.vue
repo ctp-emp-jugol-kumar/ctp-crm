@@ -31,9 +31,9 @@
                                 </div>
                                 <div class="d-flex justify-content-between align-items-end mt-1 pt-25">
                                     <div class="role-heading">
-                                        <h4 class="fw-bolder">{{ role.name  }}</h4>
+                                        <h4 class="fw-bolder">{{ role.name  }} {{ role.is_delete === 1 ? true : false }}</h4>
                                         <a v-if="role.is_delete"  href="javascript:;" class="role-edit-modal" @click="editRole(role.id)">
-                                            <small class="fw-bolder">Edit Role</small>
+                                            <small class="fw-bolder">Edit Role {{ role.is_delete }}</small>
                                         </a>
                                         <span v-else class="text-danger">
                                             This is System Role. Can't Edit Or Delete This Role

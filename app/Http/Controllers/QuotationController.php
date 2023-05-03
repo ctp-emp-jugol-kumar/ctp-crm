@@ -585,8 +585,9 @@ class QuotationController extends Controller
 
     public function givenDiscount($id){
         $quotation = Quotation::findOrFail($id);
-        $quotation->discount = Request::input('discount');
-        $quotation->grand_total = $quotation->total_price - Request::input('discount');
+        $discount = $quotation->discount + Request::input('discount');
+        $quotation->discount = $discount;
+        $quotation->grand_total = $quotation->total_price - $discount;
         $quotation->save();
         return back();
     }
@@ -864,20 +865,31 @@ class QuotationController extends Controller
             ];
         }
 
+        $grandTotal = Request::input('totalPrice') - $quotation->discount;
         $quotation->update([
             'client_id' => Request::input('clientId'),
             'qut_date' => Request::input('date'),
             'subject' => Request::input('subject'),
             'created_by' => Auth::id(),
             "total_price" => Request::input('totalPrice'),
-            'discount' => 0,
-            'grand_total' => Request::input('totalPrice'),
+            'discount' => $quotation->discount,
+            'grand_total' => $grandTotal,
             'items' => json_encode($storeItems),
             'status' => true,
             'note' => Request::input('note'),
             'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
             'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
         ]);
+
+
+        $invoice = $quotation->invoice;
+        if ($invoice){
+            $invoice->update([
+                'total_price' => $quotation->total_price,
+                'grand_total' => $quotation->grand_total,
+                'due' => $grandTotal - $invoice->pay,
+            ]);
+        }
 
         return Redirect::route('quotations.index');
 
@@ -1017,7 +1029,12 @@ class QuotationController extends Controller
      */
     public function destroy(Quotation $quotation)
     {
-//        return $quotation;
+        if ($quotation->invoice){
+            if ($quotation->invoice()->transactions){
+                $quotation->invoice()->transactions()->delete();
+            }
+            $quotation->invoice()->delete();
+        }
         $quotation->delete();
         return back();
     }
