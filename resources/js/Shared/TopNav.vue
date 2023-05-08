@@ -17,7 +17,7 @@
                         </a>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav">
+<!--                <ul class="nav navbar-nav">
                     <li class="nav-item d-none d-lg-block"><a class="nav-link bookmark-star"><vue-feather type="star" /></a>
                         <div class="bookmark-input search-input">
                             <div class="bookmark-input-icon"><vue-feather type="search" /></div>
@@ -26,7 +26,7 @@
                             <ul class="search-list search-list-bookmark"></ul>
                         </div>
                     </li>
-                </ul>
+                </ul>-->
             </div>
             <ul class="nav navbar-nav align-items-center ms-auto">
 
@@ -35,7 +35,7 @@
                 <li class="nav-item dropdown dropdown-notification me-25">
                     <a class="nav-link" href="#" data-bs-toggle="dropdown" @click="openNotefication">
                         <vue-feather type="bell"/>
-                        <span class="badge rounded-pill bg-danger badge-up">5</span>
+                        <span class="badge rounded-pill bg-danger badge-up" v-if="$page.props.auth.user.notifications.length" v-text="$page.props.auth.user.notifications.length"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-media dropdown-menu-end" :class="{'d-block':isopen}">
                         <li class="dropdown-menu-header">
@@ -46,56 +46,47 @@
                                 <div class="badge rounded-pill badge-light-dark cursor-pointer" @click="openNotefication">X Close</div>
                             </div>
                         </li>
+
                         <li class="scrollable-container media-list">
-                            <a class="d-flex" href="#">
+
+
+                            <a class="d-flex" href="#" v-for="noti in $page.props.auth.user.notifications">
                                 <div class="list-item d-flex align-items-start">
                                     <div class="me-1">
                                         <div class="avatar bg-light-danger">
-                                            <div class="avatar-content">MD</div>
+                                            <div class="avatar-content">
+                                                <img src="/images/avatar.png" alt="" width="32" height="32">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="list-item-body flex-grow-1">
                                         <p class="media-heading">
-                                            <span class="fw-bolder">Revised Order 👋</span>&nbsp;checkout</p><small class="notification-text"> MD Inc. order updated</small>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="list-item d-flex align-items-center">
-                                <h6 class="fw-bolder me-auto mb-0">System Notifications</h6>
-                                <div class="form-check form-check-primary form-switch">
-                                    <input class="form-check-input" id="systemNotification" type="checkbox" checked="">
-                                    <label class="form-check-label" for="systemNotification"></label>
-                                </div>
-                            </div>
-                            <a class="d-flex" href="#">
-                                <div class="list-item d-flex align-items-start">
-                                    <div class="me-1">
-                                        <div class="avatar bg-light-danger">
-                                            <div class="avatar-content"><i class="avatar-icon" data-feather="x"></i></div>
-                                        </div>
-                                    </div>
-                                    <div class="list-item-body flex-grow-1">
-                                        <p class="media-heading"><span class="fw-bolder">Server down</span>&nbsp;registered</p><small class="notification-text"> USA Server is down due to high CPU usage</small>
-                                    </div>
-                                </div>
-                            </a>
-                            <a class="d-flex" href="#">
-                                <div class="list-item d-flex align-items-start">
-                                    <div class="me-1">
-                                        <div class="avatar bg-light-success">
-                                            <div class="avatar-content"><i class="avatar-icon" data-feather="check"></i></div>
-                                        </div>
-                                    </div>
-                                    <div class="list-item-body flex-grow-1">
-                                        <p class="media-heading">
-                                            <span class="fw-bolder">Sales report</span>&nbsp;generated
+                                            <span class="fw-bolder text-capitalize">{{  noti.data.data.name  }}</span>
+                                            <span style="font-size: 10px; margin-left: 5px;">add Todo</span>
                                         </p>
-                                        <small class="notification-text"> Last month sales report generated</small>
+
+                                        <div class="notification-text">
+                                            <span>{{ noti.data.notefication.title }}</span>
+                                            <span v-if="noti.data.notefication.file">
+                                                |
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 15px;">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                                </svg>
+                                            </span>
+                                            <span style="margin-left:5px;">{{ noti.data.notefication.file }}</span>
+                                        </div>
+
+
+                                        <!--                                            <span style="margin:0 3px;"></span>-->
+                                        <!--                                            <span v-if="noti.data.notefication.file">
+                                                                                        <span></span>
+                                                                                    </span>-->
                                     </div>
                                 </div>
                             </a>
+
                         </li>
-                        <li class="dropdown-menu-footer"><a class="btn btn-primary w-100" href="#">Read all notifications</a></li>
+<!--                        <li class="dropdown-menu-footer"><a class="btn btn-primary w-100" href="#">Read all notifications</a></li>-->
                     </ul>
                 </li>
 

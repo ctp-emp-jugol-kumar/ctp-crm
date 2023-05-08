@@ -13,6 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 /**
  * @method static create(array $array)
  * @method static updateOrCreate(array $array)
+ * @method static whereIn(mixed $json_decode)
  */
 class User extends Authenticatable
 {

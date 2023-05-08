@@ -50,10 +50,12 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'auth' =>  $user ? [
                 'user' => [
+                    'id' => $user->id,
                     'username' => $user->name,
                     'role' => $user->getRoleNames(),
                     'photo' => $user->photo,
-                    'can' => $can
+                    'can' => $can,
+                    'notifications' => $user->notifications()->latest()->take(10)->get()
                 ],
                 'ADMIN_URL' => 'http://127.0.0.1:8000/admin',
                 'MAIN_URL' => config('app.url'),

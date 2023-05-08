@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 
+/**
+ * @method static findOrFail(int $id)
+ */
 class Project extends Model
 {
 
