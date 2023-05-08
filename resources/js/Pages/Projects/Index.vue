@@ -18,7 +18,6 @@
                                     >
                                         Add Project
                                     </button>
-
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">

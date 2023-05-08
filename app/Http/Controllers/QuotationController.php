@@ -556,6 +556,7 @@ class QuotationController extends Controller
             }
         }
 
+
         if (Request::input('download')) {
             $isPrint = false;
             $pdf = Pdf::loadView('invoice.quotation', compact('quotation', 'pref', 'isPrint'));
@@ -579,15 +580,29 @@ class QuotationController extends Controller
                 "invoice_url" => $downloadInvoiceUrl,
             ]
         ]);
-
-
     }
 
     public function givenDiscount($id){
         $quotation = Quotation::findOrFail($id);
         $discount = $quotation->discount + Request::input('discount');
+        $grandTotal = $quotation->total_price - $discount;
         $quotation->discount = $discount;
-        $quotation->grand_total = $quotation->total_price - $discount;
+        $quotation->grand_total = $grandTotal;
+
+        $invoice = $quotation->invoice;
+        if ($invoice){
+
+            $discount = Request::input('discount') + $invoice->discount;
+
+            $invoice->update([
+                'grand_total' => $invoice->total_price - $discount,
+                'discount' => $discount,
+                'due' => $invoice->total_price - ($discount + $invoice->pay),
+            ]);
+        }
+
+
+
         $quotation->save();
         return back();
     }
@@ -884,9 +899,10 @@ class QuotationController extends Controller
 
         $invoice = $quotation->invoice;
         if ($invoice){
+            $grandTotal = $quotation->total_price - $invoice->discount;
             $invoice->update([
                 'total_price' => $quotation->total_price,
-                'grand_total' => $quotation->grand_total,
+                'grand_total' => $grandTotal,
                 'due' => $grandTotal - $invoice->pay,
             ]);
         }

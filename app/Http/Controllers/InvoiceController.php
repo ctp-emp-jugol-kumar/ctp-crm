@@ -215,9 +215,7 @@ class InvoiceController extends Controller
         $quotation = Quotation::findOrFail(Request::input('quotationId'));
         $discount = $quotation->discount + Request::input('discount') ?? 0;
 
-
         $grandTotal = $quotation->total_price - $discount;
-
 
         $due = $grandTotal - (int)Request::input('pay');
 

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 
 class TodoController extends Controller
 {
@@ -13,7 +16,10 @@ class TodoController extends Controller
      */
     public function index()
     {
-        return inertia('Todo/Index');
+        return inertia('Todo/Index',[
+            'users' => User::all(),
+            'main_url' => URL::route('todos.index'),
+        ]);
     }
 
     /**
@@ -30,11 +36,16 @@ class TodoController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \never|void
      */
     public function store(Request $request)
     {
-        //
+
+        if (Request::hasFile('attachment')) {
+            $filePath = Storage::putFile('public/todos', Request::file('attachment'));
+        }
+
+        return $filePath;
     }
 
     /**
