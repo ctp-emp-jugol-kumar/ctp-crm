@@ -88,9 +88,9 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        if (!auth()->user()->can('user.show')){
-            abort(404);
-        }
+//        if (!auth()->user()->can('user.show')){
+//            abort(404);
+//        }
         $user = User::findOrFail($id)->load('invoices', 'projects', 'roles');
         if(Request::input("api")){
             return $user;

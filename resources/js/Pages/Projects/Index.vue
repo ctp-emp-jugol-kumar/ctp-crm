@@ -13,6 +13,7 @@
                                     <h4 class="card-title">Project Information's </h4>
 <!--                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal" data-bs-target="#addItemModal">Add Client</button>-->
                                     <button
+                                        v-if="this.$page.props.auth.user.can.includes('project.create')"
                                         class="dt-button add-new btn btn-primary"
                                         @click="addDataModal"
                                     >
@@ -149,7 +150,7 @@
     </div>
 
 
-    <Modal id="addItemModal" title="Add New Project" v-vb-is:modal size="lg">
+    <Modal id="addItemModal" title="Add New Project" v-vb-is:modal size="lg" v-if="this.$page.props.auth.user.can.includes('project.create')">
         <form @submit.prevent="createProject">
             <div class="modal-body">
                 <div class="row mb-1">

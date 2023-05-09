@@ -13,6 +13,7 @@
                                     <h4 class="card-title">Project Information's </h4>
 <!--                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal" data-bs-target="#addItemModal">Add Client</button>-->
                                     <button
+                                        v-if="this.$page.props.auth.user.can.includes('project.create')"
                                         class="dt-button add-new btn btn-primary"
                                         @click="addDataModal"
                                     >
@@ -149,6 +150,173 @@
             </div>
         </div>
     </div>
+
+
+    <Modal id="addItemModal" title="Add New Project" v-vb-is:modal size="lg" v-if="this.$page.props.auth.user.can.includes('project.create')">
+        <form @submit.prevent="createProject">
+            <div class="modal-body">
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Project Name:
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <input v-model="createForm.name" type="text" placeholder="Name" class="form-control">
+                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <label>Invoice: <span class="text-danger">*</span></label>
+                        <div class="">
+                            <v-select v-model="createForm.invoiceId" :options="preparedInvoices"
+                                      @update:modelValue="setClientId"
+                                      class="form-control select-padding"
+                                      :reduce="invoice => invoice.id" label="invoiceId"
+                                      placeholder="Select Client">
+                                <template v-slot:option="option">
+                                    <li class="d-flex align-items-start py-1">
+                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                            <div class="me-1 d-flex flex-column">
+                                                <strong class="mb-25">{{ 'Invoice Id: #_'+option.invoiceId }}</strong>
+                                                <span>{{ option.clientName }}</span>
+                                                <span>{{ option.clientEmail ?? ''}}</span>
+                                                <span>{{ option.clientPhone ?? ''}}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </template>
+                            </v-select>
+                            <InputFieldError :errors="errors.invoiceId"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Date :
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <Datepicker v-model="createForm.date" :monthChangeOnScroll="false"
+                                        placeholder="Select Date" autoApply></Datepicker>
+                            <InputFieldError :errors="errors.date"/>
+                        </div>
+                    </div>
+
+                    <div class="col-md">
+                        <label>Start date :
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <Datepicker v-model="createForm.start_date"
+                                        :monthChangeOnScroll="false"
+                                        placeholder="Select Date" autoApply></Datepicker>
+                            <InputFieldError :errors="errors.start_date"/>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md">
+                        <label>End date :
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <Datepicker v-model="createForm.end_date"
+                                        :monthChangeOnScroll="false"
+                                        placeholder="Select Date" autoApply></Datepicker>
+                            <InputFieldError :errors="errors.end_date"/>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row mb-1">
+                    <div class="col-md-12">
+                        <label>Project Description  :</label>
+                        <div class="">
+                            <textarea v-model="createForm.project_details" class="form-control" rows="6" placeholder="e.g Project description explain here help for developer..."></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <label>Project Credential's : </label>
+                        <div class="">
+                            <textarea v-model="createForm.credintials" class="form-control" rows="6" placeholder="e.g Details explain about this project credentials..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!--
+                                <div class="row mb-1">
+                                    <div class="col-md">
+                                        <label>Upload Files</label>
+                                        <ImageUploader v-model="createForm.files" label="Project Files" />
+                                    </div>
+                                </div>-->
+
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Project Status: </label>
+
+                        <v-select v-model="createForm.status"
+                                  label="name"
+                                  :options="status"
+                                  class="form-control select-padding"
+                                  placeholder="Project Status"
+                                  :reduce="optoin"></v-select>
+
+                    </div>
+
+                    <div class="col-md">
+                        <label>Assign Developers: </label>
+                        <v-select
+                            multiple
+                            v-model="createForm.agents"
+                            :options="users"
+                            class="form-control select-padding"
+                            placeholder="Assign Developers"
+                            :reduce="user => user.id"
+                            label="name">
+                            <template v-slot:option="option">
+                                <li class="d-flex align-items-start py-1">
+                                    <div class="avatar me-75">
+                                        <img :src="`${option.photo}`" alt="" width="38" height="38">
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="me-1 d-flex flex-column">
+                                            <strong class="mb-25">{{ option.name }}</strong>
+                                            <span >{{ option.email }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </template>
+                        </v-select>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-md-12 mt-2">
+                        <label>Nots : </label>
+                        <div class="">
+                            <textarea v-model="createForm.note" class="form-control" placeholder="e.g Write an note about this project..." rows="6"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button :disabled="createForm.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit
+                </button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel
+                </button>
+            </div>
+        </form>
+    </Modal>
+
+
 </template>
 
 
@@ -175,7 +343,9 @@
         projects: Object,
         filters: Object,
         errors: Object,
+        invoice:Object|null,
         main_url:String|null,
+        users:Object,
     });
 
     const createForm = useForm({
@@ -195,23 +365,6 @@
         processing: Boolean,
     })
 
-    const updateForm = useForm({
-        name: null,
-        note: null,
-        status: null,
-        date:null,
-        start_date:null,
-        end_date:null,
-        agents:[],
-        client_id:null,
-        descriptions:null,
-        credintials:null,
-        project_details:null,
-
-        files:null,
-
-        processing: Boolean,
-    })
 
     const status = [
         'New Project',
@@ -221,6 +374,29 @@
         'Complete',
         'Canceled'
     ]
+
+    const addDataModal = () => {
+        document.getElementById('addItemModal').$vb.modal.show()
+    }
+    const createProject = () => {
+        Inertia.post('projects', createForm, {
+            preserveState: true,
+            onStart: () => {createForm.processing = true},
+            onFinish: () => {createForm.processing = false},
+            onSuccess: () => {
+                document.getElementById('addItemModal').$vb.modal.hide()
+                createForm.reset()
+                Swal.fire(
+                    'Saved!',
+                    'Your file has been Saved.',
+                    'success'
+                )
+            },
+            onError:()=>{
+
+            }
+        })
+    }
 
     const search = ref(props.filters.search);
     const perPage = ref(props.filters.perPage);

@@ -66,9 +66,6 @@
                     </div>
                 </div>
 
-                <form @submit.prevent="onSubmit">
-                    <button class="btn btn-primary" type="submit">ok</button>
-                </form>
 
                 <!--/ Role cards -->
                 <h3 class="mt-50">Module Wise All permissions</h3>
