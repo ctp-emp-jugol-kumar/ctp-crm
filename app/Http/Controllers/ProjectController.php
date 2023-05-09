@@ -342,7 +342,7 @@ class ProjectController extends Controller
             'users'    => User::all(['id','name', 'email']),
             'invoice' => Invoice::with(['quotation', 'client'])->get(),
             'filters'  => Request::only(['search','perPage']),
-            'main_url' => URL::route('projects.employeeProject'),
+            'main_url' => URL::route('employeeProject'),
         ]);
     }
 
