@@ -84,20 +84,20 @@ class RolesAndPermissionsSeeder extends Seeder
                 ]
             ],
             [
-                'module' => "Feature",
+                'module' => "Client",
                 'permissions' => [
-                    'feature.show',
-                    'feature.index',
-                    'feature.create',
-                    'feature.edit',
-                    'feature.delete'
+                    'client.show',
+                    'client.index',
+                    'client.create',
+                    'client.edit',
+                    'client.delete',
                 ],
                 'name' => [
-                    'Show Feature',
-                    'Manage Feature',
-                    'Create Feature',
-                    'Edit Feature',
-                    'Delete Feature'
+                    'Show Client',
+                    'Manage Client',
+                    'Create Client',
+                    'Edit Client',
+                    'Delete Client',
                 ]
             ],
             [
@@ -118,88 +118,37 @@ class RolesAndPermissionsSeeder extends Seeder
                 ]
             ],
             [
-                'module' => "Work",
+                'module' => "Packages",
                 'permissions' => [
-                    'work.show',
-                    'work.index',
-                    'work.create',
-                    'work.edit',
-                    'work.delete'
+                    'packages.show',
+                    'packages.index',
+                    'packages.create',
+                    'packages.edit',
+                    'packages.delete'
                 ],
                 'name' => [
-                    'Show Work',
-                    'Manage Work',
-                    'Create Work',
-                    'Edit Work',
-                    'Delete Work'
+                    'Show Packages',
+                    'Manage Packages',
+                    'Create Packages',
+                    'Edit Packages',
+                    'Delete Packages'
                 ]
             ],
             [
-                'module' => "Design",
+                'module' => "Services",
                 'permissions' => [
-                    'design.show',
-                    'design.index',
-                    'design.create',
-                    'design.edit',
-                    'design.delete'
+                    'services.show',
+                    'services.index',
+                    'services.create',
+                    'services.edit',
+                    'services.delete'
                 ],
                 'name' => [
-                    'Show Design',
-                    'Manage Design',
-                    'Create Design',
-                    'Edit Design',
-                    'Delete Design'
-                ]
-            ],
-            [
-                'module' => "Website",
-                'permissions' => [
-                    'website.show',
-                    'website.index',
-                    'website.create',
-                    'website.edit',
-                    'website.delete'
-                ],
-                'name' => [
-                    'Show Website',
-                    'Manage Website',
-                    'Create Website',
-                    'Edit Website',
-                    'Delete Website'
-                ]
-            ],
-            [
-                'module' => "Hosting",
-                'permissions' => [
-                    'hosting.show',
-                    'hosting.index',
-                    'hosting.create',
-                    'hosting.edit',
-                    'hosting.delete'
-                ],
-                'name' => [
-                    'Show Hosting',
-                    'Manage Hosting',
-                    'Create Hosting',
-                    'Edit Hosting',
-                    'Delete Hosting'
-                ]
-            ],
-            [
-                'module' => "Domain",
-                'permissions' => [
-                    'domain.show',
-                    'domain.index',
-                    'domain.create',
-                    'domain.edit',
-                    'domain.delete'
-                ],
-                'name' => [
-                    'Show Domain',
-                    'Manage Domain',
-                    'Create Domain',
-                    'Edit Domain',
-                    'Delete Domain'
+                    'Show Services',
+                    'Manage Services',
+                    'Create Services',
+                    'Edit Services',
+                    'Delete Services'
                 ]
             ],
             [
@@ -209,14 +158,16 @@ class RolesAndPermissionsSeeder extends Seeder
                     'quotation.index',
                     'quotation.create',
                     'quotation.edit',
-                    'quotation.delete'
+                    'quotation.delete',
+                    'quotation.invoice'
                 ],
                 'name' => [
                     'Show Quotation',
                     'Manage Quotation',
                     'Create Quotation',
                     'Edit Quotation',
-                    'Delete Quotation'
+                    'Delete Quotation',
+                    'Invoice Quotation'
                 ]
             ],
             [
@@ -234,57 +185,6 @@ class RolesAndPermissionsSeeder extends Seeder
                     'Create Invoice',
                     'Edit Invoice',
                     'Delete Invoice'
-                ]
-            ],
-            [
-                'module' => "Method",
-                'permissions' => [
-                    'method.show',
-                    'method.index',
-                    'method.create',
-                    'method.edit',
-                    'method.delete'
-                ],
-                'name' => [
-                    'Show Method',
-                    'Manage Method',
-                    'Create Method',
-                    'Edit Method',
-                    'Delete Method'
-                ]
-            ],
-            [
-                'module' => "Purpose",
-                'permissions' => [
-                    'purpose.show',
-                    'purpose.index',
-                    'purpose.create',
-                    'purpose.edit',
-                    'purpose.delete'
-                ],
-                'name' => [
-                    'Show Purpose',
-                    'Manage Purpose',
-                    'Create Purpose',
-                    'Edit Purpose',
-                    'Delete Purpose'
-                ]
-            ],
-            [
-                'module' => "Transaction",
-                'permissions' => [
-                    'transaction.show',
-                    'transaction.index',
-                    'transaction.create',
-                    'transaction.edit',
-                    'transaction.delete'
-                ],
-                'name' => [
-                    'Show Transaction',
-                    'Manage Transaction',
-                    'Create Transaction',
-                    'Edit Transaction',
-                    'Delete Transaction'
                 ]
             ],
             [
@@ -338,6 +238,57 @@ class RolesAndPermissionsSeeder extends Seeder
                     'Delete Expanse'
                 ]
             ],
+            [
+                'module' => "Method",
+                'permissions' => [
+                    'method.show',
+                    'method.index',
+                    'method.create',
+                    'method.edit',
+                    'method.delete'
+                ],
+                'name' => [
+                    'Show Method',
+                    'Manage Method',
+                    'Create Method',
+                    'Edit Method',
+                    'Delete Method'
+                ]
+            ],
+            [
+                'module' => "Purpose",
+                'permissions' => [
+                    'purpose.show',
+                    'purpose.index',
+                    'purpose.create',
+                    'purpose.edit',
+                    'purpose.delete'
+                ],
+                'name' => [
+                    'Show Purpose',
+                    'Manage Purpose',
+                    'Create Purpose',
+                    'Edit Purpose',
+                    'Delete Purpose'
+                ]
+            ],
+            [
+                'module' => "Transaction",
+                'permissions' => [
+                    'transaction.show',
+                    'transaction.index',
+                    'transaction.create',
+                    'transaction.edit',
+                    'transaction.delete'
+                ],
+                'name' => [
+                    'Show Transaction',
+                    'Manage Transaction',
+                    'Create Transaction',
+                    'Edit Transaction',
+                    'Delete Transaction'
+                ]
+            ],
         ];
 
         foreach ($all as $item) {
@@ -357,25 +308,25 @@ class RolesAndPermissionsSeeder extends Seeder
         };
 
         Role::updateOrCreate(['name' => 'Administrator', 'is_delete' => false]);
-        $developer = Role::updateOrCreate(['name' => 'Developer']);
+//        $developer = Role::updateOrCreate(['name' => 'Developer']);
 
-        foreach ($all as $item) {
-            foreach ($item['permissions'] as $permission) {
-                $developer->givePermissionTo( $permission );
-            }
-        };
+//        foreach ($all as $item) {
+//            foreach ($item['permissions'] as $permission) {
+//                $developer->givePermissionTo( $permission );
+//            }
+//        };
 
-        User::updateOrCreate([
-            'name' => 'Jugol Kumar',
-            'email' => 'jugol@creativetechpark.com',
-            'password' => bcrypt(12345678),
-        ])->assignRole('Developer');
+//        User::updateOrCreate([
+//            'name' => 'Jugol Kumar',
+//            'email' => 'jugol@creativetechpark.com',
+//            'password' => bcrypt(12345678),
+//        ])->assignRole('Developer');
 
-        User::updateOrCreate([
-        'name' => 'Creative Tech Park',
-            'email' => 'info@creativetechpark.com',
-            'password' => bcrypt('creativetechpark'),
-        ])->assignRole('Administrator');
+//        User::updateOrCreate([
+//        'name' => 'Creative Tech Park',
+//            'email' => 'info@creativetechpark.com',
+//            'password' => bcrypt('creativetechpark'),
+//        ])->assignRole('Administrator');
 
         User::updateOrCreate([
             'name' => 'admin',

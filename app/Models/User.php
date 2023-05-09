@@ -13,6 +13,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 /**
  * @method static create(array $array)
  * @method static updateOrCreate(array $array)
+ * @method static whereIn(mixed $json_decode)
+ * @method static findOrFail(int|string|null $id)
  */
 class User extends Authenticatable
 {
@@ -74,7 +76,7 @@ class User extends Authenticatable
     }
 
     public function invoices(){
-        return $this->hasMany(CustomInvoice::class, 'user_id');
+        return $this->hasMany(Invoice::class, 'user_id');
     }
 
     public function projects()

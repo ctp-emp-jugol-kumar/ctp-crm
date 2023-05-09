@@ -63,8 +63,8 @@
                                         <div class="input-group col-md-5">
                                             <v-select :options="props.clients"
                                                       style="width: 100%"
-                                                      class="py-0"
                                                       label="name"
+                                                      class="form-control select-padding py-0"
                                                       v-model="formData.clientId"
                                                       :reduce="client => client.id"
                                                       @update:modelValue="loadClient"

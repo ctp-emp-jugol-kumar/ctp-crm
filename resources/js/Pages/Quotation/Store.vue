@@ -15,7 +15,8 @@
                                             <v-select :options="services"
                                                       v-model="formData.items[index].service"
                                                       label="service_name"
-                                                      style="width:100%"
+                                                      class="form-control select-padding p-0 rounded-0"
+                                                      style="width:100%; padding: 0px 0px !important;"
                                                       :reduce="service => service.id"
                                                       @update:modelValue="loadPlatforms(index)"
                                                       placeholder="e.g Select Service">
@@ -40,7 +41,8 @@
                                             <v-select
                                                 :options="formData.items[index].platforms"
                                                 label="name"
-                                                style="width:100%"
+                                                style="width:100%; padding: 0px 0px !important;"
+                                                class="form-control select-padding p-0 rounded-0"
                                                 v-model="formData.items[index].platform"
                                                 @update:modelValue="loadPlatformFeatureds(index)"
                                                 placeholder="e.g Select Platform">

@@ -6,6 +6,7 @@
                     <label class="mb-2">Change Project Status</label>
                     <v-select v-model="formData.status"
                               label="name"
+                              class="form-control select-padding"
                               :options="status"
                               placeholder="~~Select Sub Category~~">
                     </v-select>
@@ -17,7 +18,6 @@
                             <span>{{ reange }} %</span>
                         </div>
                     </div>
-
                     <button class="btn btn-primary btn-sm mt-1" @click="changeStatus">Update</button>
                 </div>
             </div>
@@ -27,6 +27,17 @@
                 <div class="card-body">
                     <h4 class=" card-title ">Overall Progress </h4>
                     <ProgressChart :progress="props.info.progress" :height="250" :status="props.info.status"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class=" card-title ">Upload Backup File Url</h4>
+                    <input type="text" v-model="backupData.files" class="form-control" placeholder="e.g https://dricve.google.com/project-url">
+                    <p v-if="errors.files" class="text-danger">{{ errors.files }}</p>
+                    <button @click="uploadBackup" class="btn btn-primary btn-sm mt-2">Save Backup</button>
                 </div>
             </div>
         </div>
@@ -50,7 +61,8 @@ const props = defineProps({
     updateUrl:{
         type:String,
         required:true
-    }
+    },
+    errors:Object,
 })
 
 const {status} = useJson()
@@ -75,6 +87,26 @@ const changeStatus = () =>{
         onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
     })
 }
+
+
+const backupData = useForm({
+    files:props.info.files,
+})
+const errors = ref({});
+const uploadBackup = () =>{
+    backupData.post('/admin/project/update-project-backup/'+props.info.id, {
+        preserveState: true,
+        onStart: () => {processing.value = true},
+        onFinish: () => {processing.value = false},
+        onSuccess: ()=> { $toast.success('Saved project backup') },
+        onError: (error)=> {
+            errors.value = error;
+            $toast.error('Have An Error. Please Try Again.')
+
+        },
+    })
+}
+
 
 </script>
 

@@ -232,8 +232,9 @@
                         <v-select v-model="createForm.status"
                                   @update:modelValue="changeStatus"
                                   label="name"
+                                  class="form-control select-padding"
                                   :options="status"
-                                  placeholder="~~Select Sub Category~~">
+                                  placeholder="Select Lead Status">
                         </v-select>
                     </div>
                     <div class="col-md" :class="{ 'd-none' : clientStatus }">
@@ -242,7 +243,8 @@
                             multiple
                             v-model="createForm.agents"
                             :options="users"
-                            placeholder="Search Country Name"
+                            placeholder="Select Assigned Employee"
+                            class="form-control select-padding"
                             :reduce="user => user.id"
                             label="name">
                             <template v-slot:option="option">
@@ -341,7 +343,8 @@
                                   @update:modelValue="changeStatus"
                                   label="name"
                                   :options="status"
-                                  placeholder="~~Select Sub Category~~">
+                                  class="form-control select-padding"
+                                  placeholder="Select Lead Status">
                         </v-select>
                     </div>
                     <div class="col-md" :class="{ 'd-none' : clientStatus }">
@@ -350,7 +353,8 @@
                             multiple
                             v-model="createForm.agents"
                             :options="users"
-                            placeholder="Search Country Name"
+                            placeholder="Select Assigned Employee"
+                            class="form-control select-padding"
                             :reduce="user => user.id"
                             label="name">
                             <template v-slot:option="option">
@@ -448,8 +452,9 @@
                         <v-select v-model="updateForm.status"
                                   @update:modelValue="changeStatus"
                                   label="name"
+                                  class="form-control select-padding"
                                   :options="status"
-                                  placeholder="~~Select Sub Category~~">
+                                  placeholder="Select Lead Status">
                         </v-select>
                     </div>
                     <div class="col-md" :class="{ 'd-none' : clientStatus }">
@@ -458,7 +463,8 @@
                             multiple
                             v-model="updateForm.agents"
                             :options="users"
-                            placeholder="Search Country Name"
+                            placeholder="Select Assigned Employee"
+                            class="form-control select-padding"
                             :reduce="user => user.id"
                             label="name">
                             <template v-slot:option="option">

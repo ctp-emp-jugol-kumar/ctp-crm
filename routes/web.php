@@ -56,6 +56,9 @@ Route::prefix('admin')->group(function(){
         Route::resource('users', AdminController::class);
         Route::post('users/{id}', [AdminController::class, 'update']);
         Route::post('user/update-pass/{id}', [AdminController::class, 'updateCredentials'])->name('updateCredentials');
+        Route::post('user/update-profile-image', [AdminController::class, 'uploadProfile'])->name('users.uploadProfile');
+
+
         // user authorizations
         Route::resource('authorizations', AutorizaitonController::class);
         // clients management
@@ -119,6 +122,9 @@ Route::prefix('admin')->group(function(){
         Route::post('projects/{id}', [ProjectController::class, 'update']);
         Route::get('project/employee-projects', [ProjectController::class, 'employeeProjects'])->name('employeeProject');
         Route::post('project/change-status', [ProjectController::class, 'updateProgress'])->name('projects.updateProgress');
+        Route::post('project/update-details/{id}', [ProjectController::class, 'updateProjectDetails'])->name('projects.updateProjectDetails');
+        Route::post('project/update-project-backup/{id}', [ProjectController::class, 'updateProjectBackup'])->name('projects.updateProjectBackup');
+
 
         // transaction management
         Route::resource('transaction', TransactionController::class);

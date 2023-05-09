@@ -121,8 +121,10 @@ class TransactionController extends Controller
         ]);
 
         $invoice = Invoice::findOrFail(Request::input('invoiceId'));
-        $invoice->pay = $invoice->pay + (int)Request::input("pay");
-        $invoice->due = (int)Request::input("totalPrice") - (int)Request::input("pay");
+
+        $invoice->due = $invoice->due - (int)Request::input("pay");
+        $pay = $invoice->pay + (int)Request::input("pay");
+        $invoice->pay = $pay;
         $invoice->update();
 
         return back();

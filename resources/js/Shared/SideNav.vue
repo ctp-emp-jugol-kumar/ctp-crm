@@ -41,21 +41,8 @@
                         </Link>
                     </li>
 
-<!--                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('email.show') || this.$page.props.auth.user.role == 'Administrator' ">
-                        <Link preserve-scroll class="d-flex align-items-center" href="#">
-                            <vue-feather type="mail" />
-                            <span class="menu-title text-truncate" data-i18n="Email">Email</span>
-                        </Link>
-                    </li>
-                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('chat.show') || this.$page.props.auth.user.role == 'Administrator' ">
-                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/chat">
-                            <vue-feather type="message-circle" />
-                            <span class="menu-title text-truncate" data-i18n="Chat">Chat</span>
-                        </Link>
-                    </li>-->
-
                     <li class=" nav-item has-sub" :class="{'open' : clickMenu === 1}"  @click="toggleSubMenu(1)"
-                        v-if="this.$page.props.auth.user.can.includes('user.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                        v-if="this.$page.props.auth.user.can.includes('user.index') || this.$page.props.auth.user.role == 'Administrator' ">
                         <a preserve-scroll class="d-flex align-items-center">
                             <vue-feather type="users" size="8"/>
                             <span class="menu-title text-truncate"
@@ -99,8 +86,6 @@
                             </li>
                         </ul>
                     </li>
-
-
 
                     <li class=" nav-item has-sub" :class="{'open' : clickMenu === 3}"  @click="toggleSubMenu(3)"
                         v-if="this.$page.props.auth.user.can.includes('user.show') || this.$page.props.auth.user.role == 'Administrator' ">
@@ -157,15 +142,12 @@
                         </ul>
                     </li>
 
-
-
                     <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('quotation.show') || this.$page.props.auth.user.role == 'Administrator' ">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/quotations">
                             <vue-feather type="aperture" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Quotations</span>
                         </Link>
                     </li>
-
 
                     <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('chat.show') || this.$page.props.auth.user.role == 'Administrator' ">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/invoices">
@@ -174,22 +156,13 @@
                         </Link>
                     </li>
 
-
-
-<!--                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('invoice.show') || this.$page.props.auth.user.role == 'Administrator' ">
-                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/invoices">
-                            <vue-feather type="archive" />
-                            <span class="menu-title text-truncate" data-i18n="Chat">Custom Invoice</span>
-                        </Link>
-                    </li>-->
-
-
                     <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('project.show') || this.$page.props.auth.user.role == 'Administrator' ">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/projects">
                             <vue-feather type="package" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Projects</span>
                         </Link>
                     </li>
+
                     <li class=" nav-item" v-else>
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/project/employee-projects">
                             <vue-feather type="package" />

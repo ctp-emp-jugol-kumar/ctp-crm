@@ -75,6 +75,7 @@
                                                                   v-model="formData.clientId"
                                                                   :reduce="client => client.id"
                                                                   @update:modelValue="loadClient"
+                                                                  class="form-control select-padding"
                                                                   :filter="fuseSearch"
                                                                   placeholder="e.g Select Client">
                                                             <template v-slot:option="option">

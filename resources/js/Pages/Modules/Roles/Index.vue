@@ -3,9 +3,9 @@
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper container-xxl p-0">
-        <div class="content-header row">
-        </div>
-<!--             horizontal role create module-->
+            <div class="content-header row">
+            </div>
+            <!--             horizontal role create module-->
 
             <div class="content-body">
                 <h3>Roles List</h3>
@@ -200,126 +200,126 @@
 </template>
 
 <script setup>
-    import {useForm} from "@inertiajs/inertia-vue3";
-    import Swal from "sweetalert2";
-    import Modal from '../../../components/Modal'
-    import {Inertia} from "@inertiajs/inertia";
-    import {ref} from "vue";
-    import axios from 'axios';
+import {useForm} from "@inertiajs/inertia-vue3";
+import Swal from "sweetalert2";
+import Modal from '../../../components/Modal'
+import {Inertia} from "@inertiajs/inertia";
+import {ref} from "vue";
+import axios from 'axios';
 
-    let props = defineProps({
-        permissions:Object,
-        all_permissions:Object,
-        roles: Object,
-        create_url:String,
-        errors:Object
-    });
+let props = defineProps({
+    permissions:Object,
+    all_permissions:Object,
+    roles: Object,
+    create_url:String,
+    errors:Object
+});
 
-    let createRole = useForm({
-        roleName: "",
-        selectedPermissions: [],
-    });
-    let updateRole = useForm({
-        roleName: "",
-        selectedPermissions: [],
-    });
+let createRole = useForm({
+    roleName: "",
+    selectedPermissions: [],
+});
+let updateRole = useForm({
+    roleName: "",
+    selectedPermissions: [],
+});
 
 
-    let checkAllPermission = (e) =>{
-        createRole.selectedPermissions = [];
-        if(e.target.checked){
-            for(let item in props.all_permissions){
-                createRole.selectedPermissions.push(props.all_permissions[item].name);
-            }
-            Object.entries(props.permissions).map((item, index) => document.getElementById(`checkgroup-${item[0]}`).checked=true);
-        }else{
-            Object.entries(props.permissions).map((item, index) => document.getElementById(`checkgroup-${item[0]}`).checked=false);
+let checkAllPermission = (e) =>{
+    createRole.selectedPermissions = [];
+    if(e.target.checked){
+        for(let item in props.all_permissions){
+            createRole.selectedPermissions.push(props.all_permissions[item].name);
+        }
+        Object.entries(props.permissions).map((item, index) => document.getElementById(`checkgroup-${item[0]}`).checked=true);
+    }else{
+        Object.entries(props.permissions).map((item, index) => document.getElementById(`checkgroup-${item[0]}`).checked=false);
+    }
+}
+
+let selectGroup = (groupName, event) =>{
+    if(event.target.checked){
+        for(let item in props.permissions[groupName]){
+            createRole.selectedPermissions.push(props.permissions[groupName][item].name);
+        }
+    }else{
+        for(let item in props.permissions[groupName]){
+            createRole.selectedPermissions = createRole.selectedPermissions.filter( a => a !== props.permissions[groupName][item].name);
         }
     }
 
-    let selectGroup = (groupName, event) =>{
-        if(event.target.checked){
-            for(let item in props.permissions[groupName]){
-                createRole.selectedPermissions.push(props.permissions[groupName][item].name);
-            }
-        }else{
-            for(let item in props.permissions[groupName]){
-                createRole.selectedPermissions = createRole.selectedPermissions.filter( a => a !== props.permissions[groupName][item].name);
-            }
-        }
-
-        if(props.all_permissions.length === createRole.selectedPermissions.length){
-            document.getElementById("checkAll").checked = true;
-        }else{
-            document.getElementById("checkAll").checked = false;
-        }
+    if(props.all_permissions.length === createRole.selectedPermissions.length){
+        document.getElementById("checkAll").checked = true;
+    }else{
+        document.getElementById("checkAll").checked = false;
     }
+}
 
-    let lastItemCheck = (event) =>{
-        if(props.all_permissions.length === createRole.selectedPermissions.length){
-            document.getElementById("checkAll").checked = true;
-            let availableGroupVlaue = createRole.selectedPermissions.filter(a => a === event.target.value);
-        }else{
-            document.getElementById("checkAll").checked = false;
-        }
+let lastItemCheck = (event) =>{
+    if(props.all_permissions.length === createRole.selectedPermissions.length){
+        document.getElementById("checkAll").checked = true;
+        let availableGroupVlaue = createRole.selectedPermissions.filter(a => a === event.target.value);
+    }else{
+        document.getElementById("checkAll").checked = false;
     }
+}
 
-    const editRoleRef = ref(false);
+const editRoleRef = ref(false);
 
-    const addNewRoleModal = () =>{
-        createRole.reset();
-        editRoleRef.value = null;
-        document.getElementById('addRoleModal').$vb.modal.show()
-    }
-    const onSubmit = () => editRoleRef.value ? updateThisRole(editRoleRef.value?.edited.id) : createNewRole();
+const addNewRoleModal = () =>{
+    createRole.reset();
+    editRoleRef.value = null;
+    document.getElementById('addRoleModal').$vb.modal.show()
+}
+const onSubmit = () => editRoleRef.value ? updateThisRole(editRoleRef.value?.edited.id) : createNewRole();
 
-    const createNewRole = () =>{
-        createRole.post(props.create_url, {
-            onSuccess: (res) =>{
-                createRole.reset()
-                Swal.fire(
-                    'Saved!',
-                    'Role has been Created....',
-                    'success'
-                )
-                document.getElementById('addRoleModal').$vb.modal.hide()
-                document.querySelector(".modal-backdrop ").classList.remove("show");
-            },
-            onError: (err) =>{
-                console.log(err)
-            }
-        });
-    }
-
-    let editRole = (id) =>{
-        axios.get(`authorizations/${id}/edit`).then((res)=>{
-            createRole.reset();
-            editRoleRef.value = res.data;
-            createRole.roleName = res.data.edited.name;
-            res.data.edited.permissions.map(item => createRole.selectedPermissions.push(item.name))
-            document.getElementById('addRoleModal').$vb.modal.show()
-            console.log(res)
-        }).catch((err)=>{
+const createNewRole = () =>{
+    createRole.post(props.create_url, {
+        onSuccess: (res) =>{
+            createRole.reset()
+            Swal.fire(
+                'Saved!',
+                'Role has been Created....',
+                'success'
+            )
+            document.getElementById('addRoleModal').$vb.modal.hide()
+            document.querySelector(".modal-backdrop ").classList.remove("show");
+        },
+        onError: (err) =>{
             console.log(err)
-        })
-    }
-    const updateThisRole = (id) =>{
-        createRole.put(`authorizations/${id}`, {
-            onSuccess: (res) =>{
-                createRole.reset()
-                Swal.fire(
-                    'Saved!',
-                    'Role has been Created....',
-                    'success'
-                )
-                document.getElementById('addRoleModal').$vb.modal.hide()
-                document.querySelector(".modal-backdrop ").classList.remove("show");
-            },
-            onError: (err) =>{
-                console.log(err)
-            }
-        });
-    }
+        }
+    });
+}
+
+let editRole = (id) =>{
+    axios.get(`authorizations/${id}/edit`).then((res)=>{
+        createRole.reset();
+        editRoleRef.value = res.data;
+        createRole.roleName = res.data.edited.name;
+        res.data.edited.permissions.map(item => createRole.selectedPermissions.push(item.name))
+        document.getElementById('addRoleModal').$vb.modal.show()
+        console.log(res)
+    }).catch((err)=>{
+        console.log(err)
+    })
+}
+const updateThisRole = (id) =>{
+    createRole.put(`authorizations/${id}`, {
+        onSuccess: (res) =>{
+            createRole.reset()
+            Swal.fire(
+                'Saved!',
+                'Role has been Created....',
+                'success'
+            )
+            document.getElementById('addRoleModal').$vb.modal.hide()
+            document.querySelector(".modal-backdrop ").classList.remove("show");
+        },
+        onError: (err) =>{
+            console.log(err)
+        }
+    });
+}
 
 
 

@@ -187,6 +187,7 @@
                             multiple
                             v-model="createForm.roles_name"
                             :options="roles"
+                            class="form-control select-padding"
                             placeholder="Search Country Name"
                             :reduce="role => role.id"
                             label="name">
@@ -253,6 +254,7 @@
                             multiple
                             v-model="updateForm.roles_name"
                             :options="roles"
+                            class="form-control select-padding"
                             placeholder="Search Country Name"
                             :reduce="role => role.id"
                             label="name">

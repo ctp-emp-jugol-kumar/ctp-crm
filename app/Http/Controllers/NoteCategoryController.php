@@ -15,7 +15,7 @@ class NoteCategoryController extends Controller
      */
     public function index()
     {
-        return inertia('Modules/Notes/Category', [
+        return inertia('Notes/Category', [
             $search = Request::input('search'),
             'categories' => NoteCategory::query()
                 ->with('notes')

@@ -20,28 +20,27 @@
                         </div>
 
 
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-<!--                            <li class="nav-item" role="presentation">
+<!--                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+&lt;!&ndash;                            <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="home-tab"
                                         data-bs-toggle="tab" data-bs-target="#home"
                                         type="button" role="tab" aria-controls="home"
                                         aria-selected="true">Form Quotation</button>
-                            </li>-->
-                            <li class="nav-item" role="presentation">
+                            </li>&ndash;&gt;
+&lt;!&ndash;                            <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="profile-tab"
                                         data-bs-toggle="tab" data-bs-target="#profile"
                                         type="button" role="tab" aria-controls="profile"
                                         aria-selected="false">Custom Invoice</button>
-                            </li>
+                            </li>&ndash;&gt;
 
-                        </ul>
+                        </ul>-->
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
                                 <div class="col-md-8 mx-auto">
                                     <div class="card">
                                         <div class="card-body">
                                             <h2>Quotation To Invoice</h2>
-
 
 
                                             <form @submit.prevent="createInvoice" class="mt-3">
@@ -53,6 +52,7 @@
                                                         <v-select v-model="invoiceFormData.quotationId"
                                                                   :options="quotations"
                                                                   :reduce="qut => qut.id"
+                                                                  class="form-control select-padding"
                                                                   @update:modelValue="selectQuotation"
                                                                   label="subject" placeholder="Select Quotation"></v-select>
                                                         <InputFieldError :errors="errors.client_id"/>
@@ -90,6 +90,7 @@
                                                     <label class="form-label"></label>
                                                     <v-select :options="props.paymentMethods"
                                                               :reduce="payment => payment.id"
+                                                              class="form-control select-padding"
                                                               v-model="invoiceFormData.payment_method"
                                                               label="name"  placeholder="Select Payment Method"></v-select>
                                                 </div>

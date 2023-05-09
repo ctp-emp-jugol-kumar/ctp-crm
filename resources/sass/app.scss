@@ -95,6 +95,11 @@
     background: #a4f9ff;
     color: #008a96;
 }
+.bg-light-gray{
+    background: #f5f5f5;
+    color: #212020;
+}
+
 
 //#vs1__listbox{
 //    overflow-x: hidden;
@@ -120,9 +125,9 @@
     border-radius: 15px !important;
 }
 
-//.vs__dropdown-toggle{
-//    border: none !important;
-//}
+.vs__dropdown-toggle{
+    border: none !important;
+}
 .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback){
     padding: 0 !important;
 }
@@ -179,4 +184,29 @@
     font-size: 13px;
     padding: 7px 0px;
     padding-left: 0 !important;
+}
+
+
+
+// todo overflow sytel
+
+.min-chat-height::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 15px;
+}
+
+/* Track */
+.min-chat-height::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+/* Handle */
+.min-chat-height::-webkit-scrollbar-thumb {
+    background: var(--bs-primary);
+    border-radius: 15px;
+}
+
+
+.select-padding{
+    padding:4px 0 0 5px !important;
 }
