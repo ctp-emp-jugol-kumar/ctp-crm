@@ -122,10 +122,6 @@
                                                         <vue-feather type="more-vertical" />
                                                     </CDropdownToggle>
                                                     <CDropdownMenu>
-                                                        <CDropdownItem @click="editProject(projects.edit_url)">
-                                                            <Icon title="pencil" />
-                                                            <span class="ms-1">Edit</span>
-                                                        </CDropdownItem>
                                                         <CDropdownItem  :href="projects.show_url" >
                                                             <Icon title="eye" />
                                                             <span class="ms-1">Show</span>
@@ -171,6 +167,7 @@
                         <div class="">
                             <v-select v-model="createForm.invoiceId" :options="preparedInvoices"
                                       @update:modelValue="setClientId"
+                                      class="form-control select-padding"
                                       :reduce="invoice => invoice.id" label="invoiceId"
                                       placeholder="Select Client">
                                 <template v-slot:option="option">
@@ -186,7 +183,7 @@
                                     </li>
                                 </template>
                             </v-select>
-                            <InputFieldError :errors="errors.client_id"/>
+                            <InputFieldError :errors="errors.invoiceId"/>
                         </div>
                     </div>
                 </div>
@@ -211,7 +208,7 @@
                             <Datepicker v-model="createForm.start_date"
                                         :monthChangeOnScroll="false"
                                         placeholder="Select Date" autoApply></Datepicker>
-                            <InputFieldError :errors="errors.valid_until"/>
+                            <InputFieldError :errors="errors.start_date"/>
                         </div>
                     </div>
 
@@ -224,7 +221,7 @@
                             <Datepicker v-model="createForm.end_date"
                                         :monthChangeOnScroll="false"
                                         placeholder="Select Date" autoApply></Datepicker>
-                            <InputFieldError :errors="errors.valid_until"/>
+                            <InputFieldError :errors="errors.end_date"/>
                         </div>
                     </div>
                 </div>
@@ -233,9 +230,7 @@
 
                 <div class="row mb-1">
                     <div class="col-md-12">
-                        <label>Project Description  :
-                            <Required/>
-                        </label>
+                        <label>Project Description  :</label>
                         <div class="">
                             <textarea v-model="createForm.project_details" class="form-control" rows="6" placeholder="e.g Project description explain here help for developer..."></textarea>
                         </div>
@@ -248,22 +243,23 @@
                     </div>
                 </div>
 
-
+<!--
                 <div class="row mb-1">
                     <div class="col-md">
                         <label>Upload Files</label>
                         <ImageUploader v-model="createForm.files" label="Project Files" />
                     </div>
-                </div>
+                </div>-->
+
                 <div class="row mb-1">
                     <div class="col-md">
                         <label>Project Status: </label>
 
                         <v-select v-model="createForm.status"
-                                  @update:modelValue="subCategorySelected"
                                   label="name"
                                   :options="status"
-                                  placeholder="~~Select Sub Category~~"
+                                  class="form-control select-padding"
+                                  placeholder="Project Status"
                                   :reduce="optoin"></v-select>
 
                     </div>
@@ -274,7 +270,8 @@
                             multiple
                             v-model="createForm.agents"
                             :options="users"
-                            placeholder="Search Country Name"
+                            class="form-control select-padding"
+                            placeholder="Assign Developers"
                             :reduce="user => user.id"
                             label="name">
                             <template v-slot:option="option">
@@ -307,172 +304,6 @@
 
             <div class="modal-footer">
                 <button :disabled="createForm.processing" type="submit"
-                        class="btn btn-primary waves-effect waves-float waves-light">Submit
-                </button>
-                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                        aria-label="Close">Cancel
-                </button>
-            </div>
-        </form>
-    </Modal>
-
-
-
-    <Modal id="editItemModal" title="Update Project" v-vb-is:modal size="lg">
-        <form @submit.prevent="updateProject(editData.id)">
-            <div class="modal-body">
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Project Name:
-                            <Required/>
-                        </label>
-                        <div class="">
-                            <input v-model="updateForm.name" type="text" placeholder="Name" class="form-control">
-                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <label>Client: <span class="text-danger">*</span></label>
-                        <div class="">
-                            <v-select v-model="updateForm.client_id" :options="clients"
-                                      :reduce="client => client.id" label="name"
-                                      placeholder="Select Client">
-                                    <template v-slot:option="option">
-                                        <li class="d-flex align-items-start py-1">
-                                            <div class="avatar me-75">
-                                                <img :src="`${option.photo}`" alt="" width="38" height="38">
-                                            </div>
-                                            <div class="d-flex align-items-center justify-content-between w-100">
-                                                <div class="me-1 d-flex flex-column">
-                                                    <strong class="mb-25">{{ option.name }}</strong>
-                                                    <span >{{ option.email }}</span>
-                                                    <span >{{ option.phone }}</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </template>
-                            </v-select>
-
-                            <InputFieldError :errors="errors.client_id"/>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Date :
-                            <Required/>
-                        </label>
-                        <div class="">
-                            <Datepicker v-model="updateForm.date" :monthChangeOnScroll="false"
-                                        placeholder="Select Date" autoApply></Datepicker>
-                            <InputFieldError :errors="errors.date"/>
-                        </div>
-                    </div>
-
-                    <div class="col-md">
-                        <label>Start date :
-                            <Required/>
-                        </label>
-                        <div class="">
-                            <Datepicker v-model="updateForm.start_date"
-                                        :monthChangeOnScroll="false"
-                                        placeholder="Select Date" autoApply></Datepicker>
-                            <InputFieldError :errors="errors.valid_until"/>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md">
-                        <label>End date :
-                            <Required/>
-                        </label>
-                        <div class="">
-                            <Datepicker v-model="updateForm.end_date"
-                                        :monthChangeOnScroll="false"
-                                        placeholder="Select Date" autoApply></Datepicker>
-                            <InputFieldError :errors="errors.valid_until"/>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="row mb-1">
-                    <div class="col-md-12">
-                        <label>Project Description  :
-                            <Required/>
-                        </label>
-                        <div class="">
-                            <TextEditor v-model="updateForm.credintials"></TextEditor>
-                        </div>
-                    </div>
-                    <div class="col-md-12 mt-2">
-                        <label>Project Credential's : </label>
-                        <div class="">
-                            <TextEditor v-model="updateForm.project_details"></TextEditor>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Upload Files</label>
-                        <ImageUploader v-model="updateForm.files" label="Project Files" />
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Project Status: </label>
-
-                        <v-select v-model="updateForm.status"
-                                  label="name"
-                                  :options="status"
-                                  placeholder="~~Select Sub Category~~"
-                                  :reduce="optoin"></v-select>
-
-                    </div>
-
-                    <div class="col-md">
-                        <label>Assign Developers: </label>
-                        <v-select
-                            multiple
-                            v-model="updateForm.agents"
-                            :options="users"
-                            placeholder="Search Country Name"
-                            :reduce="user => user.id"
-                            label="name">
-                            <template v-slot:option="option">
-                                <li class="d-flex align-items-start py-1">
-                                    <div class="avatar me-75">
-                                        <img :src="`${option.photo}`" alt="" width="38" height="38">
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between w-100">
-                                        <div class="me-1 d-flex flex-column">
-                                            <strong class="mb-25">{{ option.name }}</strong>
-                                            <span >{{ option.email }}</span>
-                                        </div>
-                                    </div>
-                                </li>
-                            </template>
-                        </v-select>
-                    </div>
-                </div>
-
-                <div class="row mb-1">
-                    <div class="col-md-12 mt-2">
-                        <label>Nots : </label>
-                        <div class="">
-                            <TextEditor v-model="updateForm.note"></TextEditor>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="modal-footer">
-                <button :disabled="updateForm.processing" type="submit"
                         class="btn btn-primary waves-effect waves-float waves-light">Submit
                 </button>
                 <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
@@ -534,23 +365,6 @@
         processing: Boolean,
     })
 
-    const updateForm = useForm({
-        name: null,
-        note: null,
-        status: null,
-        date:null,
-        start_date:null,
-        end_date:null,
-        agents:[],
-        client_id:null,
-        descriptions:null,
-        credintials:null,
-        project_details:null,
-
-        files:null,
-
-        processing: Boolean,
-    })
 
     const status = [
         'New Project',
@@ -578,54 +392,12 @@
                     'success'
                 )
             },
+            onError:()=>{
+
+            }
         })
     }
 
-    const editData = ref(null);
-    const editProject = (url) => {
-        axios.get(url).then(res => {
-            editData.value = res.data;
-
-            updateForm.name = res.data.name;
-            updateForm.note = res.data.note;
-            updateForm.status = res.data.status;
-            updateForm.date = res.data.date;
-            updateForm.start_date = res.data.start_date;
-            updateForm.end_date = res.data.end_date;
-            res.data.users.map(item => updateForm.agents.push(item));
-            updateForm.client_id = res.data.client_id ?? null;
-            updateForm.descriptions = res.data.descriptions;
-            updateForm.credintials = res.data.credintials;
-            updateForm.project_details =res.data.project_details;
-
-            console.log(res);
-
-
-            document.getElementById('editItemModal').$vb.modal.show();
-        }).catch(err => {
-            console.log(err);
-        });
-    }
-    const updateProject = (id) => {
-        Inertia.post(props.main_url+"/"+ id, updateForm, {
-            preserveState: true,
-            onStart: () => {
-                createForm.processing = true
-            },
-            onFinish: () => {
-                createForm.processing = false
-            },
-            onSuccess: () => {
-                document.getElementById('editItemModal').$vb.modal.hide()
-                updateForm.reset()
-                Swal.fire(
-                    'Saved!',
-                    'Your file has been Updated.',
-                    'success'
-                )
-            },
-        })
-    }
 
 
     const preparedInvoices = computed(()=>{

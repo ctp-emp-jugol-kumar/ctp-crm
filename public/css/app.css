@@ -24709,3 +24709,7 @@ div.dataTables_wrapper .dataTables_info {
   background: var(--bs-primary);
   border-radius: 15px;
 }
+
+.select-padding {
+  padding: 4px 0 0 5px !important;
+}

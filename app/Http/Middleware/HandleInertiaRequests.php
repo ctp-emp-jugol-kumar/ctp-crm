@@ -55,7 +55,7 @@ class HandleInertiaRequests extends Middleware
                     'role' => $user->getRoleNames(),
                     'photo' => $user->photo,
                     'can' => $can,
-                    'notifications' => $user->notifications()->latest()->take(10)->get()
+                    'notifications' => $user->notifications()->where('read_at', '=', NULL)->latest()->take(10)->get()
                 ],
                 'ADMIN_URL' => 'http://127.0.0.1:8000/admin',
                 'MAIN_URL' => config('app.url'),

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Session\Store;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Spatie\Permission\Models\Role;
 
@@ -81,7 +84,7 @@ class AdminController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return array
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
     public function show($id)
     {
@@ -123,6 +126,19 @@ class AdminController extends Controller
         return back();
     }
 
+    public function uploadProfile(){
+
+        $user = User::findOrFail(Auth::id());
+        if(Storage::exists($user->photo)){
+            Storage::delete($user->photo);
+        }
+        $path = Storage::putFile('public/user', Request::file('image'));
+        $user->photo = $path;
+        $user->save();
+        return back();
+    }
+
+
     /**
      * Remove the specified resource from storage.
      *
@@ -131,7 +147,17 @@ class AdminController extends Controller
      */
 
     public function updateCredentials($id){
+
+
         $user = User::findOrFail($id);
+
+        Request::validate([
+           'name' => 'required',
+           'email' => 'required',
+           'password' => 'required'
+        ]);
+
+        $user->name = Request::input('name');
         $user->email = Request::input('email');
         $user->password = Hash::make(Request::integer('password'));
         $user->update();

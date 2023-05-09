@@ -48,9 +48,7 @@
                         </li>
 
                         <li class="scrollable-container media-list">
-
-
-                            <a class="d-flex" href="#" v-for="noti in $page.props.auth.user.notifications">
+                            <a class="d-flex" @click="showItem(noti.data.notefication.id, noti.id)" v-for="noti in $page.props.auth.user.notifications">
                                 <div class="list-item d-flex align-items-start">
                                     <div class="me-1">
                                         <div class="avatar bg-light-danger">
@@ -84,7 +82,6 @@
                                     </div>
                                 </div>
                             </a>
-
                         </li>
 <!--                        <li class="dropdown-menu-footer"><a class="btn btn-primary w-100" href="#">Read all notifications</a></li>-->
                     </ul>
@@ -98,7 +95,7 @@
 
                 <dark-toggle />
                 <li class="nav-item dropdown dropdown-user">
-                    <a class="nav-link dropdown-toggle dropdown-user-link" id="dropdown-user" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle dropdown-user-link" :href="`/admin/users/${this.$page.props.auth.user.id}`">
                         <div class="user-nav d-sm-flex d-none">
                             <span class="user-name fw-bolder">{{ this.$page.props.auth.user.username }}</span>
                             <span class="user-status">{{ this.$page.props.auth.user.role[0]  }}</span>
@@ -137,11 +134,44 @@
                         data-feather="alert-circle"></span><span>No results found.</span></div>
             </a></li>
     </ul>
+
+
+    <div class="modal modal-slide-in fade" id="showTodo" aria-hidden="true" v-vb-is:modal>
+        <div class="modal-dialog sidebar-lg">
+            <div class="modal-content p-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title">
+                        <span class="align-middle">Show Todo</span>
+                    </h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <div class="d-flex flex-column mb-2">
+                        <h1>{{ showData?.title }}</h1>
+                        <small>{{ showData?.about_todo }}</small>
+                        <span class="text-primary mt-1">{{ moment(showData?.date).format('MMMM, DD') }}</span>
+                    </div>
+
+
+                    <a v-if="showData?.downloadUrl" :href="showData?.downloadUrl" target="_blank" v-c-tooltip="'View Or Download This File.'">
+                        <img :src="showData?.downloadUrl" alt="" class="mb-1" style="max-width: 100%;">
+                        {{ $page.props.auth?.ADMIN_URL+''+showData?.downloadUrl }}
+                    </a>
+                    <!--                    <iframe :src="showData.downloadUrl" scrolling="no" style="overflow:hidden"></iframe>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 </template>
 
 <script setup>
 import DarkToggle from "../components/DarkToggle";
 import {ref} from "vue";
+import axios from "axios";
+import moment from "moment";
 
 const props = defineProps({
   toggleVerticalMenuActive: {
@@ -152,8 +182,16 @@ const props = defineProps({
 
 
 const isopen = ref(false);
+const showData = ref();
 const openNotefication = () => isopen.value = !isopen.value;
-
+const showItem = (id, notify_id)=>{
+    axios.get('/admin/todos'+'/'+id+'?show_data=true&notification_id='+notify_id).then((res) =>{
+        showData.value = res.data;
+        document.getElementById('showTodo').$vb.modal.show()
+    }).catch((err)=>{
+        console.log(err)
+    })
+}
 
 
 </script>

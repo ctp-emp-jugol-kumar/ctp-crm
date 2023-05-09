@@ -73,7 +73,8 @@
                             </div>
                             <div class="card-body chat-bg p-0 min-chat-height">
                                 <ul id="chat">
-                                    <li class="d-flex align-items-center justify-content-between todo-item-style p-1" @click="showItem(todo.id)" v-for="todo in loadTodos">
+                                    <li class="d-flex align-items-center justify-content-between todo-item-style p-1"
+                                        v-for="todo in loadTodos">
                                         <div class="d-flex align-items-center">
                                             <div v-if="activeClassRef === 'myTask'">
                                                 <CDropdown>
@@ -81,9 +82,9 @@
                                                         <vue-feather type="more-vertical"  size="18"/>
                                                     </CDropdownToggle>
                                                     <CDropdownMenu>
-                                                        <CDropdownItem>
+                                                        <CDropdownItem @click="showItem(todo.id)">
                                                             <vue-feather type="eye" size="15"/>
-                                                            <span class="ms-1">Edit</span>
+                                                            <span class="ms-1">Show</span>
                                                         </CDropdownItem>
                                                         <CDropdownItem @click="deleteItem(props.main_url, todo.id)">
                                                             <vue-feather type="trash" size="15"/>
@@ -92,12 +93,12 @@
                                                     </CDropdownMenu>
                                                 </CDropdown>
                                             </div>
-                                            <input type="checkbox" @click="taskComplate(todo.id)" :checked="todo.priority === 'Complete'" class="form-check-input">
-                                            <div class="ms-1 todo-content">
-                                                <h4 class="m-0 text-black">
-                                                    {{ todo.title.slice(0, 100) }}
+                                            <input type="checkbox" @click="taskComplate(todo.id)" :checked="todo?.priority === 'Complete'" class="form-check-input">
+                                            <div class="ms-1 todo-content cursor-pointer" @click="showItem(todo.id)">
+                                                <h4 class="m-0 text-black" >
+                                                    {{ todo?.title.slice(0, 100) }}
                                                 </h4>
-                                                <small>
+                                                <small @click="showItem(todo.id)">
                                                     <span style="margin-left:5px;">{{ todo.about_todo?.slice(0, 100) }}</span>
                                                       <span v-if="todo.file">
                                                         |
@@ -119,6 +120,7 @@
                                                     'badge-light-purple' : todo.priority === 'Low',
                                                     'badge-light-danger' : todo.priority === 'High',
                                                     'badge-light-indego' : todo.priority === 'New Lead',
+                                                    'badge-light-indego' : todo.priority === 'First',
                                                 }"
                                                 >{{ todo.priority }}</span>
                                                 <small class="badge text-black">{{ moment(todo.date).format('MMM, D') }}</small>
@@ -223,7 +225,7 @@
     </div>
 
 
-    <div class="modal modal-slide-in fade" id="showTodo" aria-hidden="true" v-vb-is:modal>
+    <div class="modal modal-slide-in fade" id="showTodoModal" aria-hidden="true" v-vb-is:modal>
         <div class="modal-dialog sidebar-lg">
             <div class="modal-content p-0">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
@@ -233,7 +235,18 @@
                     </h5>
                 </div>
                 <div class="modal-body flex-grow-1">
+                    <div class="d-flex flex-column mb-2">
+                        <h1>{{ showTodoData.title }}</h1>
+                        <small>{{ showTodoData.about_todo }}</small>
+                        <span class="text-primary mt-1">{{ moment(showTodoData.date).format('MMMM, DD') }}</span>
+                    </div>
 
+
+                    <a v-if="showTodoData.downloadUrl" :href="showTodoData.downloadUrl" target="_blank" v-c-tooltip="'View Or Download This File.'">
+                        <img :src="showTodoData.downloadUrl" alt="" class="mb-1" style="max-width: 100%;">
+                        {{ $page.props.auth.ADMIN_URL+''+showTodoData.downloadUrl }}
+                    </a>
+<!--                    <iframe :src="showTodoData.downloadUrl" scrolling="no" style="overflow:hidden"></iframe>-->
                 </div>
             </div>
         </div>
@@ -265,6 +278,7 @@ const props = defineProps({
     todos:Array|[],
     myTodos:Array|[],
     comTodos:Array|[],
+    empTodos:Array|[],
     main_url:null,
     errors:Object,
 })
@@ -299,7 +313,7 @@ const uploadAttachment = (event) =>{
     formData.attachment = event.target.files[0];
 }
 
-
+const showTodoData = ref({});
 const saveTodo = () => {
     formData.post(props.main_url, {
         preserveState: true,
@@ -326,16 +340,24 @@ const saveTodo = () => {
 }
 const showItem = (id)=>{
     axios.get(props.main_url+'/'+id+'?show_data=true').then((res) =>{
-        console.log(res);
-        document.getElementById('showTodo').$vb.modal.show()
+        showTodoData.value = res.data;
+        document.getElementById('showTodoModal').$vb.modal.show()
     }).catch((err)=>{
         console.log(err)
     })
 }
+
+
+
 const loadTodos = computed(()=>{
-    console.log(usePage())
     if(activeClassRef.value === 'allTask'){
-        return props.todos;//.map(item => item.user_id === usePage().props.auth.user.id)
+        if (usePage().props.value.auth.user.role.includes("Administrator")){
+            return props.todos;
+        }else{
+            return props.empTodos;
+        }
+
+        //.map(item => item.user_id === usePage().props.auth.user.id)
     }else if(activeClassRef.value === 'complated'){
         return props.comTodos;
     }else{
@@ -371,7 +393,6 @@ const taskComplate = (event) =>{
     }
 
     .todo-item-style{
-        cursor: pointer;
         border: 1px solid #f5f5f5;
         border-top: none;
         color: #212020;
@@ -398,6 +419,6 @@ const taskComplate = (event) =>{
     }
     .todo-content{
         max-width: 70%;
-        text-align: justify;
+        /*text-align: justify;*/
     }
 </style>

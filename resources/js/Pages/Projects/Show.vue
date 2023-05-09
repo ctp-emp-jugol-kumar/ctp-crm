@@ -162,6 +162,7 @@
                                       v-model="formData.users"
                                       label="name"
                                       :reduce="user => user.id"
+                                      class="form-control select-padding"
                                       multiple
                                       placeholder="e.g Select User">
                                 <template v-slot:option="option">

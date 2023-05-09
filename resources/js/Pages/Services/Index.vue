@@ -20,7 +20,6 @@
                     </div>
                 </section>
                 <div class="row match-height">
-
                     <div>
                         <ul>
                             <li class="text-danger" v-for="error in formData.errors" v-text="error"></li>
@@ -87,6 +86,7 @@
                                        :options="props.platforms"
                                        :reduce="item => item.id"
                                        multiple
+                                       class="form-control select-padding"
                                        v-model="formData.platforms"
                                        placeholder="e.g Laravel, vue js, react js etc">
                             </v-select>

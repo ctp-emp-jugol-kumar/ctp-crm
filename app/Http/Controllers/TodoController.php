@@ -6,6 +6,7 @@ use App\Models\Todo;
 use App\Models\User;
 use App\Notifications\TodoNotefication;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
@@ -21,22 +22,27 @@ class TodoController extends Controller
      */
     public function index()
     {
-        $notifications = auth()->user()->notifications()->latest()->paginate(10);
-//        return $notifications;
-//        $my_array = array('sheldon', 'leonard', 'howard', 'penny');
-//        $to_remove = array('howard');
-//        $result = array_diff($my_array, $to_remove);
-//        return $result;
-
-//        return $notifications;
 
         $todos = Todo::with('user')->latest()->get();
         $myTodos = Todo::with('user')->where('user_id', Auth::id())->latest()->get();
         $comTodos = Todo::with('user')->where('priority',  '=', 'Complete')->latest()->get();
+
+
+        $filtedTodos =[];
+        $empTodos = $todos->filter(function ($todo){
+            $user_ids = json_decode($todo['users']);
+            return in_array(Auth::id(), $user_ids) || $todo['user_id'] == Auth::id();
+        });
+
+//        return $empTodos;
+
+
+
         return inertia('Todo/Index',[
             'users' =>  User::where('id', '!=', Auth::id())->get(),
             'todos' => $todos,
             'myTodos' => $myTodos,
+            'empTodos' => $empTodos,
             'comTodos' => $comTodos,
             'main_url' => URL::route('todos.index'),
         ]);
@@ -101,7 +107,7 @@ class TodoController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|object
      */
     public function show($id)
     {
@@ -112,8 +118,20 @@ class TodoController extends Controller
             return back();
         }
 
+
+        $todo->downloadUrl = $todo->file ? Storage::url($todo->file) : null;
+
         if (Request::input('show_data') == 'true'){
-            return $todo;
+
+            if (Request::input('notification_id')){
+                DB::table('notifications')->where('id', Request::input('notification_id'))->update([
+                    'read_at' => now(),
+                ]);
+
+                return $todo;
+            }else{
+                return $todo;
+            }
         }
     }
 

@@ -5,7 +5,11 @@
                 <div class="col-12 mb-2">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="mb-0">Project Summary</h4>
+                            <h4 class="mb-0">Project Summary
+                                <span @click="editDetails" class="cursor-pointer" v-c-tooltip="'Edit Project Details and Timeline.'">
+                                    <vue-feather type="edit" size="15"/>
+                                </span>
+                            </h4>
                         </div>
                         <div class="card-body">
                             <p class="newlineStringStyle">{{ info.description }}</p>
@@ -82,8 +86,8 @@
                         <div class="card-header">
                             <h4 class="mb-0">Project Credintials</h4>
                             <span class="cursor-pointer" @click="viewCredintials">
-                                                        <vue-feather :type="showCredintials ? 'eye' : 'eye-off'"/>
-                                                    </span>
+                                <vue-feather :type="showCredintials ? 'eye' : 'eye-off'"/>
+                            </span>
                         </div>
                         <div class="card-body" v-if="showCredintials">
                             <p class="newlineStringStyle">{{ info.credential }}</p>
@@ -213,6 +217,75 @@
             </div>
         </div>
     </div>
+
+
+
+    <Modal id="editDetails" title="Update Details & Credentials" v-vb-is:modal size="lg">
+        <form @submit.prevent="updateDetails">
+            <div class="modal-body">
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Date :
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <Datepicker v-model="formData.date" :monthChangeOnScroll="false"
+                                        placeholder="Select Date" autoApply></Datepicker>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <label>Start date :
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <Datepicker v-model="formData.start_date"
+                                        :monthChangeOnScroll="false"
+                                        placeholder="Select Date" autoApply></Datepicker>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <label>End date :
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <Datepicker v-model="formData.end_date"
+                                        :monthChangeOnScroll="false"
+                                        placeholder="Select Date" autoApply></Datepicker>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row mb-1">
+                    <div class="col-md-12">
+                        <label>Project Description  :
+                            <Required/>
+                        </label>
+                        <div class="">
+                            <textarea v-model="formData.project_details" class="form-control" rows="6" placeholder="e.g Project description explain here help for developer..."></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <label>Project Credential's : </label>
+                        <div class="">
+                            <textarea v-model="formData.credintials" class="form-control" rows="6" placeholder="e.g Details explain about this project credentials..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button :disabled="formData.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit
+                </button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel
+                </button>
+            </div>
+        </form>
+    </Modal>
 </template>
 
 <script setup>
@@ -220,6 +293,10 @@
 import {computed, ref} from "vue";
 import moment from "moment";
 import ProgressChart from "../../../components/ProgressChart.vue";
+import {useForm} from "@inertiajs/inertia-vue3";
+import Modal from '../../../components/Modal.vue';
+import {Inertia} from "@inertiajs/inertia";
+import Swal from "sweetalert2";
 
 
 const props = defineProps({
@@ -239,6 +316,33 @@ const props = defineProps({
 
     const showCredintials = ref(false)
     const viewCredintials =()=> showCredintials.value = !showCredintials.value;
+
+    const formData = useForm({
+        date:props.info.date,
+        start_date:props.info.start,
+        end_date:props.info.end,
+        project_details:props.info.description,
+        credintials:props.info.credential,
+    })
+
+    const editDetails = () =>{
+        document.getElementById('editDetails').$vb.modal.show()
+    }
+
+    const updateDetails = () =>{
+        formData.post('/admin/project/update-details/'+props.info.id,{
+            onSuccess:()=>{
+                Swal.fire(
+                    'Updated!',
+                    'Project Details And Credentials Has been Updated.',
+                    'success'
+                )
+                document.getElementById('editDetails').$vb.modal.hide()
+            }
+        })
+    }
+
+
 
 </script>
 

@@ -63,7 +63,7 @@ class ProjectController extends Controller
                     "show_url"      => URL::route('projects.show', $project->id),
                 ]),
             'clients'  => Client::all(['id','name', 'email', 'phone']),
-            'users'    => User::all(['id','name', 'email']),
+            'users'    => User::all(['id','name', 'email', 'photo']),
             'invoice' => Invoice::with(['quotation', 'client'])->get(),
             'filters'  => Request::only(['search','perPage']),
             'main_url' => URL::route('projects.index'),
@@ -100,6 +100,15 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
+
+        Request::validate([
+           'name' => 'required',
+           'invoiceId' => 'required',
+           'date' => 'required',
+           'start_date' => 'required',
+           'end_date' => 'required',
+        ]);
+
         $filePath = "";
 
         if (Request::hasFile('files')) {
@@ -116,7 +125,7 @@ class ProjectController extends Controller
             "end"         => Request::input('end_date'),
             "description" => Request::input('project_details'),
             "credential"  => Request::input('credintials'),
-            "status"      => Request::input('status'),
+            "status"      => Request::input('status') ?? 'New Project',
             "files"       => $filePath,
         ]);
 
@@ -224,6 +233,29 @@ class ProjectController extends Controller
             $project->users()->sync($this->createArrayGroups($agents));
         }
 
+    }
+
+    public function updateProjectDetails($id){
+        $project = Project::findOrFail($id);
+        $project->update([
+            "date"        => Request::input('date'),
+            "start"       => Request::input('start_date'),
+            "end"         => Request::input('end_date'),
+            "description" => Request::input('project_details'),
+            "credential"  => Request::input('credintials'),
+        ]);
+
+        return back();
+    }
+
+    public function updateProjectBackup($id){
+        Request::validate([
+           'files' => 'required'
+        ]);
+        $project = Project::findOrFail($id);
+        $project->files = Request::input('files');
+        $project->save();
+        return back();
     }
 
     /**

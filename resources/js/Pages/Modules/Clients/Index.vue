@@ -193,8 +193,9 @@
                         <v-select v-model="createForm.status"
                                   @update:modelValue="subCategorySelected"
                                   label="name"
+                                  class="form-control select-padding"
                                   :options="status"
-                                  placeholder="~~Select Sub Category~~"></v-select>
+                                  placeholder="Select Status"></v-select>
                     </div>
                     <div class="col-md">
                         <label>Assign Agent: </label>
@@ -203,8 +204,9 @@
                             multiple
                             v-model="createForm.agents"
                             :options="users"
-                            placeholder="Search Country Name"
+                            placeholder="Select Assign Employee"
                             :reduce="user => user.id"
+                            class="form-control select-padding"
                             label="name">
                             <template v-slot:option="option">
                                 <li class="d-flex align-items-start py-1">
@@ -306,10 +308,13 @@
 
                 <div class="row mb-1">
                     <div class="col-md">
+                        <label>Client Status: </label>
+
                         <v-select v-model="updateForm.status"
                                   label="name"
+                                  class="form-control select-padding"
                                   :options="status"
-                                  placeholder="~~Select Sub Category~~"
+                                  placeholder="Select Status"
                                   :reduce="optoin"></v-select>
 
                     </div>
@@ -320,7 +325,8 @@
                             multiple
                             v-model="updateForm.agents"
                             :options="users"
-                            placeholder="Search Country Name"
+                            class="form-control select-padding"
+                            placeholder="Select Assign Employee"
                             :reduce="user => user.id"
                             label="name">
                             <template v-slot:option="option">

@@ -58,6 +58,7 @@
                                             label="name"
                                             v-model="formData.platformId"
                                             :reduce="item => item.id"
+                                            class="form-control select-padding"
                                             @update:modelValue="loadFeatures"
                                             placeholder="e.g Select Service">
                                                 <template v-slot:option="option">

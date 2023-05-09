@@ -9,7 +9,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
-                                    <h4 class="card-title">Services Information's </h4>
+                                    <h4 class="card-title">Platform Information's </h4>
                                     <a class="dt-button add-new btn btn-primary"
                                     :href="props.main_url+'/create'">
                                         Add Platform
