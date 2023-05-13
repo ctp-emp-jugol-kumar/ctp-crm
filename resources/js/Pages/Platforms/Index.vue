@@ -11,7 +11,7 @@
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Platform Information's </h4>
                                     <a class="dt-button add-new btn btn-primary"
-                                       v-if="this.$page.props.auth.user.can.includes('platform.create')"
+                                       v-if="this.$page.props.auth.user.can.includes('platform.create') || this.$page.props.auth.user.role.includes('Administrator')"
                                     :href="props.main_url+'/create'">
                                         Add Platform
                                     </a>
@@ -49,12 +49,12 @@
 
                                     <div>
                                         <a :href="item.edit_url"
-                                           v-if="this.$page.props.auth.user.can.includes('platform.edit')"
+                                           v-if="this.$page.props.auth.user.can.includes('platform.edit') || this.$page.props.auth.user.role.includes('Administrator')"
                                         >
                                             <vue-feather  type="edit" size="15" class="text-info cursor-pointer"/>
                                         </a>
                                         <vue-feather @click="deleteItem(props.main_url, item.id)"
-                                                     v-if="this.$page.props.auth.user.can.includes('platform.delete')"
+                                                     v-if="this.$page.props.auth.user.can.includes('platform.delete') || this.$page.props.auth.user.role.includes('Administrator')"
                                                      type="trash-2" size="15" class="text-danger cursor-pointer"/>
                                     </div>
                                 </div>

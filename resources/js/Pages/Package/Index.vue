@@ -11,7 +11,7 @@
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Packages</h4>
                                     <a class="dt-button add-new btn btn-primary"
-                                       v-if="this.$page.props.auth.user.can.includes('packages.create')"
+                                       v-if="this.$page.props.auth.user.can.includes('packages.create') || this.$page.props.auth.user.role.includes('Administrator')"
                                        :href="props.main_url+'/create'">
                                         Add Package
                                     </a>
@@ -29,21 +29,21 @@
                                     <div class="d-flex align-items-center justify-content-between">
                                         <h5 class="text-capitalize">{{ pac.name }}</h5>
                                         <CDropdown
-                                            v-if="this.$page.props.auth.user.can.includes('packages.delete') || this.$page.props.auth.user.can.includes('packages.edit')">
+                                            v-if="this.$page.props.auth.user.can.includes('packages.delete') || this.$page.props.auth.user.can.includes('packages.edit') || this.$page.props.auth.user.role.includes('Administrator')">
                                             <CDropdownToggle class="p-0">
                                                 <vue-feather type="more-vertical" />
                                             </CDropdownToggle>
                                             <CDropdownMenu>
                                                 <CDropdownItem
                                                     :href="pac.edit_url"
-                                                    v-if="this.$page.props.auth.user.can.includes('packages.edit')"
+                                                    v-if="this.$page.props.auth.user.can.includes('packages.edit') || this.$page.props.auth.user.role.includes('Administrator')"
                                                 >
                                                     <vue-feather type="edit" size="15"/>
                                                     <span class="ms-1">Edit</span>
                                                 </CDropdownItem>
 
                                                 <CDropdownItem
-                                                    v-if="this.$page.props.auth.user.can.includes('packages.delete')"
+                                                    v-if="this.$page.props.auth.user.can.includes('packages.delete') || this.$page.props.auth.user.role.includes('Administrator')"
                                                     @click="deleteItem(props.main_url, pac.id)">
                                                     <vue-feather type="trash-2" size="15"/>
                                                     <span class="ms-1">Delete</span>
