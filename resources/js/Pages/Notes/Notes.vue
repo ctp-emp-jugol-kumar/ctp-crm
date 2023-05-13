@@ -118,13 +118,16 @@
                                                             </div>
                                                         </div>
                                                         <div class="row mb-1">
+                                                            <div class="col-md">
                                                             <label>Note Category <Required/></label>
                                                             <v-select v-model="createForm.category"
                                                                       label="title"
                                                                       :options="categories"
+                                                                      class="form-control select-padding"
                                                                       :reduce="cat => cat.id"
-                                                                      placeholder="~~Select Sub Category~~"></v-select>
+                                                                      placeholder="Select Note Category"></v-select>
                                                             <span v-if="errors.category" class="error text-sm text-danger">{{ errors.category }}</span>
+                                                            </div>
                                                         </div>
 
                                                         <div class="row mb-1">
@@ -134,7 +137,8 @@
                                                                     multiple
                                                                     v-model="createForm.agents"
                                                                     :options="users"
-                                                                    placeholder="Search Country Name"
+                                                                    placeholder="Search Assign Agent"
+                                                                    class="form-control select-padding"
                                                                     :reduce="user => user.id"
                                                                     label="name">
                                                                     <template v-slot:option="option">

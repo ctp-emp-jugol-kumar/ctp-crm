@@ -13,7 +13,7 @@
                                     <h4 class="card-title">Project Information's </h4>
 <!--                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal" data-bs-target="#addItemModal">Add Client</button>-->
                                     <button
-                                        v-if="this.$page.props.auth.user.can.includes('project.create')"
+                                        v-if="this.$page.props.auth.user.can.includes('project.create') || this.$page.props.auth.user.role.includes('Administrator')"
                                         class="dt-button add-new btn btn-primary"
                                         @click="addDataModal"
                                     >
@@ -152,7 +152,7 @@
     </div>
 
 
-    <Modal id="addItemModal" title="Add New Project" v-vb-is:modal size="lg" v-if="this.$page.props.auth.user.can.includes('project.create')">
+    <Modal id="addItemModal" title="Add New Project" v-vb-is:modal size="lg" v-if="this.$page.props.auth.user.can.includes('project.create') || this.$page.props.auth.user.role.includes('Administrator')">
         <form @submit.prevent="createProject">
             <div class="modal-body">
                 <div class="row mb-1">
@@ -168,7 +168,8 @@
                     <div class="col-md">
                         <label>Invoice: <span class="text-danger">*</span></label>
                         <div class="">
-                            <v-select v-model="createForm.invoiceId" :options="preparedInvoices"
+                            <v-select v-model="createForm.invoiceId"
+                                      :options="preparedInvoices"
                                       @update:modelValue="setClientId"
                                       class="form-control select-padding"
                                       :reduce="invoice => invoice.id" label="invoiceId"
@@ -343,10 +344,15 @@
         projects: Object,
         filters: Object,
         errors: Object,
+        clients:Object,
         invoice:Object|null,
         main_url:String|null,
+        emp_url:String|null,
         users:Object,
     });
+
+
+
 
     const createForm = useForm({
         name: null,
@@ -379,7 +385,7 @@
         document.getElementById('addItemModal').$vb.modal.show()
     }
     const createProject = () => {
-        Inertia.post('projects', createForm, {
+        Inertia.post(props.main_url, createForm, {
             preserveState: true,
             onStart: () => {createForm.processing = true},
             onFinish: () => {createForm.processing = false},
@@ -398,12 +404,30 @@
         })
     }
 
+
+
+    const preparedInvoices = computed(()=>{
+        return props.invoice.map(item =>{
+            return {
+                id:item.id,
+                invoiceId:item.invoice_id+''+item.id,
+                clientId:item.client?.id,
+                clientName:item.client?.name,
+                clientEmail:item.client?.email ?? item.client?.secondary_email,
+                clientPhone:item.client?.phone ?? item.client?.secondary_phone,
+            }
+        })
+    })
+    const setClientId =(event)=>createForm.clientId = preparedInvoices.value.filter(item => item.id === event)[0].clientId;
+
+
     const search = ref(props.filters.search);
     const perPage = ref(props.filters.perPage);
 
     watch([search, perPage], debounce(function ([val, val2]) {
-        Inertia.get(props.main_url, {search: val, perPage: val2}, {preserveState: true, replace: true});
+        Inertia.get(props.emp_url, {search: val, perPage: val2}, {preserveState: true, replace: true});
     }, 300));
+
 </script>
 
 <style scoped>

@@ -226,10 +226,12 @@
                     <td class="text-right border" colspan="3">Sub Total</td>
                     <td class="text-right border"><strong>{{ $invoice->total_price  }}</strong></td>
                 </tr>
-                <tr>
-                    <td class="text-right border" colspan="3">Discount</td>
-                    <td class="text-right border"><strong> {{ $invoice->discount ?? 0  }}</strong></td>
-                </tr>
+                @if($invoice->discount > 0)
+                    <tr>
+                        <td class="text-right border" colspan="3">Discount</td>
+                        <td class="text-right border"><strong> {{ $invoice->discount ?? 0  }}</strong></td>
+                    </tr>
+                @endif
                 <tr style="border-top: 1px solid #e7e7e7">
                     <td class="text-right border" style="padding: 10px" colspan="3"><strong>Grand Total</strong></td>
                     <td class="text-right border" style="padding: 10px"><strong>{{ $invoice->grand_total }}</strong></td>

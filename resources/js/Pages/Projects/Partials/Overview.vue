@@ -6,7 +6,10 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="mb-0">Project Summary
-                                <span @click="editDetails" class="cursor-pointer" v-c-tooltip="'Edit Project Details and Timeline.'">
+                                <span @click="editDetails"
+                                      v-if="this.$page.props.auth.user.can.includes('project.edit')||
+                                            this.$page.props.auth.user.role.includes('Administrator')"
+                                      class="cursor-pointer" v-c-tooltip="'Edit Project Details and Timeline.'">
                                     <vue-feather type="edit" size="15"/>
                                 </span>
                             </h4>

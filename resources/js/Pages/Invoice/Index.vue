@@ -11,7 +11,9 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Invoices Information's </h4>
-                                    <a class="dt-button add-new btn btn-primary" href="invoices/create">Add Invoices</a>
+                                    <a class="dt-button add-new btn btn-primary" href="invoices/create"
+                                       v-if="this.$page.props.auth.user.can.includes('invoice.create') ||
+                                       this.$page.props.auth.user.role.includes('Administrator')">Add Invoices</a>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -80,13 +82,15 @@
                                                             <span class="ms-1">Download</span>
                                                         </CDropdownItem>
 
-                                                        <CDropdownItem :href="invoice.show_url" target="_blank">
+                                                        <CDropdownItem :href="invoice.show_url" target="_blank"
+                                                                       v-if="this.$page.props.auth.user.can.includes('invoice.show') || this.$page.props.auth.user.role.includes('Administrator')">
                                                             <vue-feather type="eye" size="15"/>
                                                             <span class="ms-1">Show</span>
                                                         </CDropdownItem>
 
-                                                        <CDropdownItem @click="deleteItem(props.main_url, invoice.id)">
-                                                            <Icon title="trash" />
+                                                        <CDropdownItem @click="deleteItem(props.main_url, invoice.id)"
+                                                                       v-if="this.$page.props.auth.user.can.includes('invoice.delete') || this.$page.props.auth.user.role.includes('Administrator')">
+                                                        <Icon title="trash" />
                                                             <span class="ms-1">Delete</span>
                                                         </CDropdownItem>
                                                     </CDropdownMenu>

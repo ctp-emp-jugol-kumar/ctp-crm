@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Package;
 use App\Models\Platform;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
 
@@ -79,7 +80,7 @@ class PackageController extends Controller
             'descriptions' => Request::input('descriptions')
         ]);
 
-        return back();
+        return Redirect::route('package.index');
     }
 
     /**

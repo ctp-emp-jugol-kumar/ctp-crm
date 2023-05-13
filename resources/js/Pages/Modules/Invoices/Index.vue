@@ -60,15 +60,15 @@
                                                         <vue-feather type="more-vertical" />
                                                     </CDropdownToggle>
                                                     <CDropdownMenu>
-                                                        <CDropdownItem :href="invoice.edit_url" >
+                                                        <CDropdownItem :href="invoice.edit_url" v-if="this.$page.props.auth.user.can.includes('invoice.edit') || this.$page.props.auth.user.role.includes('Administrator') ">
                                                             <Icon title="pencil" />
                                                             <span class="ms-1">Edit</span>
                                                         </CDropdownItem>
-                                                        <CDropdownItem :href="invoice.invice_url">
+                                                        <CDropdownItem :href="invoice.invice_url" v-if="this.$page.props.auth.user.can.includes('invoice.show') || this.$page.props.auth.user.role.includes('Administrator') ">
                                                             <Icon title="eye" />
                                                             <span class="ms-1">Show</span>
                                                         </CDropdownItem>
-                                                        <CDropdownItem @click="deleteItemModal(invoice.delete_url)">
+                                                        <CDropdownItem @click="deleteItemModal(invoice.delete_url)" v-if="this.$page.props.auth.user.can.includes('invoice.delete') || this.$page.props.auth.user.role.includes('Administrator') ">
                                                             <Icon title="trash" />
                                                             <span class="ms-1">Delete</span>
                                                         </CDropdownItem>

@@ -22,7 +22,9 @@
                                                 <option value="50">50</option>
                                                 <option value="100">100</option>
                                             </select>
-                                            <Link href="quotations/create" class="btn btn-primary ml-2 d-flex align-items-center">
+                                            <Link href="quotations/create"
+                                                  v-if="this.$page.props.auth.user.can.includes('quotation.create') || this.$page.props.auth.user.role.includes('Administrator')"
+                                                  class="btn btn-primary ml-2 d-flex align-items-center">
                                                 <vue-feather type="plus" size="15"/>
                                                 <span>
                                                     Add Quotations
@@ -110,27 +112,41 @@
                                                 {{ qut.created_at }}
                                             </td>
                                             <td>
-                                                <CDropdown>
-                                                    <CDropdownToggle class="p-0">
+                                                <CDropdown
+                                                    v-if="
+                                                            this.$page.props.auth.user.can.includes('quotation.invoice') ||
+                                                            this.$page.props.auth.user.can.includes('quotation.edit') ||
+                                                            this.$page.props.auth.user.can.includes('quotation.show') ||
+                                                            this.$page.props.auth.user.can.includes('quotation.delete')||
+                                                            this.$page.props.auth.user.role.includes('Administrator')
+                                                         ">
+
+
+                                                <CDropdownToggle class="p-0">
                                                         <vue-feather type="more-vertical" />
                                                     </CDropdownToggle>
-                                                    <CDropdownMenu>
-                                                        <CDropdownItem :href="qut.show_url+'?download=true'" >
+                                                    <CDropdownMenu >
+                                                        <CDropdownItem :href="qut.show_url+'?download=true'"
+                                                        v-if="this.$page.props.auth.user.can.includes('quotation.invoice') || this.$page.props.auth.user.role.includes('Administrator')">
                                                             <vue-feather type="download" size="15"/>
                                                             <span class="ms-1">Download</span>
                                                         </CDropdownItem>
 
-                                                        <CDropdownItem :href="qut.edit_url">
+                                                        <CDropdownItem :href="qut.edit_url"
+                                                                       v-if="this.$page.props.auth.user.can.includes('quotation.edit') || this.$page.props.auth.user.role.includes('Administrator')">
                                                             <Icon title="pencil" />
                                                             <span class="ms-1">Edit</span>
                                                         </CDropdownItem>
 
-                                                        <CDropdownItem :href="qut.show_url+'?type=show'" target="_blank">
-                                                            <Icon title="eye" />
+                                                        <CDropdownItem :href="qut.show_url+'?type=show'" target="_blank"
+                                                                       v-if="this.$page.props.auth.user.can.includes('quotation.show') || this.$page.props.auth.user.role.includes('Administrator')">
+
+                                                        <Icon title="eye" />
                                                             <span class="ms-1">Show</span>
                                                         </CDropdownItem>
-                                                        <CDropdownItem @click="deleteItemModal(qut.id)">
-                                                            <Icon title="trash" />
+                                                        <CDropdownItem @click="deleteItemModal(qut.id)"
+                                                                       v-if="this.$page.props.auth.user.can.includes('quotation.delete') || this.$page.props.auth.user.role.includes('Administrator')">
+                                                        <Icon title="trash" />
                                                             <span class="ms-1">Delete</span>
                                                         </CDropdownItem>
                                                     </CDropdownMenu>

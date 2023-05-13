@@ -39,7 +39,11 @@
                                             This is System Role. Can't Edit Or Delete This Role
                                         </span>
                                     </div>
-                                    <a href="javascript:void(0);" class="text-body"><i data-feather="copy" class="font-medium-5"></i></a>
+                                    <span @click="deleteItem(props.main_url, role.id)" class="text-body text-danger cursor-pointer"
+
+                                       v-if="role.is_delete">
+                                        <vue-feather type="trash-2" class="text-danger"/>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -203,12 +207,16 @@ import Modal from '../../../components/Modal'
 import {Inertia} from "@inertiajs/inertia";
 import {ref} from "vue";
 import axios from 'axios';
+import {useAction} from "../../../composables/useAction";
+
+const {deleteItem} = useAction();
 
 let props = defineProps({
     permissions:Object,
     all_permissions:Object,
     roles: Object,
     create_url:String,
+    main_url:String,
     errors:Object
 });
 

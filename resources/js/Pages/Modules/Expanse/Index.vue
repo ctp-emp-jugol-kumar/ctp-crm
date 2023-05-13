@@ -11,8 +11,10 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Expanse Information's </h4>
-                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" @click="addExpanseModal"
-                                    >Add Method</button>
+                                    <button class="dt-button add-new btn btn-primary"
+                                            v-if="this.$page.props.auth.user.can.includes('expanse.create') || this.$page.props.auth.user.role.includes('Administrator')"
+                                            tabindex="0" type="button" @click="addExpanseModal"
+                                    >Add Expanse</button>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
@@ -99,7 +101,12 @@
                 <div class="row mb-1 flex-column">
                     <div class="col mb-1">
                         <label>Purpose <Required/></label>
-                        <v-select v-model="createForm.purpose_id" :options="purposes" :reduce="item => item.id" label="name" placeholder="Select Expanse Purpose"></v-select>
+                        <v-select v-model="createForm.purpose_id"
+                                  :options="purposes"
+                                  class="form-control select-padding"
+                                  :reduce="item => item.id"
+                                  label="name"
+                                  placeholder="Select Expanse Purpose"></v-select>
                         <span v-if="errors.purpose_id" class="error text-sm text-danger">{{ errors.purpose_id }}</span>
                     </div>
 
@@ -115,7 +122,12 @@
                     </div>
                     <div class="col mb-1">
                         <label>Payment Method <Required/></label>
-                        <v-select v-model="createForm.method_id" :options="methods" :reduce="item => item.id" label="name" placeholder="Select Expanse Purpose"></v-select>
+                        <v-select v-model="createForm.method_id"
+                                  :options="methods"
+                                  class="form-control select-padding"
+                                  :reduce="item => item.id"
+                                  label="name"
+                                  placeholder="Select Payment Method"></v-select>
                         <span v-if="errors.method_id" class="error text-sm text-danger">{{ errors.method_id }}</span>
                     </div>
                     <div class="col-md mb-1">
@@ -151,7 +163,11 @@
                 <div class="row mb-1 flex-column">
                     <div class="col mb-1">
                         <label>Purpose <Required/></label>
-                        <v-select v-model="updateForm.purpose_id" :options="purposes" :reduce="item => item.id" label="name" placeholder="Select Expanse Purpose"></v-select>
+                        <v-select v-model="updateForm.purpose_id"
+                                  class="form-control select-padding"
+                                  :options="purposes"
+                                  :reduce="item => item.id"
+                                  label="name" placeholder="Select Expanse Purpose"></v-select>
                         <span v-if="errors.purpose_id" class="error text-sm text-danger">{{ errors }}</span>
                     </div>
 
@@ -166,8 +182,13 @@
                         <span v-if="errors.amount" class="error text-sm text-danger">{{ errors.amount }}</span>
                     </div>
                     <div class="col mb-1">
-                        <label>Payment Method <Required/></label>
-                        <v-select v-model="updateForm.method_id" :options="methods" :reduce="item => item.id" label="name" placeholder="Select Expanse Purpose"></v-select>
+                        <label>Payment Method<Required/></label>
+                        <v-select v-model="updateForm.method_id"
+                                  :options="methods"
+                                  class="form-control select-padding"
+                                  :reduce="item => item.id"
+                                  label="name"
+                                  placeholder="Select Payment Method"></v-select>
                         <span v-if="errors.method_id" class="error text-sm text-danger">{{ errors.method_id }}</span>
                     </div>
                     <div class="col-md mb-1">

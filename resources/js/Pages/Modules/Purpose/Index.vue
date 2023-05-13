@@ -12,7 +12,9 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Purposes Information's </h4>
-                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal"
+                                    <button class="dt-button add-new btn btn-primary"
+                                            v-if="this.$page.props.auth.user.can.includes('purpose.create')"
+                                            tabindex="0" type="button" data-bs-toggle="modal"
                                             data-bs-target="#createPurpose"
                                     >Add Purposes</button>
                                 </div>
@@ -54,8 +56,12 @@
                                             <td>{{ purpose.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <vue-feather class="cursor-pointer text-info" size="15" type="edit" @click="editItem(purpose.show_url)"/>
-                                                    <vue-feather class="cursor-pointer text-danger" size="15" type="trash-2" @click="deleteItem(props.main_url, purpose.id)"/>
+                                                    <vue-feather class="cursor-pointer text-info"
+                                                                 v-if="this.$page.props.auth.user.can.includes('purpose.edit')"
+                                                                 size="15" type="edit" @click="editItem(purpose.show_url)"/>
+                                                    <vue-feather class="cursor-pointer text-danger" size="15"
+                                                                 v-if="this.$page.props.auth.user.can.includes('purpose.delete')"
+                                                                 type="trash-2" @click="deleteItem(props.main_url, purpose.id)"/>
                                                 </div>
                                             </td>
                                         </tr>

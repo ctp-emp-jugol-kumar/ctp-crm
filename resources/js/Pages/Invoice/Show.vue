@@ -98,6 +98,7 @@
                                             <label class="form-label"></label>
                                             <v-select :options="props.paymentMethods"
                                                       :reduce="payment => payment.id"
+                                                      class="form-control select-padding"
                                                       v-model="paymentFormData.payment_method"
                                                       label="name"  placeholder="Select Payment Method"></v-select>
                                         </div>

@@ -276,7 +276,7 @@ class InvoiceController extends Controller
 
 
         $pdf = Pdf::loadView('invoice.quotationInvoice', compact('invoice','pref', 'isPrint'));
-        return $pdf->download($clientName."_".now()->format('d_m_Y')."_".'quotation.pdf');
+        return $pdf->download($clientName."_".now()->format('d_m_Y')."_".'invoice.pdf');
     }
 
     public function generateInvoicePDFFile($id){
@@ -441,6 +441,12 @@ class InvoiceController extends Controller
     public function destroy($id)
     {
         $invoice = Invoice::findOrFail($id);
+        if ($invoice->transactions){
+            $invoice->transactions()->delete();
+        }
+        if ($invoice->project){
+            $invoice->project()->delete();
+        }
         $invoice->delete();
         return back();
     }
