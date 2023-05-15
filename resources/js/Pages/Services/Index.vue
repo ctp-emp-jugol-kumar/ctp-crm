@@ -11,7 +11,7 @@
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Services Information's </h4>
                                     <button class="dt-button add-new btn btn-primary"
-                                            v-if="this.$page.props.auth.user.can.includes('services.create')"
+                                            v-if="this.$page.props.auth.user.can.includes('services.create') || this.$page.props.auth.user.role.includes('Administrator')"
                                     @click="addServiceModal">
                                         Add Service
                                     </button>

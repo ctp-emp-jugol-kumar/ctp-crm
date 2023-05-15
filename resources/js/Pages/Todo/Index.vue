@@ -7,64 +7,7 @@
             <div class="content-body">
                 <div class="row match-height ">
                     <div class="col-md-3 me-0 pe-0">
-                        <div class="card h-100 mb-0 shadow-none rounded-0">
-                            <div class="card-header border-bottom border-end rounded-0">
-                                <div class="chat-fixed-search">
-                                    <div class="d-flex align-items-center w-100">
-                                        <div class="input-group input-group-merge ms-1 w-100">
-                                            <button class="btn btn-primary" @click="addTodoModal">Add Todo</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body chat-height p-0 border-end">
-                                <h5 class="text-primary m-2">Actions</h5>
-                                <div class="sidebar-menu-list ps ">
-                                    <div class="list-group list-group-filters">
-                                        <a href="#" class="d-flex align-items-center list-group-item list-group-item-action border-0" @click="activeClass('allTask')" :class="activeClassRef === 'allTask' ? 'active-list' : ''">
-                                            <vue-feather type="bar-chart-2" size="12"/>
-                                            <span class="align-middle ms-1" >All Task</span>
-                                        </a>
-
-                                        <a href="#" class="d-flex align-items-center list-group-item list-group-item-action border-0" @click="activeClass('myTask')" :class="activeClassRef === 'myTask' ? 'active-list' : ''">
-                                            <vue-feather type="mail" size="12"/>
-                                            <span class="align-middle ms-1"> My Task</span>
-                                        </a>
-
-                                        <a href="#" class="d-flex align-items-center list-group-item list-group-item-action border-0" @click="activeClass('complated')" :class="activeClassRef === 'complated' ? 'active-list' : ''">
-                                            <vue-feather type="check-circle" size="12"/>
-                                            <span class="align-middle ms-1">Completed</span>
-                                        </a>
-<!--                                        <a href="#" class="d-flex align-items-center list-group-item list-group-item-action border-0" @click="activeClass('deleted')" :class="activeClassRef === 'deleted' ? 'active-list' : ''">-->
-<!--                                            <vue-feather type="trash" size="12"/>-->
-<!--                                            <span class="align-middle ms-1">Deleted</span>-->
-<!--                                        </a>-->
-                                    </div>
-
-<!--                                    <div class="mt-3 px-2 d-flex justify-content-between">
-                                        <h6 class="section-label mb-1">Tags</h6>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus cursor-pointer"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                    </div>
-                                    <div class="list-group list-group-labels">
-                                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center border-0">
-                                            <span class="bullet bullet-sm bullet-primary me-1"></span>Team
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center border-0">
-                                            <span class="bullet bullet-sm bullet-success me-1"></span>Low
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center border-0">
-                                            <span class="bullet bullet-sm bullet-warning me-1"></span>Medium
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center border-0">
-                                            <span class="bullet bullet-sm bullet-danger me-1"></span>High
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action d-flex align-items-center border-0">
-                                            <span class="bullet bullet-sm bullet-info me-1"></span>Update
-                                        </a>
-                                    </div>-->
-                                </div>
-                            </div>
-                        </div>
+                        <Sidebar :users="props.users" :main_url="props.main_url"/>
                     </div>
                     <div class="col-md-9 ms-0 ps-0  bg-white" id="mainSection">
                         <div  class="card h-100 shadow-none mb-0 pb-0 rounded-0">
@@ -74,25 +17,9 @@
                             <div class="card-body chat-bg p-0 min-chat-height">
                                 <ul id="chat">
                                     <li class="d-flex align-items-center justify-content-between todo-item-style p-1"
-                                        v-for="todo in loadTodos">
+                                        v-for="todo in props.todos.data">
                                         <div class="d-flex align-items-center">
-                                            <div v-if="activeClassRef === 'myTask'">
-                                                <CDropdown>
-                                                    <CDropdownToggle>
-                                                        <vue-feather type="more-vertical"  size="18"/>
-                                                    </CDropdownToggle>
-                                                    <CDropdownMenu>
-                                                        <CDropdownItem @click="showItem(todo.id)">
-                                                            <vue-feather type="eye" size="15"/>
-                                                            <span class="ms-1">Show</span>
-                                                        </CDropdownItem>
-                                                        <CDropdownItem @click="deleteItem(props.main_url, todo.id)">
-                                                            <vue-feather type="trash" size="15"/>
-                                                            <span class="ms-1">Delete</span>
-                                                        </CDropdownItem>
-                                                    </CDropdownMenu>
-                                                </CDropdown>
-                                            </div>
+                                            <vue-feather type="more-vertical"  size="18"/>
                                             <input type="checkbox" @click="taskComplate(todo.id)" :checked="todo?.priority === 'Complete'" class="form-check-input">
                                             <div class="ms-1 todo-content cursor-pointer" @click="showItem(todo.id)">
                                                 <h4 class="m-0 text-black" >
@@ -123,7 +50,7 @@
                                                     'badge-light-indego' : todo.priority === 'First',
                                                 }"
                                                 >{{ todo.priority }}</span>
-                                                <small class="badge text-black">{{ moment(todo.date).format('MMM, D') }}</small>
+                                                <small class="badge text-black">{{ moment(todo.date).format('MMMM, D') }}</small>
                                             <span class="avatar me-1" v-c-tooltip="todo.user?.name">
                                                 <img :src="todo.user.photo" height="32" width="32" alt="Generic placeholder image">
                                             </span>
@@ -138,91 +65,6 @@
         </div>
     </div>
 
-    <div class="modal modal-slide-in fade" id="addTodo" aria-hidden="true" v-vb-is:modal>
-        <div class="modal-dialog sidebar-lg">
-            <div class="modal-content p-0">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
-                <div class="modal-header mb-1">
-                    <h5 class="modal-title">
-                        <span class="align-middle">Add New Todo</span>
-                    </h5>
-                </div>
-                <div class="modal-body flex-grow-1">
-                    <form @submit.prevent="saveTodo">
-                        <div class="mb-1">
-                            <label>Title</label>
-                            <input  v-model="formData.title" class="form-control" type="text" placeholder="Todo Title"/>
-                            <span v-if="props.errors.title" v-text="props.errors.title" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-1">
-                            <label class="form-label">Date</label>
-                            <Datepicker :monthChangeOnScroll="false"
-                                        v-model="formData.date"
-                                        placeholder="Select Payment Date"
-                                        autoApply></Datepicker>
-                            <span v-if="props.errors.date" v-text="props.errors.date" class="text-danger"></span>
-                        </div>
-                        <div class="mb-1">
-                            <label>Todo For</label>
-                            <v-select
-                                class="form-control select-padding"
-                                multiple
-                                v-model="formData.users"
-                                :options="users"
-                                placeholder="Who Can See This Todo"
-                                :reduce="user => user.id"
-                                label="name">
-                                <template v-slot:option="option">
-                                    <li class="d-flex align-items-start py-1">
-                                        <div class="avatar me-75">
-                                            <img :src="`${option.photo}`" alt="" width="38" height="38">
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between w-100">
-                                            <div class="me-1 d-flex flex-column">
-                                                <strong class="mb-25">{{ option.name }}</strong>
-                                                <span >{{ option.email }}</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </template>
-                            </v-select>
-                            <span v-if="props.errors.users" v-text="props.errors.users" class="text-danger"></span>
-                        </div>
-
-
-                        <div class="mb-1">
-                            <label>Priority</label>
-                            <v-select
-                                class="form-control select-padding"
-                                v-model="formData.priority"
-                                :options="priority"
-                                :reduce="priority => priority.name"
-                                placeholder="Select Todo Priority"
-                                label="name">
-                            </v-select>
-                        </div>
-
-                        <div class="mb-1">
-                            <label for="customFile" class="form-label">Attachment</label>
-                            <input class="form-control" type="file" @input="uploadAttachment"
-                                   id="customFile" name="customFile" aria-invalid="false">
-                        </div>
-
-                        <div class="mb-1">
-                            <label class="form-label" for="payment-note">About Todo</label>
-                            <textarea class="form-control" v-model="formData.aboutTodo"
-                                      id="payment-note" rows="5" placeholder="Write about this note..."></textarea>
-                        </div>
-                        <div class="d-flex flex-wrap mb-0">
-                            <button type="submit" class="btn btn-primary me-1">Save Todo</button>
-                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
     <div class="modal modal-slide-in fade" id="showTodoModal" aria-hidden="true" v-vb-is:modal>
@@ -268,6 +110,7 @@ import {Inertia} from "@inertiajs/inertia";
 import axios from "axios";
 import moment from "moment";
 import Swal from "sweetalert2";
+import Sidebar from './Sidebar.vue'
 
 
 const {deleteItem} = useAction();
@@ -276,68 +119,12 @@ const {deleteItem} = useAction();
 const props = defineProps({
     users:Array|[],
     todos:Array|[],
-    myTodos:Array|[],
-    comTodos:Array|[],
-    empTodos:Array|[],
     main_url:null,
     errors:Object,
 })
 
 
-const activeClassRef=ref('allTask')
-const activeClass = (task) => activeClassRef.value = task;
-
-const itemText = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur deleniti dolore ratione reprehenderit sint. Beatae debitis deleniti dolore doloribus exercitationem facere illum nobis perspiciatis reiciendis similique tempore, temporibus totam voluptatibus!"
-const addTodoModal = () => document.getElementById('addTodo').$vb.modal.show()
-
-
-const priority = [
-    {name: "High"},
-    {name: "Low"},
-    {name: "Medium"},
-    {name: "First"},
-    {name: "Very Low"},
-    {name: "High"},
-];
-
-const formData = useForm({
-    title:null,
-    users:[],
-    date:null,
-    priority:null,
-    aboutTodo:null,
-    attachment:Object,
-})
-
-const uploadAttachment = (event) =>{
-    formData.attachment = event.target.files[0];
-}
-
 const showTodoData = ref({});
-const saveTodo = () => {
-    formData.post(props.main_url, {
-        preserveState: true,
-        // onStart: () =>{ data.processing = true},
-        // onFinish: () => { data.processing = false},
-        onSuccess: () => {
-            formData.reset();
-            Swal.fire(
-                'Saved!',
-                'Your file has been Saved.',
-                'success'
-            )
-
-            document.getElementById('addTodo').$vb.modal.hide()
-        },
-        onError: () =>{
-            Swal.fire(
-                'Error!',
-                'Have an error, Try again.',
-                'error'
-            )
-        }
-    })
-}
 const showItem = (id)=>{
     axios.get(props.main_url+'/'+id+'?show_data=true').then((res) =>{
         showTodoData.value = res.data;
@@ -349,21 +136,7 @@ const showItem = (id)=>{
 
 
 
-const loadTodos = computed(()=>{
-    if(activeClassRef.value === 'allTask'){
-        if (usePage().props.value.auth.user.role.includes("Administrator")){
-            return props.todos;
-        }else{
-            return props.empTodos;
-        }
 
-        //.map(item => item.user_id === usePage().props.auth.user.id)
-    }else if(activeClassRef.value === 'complated'){
-        return props.comTodos;
-    }else{
-        return props.myTodos;
-    }
-})
 
 const taskComplate = (event) =>{
     Inertia.get(props.main_url+"/"+event+"?complete=true", {},{
@@ -380,36 +153,6 @@ const taskComplate = (event) =>{
 </script>
 
 <style lang="css" scoped>
-    .active-list{
-        border: 0;
-        border-left: 3px solid #7367f0 !important;
-        border-radius: 0 !important;
-        color: #7367f0;
-    }
-
-    .min-chat-height{
-        max-height: calc(100vh - 14.5rem);
-        overflow-y: scroll;
-    }
-
-    .todo-item-style{
-        border: 1px solid #f5f5f5;
-        border-top: none;
-        color: #212020;
-        transition: 0.3s all ease;
-    }
-    .todo-item-style:hover{
-        box-shadow:0 5px 15px -8px #c3bfbf;
-    }
-    .todo-item-style:first-child{
-        border-top: 1px solid #f5f5f5;
-    }
-    .form-control:focus:valid, .form-control:focus.is-valid{
-        box-shadow: none;
-    }
-    .select-padding{
-        padding:4px 0 0 5px !important;
-    }
     .todo-content h4{
         font-size:14px;
     }

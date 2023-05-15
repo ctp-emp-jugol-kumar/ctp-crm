@@ -13,6 +13,7 @@
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Methods Information's </h4>
                                     <button class="dt-button add-new btn btn-primary"
+                                            v-if="this.$page.props.auth.user.can.includes('method.create') || this.$page.props.auth.user.role.includes('Administrator')"
                                             @click="createDataModal">Add Method</button>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
@@ -53,7 +54,9 @@
                                             <td>{{ method.created_at }}</td>
                                             <td>
                                                 <div class="demo-inline-spacing">
-                                                    <button @click="deleteItem(props.main_url, method.id)" type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
+                                                    <button @click="deleteItem(props.main_url, method.id)"
+                                                            v-if="this.$page.props.auth.user.can.includes('method.create') || this.$page.props.auth.user.role.includes('Administrator')"
+                                                            type="button" class="btn btn-icon btn-icon rounded-circle btn-warning waves-effect waves-float waves-light btn-danger">
                                                         <Icon title="trash" />
                                                     </button>
                                                 </div>
@@ -131,7 +134,7 @@
 
     const createDataModal = () => document.getElementById('createData').$vb.modal.show()
     let createData = () => {
-        Inertia.post('methods/', updateForm,{
+        updateForm.post(props.main_url,{
             preserveState: true,
             onSuccess: () => {
                 document.getElementById('createData').$vb.modal.hide()

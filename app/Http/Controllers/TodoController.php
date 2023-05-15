@@ -23,6 +23,26 @@ class TodoController extends Controller
     public function index()
     {
 
+
+        $todos = Todo::query()
+            ->with('user')
+            ->when(Request::input('search'), function ($query, $serch){
+                $query->where('title', 'like', "%$serch%")
+                    ->orWhere('about_todo', 'like', "%{$serch}%");
+            })
+            ->latest()
+            ->paginate(Request::input('perPage') ?? 10)
+            ->withQueryString();
+
+        return inertia('Todo/Index',[
+            'users' =>  User::where('id', '!=', Auth::id())->get(),
+            'todos' => $todos,
+            'main_url' => URL::route('todos.index'),
+        ]);
+    }
+
+    public function extra(){
+
         $todos = Todo::with('user')->latest()->get();
         $myTodos = Todo::with('user')->where('user_id', Auth::id())->latest()->get();
         $comTodos = Todo::with('user')->where('priority',  '=', 'Complete')->latest()->get();
@@ -37,15 +57,6 @@ class TodoController extends Controller
 //        return $empTodos;
 
 
-
-        return inertia('Todo/Index',[
-            'users' =>  User::where('id', '!=', Auth::id())->get(),
-            'todos' => $todos,
-            'myTodos' => $myTodos,
-            'empTodos' => $empTodos,
-            'comTodos' => $comTodos,
-            'main_url' => URL::route('todos.index'),
-        ]);
     }
 
     /**
@@ -69,8 +80,21 @@ class TodoController extends Controller
 
         Request::validate([
             'title' => 'required',
-            'users' => 'required',
         ]);
+
+        if(Request::input('allUsers') != true || Request::input('users')){
+            Request::validate([
+                'users' => 'required',
+            ]);
+        }
+
+        $userId = [];
+        if (Request::input('allUsers')){
+            $userId = User::pluck('id');
+        }else{
+            $userId = Request::input('users');
+        }
+
 
         if (Request::input('date')){
             Request::validate([
@@ -87,8 +111,8 @@ class TodoController extends Controller
 
         $todo = Todo::create([
            'title' => Request::input('title'),
-           'users' => json_encode(Request::input('users')),
-           'date' => Request::input('date') ? date('d-m-Y', strtotime(Request::input('date'))) : now()->format('d-y-m'),
+           'users' => json_encode($userId),
+           'date' => Request::input('date') ? date('d-m-Y', strtotime(Request::input('date'))) :  now()->format('d-y-m h:m:s'),
            'about_todo' => Request::input('aboutTodo'),
            'file' => $path,
            'user_id' => Auth::id(),
