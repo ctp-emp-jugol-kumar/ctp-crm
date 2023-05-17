@@ -67,7 +67,6 @@ class RolesAndPermissionsSeeder extends Seeder
             [
                 'module' => "Leads",
                 'permissions' => [
-                    'leads.show',
                     'leads.index',
                     'leads.create',
                     'leads.edit',

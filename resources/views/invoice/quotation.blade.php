@@ -216,10 +216,12 @@
                         <td class="text-right border" colspan="3">Sub Total</td>
                         <td class="text-right border"><strong>{{ $quotation->total_price  }}</strong></td>
                     </tr>
+                @if($quotation->discount > 0)
                     <tr>
                         <td class="text-right border" colspan="3">Discount</td>
                         <td class="text-right border"><strong> {{ $quotation->discount  }}</strong></td>
                     </tr>
+                @endif
 
                     <tr style="border-top: 1px solid #e7e7e7">
                         <td class="text-right border" style="padding: 10px; font-weight: bolder; font-size: 18px" colspan="3">Grand Total</td>

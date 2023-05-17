@@ -30,4 +30,9 @@ class Invoice extends Model
         return $this->morphMany(Transaction::class, 'transactionable');
     }
 
+    public function project(){
+        return $this->hasOne(Project::class, 'invoice_id');
+    }
+
+
 }

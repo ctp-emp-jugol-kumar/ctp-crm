@@ -21,9 +21,9 @@ class ClientsController extends Controller
      */
     public function index()
     {
-        if (!auth()->user()->can('client.index')){
-            abort(404);
-        }
+//        if (!auth()->user()->can('client.index')){
+//            abort(404);
+//        }
 
         return inertia('Modules/Clients/Index', [
             $search = Request::input('search'),
@@ -89,13 +89,20 @@ class ClientsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(ClientRequest $request)
+    public function store()
     {
-        if (!auth()->user()->can('client.create') || !auth()->user()->can('leads.create')) {
-            abort(401 );
-        }
 
-       $data = $request->validate([
+//        return dd(!auth()->user()->can('client.create'));
+//
+//        if (!auth()->user()->can('leads.create')) {
+//            abort(401 );
+//        }
+//
+//        if (!auth()->user()->can('client.create')) {
+//            abort(401 );
+//        }
+
+       $data = Request::validate([
             "name" => ['required'],
             "email" => ['required', 'email', Rule::unique('clients', 'email')],
             "secondary_email" => ['nullable','email'],
@@ -108,12 +115,13 @@ class ClientsController extends Controller
             "agents" => ['nullable']
        ]);
 
-       $data['status'] = $request->status["name"];
+       $data['status'] = Request::input("status")["name"];
 
        $client = Client::create($data);
-       if ($request->agents != null){
-            $client->users()->attach($request->input('agents'));
+       if (Request::input('agents') != null){
+            $client->users()->attach(Request::input('agents'));
        }
+
        return back();
 //        return redirect()->route('clients.index');
 
@@ -163,9 +171,9 @@ class ClientsController extends Controller
      */
     public function update(UpdateClient $request, Client $client)
     {
-        if (!auth()->user()->can('client.edit') || !auth()->user()->can('leads.edit')) {
-            abort(401 );
-        }
+//        if (!auth()->user()->can('client.edit') || !auth()->user()->can('leads.edit')) {
+//            abort(401 );
+//        }
 
         $data = $request->validated();
 
@@ -204,12 +212,29 @@ class ClientsController extends Controller
      */
     public function destroy($id)
     {
-        if (!auth()->user()->can('client.delete') || !auth()->user()->can('leads.delete')) {
-            abort(401 );
+//        if (!auth()->user()->can('client.delete') || !auth()->user()->can('leads.delete')) {
+//            abort(401 );
+//        }
+
+        $client = Client::findOrFail($id);
+        $invoices = $client->invoices;
+        if ($invoices){
+            foreach ($invoices as $invoice) {
+                $transactions = $invoice->transactions;
+                if ($transactions){
+                    foreach ($transactions as $transaction) {
+                        $transaction->delete();
+                    }
+                }
+                if($invoice->project){
+                    $invoice->project->delete();
+                }
+                $invoice->delete();
+            }
         }
 
-        Client::findOrFail($id)->delete();
+
+        $client->delete();
         return back();
-//        return redirect()->route('clients.index');
     }
 }

@@ -11,9 +11,8 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Lead Information's </h4>
-<!--                                    <button class="dt-button add-new btn btn-primary" tabindex="0" type="button" data-bs-toggle="modal" data-bs-target="#addItemModal">Add Client</button>-->
                                     <button
-                                        v-if="this.$page.props.auth.user.can.includes('leads.create') || this.$page.props.auth.user.role == 'Administrator'"
+                                        v-if="this.$page.props.auth.user.can.includes('leads.create') || this.$page.props.auth.user.role.includes('Administrator')"
                                         class="dt-button add-new btn btn-primary"
                                         @click="addDataModal"
                                     >
@@ -166,7 +165,8 @@
     </div>
 
 
-    <Modal id="addItemModal" :title="clientStatus ?  'Add New Lead' : 'Convert To New Client'" v-vb-is:modal :size="clientStatus ? 'sm' : 'lg'">
+    <Modal v-if="this.$page.props.auth.user.can.includes('leads.create') || this.$page.props.auth.user.role.includes('Administrator')"
+           id="addItemModal" :title="clientStatus ?  'Add New Lead' : 'Convert To New Client'" v-vb-is:modal :size="clientStatus ? 'sm' : 'lg'">
         <form @submit.prevent="createClientForm">
             <div class="modal-body">
                 <div class="row mb-1">

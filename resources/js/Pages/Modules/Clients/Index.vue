@@ -95,16 +95,16 @@
                                                         <vue-feather type="more-vertical" />
                                                     </CDropdownToggle>
                                                     <CDropdownMenu>
-                                                        <CDropdownItem  @click="editClient(user.show_url)"   v-if="this.$page.props.auth.user.can.includes('client.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                                                        <CDropdownItem  @click="editClient(user.show_url)"   v-if="this.$page.props.auth.user.can.includes('client.edit') || this.$page.props.auth.user.role.includes('Administrator')">
                                                             <Icon title="pencil" />
                                                             <span class="ms-1">Edit</span>
                                                         </CDropdownItem>
-                                                        <CDropdownItem :href="user.show_url" v-if="this.$page.props.auth.user.can.includes('client.edit') || this.$page.props.auth.user.role == 'Administrator' ">
+                                                        <CDropdownItem :href="user.show_url" v-if="this.$page.props.auth.user.can.includes('client.show') || this.$page.props.auth.user.role.includes('Administrator')">
                                                             <Icon title="eye" />
                                                             <span class="ms-1">Show</span>
                                                         </CDropdownItem>
                                                         <CDropdownItem @click="deleteItemModal(user.id)" type="button"
-                                                                       v-if="this.$page.props.auth.user.can.includes('client.delete') || this.$page.props.auth.user.role == 'Administrator' ">
+                                                                       v-if="this.$page.props.auth.user.can.includes('client.delete') || this.$page.props.auth.user.role.includes('Administrator') ">
                                                             <Icon title="trash" />
                                                             <span class="ms-1">Delete</span>
                                                         </CDropdownItem>

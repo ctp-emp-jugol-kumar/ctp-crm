@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('received_by')->nullable()->constrained('users');
             $table->foreignId('payment_by')->nullable()->constrained('clients');
             $table->string('transactionable_type');
-            $table->enum('transaction_type', ['Debited,', 'Credited'])->nullable();
+            $table->string('transaction_type')->nullable();
             $table->foreignId('method_id')->nullable()->constrained('methods');
             $table->integer('amount')->nullable();
             $table->integer('pay')->nullable();

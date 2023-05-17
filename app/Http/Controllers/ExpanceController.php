@@ -210,7 +210,9 @@ class ExpanceController extends Controller
     {
         $expance = Expanse::findOrFail($id);
         $transaction = Transaction::where('transactionable_type', "App\\Models\\Expanse")->where('transactionable_id', $expance->id)->first();
-        $transaction->delete();
+        if($transaction){
+            $transaction->delete();
+        }
         $expance->delete();
         return back();
     }

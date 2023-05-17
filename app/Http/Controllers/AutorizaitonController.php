@@ -39,7 +39,8 @@ class AutorizaitonController extends Controller
             'all_permissions' => Permission::with("roles", "users")->get(),
             'roles'       => $roles,
             'can'         => null,
-            'create_url'  => URL::route('authorizations.store')
+            'create_url'  => URL::route('authorizations.store'),
+            'main_url'  => URL::route('authorizations.index')
         ]);
     }
 
@@ -139,7 +140,7 @@ class AutorizaitonController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
@@ -147,6 +148,10 @@ class AutorizaitonController extends Controller
         if (!auth()->user()->can('user.delete')){
             abort(404);
         }
-        //
+
+        $role = Role::findById($id);
+        $role->delete();
+        return back();
+
     }
 }
