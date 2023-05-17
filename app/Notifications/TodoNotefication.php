@@ -58,7 +58,6 @@ class TodoNotefication extends Notification
     public function toArray($notifiable)
     {
         return [
-            "data" => $notifiable,
             "notefication" => $this->todo,
         ];
     }

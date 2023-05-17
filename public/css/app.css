@@ -24694,18 +24694,18 @@ div.dataTables_wrapper .dataTables_info {
   padding-left: 0 !important;
 }
 
-.min-chat-height::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 5px;
   border-radius: 15px;
 }
 
 /* Track */
-.min-chat-height::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: #ffffff;
 }
 
 /* Handle */
-.min-chat-height::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: var(--bs-primary);
   border-radius: 15px;
 }

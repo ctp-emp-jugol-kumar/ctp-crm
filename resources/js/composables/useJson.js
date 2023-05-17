@@ -63,8 +63,15 @@ export function useJson(){
         return color;
     }
 
+    const priority = [
+        {name: "High"},
+        {name: "Low"},
+        {name: "Medium"},
+        {name: "In Process"},
+        {name: "Complete"},
+    ];
 
-    return {status, color}
+    return {status, color, priority}
 
 
 }

@@ -54,6 +54,7 @@ Route::prefix('admin')->group(function(){
         Route::get('dashboard', DashboardController::class);
         // user management
         Route::resource('users', AdminController::class);
+        Route::get('all-users', [AdminController::class, 'allUsers']);
         Route::post('users/{id}', [AdminController::class, 'update']);
         Route::post('user/update-pass/{id}', [AdminController::class, 'updateCredentials'])->name('updateCredentials');
         Route::post('user/update-profile-image', [AdminController::class, 'uploadProfile'])->name('users.uploadProfile');
@@ -141,6 +142,11 @@ Route::prefix('admin')->group(function(){
         Route::get('employee-notes', [NoteController::class, 'employeeNotes'])->name('notes.empNots');
 
         Route::resource('todos', TodoController::class);
+        Route::get('change-todo-status/{id}', [TodoController::class, 'show']);
+        Route::post('todos/replay-todo', [TodoController::class, 'replayTodo'])->name('replayTodo');
+        Route::get('my-todos', [TodoController::class, 'myTodos'])->name('myTodos');
+        Route::get('complete-todos', [TodoController::class, 'completeTodos'])->name('completeTodos');
+        Route::get('read-all-notification', [TodoController::class, 'readAllNotification'])->name('readAllNotification');
     });
 
     Route::post('/logout', [LoginController::class, 'destroy']);

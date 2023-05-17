@@ -13,17 +13,17 @@
             <h5 class="text-primary m-2">Actions</h5>
             <div class="sidebar-menu-list ps ">
                 <div class="list-group list-group-filters">
-                    <a href="#" class="d-flex align-items-center list-group-item list-group-item-action border-0" @click="activeClass('allTask')" :class="activeClassRef === 'allTask' ? 'active-list' : ''">
+                    <a href="/admin/todos" class="d-flex align-items-center list-group-item list-group-item-action border-0" @click="activeClass('todos')" :class="activeClassRef === 'todos' ? 'active-list' : ''">
                         <vue-feather type="bar-chart-2" size="12"/>
                         <span class="align-middle ms-1" >All Task</span>
                     </a>
 
-                    <a href="#" class="d-flex align-items-center list-group-item list-group-item-action border-0" @click="activeClass('myTask')" :class="activeClassRef === 'myTask' ? 'active-list' : ''">
+                    <a href="/admin/my-todos" class="d-flex align-items-center list-group-item list-group-item-action border-0" @click="activeClass('my-todos')" :class="activeClassRef ===  'my-todos' ? 'active-list' : ''">
                         <vue-feather type="mail" size="12"/>
                         <span class="align-middle ms-1"> My Task</span>
                     </a>
 
-                    <a href="#" class="d-flex align-items-center list-group-item list-group-item-action border-0" @click="activeClass('complated')" :class="activeClassRef === 'complated' ? 'active-list' : ''">
+                    <a href="/admin/complete-todos" class="d-flex align-items-center list-group-item list-group-item-action border-0" @click="activeClass('complete-todos')" :class="activeClassRef === 'complete-todos' ? 'active-list' : ''">
                         <vue-feather type="check-circle" size="12"/>
                         <span class="align-middle ms-1">Completed</span>
                     </a>
@@ -157,38 +157,30 @@
 
 
 
-import {ref} from "vue";
+import {ref,onMounted} from "vue";
 import {useForm} from "@inertiajs/inertia-vue3";
 import Swal from "sweetalert2";
 import Switch from '../../components/Switch.vue'
-
+import {useQuotationStore} from "../../Store/useQuotationStore";
+const usersData = useQuotationStore();
+import axios from "axios";
+import {useJson} from "../../composables/useJson";
+const {priority} = useJson()
 const props = defineProps({
-    users:{
-        type:Array,
-        required:true,
-    },
-    main_url:{
-        type:String,
-        required:true,
-    },
     errors:Object,
+    users:[]
 })
 
-const activeClassRef=ref('allTask')
+const checkUrl = window.location.pathname.split('/').pop();
+
+const main_url = ref('/admin/todos')
+const activeClassRef=ref(checkUrl)
 const activeClass = (task) => activeClassRef.value = task;
 
 const itemText = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur deleniti dolore ratione reprehenderit sint. Beatae debitis deleniti dolore doloribus exercitationem facere illum nobis perspiciatis reiciendis similique tempore, temporibus totam voluptatibus!"
 const addTodoModal = () => document.getElementById('addTodo').$vb.modal.show()
 
 
-const priority = [
-    {name: "High"},
-    {name: "Low"},
-    {name: "Medium"},
-    {name: "First"},
-    {name: "Very Low"},
-    {name: "High"},
-];
 
 const formData = useForm({
     title:null,
@@ -203,7 +195,7 @@ const formData = useForm({
 const uploadAttachment = (event) => formData.attachment = event.target.files[0];
 
 const saveTodo = () => {
-    formData.post(props.main_url, {
+    formData.post('/admin/todos', {
         preserveState: true,
         // onStart: () =>{ data.processing = true},
         // onFinish: () => { data.processing = false},
@@ -226,7 +218,6 @@ const saveTodo = () => {
         }
     })
 }
-
 
 
 </script>

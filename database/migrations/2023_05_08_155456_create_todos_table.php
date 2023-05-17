@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('date');
             $table->text('about_todo')->nullable();
             $table->string('file')->nullable();
-            $table->string('priority')->default('Normal');
+            $table->string('priority')->nullable()->default('Normal');
             $table->boolean('is_replay')->default(false);
             $table->timestamps();
         });
