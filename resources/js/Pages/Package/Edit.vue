@@ -56,6 +56,7 @@
                                             :options="props.platforms"
                                             style="width:100%"
                                             label="name"
+                                            class="form-control select-padding"
                                             v-model="formData.platformId"
                                             :reduce="item => item.id"
                                             @update:modelValue="loadFeatures"

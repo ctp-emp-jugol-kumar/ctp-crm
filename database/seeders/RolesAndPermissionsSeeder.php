@@ -194,14 +194,18 @@ class RolesAndPermissionsSeeder extends Seeder
                     'project.index',
                     'project.create',
                     'project.edit',
-                    'project.delete'
+                    'project.delete',
+                    'project.budget',
+                    'project.employees',
                 ],
                 'name' => [
                     'Show Project',
                     'Manage Project',
                     'Create Project',
                     'Edit Project',
-                    'Delete Project'
+                    'Delete Project',
+                    'Show Budget',
+                    'Employees Project'
                 ]
             ],
             [
@@ -211,14 +215,16 @@ class RolesAndPermissionsSeeder extends Seeder
                     'note.index',
                     'note.create',
                     'note.edit',
-                    'note.delete'
+                    'note.delete',
+                    'note.employees'
                 ],
                 'name' => [
                     'Show Note',
                     'Manage Note',
                     'Create Note',
                     'Edit Note',
-                    'Delete Note'
+                    'Delete Note',
+                    'Show Employees'
                 ]
             ],
             [

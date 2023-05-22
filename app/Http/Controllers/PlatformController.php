@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PlatformRequest;
 use App\Models\Design;
 use App\Models\Platform;
+use App\Models\Searvice;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Validation\Rule;
 
 
 class PlatformController extends Controller
@@ -56,6 +58,10 @@ class PlatformController extends Controller
 
     public function store()
     {
+        Request::validate([
+           'platform' => 'required|unique:platforms,name',
+        ]);
+
         Platform::create([
             'name' => Request::input('platform'),
             'featureds' => json_encode(Request::all("features")['features']),
@@ -94,6 +100,14 @@ class PlatformController extends Controller
      */
     public function update(Request $request, Platform $platform)
     {
+
+        Request::validate([
+            'platform' => [
+                'required',
+                Rule::unique('platforms', 'name')->ignore($platform->id),
+            ]
+        ]);
+
         $platform->update([
             'name' => Request::input('platform'),
             'featureds' => json_encode(Request::all("features")['features']),
@@ -111,6 +125,7 @@ class PlatformController extends Controller
      */
     public function destroy(Platform $platform)
     {
+        $platform->packages()->delete();
         $platform->delete();
         return redirect()->route('platforms.index');
     }

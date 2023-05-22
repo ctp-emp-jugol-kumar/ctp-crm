@@ -460,7 +460,7 @@
         document.getElementById('addItemModal').$vb.modal.show()
     }
     let createClientForm = () => {
-        Inertia.post('clients', createForm, {
+        Inertia.post('clients?create=true', createForm, {
             preserveState: true,
             onStart: () => {
                 createForm.processing = true

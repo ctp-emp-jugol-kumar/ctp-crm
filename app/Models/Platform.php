@@ -10,7 +10,7 @@ use const http\Client\Curl\FEATURES;
 class Platform extends Model
 {
 
-    use SoftDeletes;
+//    use SoftDeletes;
 
 
     protected $table = 'platforms';
@@ -22,6 +22,10 @@ class Platform extends Model
 
     public function featureds(){
         return $this->hasMany(Feature::class, 'featured_id');
+    }
+
+    public function searvice(){
+        return $this->belongsTo(Searvice::class, 'platform_id');
     }
 
 }
