@@ -234,7 +234,7 @@
                 </div>
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Lead Status</label>
+                        <label>Lead Status  <span class="text-danger">*</span></label>
                         <v-select v-model="createForm.status"
                                   @update:modelValue="changeStatus"
                                   label="name"
@@ -242,116 +242,8 @@
                                   :options="status"
                                   placeholder="Select Lead Status">
                         </v-select>
-                    </div>
-                    <div class="col-md" :class="{ 'd-none' : clientStatus }">
-                        <label>Assign Agent </label>
-                        <v-select
-                            multiple
-                            v-model="createForm.agents"
-                            :options="users"
-                            placeholder="Select Assigned Employee"
-                            class="form-control select-padding"
-                            :reduce="user => user.id"
-                            label="name">
-                            <template v-slot:option="option">
-                                <li class="d-flex align-items-start py-1">
-                                    <div class="avatar me-75">
-                                        <img :src="`${option.photo}`" alt="" width="38" height="38">
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between w-100">
-                                        <div class="me-1 d-flex flex-column">
-                                            <strong class="mb-25">{{ option.name }}</strong>
-                                            <span >{{ option.email }}</span>
-                                        </div>
-                                    </div>
-                                </li>
-                            </template>
-                        </v-select>
-                    </div>
-                </div>
-            </div>
+                        <span v-if="errors.status" class="error text-sm text-danger">{{errors.status}}</span>
 
-            <div class="modal-footer">
-                <button :disabled="createForm.processing" type="submit"
-                        class="btn btn-primary waves-effect waves-float waves-light">Submit
-                </button>
-                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                        aria-label="Close">Cancel
-                </button>
-            </div>
-        </form>
-    </Modal>
-
-    <Modal id="chaneStatusModal" :title="clientStatus ?  'Update Lead Status' : 'Convert To New Client'" v-vb-is:modal :size="clientStatus ? 'sm' : 'lg'">
-        <form @submit.prevent="createClientForm">
-            <div class="modal-body">
-                <div class="row mb-1" :class="{ 'd-none' : clientStatus }">
-                    <div class="col-md">
-                        <label>Name:
-                            <Required/>
-                        </label>
-                        <div class=null>
-                            <input v-model="createForm.name" type="text" placeholder="Name" class="form-control">
-                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
-                        </div>
-                    </div>
-
-                    <div class="col-md">
-                        <label>Company: </label>
-                        <input v-model="createForm.company" type="text" placeholder="Enter Company Name" class="form-control">
-                        <span v-if="errors.company" class="error text-sm text-danger">{{ errors.company }}</span>
-                    </div>
-                </div>
-                <div class="row mb-1" :class="{ 'd-none' : clientStatus }">
-                    <div class="col-md ">
-                        <label>Email: <span class="text-danger">*</span></label>
-                        <div class=null>
-                            <input v-model="createForm.email" type="email" placeholder="eg.example@creativetechpark.com"
-                                   class="form-control">
-                            <span v-if="errors.email" class="error text-sm text-danger">{{ errors.email }}</span>
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <label>Secondary Email: </label>
-                        <input v-model="createForm.secondary_email" type="email" placeholder="second.eg@ctpbd.com"
-                               class="form-control">
-                        <span v-if="errors.secondary_email" class="error text-sm text-danger">{{errors.secondary_email}}</span>
-                    </div>
-                </div>
-                <div class="row mb-1" :class="{ 'd-none' : clientStatus }">
-                    <div class="col-md">
-                        <label>Phone: <span class="text-danger">*</span></label>
-                        <input v-model="createForm.phone" type="text" placeholder="+88017********" class="form-control">
-                        <span v-if="errors.phone" class="error text-sm text-danger">{{ errors.phone }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Secondary Phone: </label>
-                        <input v-model="createForm.secondary_phone" type="text" placeholder="+88017********" class="form-control">
-                        <span v-if="errors.secondary_phone" class="error text-sm text-danger">{{errors.secondary_phone}}</span>
-                    </div>
-                </div>
-                <div class="row mb-1" :class="{ 'd-none' : clientStatus }">
-                    <div class="col-md">
-                        <label>Address: </label>
-                        <textarea v-model="createForm.address" type="text" placeholder="Enter Full Address" rows="5" class="form-control"></textarea>
-                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.address }}</span>
-                    </div>
-                    <div class="col-md">
-                        <label>Nots: </label>
-                        <textarea v-model="createForm.note" type="text" placeholder="Enter note messages" rows="5" class="form-control"></textarea>
-                        <span v-if="errors.note" class="error text-sm text-danger">{{ errors.note }}</span>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Lead Status</label>
-                        <v-select v-model="updateForm.status"
-                                  @update:modelValue="changeStatus"
-                                  label="name"
-                                  :options="status"
-                                  class="form-control select-padding"
-                                  placeholder="Select Lead Status">
-                        </v-select>
                     </div>
                     <div class="col-md" :class="{ 'd-none' : clientStatus }">
                         <label>Assign Agent </label>
@@ -464,7 +356,6 @@
                             <span v-if="errors.followDate" class="error text-sm text-danger">{{ errors.followDate }}</span>
                         </div>
                     </div>
-
                 </div>
                 <div class="row mb-1">
                     <div class="col-md">
@@ -595,10 +486,7 @@
     }
 
 
-    let status = [
-        {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Proposal Sent'},
-        {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Follow Up'}, {"name":'Converted to Customer'}
-    ]
+    let status = ref([])
 
     let deleteItemModal = (id) => {
         Swal.fire({
@@ -632,6 +520,11 @@
     };
 
     let addDataModal = () => {
+        status.value = [
+            {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Proposal Sent'},
+            {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Converted to Customer'}
+        ];
+
         createForm.reset();
         createForm.processing = false;
         clientStatus.value = true;
@@ -680,6 +573,13 @@
     }
 
     let editClient = (url) => {
+
+        status.value = [
+            {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Proposal Sent'},
+            {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Follow Up'}, {"name":'Converted to Customer'}
+        ]
+
+
         axios.get(url+"?edit=true").then(res => {
             console.log(res.data)
             editData.value = res.data;

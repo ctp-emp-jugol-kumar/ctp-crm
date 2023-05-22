@@ -9,6 +9,7 @@ use App\Models\Domain;
 use App\Models\Expanse;
 use App\Models\Hosting;
 use App\Models\Invoice;
+use App\Models\Note;
 use App\Models\Platform;
 use App\Models\Project;
 use App\Models\Quotation;
@@ -32,11 +33,14 @@ class DashboardController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response
      */
-    public function __invoke(Request $request)
+/*    public function __invoke(Request $request)
     {
         if (!auth()->user()->can('dashboard.show')){
             abort(401);
         }
+
+
+
 /*
         // custom invoice total incomes
         $invoiceTotalSeals = CustomInvoice::sum('total_price');
@@ -179,7 +183,7 @@ class DashboardController extends Controller
 
 
 
-        return Inertia::render('Test');
+//        return Inertia::render('Test');
 
     /*    [
             "trans" => [
@@ -220,5 +224,40 @@ class DashboardController extends Controller
                 'tranByExp' => $tranByExpanse,
             ]
         ]*/
+
+//    }
+//
+    public function __invoke(Request $request){
+        if (Auth::user()->roles()->where('name', 'administrator')->exists()) {
+            $notes = Note::with('users')->get();
+        } else {
+            $notes = Note::with('users')->where(function($query) {
+                $query->whereHas('users', function($q) {
+                    $q->where('user_id', Auth::id());
+                });
+            })->get();
+        }
+
+
+
+
+
+        $clients = Client::query()
+                            ->where('status', 'Follow Up')
+                            ->whereDate('follow_up',Carbon::today())
+                            ->where('is_client', true)
+                            ->get();
+
+
+
+
+        return Inertia::render('Test',[
+            'followup_leads' => Client::where('status', 'Follow Up')->whereDate('follow_up',Carbon::today())->where('is_client', false)->get(),
+            'followup_clients' => $clients,
+            'notes' => $notes,
+        ]);
+
     }
+
+
 }

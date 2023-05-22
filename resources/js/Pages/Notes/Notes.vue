@@ -314,5 +314,8 @@
 .ck-rounded-corners .ck.ck-editor__main>.ck-editor__editable, .ck.ck-editor__main>.ck-editor__editable.ck-rounded-corners{
     min-height: 300px !important;
 }
+.newlineStringStyle {
+    white-space: pre-wrap;
+}
 </style>
 

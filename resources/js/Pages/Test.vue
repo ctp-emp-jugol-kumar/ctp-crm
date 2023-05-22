@@ -9,17 +9,80 @@
     <div class="app-content content ">
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
-            <section id="dashboard-ecommerce">
-                    <div class="row match-height">
-                        <div class="col-md-4 col-sm-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h1 class="text-capitalize">Welcome {{ this.$page.props.auth.user.username }}</h1>
-                                </div>
-                            </div>
+        <section id="dashboard-ecommerce">
+            <div class="row match-height">
+                <div class="col-md-4 col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="text-capitalize">Welcome {{ this.$page.props.auth.user.username }}</h1>
                         </div>
                     </div>
-            </section>
+                </div>
+            </div>
+        </section>
+
+        <div class="row">
+            <div class="col-md-6" v-if="this.$page.props.auth.user.can.includes('leads.index') || this.$page.props.auth.user.role.includes('Administrator')">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Today Followup Leads</h2>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="lead in followup_leads">
+                                    <td>{{ lead.name}}</td>
+                                    <td>{{ lead.email}}</td>
+                                    <td>{{ lead.phone}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6" v-if="this.$page.props.auth.user.can.includes('client.index') || this.$page.props.auth.user.role.includes('Administrator')">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Today Followup Clients</h2>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="client in followup_clients">
+                                <td>{{ client.name}}</td>
+                                <td>{{ client.email}}</td>
+                                <td>{{ client.phone}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <h2>Active Notes</h2>
+            <div class="col-md-6" v-for="note in props.notes">
+                <div class="card" >
+                    <div class="card-body">
+                        <h2 class="card-title"> {{ note.title }}</h2>
+
+                        <p class="newlineStringStyle" v-text="note.notes"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         <!--        <section id="dashboard-ecommerce">
@@ -251,6 +314,8 @@
 
     </div>
     <!-- Dashboard Ecommerce ends -->
+
+
 </template>
 
 
@@ -272,6 +337,9 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 let props = defineProps({
     trans: Object,
+    followup_leads:[],
+    followup_clients:[],
+    notes:[],
 })
 
 /*
@@ -311,3 +379,9 @@ const data = {
 
 
 </script>
+
+<style scoped>
+.newlineStringStyle {
+    white-space: pre-wrap;
+}
+</style>

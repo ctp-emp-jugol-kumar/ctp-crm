@@ -3,6 +3,8 @@
     <UserProfile
         :user="props.user"
         :image="props.image"
+        :showUrl="props.show_url"
+        :errors="props.errors"
     />
 
 </template>
@@ -13,5 +15,7 @@ import UserProfile from "../../../components/UserProfile";
 let props = defineProps({
     user:[],
     image:'',
+    show_url:String,
+    errors:Object,
 })
 </script>

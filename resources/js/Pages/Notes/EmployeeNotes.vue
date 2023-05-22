@@ -24,7 +24,7 @@
                                 <hr>
                                 <div>
                                     <h2>Notes</h2>
-                                    <p v-html="note.notes"></p>
+                                    <p class="newlineStringStyle" v-html="note.notes"></p>
                                 </div>
                             </div>
                         </div>
@@ -64,6 +64,9 @@ let props = defineProps({
 .dp__input_icon_pad {
     padding: 8px 35px !important;
     border-radius: 5px !important;
+}
+.newlineStringStyle {
+    white-space: pre-wrap;
 }
 </style>
 

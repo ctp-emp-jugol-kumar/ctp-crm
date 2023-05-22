@@ -36,6 +36,7 @@ class Client extends Model
         'note',
         'follow_up',
         'status',
+        'is_client'
         // 'user_id',
     ];
     // protected $hidden = [];

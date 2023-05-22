@@ -1,9 +1,9 @@
 <template>
     <TodoLayout :users='users' >
         <div class="card h-100 shadow-none mb-0 pb-0 rounded-0">
-            <div class="card-header rounded-0">
+<!--            <div class="card-header rounded-0">
                 <input type="text" class="form-control border-0" placeholder="Find Your Todo here">
-            </div>
+            </div>-->
             <div class="card-body chat-bg p-0 min-chat-height">
                 <ul id="chat">
                     <li class="d-flex align-items-center justify-content-between todo-item-style p-1"

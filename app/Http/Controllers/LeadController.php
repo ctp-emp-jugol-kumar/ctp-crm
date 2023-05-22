@@ -17,7 +17,7 @@ class LeadController extends Controller
         $search = Request::input('search');
         $clients = Client::query()->with('projects')
             ->latest()
-            ->where('status', '!=', 'Converted to Customer')
+            ->where('is_client', false)
             ->when(Request::input('search'), function ($query, $search) {
                 $query
                     ->where('email', 'like', "%{$search}%")
