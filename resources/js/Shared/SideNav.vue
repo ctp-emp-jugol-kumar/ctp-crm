@@ -169,7 +169,7 @@
                         </Link>
                     </li>
 
-                    <li class=" nav-item" v-else>
+                    <li class=" nav-item"  v-if="this.$page.props.auth.user.can.includes('project.employees')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/project/employee-projects">
                             <vue-feather type="package" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Projects</span>
@@ -200,7 +200,7 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item" v-else>
+                    <li class="nav-item" v-if="this.$page.props.auth.user.can.includes('note.employees')">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/employee-notes">
                             <vue-feather type="file-text" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Notes</span>

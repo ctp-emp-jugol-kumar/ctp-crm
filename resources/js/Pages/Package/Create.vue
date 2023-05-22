@@ -20,15 +20,12 @@
 
                         <div class="row match-height">
                             <div class="col-md-6">
-
                                 <div class="card">
-
                                     <div class="card-header">
                                         <ul>
                                             <li class="text-danger" v-for="error in props.errors">{{ error }}</li>
                                         </ul>
                                     </div>
-
 
                                     <div class="card-body">
                                         <h2 class="card-title">Package Information </h2>
@@ -38,7 +35,7 @@
                                         </div>
                                         <div class="mb-1">
                                             <label class="form-label">Price</label>
-                                            <input v-model="formData.price" type="number" class="form-control" placeholder="e.g Package name">
+                                            <input v-model="formData.price" type="number" class="form-control" placeholder="e.g Package price">
                                         </div>
                                         <div class="">
                                             <label class="form-label">Details</label>
@@ -56,9 +53,9 @@
                                             :options="props.platforms"
                                             style="width:100%"
                                             label="name"
+                                            class="form-control select-padding"
                                             v-model="formData.platformId"
                                             :reduce="item => item.id"
-                                            class="form-control select-padding"
                                             @update:modelValue="loadFeatures"
                                             placeholder="e.g Select Service">
                                                 <template v-slot:option="option">

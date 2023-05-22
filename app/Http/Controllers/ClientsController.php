@@ -115,8 +115,10 @@ class ClientsController extends Controller
             "agents" => ['nullable']
        ]);
 
+
+
        $data['status'] = Request::input("status")["name"];
-       if (Request::input('status') == 'Converted to Customer'){
+       if (Request::input('status') == 'Converted to Customer' || Request::input('create') == 'true'){
            $data['is_client'] = true;
        }
         $client = Client::create($data);
@@ -137,9 +139,9 @@ class ClientsController extends Controller
      */
     public function show($id)
     {
-        if (!auth()->user()->can('client.show') || !auth()->user()->can('leads.show')) {
-            abort(401 );
-        }
+//        if (!auth()->user()->can('client.show') || !auth()->user()->can('leads.show')) {
+//            abort(401 );
+//        }
 
         $user = Client::findOrFail($id)->load('users','transactions','transactions.receivedBy',
             'invoices','invoices.user',

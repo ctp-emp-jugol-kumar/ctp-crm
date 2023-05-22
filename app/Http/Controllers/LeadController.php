@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\URL;
 class LeadController extends Controller
 {
     public function index(){
-        if (!auth()->user()->can('leads.index')){
-            abort(404);
-        }
+//        if (!auth()->user()->can('leads.index')){
+//            abort(404);
+//        }
         $search = Request::input('search');
         $clients = Client::query()->with('projects')
             ->latest()
@@ -70,9 +70,9 @@ class LeadController extends Controller
 
 
     protected function loadDownload($data){
-        if (!auth()->user()->can('leads.download')){
-            abort(404);
-        }
+//        if (!auth()->user()->can('leads.download')){
+//            abort(404);
+//        }
         Pdf::setOption(['enable_php', true]);
 //        return view('reports.pdf_lead_list', compact('data'));
         $pdf = Pdf::loadView('reports.pdf_lead_list', compact('data'));
@@ -80,9 +80,9 @@ class LeadController extends Controller
     }
 
     public function show($id){
-        if (!auth()->user()->can('leads.show')){
-            abort(404);
-        }
+//        if (!auth()->user()->can('leads.show')){
+//            abort(404);
+//        }
         return Client::findOrFail($id);
     }
 

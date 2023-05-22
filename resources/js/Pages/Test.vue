@@ -71,13 +71,12 @@
             </div>
         </div>
 
-        <div class="row mt-3">
+        <div class="row" v-if="this.$page.props.auth.user.can.includes('note.employees') || this.$page.props.auth.user.can.includes('note.index') || this.$page.props.auth.user.role.includes('Administrator')">
             <h2>Active Notes</h2>
             <div class="col-md-6" v-for="note in props.notes">
                 <div class="card" >
                     <div class="card-body">
                         <h2 class="card-title"> {{ note.title }}</h2>
-
                         <p class="newlineStringStyle" v-text="note.notes"></p>
                     </div>
                 </div>

@@ -9,7 +9,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
-                                    <h4 class="card-title">Services Information's </h4>
+                                    <h4 class="card-title">Platform Information's </h4>
                                     <a :href="props.main_url" class="dt-button add-new btn btn-primary">
                                         Go To Platforms
                                     </a>
@@ -29,6 +29,8 @@
                                     <input class="form-control mb-1"
                                            v-model="formData.platform"
                                            type="text" placeholder="e.g Lravel, Vue js, React Js, Javascript etc"/>
+                                    <span v-if="errors.platform" class="error text-sm text-danger">{{ errors.platform }}</span>
+
                                 </div>
                                 <h2 class="card-title">Platform Featured's</h2>
                                 <div class="d-flex align-items-center mb-1 ms-5" v-for="(variant, index) in formData.features">
@@ -78,6 +80,7 @@
 
     const props = defineProps({
         main_url:String,
+        errors:Object,
     })
 
     const formData = useForm({

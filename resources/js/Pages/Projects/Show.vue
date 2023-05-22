@@ -10,7 +10,9 @@
                         <!-- Page header -->
                         <div class="d-lg-flex align-items-center justify-content-between">
                             <div class="mb-2 mb-lg-0">
-                                <h1 class="mb-0 h2 fw-bold text-capitalize">{{ info.name }}</h1>
+                                <a :href="info.name" target="_blank">
+                                    <h1 class="mb-0 h2 fw-bold text-capitalize">{{ info.name }}</h1>
+                                </a>
                             </div>
                             <div class="d-flex align-items-center">
                                 <!-- avatar group -->
