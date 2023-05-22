@@ -98,7 +98,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-12 mb-2" v-if="props.info.invoice">
+                <div class="col-md-12 mb-2" v-if="props.info.invoice && this.$page.props.auth.user.can.includes('project.budget') || this.$page.props.auth.user.role.includes('Administrator')">
                     <!-- card -->
                     <div class="card">
                         <div class="card-header">
