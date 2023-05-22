@@ -34,10 +34,30 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class=" card-title ">Upload Backup File Url</h4>
-                    <input type="text" v-model="backupData.files" class="form-control" placeholder="e.g https://dricve.google.com/project-url">
-                    <p v-if="errors.files" class="text-danger">{{ errors.files }}</p>
-                    <button @click="uploadBackup" class="btn btn-primary btn-sm mt-2">Save Backup</button>
+                    <h2 class="card-title">Upload Backup File Url</h2>
+                    <div class="d-flex align-items-center mb-1 ms-5" v-for="(variant, index) in backupData.files">
+                        <input type="text"
+                               class="form-control mb-1 rounded-start ms-1"
+                               placeholder="e.g backup file location." v-model="backupData.files[index]" >
+                        <button
+                            v-if="index === backupData.files.length - 1 "
+                            class="btn btn-primary btn-sm float-end mb-1 ms-1"
+                            type="button"
+                            @click="addRow()">
+                            <vue-feather type="plus" size="20"/>
+                        </button>
+                        <button
+                            v-else
+                            class="btn btn-danger btn-sm float-end mb-1 ms-1"
+                            @click="deleteRow(index)"
+                            data-repeater-delete
+                            type="button">
+                            <vue-feather type="trash" size="20"/>
+                        </button>
+                    </div>
+                    <div class="d-flex flex-wrap mb-0">
+                        <button @click="uploadBackup" class="btn btn-primary me-1">Save</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -90,7 +110,7 @@ const changeStatus = () =>{
 
 
 const backupData = useForm({
-    files:props.info.files,
+    files: JSON.parse(props.info.backup)
 })
 const errors = ref({});
 const uploadBackup = () =>{
@@ -106,7 +126,11 @@ const uploadBackup = () =>{
         },
     })
 }
+const addRow = () => {
+    backupData.files.push(null)
+}
 
+const deleteRow = (index) => backupData.files.splice(index, 1)
 
 </script>
 

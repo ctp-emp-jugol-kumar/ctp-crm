@@ -71,7 +71,18 @@ export function useJson(){
         {name: "Complete"},
     ];
 
-    return {status, color, priority}
+    const clientCurrentStatus = [
+        {"name":'New Lead'},
+        {"name":'Contacted'},
+        {"name":'Proposal Sent'},
+        {"name":'Quote Sent'},
+        {"name":'Qualified'},
+        {"name":'Disqualified'},
+        {"name":'Follow Up'},
+        {"name":'Converted to Customer'}
+    ]
+
+    return {status, color, priority, clientCurrentStatus}
 
 
 }

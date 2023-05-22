@@ -191,11 +191,12 @@
                     <div class="col-md">
                         <label>Client Status: </label>
                         <v-select v-model="createForm.status"
-                                  @update:modelValue="subCategorySelected"
                                   label="name"
                                   class="form-control select-padding"
                                   :options="status"
                                   placeholder="Select Status"></v-select>
+                        <span v-if="errors.status" class="error text-sm text-danger">{{ errors.status }}</span>
+
                     </div>
                     <div class="col-md">
                         <label>Assign Agent: </label>

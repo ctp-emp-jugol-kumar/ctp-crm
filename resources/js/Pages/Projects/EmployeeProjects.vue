@@ -69,7 +69,9 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>{{ projects.project.name  }}</td>
+                                            <td>
+                                                <a href="https://jugolkumar.com" target="_blank">{{ projects.project.name }}</a>
+                                            </td>
 
                                             <th>
                                                 <div class="avatar-group mt-50">

@@ -24,6 +24,7 @@ class Client extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
+    protected $dates = ['follow_up'];
     protected $fillable = [
         'name',
         'email',
@@ -33,6 +34,7 @@ class Client extends Model
         'secondary_email',
         'secondary_phone',
         'note',
+        'follow_up',
         'status',
         // 'user_id',
     ];

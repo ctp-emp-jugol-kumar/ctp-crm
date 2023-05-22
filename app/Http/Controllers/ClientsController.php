@@ -111,7 +111,7 @@ class ClientsController extends Controller
             "company" => ['nullable'],
             "address" => ['nullable', 'max:150'],
             "note" => ['nullable'],
-            "status" => ['nullable'],
+            "status" => ['required'],
             "agents" => ['nullable']
        ]);
 
@@ -174,6 +174,21 @@ class ClientsController extends Controller
 //        if (!auth()->user()->can('client.edit') || !auth()->user()->can('leads.edit')) {
 //            abort(401 );
 //        }
+//        return Request::all();
+
+        if(Request::input('status') == 'Follow Up'){
+            Request::validate([
+                'followDate' => 'required'
+            ]);
+
+            $client->status = Request::input('status');
+            $client->follow_up = date('Y-m-d H:i:s', strtotime(Request::input('followDate')));
+            $client->save();
+            return back();
+        }
+
+
+
 
         $data = $request->validated();
 
@@ -193,6 +208,9 @@ class ClientsController extends Controller
                 }
             }
         }
+
+        $data['follow_up'] = null;
+
 
         $client->update($data);
         $client->users()->sync($agents);

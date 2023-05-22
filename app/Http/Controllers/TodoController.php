@@ -227,9 +227,7 @@ class TodoController extends Controller
 
             if (Request::input('show_data') == 'true'){
                 if (Request::input('notification_id')){
-                    DB::table('notifications')->where('id', Request::input('notification_id'))->update([
-                        'read_at' => now()
-                    ]);
+                    DB::table('notifications')->where('id', Request::input('notification_id'))->delete();
                 }
                 $replais = Todo::query()->where('todo_id', $id)->with('user')->get();
                 $replais->map(function ($todo){
@@ -245,9 +243,7 @@ class TodoController extends Controller
             }
         }else{
             if (Request::input('notification_id')){
-                DB::table('notifications')->where('id', Request::input('notification_id'))->update([
-                    'read_at' => now()
-                ]);
+                DB::table('notifications')->where('id', Request::input('notification_id'))->delete();
             }
         }
     }
@@ -283,11 +279,18 @@ class TodoController extends Controller
      */
     public function destroy($id)
     {
+
         $todo = Todo::findOrFail($id);
-        if($todo->file && Storage::exists($todo->file)){
+
+// Delete the main "todo" record and its related "replay" records
+        $todo->replayTodos()->delete();
+        $todo->delete();
+
+// Delete the file associated with the main "todo" record
+        if ($todo->file && Storage::exists($todo->file)) {
             Storage::delete($todo->file);
         }
-        $todo->delete();
+
         return back();
     }
 }

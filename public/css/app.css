@@ -24713,3 +24713,7 @@ div.dataTables_wrapper .dataTables_info {
 .select-padding {
   padding: 4px 0 0 5px !important;
 }
+
+.single-datepiker .dp__input_wrap svg {
+  margin-left: 0 !important;
+}

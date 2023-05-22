@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\CustomInvoice;
-use App\Models\invoice;
+use App\Models\Invoice;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -73,7 +73,7 @@ class ProjectController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
     public function create()
     {
@@ -102,7 +102,7 @@ class ProjectController extends Controller
     {
 
         Request::validate([
-           'name' => 'required',
+           'name' => 'required|url',
            'invoiceId' => 'required',
            'date' => 'required',
            'start_date' => 'required',
@@ -252,8 +252,9 @@ class ProjectController extends Controller
         Request::validate([
            'files' => 'required'
         ]);
+
         $project = Project::findOrFail($id);
-        $project->files = Request::input('files');
+        $project->backup = json_encode(Request::input('files'));
         $project->save();
         return back();
     }

@@ -27,6 +27,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\WorkController;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PackageController;
@@ -186,6 +187,10 @@ Route::get("/test", function(){
     return inertia("ntest");
 });
 
+
+Route::get('/storage',function (){
+    Artisan::call('storage:link');
+});
 
 
 
