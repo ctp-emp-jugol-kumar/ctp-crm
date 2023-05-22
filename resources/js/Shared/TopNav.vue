@@ -47,41 +47,38 @@
                             </div>
                         </li>
 
-                        <li class="scrollable-container media-list">
-                            <a class="d-flex" @click="showItem(noti.data.notefication.id, noti.id)" v-for="noti in $page.props.auth.user.notifications">
+                        <li class="scrollable-container media-list overflow-y-scroll notification-scroll">
+                            <div class="d-flex cursor-pointer " v-for="noti in $page.props.auth.user.notifications" @click="showItem(noti.data.notefication?.id, noti.id)">
                                 <div class="list-item d-flex align-items-start">
                                     <div class="me-1">
                                         <div class="avatar bg-light-danger">
                                             <div class="avatar-content">
-                                                <img src="/images/avatar.png" alt="" width="32" height="32">
+                                                <img :src="noti.data.notefication?.user?.photo" alt="" width="32" height="32">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="list-item-body flex-grow-1">
                                         <p class="media-heading">
-                                            <span class="fw-bolder text-capitalize">{{  noti.data.data.name  }}</span>
-                                            <span style="font-size: 10px; margin-left: 5px;">add Todo</span>
+                                            <span class="fw-bolder text-capitalize">{{  noti.data.notefication?.user?.name  }}</span>
+                                            <span style="font-size: 10px; margin-left: 5px;">{{ noti.data.notefication.type }}</span>
                                         </p>
 
-                                        <div class="notification-text">
-                                            <span>{{ noti.data.notefication.title }}</span>
-                                            <span v-if="noti.data.notefication.file">
-                                                |
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="notification-text">
+                                                <span>{{ noti.data.notefication?.title }}</span>
+                                                <span v-if="noti.data.notefication?.file">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 15px;">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                                                 </svg>
                                             </span>
-                                            <span style="margin-left:5px;">{{ noti.data.notefication.file }}</span>
+                                                <span style="margin-left:5px;">{{ noti.data.notefication?.about_todo }}</span>
+                                            </div>
+
+                                            <span class="unread-badge" v-if="noti.read_at === null"></span>
                                         </div>
-
-
-                                        <!--                                            <span style="margin:0 3px;"></span>-->
-                                        <!--                                            <span v-if="noti.data.notefication.file">
-                                                                                        <span></span>
-                                                                                    </span>-->
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
 <!--                        <li class="dropdown-menu-footer"><a class="btn btn-primary w-100" href="#">Read all notifications</a></li>-->
                     </ul>
@@ -172,6 +169,7 @@ import DarkToggle from "../components/DarkToggle";
 import {ref} from "vue";
 import axios from "axios";
 import moment from "moment";
+import {Inertia} from "@inertiajs/inertia";
 
 const props = defineProps({
   toggleVerticalMenuActive: {
@@ -183,15 +181,26 @@ const props = defineProps({
 
 const isopen = ref(false);
 const showData = ref();
-const openNotefication = () => isopen.value = !isopen.value;
-const showItem = (id, notify_id)=>{
-    axios.get('/admin/todos'+'/'+id+'?show_data=true&notification_id='+notify_id).then((res) =>{
-        showData.value = res.data;
-        document.getElementById('showTodo').$vb.modal.show()
-    }).catch((err)=>{
-        console.log(err)
-    })
+const openNotefication = () => {
+    // axios.get('/admin/read-all-notification').then((res) => console.log(res))
+    isopen.value = !isopen.value
+};
+const showItem = (id, noti_id)=>{
+    Inertia.get(`/admin/todos/${id}?show_data=true&notification_id=${noti_id}`);
 }
 
 
 </script>
+<style>
+.unread-badge{
+    width: 13px;
+    height: 12px;
+    background: #7367f0;
+    border-radius: 100%;
+    display: block;
+    position: absolute;
+    right: 24px;
+    top: auto;
+    bottom: auto;
+}
+</style>

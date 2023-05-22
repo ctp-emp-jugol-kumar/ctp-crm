@@ -1,5 +1,6 @@
 import {defineStore} from "pinia";
 import moment from "moment";
+import {Inertia} from "@inertiajs/inertia";
 
 
 export const useQuotationStore = defineStore('quotation', {
@@ -8,6 +9,7 @@ export const useQuotationStore = defineStore('quotation', {
         clientId:null,
         date:null,
         subject:null,
+        users:null,
     }),
 
 
@@ -23,6 +25,9 @@ export const useQuotationStore = defineStore('quotation', {
         },
         setQuotId(qutId){
             this.quotationId = qutId;
+        },
+        setUsers(){
+            axios.get('/admin/users/all-users').then((res) => this.users = res.data).catch((err) => '')
         }
     },
 
@@ -38,6 +43,9 @@ export const useQuotationStore = defineStore('quotation', {
         },
         getSubject(){
             return this.subject;
+        },
+        getUsers(){
+            return this.users;
         }
 
     }

@@ -70,7 +70,9 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>{{ projects.project.name  }}</td>
+                                            <td>
+                                                <a href="https://jugolkumar.com" target="_blank">{{ projects.project.name }}</a>
+                                            </td>
 
                                             <td>{{ projects.start_date + " - " + projects.end_date }} </td>
                                             <th>

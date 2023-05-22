@@ -17,7 +17,7 @@ class LeadController extends Controller
         $search = Request::input('search');
         $clients = Client::query()->with('projects')
             ->latest()
-            ->where('status', '!=', 'Converted to Customer')
+            ->where('is_client', false)
             ->when(Request::input('search'), function ($query, $search) {
                 $query
                     ->where('email', 'like', "%{$search}%")
@@ -51,6 +51,7 @@ class LeadController extends Controller
                 'email' => $client->email,
                 'photo' => '/images/avatar.png',
                 'status' => $client->status,
+                'followUp' => $client->follow_up,
                 'created_at' => $client?->created_at?->format('d M Y'),
                 'show_url' => URL::route('leads.show', $client->id)
             ]);

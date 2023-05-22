@@ -22,10 +22,35 @@ class TodoController extends Controller
      */
     public function index()
     {
+        $todos = Todo::query()->with('user')
+            ->whereNull('todo_id')
+            ->when(Request::input('search'), function ($query, $search) {
+                $query->where('title', 'like', "%$search%")
+                    ->orWhere('about_todo', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->get();
+
+        if (!in_array( 'Administrator', Auth::user()->getRoleNames()->toArray())) {
+            $todos = $todos->filter(function ($todo){
+                $user_ids = json_decode($todo['users']);
+                return in_array(Auth::id(), $user_ids) || $todo['user_id'] == Auth::id();
+            });
+        }
+
+        return inertia('Todo/AllTodos',[
+            'users' =>  User::where('id', '!=', Auth::id())->get(),
+            'todos' => ['data' => $todos],
+            'main_url' => URL::route('todos.index'),
+        ]);
+    }
 
 
+    public function myTodos(){
         $todos = Todo::query()
             ->with('user')
+            ->where('user_id', Auth::id())
+            ->whereNull('todo_id')
             ->when(Request::input('search'), function ($query, $serch){
                 $query->where('title', 'like', "%$serch%")
                     ->orWhere('about_todo', 'like', "%{$serch}%");
@@ -34,30 +59,73 @@ class TodoController extends Controller
             ->paginate(Request::input('perPage') ?? 10)
             ->withQueryString();
 
-        return inertia('Todo/Index',[
+        return inertia('Todo/MyTodos',[
             'users' =>  User::where('id', '!=', Auth::id())->get(),
             'todos' => $todos,
             'main_url' => URL::route('todos.index'),
         ]);
     }
 
-    public function extra(){
+    public function completeTodos(){
 
-        $todos = Todo::with('user')->latest()->get();
-        $myTodos = Todo::with('user')->where('user_id', Auth::id())->latest()->get();
-        $comTodos = Todo::with('user')->where('priority',  '=', 'Complete')->latest()->get();
+        $todos = Todo::query()->with('user')
+            ->whereNull('todo_id')
+            ->where('priority',  '=', 'Complete')
+            ->when(Request::input('search'), function ($query, $search) {
+                $query->where('title', 'like', "%$search%")
+                    ->orWhere('about_todo', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->get();
 
 
-        $filtedTodos =[];
-        $empTodos = $todos->filter(function ($todo){
-            $user_ids = json_decode($todo['users']);
-            return in_array(Auth::id(), $user_ids) || $todo['user_id'] == Auth::id();
-        });
+        return inertia('Todo/ComplateTodos',[
+            'users' =>  User::where('id', '!=', Auth::id())->get(),
+            'todos' => ['data' => $todos],
+            'main_url' => URL::route('todos.index'),
+        ]);
+    }
 
-//        return $empTodos;
+    public function replayTodo(){
+        $todo = Todo::findOrFail(Request::input('todo_id'));
 
+        $path = null;
+        if (Request::hasFile('file')) {
+            $fileName = Request::file('file')->getClientOriginalName();
+            $path = Storage::putFileAs('public/todos', Request::file('file'), $fileName);
+        }
+
+        $todo = Todo::create([
+            'title' => Request::input('title'),
+            'users' => $todo->users,
+            'date' => now()->format('d-y-m h:m:s'),
+            'about_todo' => Request::input('message'),
+            'file' => $path,
+            'user_id' => Auth::id(),
+            'priority' => null,
+            'todo_id' => $todo->id,
+        ]);
+
+        $todo->load('user');
+        $admins = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Administrator');
+        })->pluck('id');
+
+        $ids = array_filter(json_decode($todo->users), function($value) { return $value !== Auth::id(); });
+
+        $authId = Auth::id();
+        $mergedArray = array_merge($ids, $admins->toArray());
+        if (in_array($authId, $mergedArray)) {
+            $mergedArray = array_values(array_diff($mergedArray, [$authId]));
+        }
+        $users = User::whereIn('id', $mergedArray)->get();
+        $todo->type = 'Replay';
+        $todo->load('user');
+        Notification::send($users, new TodoNotefication($todo));
+        return back();
 
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -67,6 +135,11 @@ class TodoController extends Controller
     public function create()
     {
         //
+    }
+
+    public function readAllNotification(){
+        Auth::user()->unreadNotifications->markAsRead();
+        return back();
     }
 
     /**
@@ -121,9 +194,9 @@ class TodoController extends Controller
 
         $ids = array_filter(json_decode($todo->users), function($value) { return $value !== Auth::id(); });
         $users = User::whereIn('id', $ids)->get();
-
+        $todo->type = 'Create';
+        $todo->load('user');
         Notification::send($users, new TodoNotefication($todo));
-
         return back();
     }
 
@@ -135,26 +208,42 @@ class TodoController extends Controller
      */
     public function show($id)
     {
-        $todo = Todo::findOrFail($id);
-        if (Request::input('complete') == 'true'){
-            $todo->priority = 'Complete';
-            $todo->update();
-            return back();
-        }
+        $todo = Todo::where('id', $id)->first();
 
+        if ($todo){
+            if (Request::input('status')){
+                $todo->priority = Request::input('status');
+                $todo->update();
 
-        $todo->downloadUrl = $todo->file ? Storage::url($todo->file) : null;
+                $ids = array_filter(json_decode($todo->users), function($value) { return $value !== Auth::id(); });
+                $users = User::whereIn('id', $ids)->get();
+                $todo->type = 'Change Status';
+                $todo->load('user');
+                Notification::send($users, new TodoNotefication($todo));
+                return back();
+            }
 
-        if (Request::input('show_data') == 'true'){
+            $todo->downloadUrl = $todo->file ? Storage::url($todo->file) : null;
 
-            if (Request::input('notification_id')){
-                DB::table('notifications')->where('id', Request::input('notification_id'))->update([
-                    'read_at' => now(),
+            if (Request::input('show_data') == 'true'){
+                if (Request::input('notification_id')){
+                    DB::table('notifications')->where('id', Request::input('notification_id'))->delete();
+                }
+                $replais = Todo::query()->where('todo_id', $id)->with('user')->get();
+                $replais->map(function ($todo){
+                    $todo->downloadUrl = $todo->file ? Storage::url($todo->file) : null;
+                    return $todo;
+                });
+
+                return inertia('Todo/SingleTodo',[
+                    'todo' => $todo->load('user'),
+                    'replays' => $replais,
+                    'main_url' => URL::route('todos.index'),
                 ]);
-
-                return $todo;
-            }else{
-                return $todo;
+            }
+        }else{
+            if (Request::input('notification_id')){
+                DB::table('notifications')->where('id', Request::input('notification_id'))->delete();
             }
         }
     }
@@ -190,11 +279,18 @@ class TodoController extends Controller
      */
     public function destroy($id)
     {
+
         $todo = Todo::findOrFail($id);
-        if($todo->file && Storage::exists($todo->file)){
+
+// Delete the main "todo" record and its related "replay" records
+        $todo->replayTodos()->delete();
+        $todo->delete();
+
+// Delete the file associated with the main "todo" record
+        if ($todo->file && Storage::exists($todo->file)) {
             Storage::delete($todo->file);
         }
-        $todo->delete();
+
         return back();
     }
 }

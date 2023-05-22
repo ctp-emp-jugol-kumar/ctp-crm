@@ -2,6 +2,7 @@ import * as Swal from "sweetalert2";
 import {Inertia} from "@inertiajs/inertia";
 import {ref} from "vue";
 
+
 export function useAction(){
 
     const swalSuccess = (msg = null) =>{
@@ -51,7 +52,8 @@ export function useAction(){
 
     const isShow = ref(false);
     const changeIsShow = (value) => isShow.value = value;
+    const chatStyle = process.env.CHAT_STYLE;
 
 
-    return {swalSuccess, swalError, deleteItem, isShow, changeIsShow}
+    return {swalSuccess, swalError, deleteItem, isShow, changeIsShow, chatStyle}
 }

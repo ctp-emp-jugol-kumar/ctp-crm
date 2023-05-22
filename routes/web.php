@@ -27,6 +27,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\WorkController;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PackageController;
@@ -54,6 +55,7 @@ Route::prefix('admin')->group(function(){
         Route::get('dashboard', DashboardController::class);
         // user management
         Route::resource('users', AdminController::class);
+        Route::get('all-users', [AdminController::class, 'allUsers']);
         Route::post('users/{id}', [AdminController::class, 'update']);
         Route::post('user/update-pass/{id}', [AdminController::class, 'updateCredentials'])->name('updateCredentials');
         Route::post('user/update-profile-image', [AdminController::class, 'uploadProfile'])->name('users.uploadProfile');
@@ -141,6 +143,11 @@ Route::prefix('admin')->group(function(){
         Route::get('employee-notes', [NoteController::class, 'employeeNotes'])->name('notes.empNots');
 
         Route::resource('todos', TodoController::class);
+        Route::get('change-todo-status/{id}', [TodoController::class, 'show']);
+        Route::post('todos/replay-todo', [TodoController::class, 'replayTodo'])->name('replayTodo');
+        Route::get('my-todos', [TodoController::class, 'myTodos'])->name('myTodos');
+        Route::get('complete-todos', [TodoController::class, 'completeTodos'])->name('completeTodos');
+        Route::get('read-all-notification', [TodoController::class, 'readAllNotification'])->name('readAllNotification');
     });
 
     Route::post('/logout', [LoginController::class, 'destroy']);
@@ -180,6 +187,10 @@ Route::get("/test", function(){
     return inertia("ntest");
 });
 
+
+Route::get('/storage',function (){
+    Artisan::call('storage:link');
+});
 
 
 

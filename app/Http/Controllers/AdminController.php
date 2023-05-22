@@ -49,6 +49,12 @@ class AdminController extends Controller
 
 
     }
+    public function allUsers(){
+//        if (!Request::ajax()){
+//            abort(404);
+//        }
+        return User::where('id', '!=', Auth::id())->get();
+    }
 
     public function create(){
         //

@@ -29,7 +29,7 @@ class ClientsController extends Controller
             $search = Request::input('search'),
             'clients' => Client::query()
                 ->with('projects')
-                ->where('status', '=', 'Converted to Customer')
+                ->where('is_client', true)
                 ->latest()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query
@@ -111,13 +111,15 @@ class ClientsController extends Controller
             "company" => ['nullable'],
             "address" => ['nullable', 'max:150'],
             "note" => ['nullable'],
-            "status" => ['nullable'],
+            "status" => ['required'],
             "agents" => ['nullable']
        ]);
 
        $data['status'] = Request::input("status")["name"];
-
-       $client = Client::create($data);
+       if (Request::input('status') == 'Converted to Customer'){
+           $data['is_client'] = true;
+       }
+        $client = Client::create($data);
        if (Request::input('agents') != null){
             $client->users()->attach(Request::input('agents'));
        }
@@ -175,6 +177,27 @@ class ClientsController extends Controller
 //            abort(401 );
 //        }
 
+
+
+        if(Request::input('status') == 'Follow Up'){
+            Request::validate([
+                'followDate' => 'required'
+            ]);
+            if (Request::input('isClient')){
+                $client->is_client = true;
+            }else{
+                $client->is_client = false;
+            }
+
+            $client->status = Request::input('status');
+            $client->follow_up = date('Y-m-d H:i:s', strtotime(Request::input('followDate')));
+            $client->save();
+            return back();
+        }
+
+
+
+
         $data = $request->validated();
 
         if(is_array(Request::input('status'))){
@@ -193,6 +216,9 @@ class ClientsController extends Controller
                 }
             }
         }
+
+        $data['follow_up'] = null;
+
 
         $client->update($data);
         $client->users()->sync($agents);

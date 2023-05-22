@@ -24,11 +24,11 @@
                                                 <img :src="props.user.photo ?? $page.props.auth.MAIN_URL+props.image" class="rounded me-2"  style="width: 140px;height: 140px;"  alt="avatar">
                                             </span>
                                                 <div class="d-flex flex-column ml-1">
-                                                    <div class="mb-1">
-                                                        <h4 class="mb-0 text-capitalize"> {{ props.user.name }} </h4>
-                                                        <p class="card-text">{{ props.user.email }}</p>
-                                                        <p class="badge badge-light-purple text-capitalize"> {{ props.user.status }} </p>
-                                                    </div>
+                                                    <h4 class="mb-0 text-capitalize"> {{ props.user.name }} </h4>
+                                                    <p class="card-text">{{ props.user.email }}</p>
+                                                    <p class="badge badge-light-purple text-capitalize"> {{ props.user.status }} </p>
+                                                    <p v-if="props.user?.follow_up" v-c-tooltip="'follow up date'">{{ moment(props.user?.follow_up).format('ll')  }}</p>
+                                                    <button @click="editClient" class="btn-sm btn btn-primary">Change Status</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -154,6 +154,140 @@
     </div>
 
 
+
+
+    <Modal id="editClient" title="Show Client" v-vb-is:modal :size="followUp ? 'sm' : 'lg'">
+        <form @submit.prevent="updateClientForm(editData.id)">
+            <div class="modal-body">
+                <div class="row mb-1" :class="{ 'd-none' : followUp }">
+                    <div class="col-md">
+                        <label>Name:
+                            <Required/>
+                        </label>
+                        <div class=null>
+                            <input v-model="updateForm.name" type="text" placeholder="Name" class="form-control">
+                            <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <label>Email: <span class="text-danger">*</span></label>
+                        <div class=null>
+                            <input v-model="updateForm.email" type="email" placeholder="eg.example@creativetechpark.com"
+                                   class="form-control">
+                            <span v-if="errors.email" class="error text-sm text-danger">{{ errors.email }}</span>
+                        </div>
+                    </div>
+                </div >
+                <div class="row mb-1" :class="{ 'd-none' : followUp }">
+                    <div class="col-md">
+                        <label>Secondary Email: </label>
+                        <input v-model="updateForm.secondary_email" type="email" placeholder="second.eg@ctpbd.com"
+                               class="form-control">
+                        <span v-if="errors.secondary_email" class="error text-sm text-danger">{{
+                                errors.secondary_email
+                            }}</span>
+                    </div>
+                    <div class="col-md">
+                        <label>Phone: <span class="text-danger">*</span></label>
+                        <input v-model="updateForm.phone" type="text" placeholder="+88017********" class="form-control">
+                        <span v-if="errors.phone" class="error text-sm text-danger">{{ errors.phone }}</span>
+                    </div>
+                </div>
+                <div class="row mb-1" :class="{ 'd-none' : followUp }">
+                    <div class="col-md">
+                        <label>Secondary Phone: </label>
+                        <input v-model="updateForm.secondary_phone" type="text" placeholder="+88017********"
+                               class="form-control">
+                        <span v-if="errors.secondary_phone" class="error text-sm text-danger">{{
+                                errors.secondary_phone
+                            }}</span>
+                    </div>
+                    <div class="col-md">
+                        <label>Company: </label>
+                        <input v-model="updateForm.company" type="text" placeholder="Enter Company Name"
+                               class="form-control">
+                        <span v-if="errors.company" class="error text-sm text-danger">{{ errors.company }}</span>
+                    </div>
+                </div>
+                <div class="row mb-1" :class="{ 'd-none' : followUp }">
+                    <div class="col-md">
+                        <label>Address: </label>
+                        <textarea v-model="updateForm.address" type="text" placeholder="Enter Full Address" rows="5"
+                                  class="form-control"></textarea>
+                        <span v-if="errors.name" class="error text-sm text-danger">{{ errors.address }}</span>
+                    </div>
+                    <div class="col-md">
+                        <label>Nots: </label>
+                        <textarea v-model="updateForm.note" type="text" placeholder="Enter note messages" rows="5"
+                                  class="form-control"></textarea>
+                        <span v-if="errors.note" class="error text-sm text-danger">{{ errors.note }}</span>
+                    </div>
+                </div>
+                <div class="row mb-1" :class="{'d-none' : !followUp}">
+                    <div class="col-md">
+                        <label>Follow Up Date:
+                            <Required/>
+                        </label>
+                        <div class="single-datepiker">
+                            <Datepicker v-model="updateForm.followDate" :monthChangeOnScroll="false"
+                                        placeholder="Select Date" autoApply></Datepicker>
+                            <span v-if="errors.followDate" class="error text-sm text-danger">{{ errors.followDate }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <label>Client Status: </label>
+                        <v-select v-model="updateForm.status"
+                                  label="name"
+                                  @update:modelValue="changeStatus"
+                                  class="form-control select-padding"
+                                  :options="status"
+                                  :reduce="option => option.name"
+                                  placeholder="Select Status"></v-select>
+                    </div>
+
+                    <div class="col-md" :class="{ 'd-none' : followUp }">
+                        <label>Assign Agent: </label>
+
+                        <v-select
+                            multiple
+                            v-model="updateForm.agents"
+                            :options="users"
+                            class="form-control select-padding"
+                            placeholder="Select Assign Employee"
+                            :reduce="user => user.id"
+                            label="name">
+                            <template v-slot:option="option">
+                                <li class="d-flex align-items-start py-1">
+                                    <div class="avatar me-75">
+                                        <img :src="`${option.photo}`" alt="" width="38" height="38">
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-between w-100">
+                                        <div class="me-1 d-flex flex-column">
+                                            <strong class="mb-25">{{ option.name }}</strong>
+                                            <span >{{ option.email }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </template>
+                        </v-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit
+                </button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel
+                </button>
+            </div>
+        </form>
+    </Modal>
+
+
 </template>
 
 <script setup>
@@ -164,6 +298,9 @@ import Invoice from './Uerprofile/Invoice'
 import Project from './Uerprofile/Project'
 import Domain from './Uerprofile/Domain'
 import Hosting from './Uerprofile/Hosting'
+import Modal from './Modal.vue'
+import moment from "moment";
+
 import {useDate} from '../composables/useDate.js'
 import {ref} from "vue";
 import {Inertia} from "@inertiajs/inertia";
@@ -174,7 +311,72 @@ let {formatted} = useDate();
 let props = defineProps({
     user:[],
     image:String,
+    showUrl:String,
+    errors:Object,
 })
+
+let status = [
+    {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Proposal Sent'},
+    {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'},  {"name":'Follow Up'}, {"name":'Converted to Customer'},
+]
+
+const followUp = ref(false);
+const changeStatus = (event) =>{
+    followUp.value = event === 'Follow Up';
+}
+
+let updateForm = useForm({
+    name: null,
+    email: null,
+    secondary_email: null,
+    phone: null,
+    secondary_phone: null,
+    company: null,
+    address: null,
+    note: null,
+    status: null,
+    agents: null,
+    isClient:true,
+})
+
+let editData = ref([]);
+
+let editClient = (url) => {
+    axios.get(props.showUrl+"?edit=true").then(res => {
+        editData.value = res.data;
+        updateForm.name = res.data.name;
+        updateForm.email = res.data.email;
+        updateForm.secondary_email = res.data.secondary_email;
+        updateForm.phone = res.data.phone;
+        updateForm.secondary_phone = res.data.secondary_phone;
+        updateForm.company = res.data.company;
+        updateForm.address = res.data.address;
+        updateForm.note = res.data.note;
+        updateForm.status = res.data.status;
+        updateForm.agents = res.data.users;
+
+        document.getElementById('editClient').$vb.modal.show();
+    }).catch(err => {
+        console.log(err);
+    });
+}
+
+
+
+let updateClientForm = (id) => {
+    Inertia.put(props.showUrl, updateForm, {
+        preserveState: true,
+        onSuccess: () => {
+            document.getElementById('editClient').$vb.modal.hide()
+            Swal.fire(
+                'Saved!',
+                'Your file has been Updated.',
+                'success'
+            )
+        },
+    })
+}
+
 
 </script>
 
@@ -199,6 +401,9 @@ export default {
         }
     }
 }
+</script>
+
+<script setup>
 </script>
 
 

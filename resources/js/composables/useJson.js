@@ -63,8 +63,26 @@ export function useJson(){
         return color;
     }
 
+    const priority = [
+        {name: "High"},
+        {name: "Low"},
+        {name: "Medium"},
+        {name: "In Process"},
+        {name: "Complete"},
+    ];
 
-    return {status, color}
+    const clientCurrentStatus = [
+        {"name":'New Lead'},
+        {"name":'Contacted'},
+        {"name":'Proposal Sent'},
+        {"name":'Quote Sent'},
+        {"name":'Qualified'},
+        {"name":'Disqualified'},
+        {"name":'Follow Up'},
+        {"name":'Converted to Customer'}
+    ]
+
+    return {status, color, priority, clientCurrentStatus}
 
 
 }

@@ -36,6 +36,7 @@ class Project extends Model
         'description',
         'credential',
         'status',
+        'backup',
         'progress',
         'files',
     ];
