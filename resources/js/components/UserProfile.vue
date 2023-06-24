@@ -9,31 +9,58 @@
                 <div class="content-header row">
                 </div>
                 <div class="content-body">
-                    <div class="row match-height">
-                        <div class="col-md-7 col-lg-8 col-xl-12 col-12">
-                            <div class="card">
-                                <!---->
-                                <!---->
-                                <div class="card-body">
-                                    <!---->
-                                    <!---->
-                                    <div class="row">
-                                        <div class="d-flex justify-content-between flex-column col-xl-6 col-21">
-                                            <div class="d-flex justify-content-start">
+
+                    <div class="">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 d-flex justify-content-between flex-column">
+                                        <div class="d-flex justify-content-start">
                                             <span class="b-avatar badge-light-danger rounded">
                                                 <img :src="props.user.photo ?? $page.props.auth.MAIN_URL+props.image" class="rounded me-2"  style="width: 140px;height: 140px;"  alt="avatar">
                                             </span>
-                                                <div class="d-flex flex-column ml-1">
-                                                    <h4 class="mb-0 text-capitalize"> {{ props.user.name }} </h4>
-                                                    <p class="card-text">{{ props.user.email }}</p>
-                                                    <p class="badge badge-light-purple text-capitalize"> {{ props.user.status }} </p>
-                                                    <p v-if="props.user?.follow_up" v-c-tooltip="'follow up date'">{{ moment(props.user?.follow_up).format('ll')  }}</p>
+                                            <div class="d-flex flex-column ml-1">
+                                                <h4 class="mb-0 text-capitalize"> {{ props.user.name }} </h4>
+                                                <p class="card-text">{{ props.user.email }}</p>
+                                                <p class="badge badge-light-purple text-capitalize"> {{ props.user.status }} </p>
+                                                <p v-if="props.user?.follow_up" v-c-tooltip="'follow up date'">{{ moment(props.user?.follow_up).format('ll')  }}</p>
+                                                <div class="d-flex align-items-center gap-1">
                                                     <button @click="editClient" class="btn-sm btn btn-primary">Change Status</button>
+                                                    <button v-if="props.user?.note" class="btn btn-info btn-sm" @click="showClientNote" v-c-tooltip="'click for show client note.'">
+                                                        <vue-feather type="info"/>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-6 col-12">
-                                            <table class="mt-2 mt-xl-0 w-100">
+                                    </div>
+                                    <div class="col-md-4 col-12">
+                                        <h2>Assigned Users
+                                            <vue-feather type="edit" class="cursor-pointer" @click="editClient"/>
+                                        </h2>
+                                        <div class="row">
+                                            <div class="col-md-6 col-12" v-for="(developer, index) in user.users" :key="developer.id">
+                                                <div class="card mb-4">
+                                                    <!-- card body  -->
+                                                    <div class="card-body py-1 px-1">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="avatar avatar-lg">
+                                                                <img :src="developer.photo" alt="" class="rounded-circle">
+                                                            </div>
+                                                            <div class="ms-2">
+                                                                <h4 class="mb-0 fs-5 fw-bold">
+                                                                    <a href="#" class="text-black">{{ developer.name }}</a>
+                                                                </h4>
+                                                                <p class="mb-0 text-muted fs-6" v-for="role in developer.roles">{{ role.name }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <table class="mt-2 mt-xl-0 w-100">
                                                 <tr>
                                                     <th class="pb-50">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
@@ -88,45 +115,12 @@
                                                     <td> {{ props.user.phone }} </td>
                                                 </tr>
                                             </table>
-                                        </div>
                                     </div>
                                 </div>
-                                <!---->
-                                <!---->
                             </div>
                         </div>
-                        <!--
-                        <div class="col-md-5 col-lg-4 col-xl-3 col-12">
-                            <div class="card border-primary">
-
-                                <div class="card-header d-flex justify-content-between align-items-center pt-75 pb-25">
-                                    <h5 class="mb-0"> Current Plan </h5>
-                                    <span class="badge badge-light-primary"> Basic </span>
-                                    <small class="text-muted w-100">July 22, 2021</small>
-                                </div>
-                                <div class="card-body">
-
-                                    <ul class="list-unstyled my-1">
-                                        <li>
-                                            <span class="align-middle">5 Users</span>
-                                        </li>
-                                        <li class="my-25">
-                                            <span class="align-middle">10 GB storage</span>
-                                        </li>
-                                        <li>
-                                            <span class="align-middle">Basic Support</span>
-                                        </li>
-                                    </ul>
-                                    <button type="button" class="btn btn-primary btn-block"> Upgrade Plan </button>
-                                </div>
-
-                            </div>
-                        </div>
-                        -->
-
-
                     </div>
-                    <!-- User Content -->
+
                     <div class="col-xl-12 col-lg-7 col-md-7 order-0 order-md-1">
                         <!-- User Pills -->
                         <ul class="nav nav-pills mb-2">
@@ -152,8 +146,6 @@
             </div>
         </div>
     </div>
-
-
 
 
     <Modal id="editClient" title="Show Client" v-vb-is:modal :size="followUp ? 'sm' : 'lg'">
@@ -253,7 +245,7 @@
                         <v-select
                             multiple
                             v-model="updateForm.agents"
-                            :options="users"
+                            :options="props.users"
                             class="form-control select-padding"
                             placeholder="Select Assign Employee"
                             :reduce="user => user.id"
@@ -288,6 +280,10 @@
     </Modal>
 
 
+
+    <Modal id="showUserNote" title="Show Client" v-vb-is:modal :size="followUp ? 'sm' : 'lg'">
+        <p class="p-3">{{ props.user?.note ?? 'no have note in this user' }}</p>
+    </Modal>
 </template>
 
 <script setup>
@@ -310,6 +306,7 @@ import {useForm} from "@inertiajs/inertia-vue3";
 let {formatted} = useDate();
 let props = defineProps({
     user:[],
+    users:[],
     image:String,
     showUrl:String,
     errors:Object,
@@ -376,6 +373,12 @@ let updateClientForm = (id) => {
         },
     })
 }
+
+const showClientNote = () =>{
+    document.getElementById('showUserNote').$vb.modal.show()
+}
+
+
 
 
 </script>

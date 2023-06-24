@@ -54,6 +54,7 @@
                         </li>
                         <li class="nav-item" role="presentation" v-if="props.info.invoice">
                             <button class="nav-link"
+                                    v-if="this.$page.props.auth.user.can.includes('project.budget') || this.$page.props.auth.user.role.includes('Administrator')"
                                     id="billing-tab" data-bs-toggle="tab"
                                     data-bs-target="#billing" type="button"
                                     role="tab" aria-controls="billing"
@@ -109,8 +110,6 @@
                                                 <p class="mb-0">{{ props.info.client?.address }}</p>
                                                 <a :href="`/admin/clients/${ props.info.client?.id}`" class="btn btn-primary mt-3">Profile</a>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </div>

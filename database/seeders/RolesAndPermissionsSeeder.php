@@ -314,30 +314,33 @@ class RolesAndPermissionsSeeder extends Seeder
         };
 
         Role::updateOrCreate(['name' => 'Administrator', 'is_delete' => false]);
-//        $developer = Role::updateOrCreate(['name' => 'Developer']);
 
-//        foreach ($all as $item) {
-//            foreach ($item['permissions'] as $permission) {
-//                $developer->givePermissionTo( $permission );
-//            }
-//        };
-
-//        User::updateOrCreate([
-//            'name' => 'Jugol Kumar',
-//            'email' => 'jugol@creativetechpark.com',
-//            'password' => bcrypt(12345678),
-//        ])->assignRole('Developer');
-
-//        User::updateOrCreate([
-//        'name' => 'Creative Tech Park',
-//            'email' => 'info@creativetechpark.com',
-//            'password' => bcrypt('creativetechpark'),
-//        ])->assignRole('Administrator');
 
         User::updateOrCreate([
             'name' => 'admin',
             'email' => 'admin@admin.com',
             'password' => bcrypt(12345678),
         ])->assignRole('Administrator');
+//
+//        $developer = Role::updateOrCreate(['name' => 'Developer']);
+//        foreach ($all as $item) {
+//            foreach ($item['permissions'] as $permission) {
+//                $developer->givePermissionTo( $permission );
+//            }
+//        };
+//
+//        User::updateOrCreate([
+//            'name' => 'Jugol Kumar',
+//            'email' => 'jugol@creativetechpark.com',
+//            'password' => bcrypt(12345678),
+//        ])->assignRole('Developer');
+//
+//        User::updateOrCreate([
+//        'name' => 'Creative Tech Park',
+//            'email' => 'info@creativetechpark.com',
+//            'password' => bcrypt('creativetechpark'),
+//        ])->assignRole('Administrator');
+
+
     }
 }

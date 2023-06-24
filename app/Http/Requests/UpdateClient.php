@@ -25,8 +25,8 @@ class UpdateClient extends FormRequest
     public function rules()
     {
         return [
-            "name" => ['required','string'],
-            "email" => ['required', 'email', Rule::unique('clients')->ignore($this->client)],
+            "name" => ['nullable'],
+            "email" => ['required'],
             "secondary_email" => ['nullable','email'],
             "phone" => ['required', 'regex:/(^([+]{1}[8]{2}|0088)?(01){1}[3-9]{1}\d{8})$/'],
             "secondary_phone" => ['nullable','regex:/(^([+]{1}[8]{2}|0088)?(01){1}[3-9]{1}\d{8})$/'],

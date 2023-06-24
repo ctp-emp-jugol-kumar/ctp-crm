@@ -169,11 +169,11 @@ class TodoController extends Controller
         }
 
 
-        if (Request::input('date')){
-            Request::validate([
-                'date' => 'date'
-            ]);
-        }
+//        if (Request::input('date')){
+//            Request::validate([
+//                'date' => 'date'
+//            ]);
+//        }
 
 
         $path = null;
@@ -185,7 +185,7 @@ class TodoController extends Controller
         $todo = Todo::create([
            'title' => Request::input('title'),
            'users' => json_encode($userId),
-           'date' => Request::input('date') ? date('d-m-Y', strtotime(Request::input('date'))) :  now()->format('d-y-m h:m:s'),
+           'date' => now()->format('d-y-m h:m:s'),
            'about_todo' => Request::input('aboutTodo'),
            'file' => $path,
            'user_id' => Auth::id(),

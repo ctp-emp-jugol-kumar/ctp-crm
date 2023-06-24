@@ -305,7 +305,6 @@
             return item;
         })
         formData.items = allItems;
-        console.log(allItems)
     })
 
 

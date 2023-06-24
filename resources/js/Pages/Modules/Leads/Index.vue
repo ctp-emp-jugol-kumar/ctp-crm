@@ -18,27 +18,27 @@
                                     >
                                         Add Lead
                                     </button>
-<!--                                    <div>
-                                        <CDropdown>
-                                            <CDropdownToggle class="p-0">
-                                                <button class="btn bg-light-secondary d-flex align-items-center">
-                                                    <vue-feather type="external-link" size="15"/>
-                                                    <span class="px-1">Export</span>
-                                                    <vue-feather type="chevron-down" size="15"/>
-                                                </button>
-                                            </CDropdownToggle>
-                                            <CDropdownMenu>
-                                                <CDropdownItem @click="exportPDF">
-                                                    &lt;!&ndash;                                                    <vue-feather type="download" size="15"/>&ndash;&gt;
-                                                    <span class="ms-1">PDF</span>
-                                                </CDropdownItem>
-&lt;!&ndash;                                                <CDropdownItem target="_blank">
-                                                    &lt;!&ndash;                                                    <vue-feather type="download" size="15"/>&ndash;&gt;
-                                                    <span class="ms-1">EXCEL</span>
-                                                </CDropdownItem>&ndash;&gt;
-                                            </CDropdownMenu>
-                                        </CDropdown>
-                                    </div>-->
+                                    <!--                                    <div>
+                                                                            <CDropdown>
+                                                                                <CDropdownToggle class="p-0">
+                                                                                    <button class="btn bg-light-secondary d-flex align-items-center">
+                                                                                        <vue-feather type="external-link" size="15"/>
+                                                                                        <span class="px-1">Export</span>
+                                                                                        <vue-feather type="chevron-down" size="15"/>
+                                                                                    </button>
+                                                                                </CDropdownToggle>
+                                                                                <CDropdownMenu>
+                                                                                    <CDropdownItem @click="exportPDF">
+                                                                                        &lt;!&ndash;                                                    <vue-feather type="download" size="15"/>&ndash;&gt;
+                                                                                        <span class="ms-1">PDF</span>
+                                                                                    </CDropdownItem>
+                                    &lt;!&ndash;                                                <CDropdownItem target="_blank">
+                                                                                        &lt;!&ndash;                                                    <vue-feather type="download" size="15"/>&ndash;&gt;
+                                                                                        <span class="ms-1">EXCEL</span>
+                                                                                    </CDropdownItem>&ndash;&gt;
+                                                                                </CDropdownMenu>
+                                                                            </CDropdown>
+                                                                        </div>-->
                                 </div>
                                 <div class="card-datatable table-responsive pt-0 px-2">
                                     <div class="d-flex align-items-center justify-content-between border-bottom">
@@ -90,36 +90,33 @@
                                         <tr class=null>
                                             <th class="sorting">Client</th>
                                             <th class="sorting">Phone</th>
+                                            <th class="sorting">Assigned</th>
                                             <th class="sorting">Status</th>
                                             <th class="sorting">Created At</th>
+                                            <th class="sorting">Created By</th>
+                                            <th class="sorting">Last Updated By</th>
                                             <th class="sorting">Actions</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr v-for="user in clients.data" :key="user.id">
                                             <td>
-                                                <div class="d-flex justify-content-left align-items-center">
-                                                    <div class="avatar-wrapper">
-                                                        <div class="avatar  me-1">
-                                                            <img
-                                                                :src="user.photo"
-                                                                alt="{{ user.username }}" height="32" width="32">
-                                                        </div>
+                                                <div class="d-flex flex-column">
+                                                    <div class="user_name text-truncate text-body">
+                                                        <span class="fw-bolder">{{ user.name ?? '---' }}</span>
                                                     </div>
-                                                    <div class="d-flex flex-column">
-                                                        <div class="user_name text-truncate text-body">
-                                                            <span class="fw-bolder">{{ user.name }}</span>
-                                                        </div>
-                                                        <small class="emp_post text-muted">{{ user.email }}</small>
-                                                    </div>
+                                                    <small class="emp_post text-muted">{{ user.email ?? '---' }}</small>
                                                 </div>
                                             </td>
                                             <td>{{ user.phone }} <span v-if="user.secondary_phone">/ {{ user.secondary_phone }}</span></td>
-                                            <td class="d-flex flex-column"><span class="badge" style="width: max-content" :class="{
+                                            <td>
+                                                <span v-for="user in user.assigned">{{ user.name }}, </span>
+                                            </td>
+                                            <td class="d-flex flex-column" style="padding:40px 0;"><span class="badge" style="width: max-content" :class="{
                                                 'badge-light-primary' : user.status === 'Proposal Sent',
                                                 'badge-light-info' : user.status === 'Contacted',
                                                 'badge-light-warning' : user.status === 'Quote Sent',
-                                                'badge-light-purple' : user.status === 'Qualified',
+                                                'badge-light-secondary' : user.status === 'Qualified',
                                                 'badge-light-danger' : user.status === 'Disqualified',
                                                 'badge-light-purple' : user.status === 'New Lead',
                                                 'badge-light-indego' : user.status === 'Follow Up',
@@ -130,29 +127,26 @@
                                                 </span>
                                             </td>
                                             <td>{{ user.created_at }}</td>
+                                            <td>{{ user.createdBy?.name ?? '---'}}</td>
+                                            <td>{{ user.updatedBy?.name ?? '---'}}</td>
                                             <td>
-
-                                                <div>
-<!--                                                    <Link :href="user.show_url"
-                                                          type="button"
-                                                          data-title="Show Client"
-                                                          class="btn p-50 btn-sm btn-icon btn-icon rounded-circle bg-light-primary waves-effect waves-float waves-light">
-                                                        <Icon title="eye" />
-                                                    </Link>-->
-                                                    <button type="button" @click="editClient(user.show_url)"
-                                                            v-if="this.$page.props.auth.user.can.includes('leads.edit') || this.$page.props.auth.user.role == 'Administrator'"
-                                                            data-title="Edit Item"
-                                                            class="btn p-50 btn-icon btn-icon rounded-circle bg-light-warning waves-effect waves-float waves-light">
-                                                        <Icon title="pencil"/>
-                                                    </button>
-
-                                                    <button @click="deleteItemModal(user.id)" type="button"
-                                                            data-title="Delete"
-                                                            v-if="this.$page.props.auth.user.can.includes('leads.delete') || this.$page.props.auth.user.role == 'Administrator' "
-                                                            class="btn p-50 btn-icon btn-icon rounded-circle waves-effect waves-float waves-light bg-light-danger">
-                                                        <Icon title="trash"/>
-                                                    </button>
-                                                </div>
+                                                <CDropdown>
+                                                    <CDropdownToggle>
+                                                        <vue-feather type="more-vertical" />
+                                                    </CDropdownToggle>
+                                                    <CDropdownMenu>
+                                                        <CDropdownItem @click="editClient(user.show_url)"
+                                                                       v-if="this.$page.props.auth.user.can.includes('leads.edit') || this.$page.props.auth.user.role == 'Administrator'">
+                                                            <Icon title="pencil" />
+                                                            <span class="ms-1">Edit</span>
+                                                        </CDropdownItem>
+                                                        <CDropdownItem  @click="deleteItemModal(user.id)"  type="button"
+                                                                        v-if="this.$page.props.auth.user.can.includes('leads.delete') || this.$page.props.auth.user.role == 'Administrator' ">
+                                                            <Icon title="trash" />
+                                                            <span class="ms-1">Delete</span>
+                                                        </CDropdownItem>
+                                                    </CDropdownMenu>
+                                                </CDropdown>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -177,9 +171,7 @@
             <div class="modal-body">
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Name:
-                            <Required/>
-                        </label>
+                        <label>Name:</label>
                         <div class=null>
                             <input v-model="createForm.name" type="text" placeholder="Name" class="form-control">
                             <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
@@ -194,7 +186,7 @@
                 </div>
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Email: <span class="text-danger">*</span></label>
+                        <label>Email:</label>
                         <div class=null>
                             <input v-model="createForm.email" type="email" placeholder="eg.example@creativetechpark.com"
                                    class="form-control">
@@ -233,7 +225,7 @@
                     </div>
                 </div>
                 <div class="row mb-1">
-                    <div class="col-md">
+                    <div :class="clientStatus ? 'col-md-12' : 'col-md'">
                         <label>Lead Status  <span class="text-danger">*</span></label>
                         <v-select v-model="createForm.status"
                                   @update:modelValue="changeStatus"
@@ -245,7 +237,8 @@
                         <span v-if="errors.status" class="error text-sm text-danger">{{errors.status}}</span>
 
                     </div>
-                    <div class="col-md" :class="{ 'd-none' : clientStatus }">
+
+                    <div class="mt-1" :class="clientStatus ? 'col-md-12' : 'col-md'">
                         <label>Assign Agent </label>
                         <v-select
                             multiple
@@ -358,8 +351,8 @@
                     </div>
                 </div>
                 <div class="row mb-1">
-                    <div class="col-md">
-                        <label>Lead Status</label>
+                    <div :class="clientStatus ? 'col-md-12' : 'col-md'">
+                        <label>Lead Status  <span class="text-danger">*</span></label>
                         <v-select v-model="updateForm.status"
                                   @update:modelValue="changeStatus"
                                   label="name"
@@ -368,8 +361,11 @@
                                   :reduce="item => item.name"
                                   placeholder="Select Lead Status">
                         </v-select>
+                        <span v-if="errors.status" class="error text-sm text-danger">{{errors.status}}</span>
+
                     </div>
-                    <div class="col-md" :class="{ 'd-none' : clientStatus }">
+
+                    <div class="mt-1" :class="clientStatus ? 'col-md-12' : 'col-md'">
                         <label>Assign Agent </label>
                         <v-select
                             multiple
@@ -413,223 +409,221 @@
 
 
 <script setup>
-    import Pagination from "../../../components/Pagination"
-    import Icon from '../../../components/Icon'
-    import Modal from '../../../components/Modal'
-    import {ref, watch, onMounted} from "vue";
-    import debounce from "lodash/debounce";
-    import {Inertia} from "@inertiajs/inertia";
-    import Swal from 'sweetalert2'
-    import {useForm} from "@inertiajs/inertia-vue3";
-    import axios from 'axios';
-    import DropdownItems from "../../../components/modules/DropdownItems"
-    import moment from "moment";
+import Pagination from "../../../components/Pagination"
+import Icon from '../../../components/Icon'
+import Modal from '../../../components/Modal'
+import {ref, watch, onMounted} from "vue";
+import debounce from "lodash/debounce";
+import {Inertia} from "@inertiajs/inertia";
+import Swal from 'sweetalert2'
+import {useForm} from "@inertiajs/inertia-vue3";
+import axios from 'axios';
+import DropdownItems from "../../../components/modules/DropdownItems"
+import moment from "moment";
 
-    import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
-    import {useDate} from "../../../composables/useDate";
-    const range = useDate();
+import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
+import {useDate} from "../../../composables/useDate";
+const range = useDate();
 
 
-    let props = defineProps({
-        clients: Object,
-        users: Object,
-        filters: Object,
-        notification: Object,
-        errors: Object,
-        main_url: null,
+let props = defineProps({
+    clients: Object,
+    users: Object,
+    filters: Object,
+    notification: Object,
+    errors: Object,
+    main_url: null,
+});
+
+
+let editData = ref([]);
+
+
+let createForm = useForm({
+    name: null,
+    email: null,
+    secondary_email: null,
+    phone: null,
+    secondary_phone: null,
+    company: null,
+    address: null,
+    note: null,
+    status: null,
+    agents: [],
+
+    processing: Boolean,
+})
+
+let updateForm = useForm({
+    name: null,
+    email: null,
+    secondary_email: null,
+    phone: null,
+    secondary_phone: null,
+    company: null,
+    address: null,
+    note: null,
+    status: null,
+    agents: null,
+    followDate:null,
+})
+
+const clientStatus = ref(true);
+const followUp = ref(false);
+const changeStatus = (event) =>{
+    clientStatus.value = event !== 'Converted to Customer';
+    followUp.value = event === 'Follow Up';
+}
+
+const updateStatus = (id, status) =>{
+    clientStatus.value = event.name !== 'Converted to Customer';
+    updateForm.status = status;
+    document.getElementById('chaneStatusModal').$vb.modal.show()
+}
+
+
+let status = ref([])
+
+let deleteItemModal = (id) => {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Inertia.delete('clients/' + id, {
+                preserveState: true, replace: true, onSuccess: page => {
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                },
+                onError: errors => {
+                    Swal.fire(
+                        'Oops...',
+                        'Something went wrong!',
+                        'error'
+                    )
+                }
+            })
+        }
+    })
+};
+
+let addDataModal = () => {
+    status.value = [
+        {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Qualified'}, {"name":'Disqualified'}
+    ];
+
+    createForm.reset();
+    createForm.processing = false;
+    clientStatus.value = true;
+    document.getElementById('addItemModal').$vb.modal.show()
+}
+let createClientForm = () => {
+    Inertia.post('clients', createForm, {
+        preserveState: true,
+        onStart: () => {
+            createForm.processing = true
+        },
+        onFinish: () => {
+            createForm.processing = false
+        },
+        onSuccess: () => {
+            document.getElementById('addItemModal').$vb.modal.hide()
+            createForm.reset()
+            Swal.fire(
+                'Saved!',
+                'Your file has been Saved.',
+                'success'
+            )
+        },
+    })
+}
+
+let updateClientForm = (id) => {
+    Inertia.put('clients/' + id, updateForm, {
+        preserveState: true,
+        onStart: () => {
+            createForm.processing = true
+        },
+        onFinish: () => {
+            createForm.processing = false
+        },
+        onSuccess: () => {
+            document.getElementById('editClient').$vb.modal.hide()
+            createForm.reset()
+            Swal.fire(
+                'Saved!',
+                'Your file has been Updated.',
+                'success'
+            )
+        },
+    })
+}
+
+let editClient = (url) => {
+
+    status.value = [
+        {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Follow Up'}, {"name":'Converted to Customer'}
+    ]
+
+
+    axios.get(url+"?edit=true").then(res => {
+        console.log(res.data)
+        editData.value = res.data;
+        updateForm.name = res.data.name;
+        updateForm.email = res.data.email;
+        updateForm.secondary_email = res.data.secondary_email;
+        updateForm.phone = res.data.phone;
+        updateForm.secondary_phone = res.data.secondary_phone;
+        updateForm.company = res.data.company;
+        updateForm.address = res.data.address;
+        updateForm.note = res.data.note;
+        updateForm.status = res.data.status;
+        updateForm.agents = res.data.users;
+        clientStatus.value = res.data.status !== 'Convarted To Customer'
+
+        document.getElementById('editClient').$vb.modal.show();
+    }).catch(err => {
+        console.log(err);
     });
+}
 
 
-    let editData = ref([]);
-
-
-    let createForm = useForm({
-        name: null,
-        email: null,
-        secondary_email: null,
-        phone: null,
-        secondary_phone: null,
-        company: null,
-        address: null,
-        note: null,
-        status: null,
-        agents: [],
-
-        processing: Boolean,
-    })
-
-    let updateForm = useForm({
-        name: null,
-        email: null,
-        secondary_email: null,
-        phone: null,
-        secondary_phone: null,
-        company: null,
-        address: null,
-        note: null,
-        status: null,
-        agents: null,
-        followDate:null,
-    })
-
-    const clientStatus = ref(true);
-    const followUp = ref(false);
-    const changeStatus = (event) =>{
-        clientStatus.value = event !== 'Converted to Customer';
-        followUp.value = event === 'Follow Up';
+const url = location.search;
+const exportPDF =() =>{
+    if (url){
+        window.location.href = window.location.href+"&export_pdf=true";
+    }else{
+        window.location.href = window.location.href+"?export_pdf=true";
     }
+}
 
-    const updateStatus = (id, status) =>{
-        clientStatus.value = event.name !== 'Converted to Customer';
-        updateForm.status = status;
-        document.getElementById('chaneStatusModal').$vb.modal.show()
+
+const dateRange = ref(props.filters.dateRange)
+const isCustom =ref(false);
+const changeDateRange = (event) => {
+    if(event=== 'custom'){
+        isCustom.value = true;
+        dateRange.value = '';
     }
+};
+const handleDate = (event) => isCustom.value = event !== null;
 
 
-    let status = ref([])
+const searchByStatus = ref(props.filters.byStatus)
+let search = ref(props.filters.search);
+let perPage = ref(props.filters.perPage);
 
-    let deleteItemModal = (id) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Inertia.delete('clients/' + id, {
-                    preserveState: true, replace: true, onSuccess: page => {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
-                        )
-                    },
-                    onError: errors => {
-                        Swal.fire(
-                            'Oops...',
-                            'Something went wrong!',
-                            'error'
-                        )
-                    }
-                })
-            }
-        })
-    };
-
-    let addDataModal = () => {
-        status.value = [
-            {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Proposal Sent'},
-            {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Converted to Customer'}
-        ];
-
-        createForm.reset();
-        createForm.processing = false;
-        clientStatus.value = true;
-        document.getElementById('addItemModal').$vb.modal.show()
-    }
-    let createClientForm = () => {
-        Inertia.post('clients', createForm, {
-            preserveState: true,
-            onStart: () => {
-                createForm.processing = true
-            },
-            onFinish: () => {
-                createForm.processing = false
-            },
-            onSuccess: () => {
-                document.getElementById('addItemModal').$vb.modal.hide()
-                createForm.reset()
-                Swal.fire(
-                    'Saved!',
-                    'Your file has been Saved.',
-                    'success'
-                )
-            },
-        })
-    }
-
-    let updateClientForm = (id) => {
-        Inertia.put('clients/' + id, updateForm, {
-            preserveState: true,
-            onStart: () => {
-                createForm.processing = true
-            },
-            onFinish: () => {
-                createForm.processing = false
-            },
-            onSuccess: () => {
-                document.getElementById('editClient').$vb.modal.hide()
-                createForm.reset()
-                Swal.fire(
-                    'Saved!',
-                    'Your file has been Updated.',
-                    'success'
-                )
-            },
-        })
-    }
-
-    let editClient = (url) => {
-
-        status.value = [
-            {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Proposal Sent'},
-            {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Follow Up'}, {"name":'Converted to Customer'}
-        ]
-
-
-        axios.get(url+"?edit=true").then(res => {
-            console.log(res.data)
-            editData.value = res.data;
-            updateForm.name = res.data.name;
-            updateForm.email = res.data.email;
-            updateForm.secondary_email = res.data.secondary_email;
-            updateForm.phone = res.data.phone;
-            updateForm.secondary_phone = res.data.secondary_phone;
-            updateForm.company = res.data.company;
-            updateForm.address = res.data.address;
-            updateForm.note = res.data.note;
-            updateForm.status = res.data.status;
-            updateForm.agents = res.data.users;
-            clientStatus.value = res.data.status !== 'Convarted To Customer'
-
-            document.getElementById('editClient').$vb.modal.show();
-        }).catch(err => {
-            console.log(err);
-        });
-    }
-
-
-    const url = location.search;
-    const exportPDF =() =>{
-        if (url){
-            window.location.href = window.location.href+"&export_pdf=true";
-        }else{
-            window.location.href = window.location.href+"?export_pdf=true";
-        }
-    }
-
-
-    const dateRange = ref(props.filters.dateRange)
-    const isCustom =ref(false);
-    const changeDateRange = (event) => {
-        if(event=== 'custom'){
-            isCustom.value = true;
-            dateRange.value = '';
-        }
-    };
-    const handleDate = (event) => isCustom.value = event !== null;
-
-
-    const searchByStatus = ref(props.filters.byStatus)
-    let search = ref(props.filters.search);
-    let perPage = ref(props.filters.perPage);
-
-    watch([search, perPage, searchByStatus, dateRange], debounce(function ([val, val2, val3, val4]) {
-        Inertia.get(props.main_url, { search: val, perPage: val2, byStatus: val3 , dateRange: val4}, { preserveState: true, replace: true });
-    }, 300));
+watch([search, perPage, searchByStatus, dateRange], debounce(function ([val, val2, val3, val4]) {
+    Inertia.get(props.main_url, { search: val, perPage: val2, byStatus: val3 , dateRange: val4}, { preserveState: true, replace: true });
+}, 300));
 
 </script>
 <style>

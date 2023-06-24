@@ -7,7 +7,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">Admines</h2>
+                            <h2 class="content-header-title float-start mb-0">Administration</h2>
                             <div class="breadcrumb-wrapper">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -182,7 +182,9 @@
                     <div class="col-md">
                         <Image  label="Profile Picture" v-model="createForm.photo"/>
                     </div>
+
                     <div class="col-md">
+                        <label for="">Select Roles</label>
                         <v-select
                             multiple
                             v-model="createForm.roles_name"

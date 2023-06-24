@@ -331,23 +331,23 @@
             </h3>
         </div>
     </div>
-{{--    @if (!is_null($invoice->quotation->payment_policy))
+    @if (!is_null($invoice->payment_policy))
         <div class="row">
             <div class="col-3">
                 <h3>Payment Policy:</h3>
-                {!! nl2br($invoice->quotation->payment_policy) !!}
+                {!! nl2br($invoice->payment_policy) !!}
             </div>
         </div>
     @endif
 
-    @if (!is_null($invoice->quotation->trams_of_service))
+    @if (!is_null($invoice->trams_of_service))
         <div class="row mb-50">
             <div class="col-3">
                 <h3>Terms of Service:</h3>
-                {!! nl2br($invoice->quotation->trams_of_service) !!}
+                {!! nl2br($invoice->trams_of_service) !!}
             </div>
         </div>
-    @endif--}}
+    @endif
 </div>
 
 
