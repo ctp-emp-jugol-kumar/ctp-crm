@@ -98,7 +98,7 @@
 
                         <div class="d-flex flex-wrap mb-0">
                             <button type="submit" class="btn btn-primary me-1" data-bs-dismiss="modal">Save</button>
-                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Reset</button>
                         </div>
                     </form>
                 </div>
@@ -106,10 +106,6 @@
         </div>
     </div>
     <!-- /Add Payment Sidebar -->
-
-
-
-
 
 </template>
 <script>

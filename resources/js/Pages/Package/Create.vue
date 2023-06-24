@@ -87,7 +87,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <button type="submit" @click="addPackage" class="btn btn-primary me-2">Save</button>
-                                        <button type="reset" class="btn btn-danger">Cancel</button>
+                                        <button type="reset" class="btn btn-danger">Reset</button>
                                     </div>
                                 </div>
                             </div>
