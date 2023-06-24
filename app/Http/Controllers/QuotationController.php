@@ -1048,8 +1048,8 @@ class QuotationController extends Controller
     public function destroy(Quotation $quotation)
     {
         if ($quotation->invoice){
-            if ($quotation->invoice()->transactions){
-                $quotation->invoice()->transactions()->delete();
+            if ($quotation->invoice->transactions->count()){
+                $quotation->invoice->transactions()->delete();
             }
             $quotation->invoice()->delete();
         }

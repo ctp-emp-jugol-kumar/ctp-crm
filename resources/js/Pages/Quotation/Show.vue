@@ -158,7 +158,9 @@
                                     <a :href="props.url.show_url+'?print=true'"  class="btn btn-outline-primary w-100 mb-75">Print Quotation</a>
                                     <button type="button" class="btn btn-outline-primary w-100 mb-75" data-bs-toggle="modal"
                                             data-bs-target="#givenDiscount">Given Discount</button>
-                                    <button v-if="props.quotation.invoice === null" class="btn btn-success w-100 mb-75" data-bs-toggle="modal" data-bs-target="#createInvoice">
+                                    <button v-if="props.quotation.invoice === null" class="btn btn-success w-100 mb-75"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#createInvoice">
                                         Generate Invoices
                                     </button>
                                     <a :href="props.url.invoice_url" v-else target="_blank" class="btn btn-success w-100 mb-75">
