@@ -313,7 +313,7 @@
             </h3>
         </div>
     </div>
-  @if (!is_null($quotation->payment_policy))
+    @if (!is_null($quotation->payment_policy))
         <div class="row">
             <div class="col-3">
                 <h3>Payment Policy:</h3>

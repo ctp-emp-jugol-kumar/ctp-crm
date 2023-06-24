@@ -64,7 +64,11 @@
                                         <tr class=null>
                                             <th class="sorting">Client</th>
                                             <th class="sorting">Phone</th>
+                                            <th class="sorting">Assigned</th>
+                                            <th class="sorting">Status</th>
                                             <th class="sorting">Created At</th>
+                                            <th class="sorting">Created By</th>
+                                            <th class="sorting">Last Updated By</th>
                                             <th class="sorting">Actions</th>
                                         </tr>
                                         </thead>
@@ -88,7 +92,27 @@
                                                 </div>
                                             </td>
                                             <td>{{ user.phone }} <span v-if="user.secondary_phone">/ {{ user.secondary_phone }}</span></td>
+                                            <td>
+                                                <span v-for="user in user.users">{{ user.name }}, </span>
+                                            </td>
+                                            <td class="d-flex flex-column" style="padding:19px 0;"><span class="badge" style="width: max-content" :class="{
+                                                'badge-light-primary' : user.status === 'Proposal Sent',
+                                                'badge-light-info' : user.status === 'Contacted',
+                                                'badge-light-warning' : user.status === 'Quote Sent',
+                                                'badge-light-purple' : user.status === 'Qualified',
+                                                'badge-light-danger' : user.status === 'Disqualified',
+                                                'badge-light-purple' : user.status === 'New Lead',
+                                                'badge-light-indego' : user.status === 'Follow Up',
+                                                'badge-light-indego' : user.status === 'Converted to Customer',
+                                            }">{{ user.status }}
+                                            </span>
+                                                <span v-if="user.followUp">
+                                                    {{ moment(user.followUp).format('ll') }}
+                                                </span>
+                                            </td>
                                             <td>{{ user.created_at }}</td>
+                                            <td>{{ user.createdBy?.name ?? '---'}}</td>
+                                            <td>{{ user.updatedBy?.name ?? '---'}}</td>
                                             <td>
                                                 <CDropdown>
                                                     <CDropdownToggle>
@@ -420,9 +444,8 @@
         agents: null,
     })
 
-    let status = [
-        {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Proposal Sent'},
-        {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Converted to Customer'}
+    let status = [{"name":'Contacted'}, {"name":'Proposal Sent'},
+        {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'}
     ]
 
     let deleteItemModal = (id) => {

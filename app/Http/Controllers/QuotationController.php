@@ -844,7 +844,8 @@ class QuotationController extends Controller
                 });
             return collect($service)->only(['service_name', 'id', 'platforms']);
         });
-        $clients = Client::where('status', '=', 'Converted to Customer')->latest()->get();
+
+        $clients = Client::where('is_client', true)->latest()->get();
 
         return Inertia::render('Quotation/Edit',   [
             'quotation' => $quot,

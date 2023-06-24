@@ -77,14 +77,14 @@
                             <span v-if="props.errors?.title" v-text="props.errors?.title" class="text-danger"></span>
                         </div>
 
-                        <div class="mb-1">
+<!--                        <div class="mb-1">
                             <label class="form-label">Date</label>
                             <Datepicker :monthChangeOnScroll="false"
                                         v-model="formData.date"
                                         placeholder="Select Payment Date"
                                         autoApply></Datepicker>
                             <span v-if="props.errors?.date" v-text="props.errors?.date" class="text-danger"></span>
-                        </div>
+                        </div>-->
                         <div class="mb-1">
                             <label>Todo For</label>
                             <Switch class="d-flex"

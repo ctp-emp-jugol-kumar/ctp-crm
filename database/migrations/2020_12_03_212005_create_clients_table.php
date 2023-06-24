@@ -14,7 +14,7 @@ class CreateClientsTable extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('phone');
             $table->string('secondary_email')->nullable();
@@ -24,7 +24,8 @@ class CreateClientsTable extends Migration
             $table->text('note')->nullable();
             $table->string('photo')->nullable();
             $table->string('status')->default('lead');
-            // $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

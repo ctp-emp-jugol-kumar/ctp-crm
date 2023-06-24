@@ -182,7 +182,9 @@
                     <div class="col-md">
                         <Image  label="Profile Picture" v-model="createForm.photo"/>
                     </div>
+
                     <div class="col-md">
+                        <label for="">Select Roles</label>
                         <v-select
                             multiple
                             v-model="createForm.roles_name"

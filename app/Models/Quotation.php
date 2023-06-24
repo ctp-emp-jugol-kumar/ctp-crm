@@ -22,7 +22,7 @@ class Quotation extends Model
     }
 
     public function invoice(){
-        return $this->hasOne(invoice::class, 'quotation_id');
+        return $this->hasOne(Invoice::class, 'quotation_id');
     }
 
 

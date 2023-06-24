@@ -36,8 +36,9 @@ class Client extends Model
         'note',
         'follow_up',
         'status',
-        'is_client'
-        // 'user_id',
+        'is_client',
+        'created_by',
+        'updated_by',
     ];
     // protected $hidden = [];
     // protected $dates = [];
@@ -92,6 +93,13 @@ class Client extends Model
 
     public function invoices(){
         return $this->hasMany(Invoice::class, 'client_id');
+    }
+
+    public function createdBy(){
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    public function updatedBy(){
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
 

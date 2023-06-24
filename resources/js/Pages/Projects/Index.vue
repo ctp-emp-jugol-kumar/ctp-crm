@@ -163,7 +163,7 @@
             <div class="modal-body">
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Project Name:
+                        <label>Project Domain Name:
                             <Required/>
                         </label>
                         <div class="">

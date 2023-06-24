@@ -104,6 +104,7 @@ class InvoiceController extends Controller
             'qutDate.required' => 'Please Select Quotation Date...',
         ]);
 
+
         Invoice::create([
             'invoice_id' => now()->format('Ymd'),
             'client_id' => Request::input('clientId'),
@@ -114,7 +115,9 @@ class InvoiceController extends Controller
             'discount' => Request::input('discount') ?? 0,
             'grand_total' => Request::input('totalPrice'),
             'due' => Request::input('totalPrice'),
-            'note' => Request::input('note')
+            'note' => Request::input('note'),
+            'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
+            'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
         ]);
 
         return back();
@@ -126,6 +129,8 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Inertia\Response
      */
+
+
 
     public function invoiceItemsGenerate($invoice){
         $pref = [];
@@ -328,93 +333,45 @@ class InvoiceController extends Controller
 
     public function edit($id){
 
-        $invoice = CustomInvoice::findOrFail($id);
+        $invoice = Invoice::findOrFail($id);
+        $clients = Client::where('is_client', true)->latest()->get();
 
-        return Inertia::render('Modules/Invoices/Edit', [
-            "clients"   => Client::all(['id','name']),
-            "info" => [
-                "invoice"       => $invoice,
-                "invoice_item"  => $invoice->invoiceItems,
-                "update_url"    => URL::route('updateInvoices', $invoice->id),
-            ]
+        return Inertia::render('Invoice/Edit', [
+            "clients"   => $clients,
+            "invoice"       => $invoice,
+            "update_url"    => URL::route('updateInvoices', $invoice->id),
         ]);
     }
 
 
     public function updateInvoice(Request $request, $id){
 
-        $invoice = CustomInvoice::findOrFail($id);
 
+        $invoice = Invoice::findOrFail($id);
 
         Request::validate([
-            'client_id' => 'required|integer',
-            'subject' => 'required',
+            'clientId' => 'required',
             'date' => 'required',
-            'trams_and_condition' => 'required',
-            'payment_policy' => 'required'
+        ],[
+            'clientId.required' => 'First Select An Client...',
+            'qutDate.required' => 'Please Select Quotation Date...',
         ]);
 
 
         $invoice->update([
-            'user_id'       => Auth::id(),
-            'client_id'        => Request::input('client_id'),
-            'subject'          => Request::input('subject'),
-            'date'             => Request::input('date'),
-            'status'           => filled(Request::input('status')),
-            'trams_and_condition' => Request::input('trams_and_condition'),
-            'privicy_and_policy'  => Request::input('payment_policy'),
+            'invoice_id' => now()->format('Ymd'),
+            'client_id' => Request::input('clientId'),
+            'user_id' => Auth::id(),
+            'invoice_type' => 'custom',
+            'items' => json_encode(Request::input('items')),
+            'total_price' => Request::input('totalPrice'),
+            'discount' => Request::input('discount') ?? 0,
+            'grand_total' => Request::input('totalPrice'),
+            'due' => Request::input('totalPrice') - $invoice->pay,
+            'note' => Request::input('note'),
+            'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
+            'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
         ]);
-
-        $invoices=Request::input('quatations') ;
-
-        $totalPrice = 0;
-        $totalDiscount = 0;
-        $invoicesOption = [];
-        foreach ($invoices as $key => $option) {
-            $totalPrice += $option['price'];
-            $totalDiscount += $option['discount'];
-            $invoicesOption[] = [
-                'id'             => $option["id"] ?? null,
-                'quotation_id'   => $invoice->id,
-                'item_name'       => $option['item_name'],
-                'discount'       => $option['discount'] ?? 0,
-                'price'          => $option['price']    ?? 0,
-                'quantity'       => $option['quantity'] ?? 1
-            ];
-        }
-
-
-        $total = $totalPrice - $totalDiscount;
-        $invoice->total_price =  $totalPrice ?? 0;
-        $invoice->discount = $totalDiscount ?? 0;
-        $invoice->grand_total = $total;
-        $invoice->due =  $total;
-        $invoice->save();
-
-        $array = $invoice->invoiceItems->toArray();
-        $deletedItems=[];
-        $deletedItems = array_map(function($item)use($invoicesOption){
-            return in_array($item['id'], array_column($invoicesOption, 'id')) ? null : $item["id"];
-        }, $array);
-        foreach ($deletedItems as $deletedItem){
-            if ($deletedItem){
-                $invoice->invoiceItems()->find($deletedItem)->delete();
-            }
-        }
-
-
-        $relatedModels = $invoice->invoiceItems;
-        foreach ($invoicesOption as $item) {
-            $updateData = $relatedModels->find($item['id']);
-            if($updateData){
-                $updateData->update($item);
-            }else{
-                if ($item['id'] == null){
-                    $invoice->invoiceItems()->create($item);
-                }
-            }
-        }
-
 
         return Redirect::route('invoices.index');
     }

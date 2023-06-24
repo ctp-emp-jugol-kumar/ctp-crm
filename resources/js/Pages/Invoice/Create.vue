@@ -227,7 +227,7 @@ const saveInvoice = (events) =>{
         preserveState: true,
         onStart: () =>{ processing.value = true},
         onFinish: () => {processing.value = false},
-        onSuccess: ()=> { $toast.success('Quotation Created Successfully Done...') },
+        onSuccess: ()=> { $toast.success('Invoice Created Successfully Done...') },
         onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
     })
 }
