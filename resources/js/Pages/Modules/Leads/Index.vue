@@ -16,7 +16,7 @@
                                         class="dt-button add-new btn btn-primary"
                                         @click="addDataModal"
                                     >
-                                        Add Lead
+                                        Add Lead btn
                                     </button>
                                     <!--                                    <div>
                                                                             <CDropdown>
@@ -482,7 +482,7 @@ const updateStatus = (id, status) =>{
 }
 
 
-let status = ref([])
+let status = ref([{"name":'New Lead'}, {"name":'Contacted'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Follow Up'}])
 
 let deleteItemModal = (id) => {
     Swal.fire({

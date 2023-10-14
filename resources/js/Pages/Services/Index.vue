@@ -56,6 +56,14 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <Pagination :links="services.links" :from="services.from" :to="services.to" :total="services.total"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -115,11 +123,14 @@ import Modal from "../../components/Modal";
 <script setup>
 
     import {useAction} from "../../composables/useAction";
-    import {ref} from "vue";
+    import {ref, watch} from "vue";
     import {useForm} from "@inertiajs/inertia-vue3";
     import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
     import {Inertia} from "@inertiajs/inertia";
     import axios from "axios";
+    import debounce from "lodash/debounce";
+    import Pagination from "../../components/Pagination"
+
 
     const {swalSuccess, deleteItem} = useAction()
 
@@ -191,6 +202,11 @@ import Modal from "../../components/Modal";
 
     }
 
+    const search = ref(props.filters.search);
+    const perPage = ref(props.filters.perPage);
+    watch([search, perPage], debounce(function ([val, val2]) {
+        Inertia.get(props.main_url, {search: val, perPage: val2}, {preserveState: true, replace: true});
+    }, 300));
 
 </script>
 

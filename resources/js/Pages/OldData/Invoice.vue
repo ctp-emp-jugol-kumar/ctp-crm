@@ -63,7 +63,7 @@
                                                         <vue-feather type="eye"/>
                                                     </a>
                                                 </td>
-                                            </tr>`
+                                            </tr>
                                         </tbody>
                                     </table>
                                     <Pagination :links="oldInvoice.links" :from="oldInvoice.from" :to="oldInvoice.to" :total="oldInvoice.total"/>

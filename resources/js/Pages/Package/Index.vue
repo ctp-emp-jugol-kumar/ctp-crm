@@ -10,6 +10,15 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Packages</h4>
+
+                                    <div
+                                        class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
+                                        <div class="select-search-area">
+                                            <label>Search:<input v-model="search" type="search"
+                                                                 class="form-control" placeholder="what you find ?"
+                                                                 aria-controls="DataTables_Table_0"></label>
+                                        </div>
+                                    </div>
                                     <a class="dt-button add-new btn btn-primary"
                                        v-if="this.$page.props.auth.user.can.includes('packages.create') || this.$page.props.auth.user.role.includes('Administrator')"
                                        :href="props.main_url+'/create'">
@@ -56,6 +65,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <Pagination :links="packages.links" :from="packages.from" :to="packages.to" :total="packages.total"/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -70,6 +86,8 @@
     import {Inertia} from "@inertiajs/inertia";
     import Swal from 'sweetalert2'
     import {useForm} from "@inertiajs/inertia-vue3";
+    import Pagination from "../../components/Pagination"
+
     import axios from "axios";
     import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
     import {useAction} from "../../composables/useAction";
@@ -77,9 +95,15 @@
     const {deleteItem} = useAction();
     const props = defineProps({
         packages:Array|null,
+        filters: Object,
         main_url:String|null,
     })
+    const search = ref(props.filters.search);
+    const perPage = ref(props.filters.perPage);
 
+    watch([search, perPage], debounce(function ([val, val2]) {
+        Inertia.get(props.main_url, {search: val, perPage: val2}, {preserveState: true, replace: true});
+    }, 300));
 
 </script>
 

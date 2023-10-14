@@ -15,8 +15,9 @@
                 :collapseTogglerIcon="collapseTogglerIcon"
             >
                 <ul class="nav navbar-nav flex-row">
-                    <li class="nav-item me-auto"><Link preserve-scroll class="navbar-brand"
-                            href="#">
+                    <li class="nav-item me-auto">
+                        <Link preserve-scroll class="navbar-brand"
+                            href="/">
                             <span class="brand-logo">
                             </span>
                             <h2 class="brand-text">CTP BD CRM</h2>
@@ -223,7 +224,7 @@
                             <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('expanse.index') || this.$page.props.auth.user.role.includes('Administrator') ">
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/expense">
                                     <vue-feather type="circle" />
-                                    <span class="menu-title text-truncate" data-i18n="Chat">Expanse</span>
+                                    <span class="menu-title text-truncate" data-i18n="Chat">Expense</span>
                                 </Link>
                             </li>
                             <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('method.index') || this.$page.props.auth.user.role.includes('Administrator') ">

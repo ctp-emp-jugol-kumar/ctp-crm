@@ -50,13 +50,7 @@ class OldDataController extends Controller
                 ->when(Request::input('search'), function ($query, $search) {
                     $query
                         ->where('subject', 'like', "%{$search}%")
-                        ->orWhere('status', 'like', "%{$search}%")
-                        ->orWhereHas('client', function ($client) use($search){
-                            $client
-                                ->where('name',    'like', "%{$search}%")
-                                ->orWhere('phone', 'like', "%{$search}%")
-                                ->orWhere('email', 'like', "%{$search}%");
-                        });
+                        ->orWhere('status', 'like', "%{$search}%");
                 })
                 ->latest()
                 ->paginate(Request::input('perPage') ?? 10)

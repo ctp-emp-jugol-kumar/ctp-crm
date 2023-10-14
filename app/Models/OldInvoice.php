@@ -13,4 +13,8 @@ class OldInvoice extends Model
         return $this->belongsTo(OldQuotation::class, 'quotation_id');
     }
 
+    public function client(){
+        return $this->belongsTo(Client::class);
+    }
+
 }

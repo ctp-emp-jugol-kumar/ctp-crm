@@ -32,6 +32,7 @@ class SearviceController extends Controller
                     'created_at' => $service->created_at->format('d M Y'),
                     'edit_url' =>  URL::route('services.edit', $service->id)
                 ]),
+            'filters' => Request::only(['search','perPage']),
             "platforms" => Platform::all(),//->get(),
             'main_url' => URL::route('services.index')
         ]);

@@ -190,7 +190,7 @@
                             v-model="createForm.roles_name"
                             :options="roles"
                             class="form-control select-padding"
-                            placeholder="Search Country Name"
+                            placeholder="Assign user roles"
                             :reduce="role => role.id"
                             label="name">
                         </v-select>

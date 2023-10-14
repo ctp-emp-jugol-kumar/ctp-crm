@@ -27,7 +27,7 @@ class PlatformController extends Controller
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('name', 'like', "%{$search}%");
                 })
-                ->paginate(Request::input('perPage') ?? 10)
+                ->paginate(Request::input('perPage') ?? 12)
                 ->withQueryString()
                 ->through(fn($platform) => [
                     'id' => $platform->id,
