@@ -251,11 +251,48 @@
 
 
                     <li class="nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/business-settings">
+                            <vue-feather type="settings" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Settings</span>
+                        </Link>
+                    </li>
+
+                    <li class="nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" method="post" href="/admin/logout">
                             <vue-feather type="log-out" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Logout</span>
                         </Link>
                     </li>
+
+
+                    <li class="nav-item has-sub" :class="{'open' : clickMenu === 6}"  @click="toggleSubMenu(6)">
+                        <a preserve-scroll class="d-flex align-items-center">
+                            <vue-feather type="anchor" />
+                            <span class="menu-title text-truncate"
+                                  data-i18n="Authentication">Old Data</span>
+                        </a>
+                        <ul class="menu-content">
+                            <li class="nav-item">
+                                <Link preserve-scroll class="d-flex align-items-center" href="/admin/old-quotation">
+                                    <vue-feather type="circle" />
+                                    <span class="menu-title text-truncate" data-i18n="Chat">Old Quotation</span>
+                                </Link>
+                            </li>
+                            <li class="nav-item">
+                                <Link preserve-scroll class="d-flex align-items-center" href="/admin/old-invoice">
+                                    <vue-feather type="circle" />
+                                    <span class="menu-title text-truncate" data-i18n="Chat">Old Invoice</span>
+                                </Link>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
+
+
+
+
 <!--                    <li class=" nav-item">
                         <Link preserve-scroll method="post" class="d-flex align-items-center" href="/admin/logout">
                             <vue-feather type="power" />

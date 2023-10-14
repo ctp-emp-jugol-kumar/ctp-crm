@@ -154,6 +154,11 @@
                                     <a :href="props.url.edit_url" class="btn btn-primary w-100 mb-75">
                                         Edit Quotation
                                     </a>
+                                    <button type="button" class="btn btn-outline-primary w-100 mb-75"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#sendEmail">
+                                        Send Email
+                                    </button>
                                     <a :href="props.url.show_url+'?download=true'"  class="btn btn-outline-primary w-100 mb-75">Download PDF</a>
                                     <a :href="props.url.show_url+'?print=true'"  class="btn btn-outline-primary w-100 mb-75">Print Quotation</a>
                                     <button type="button" class="btn btn-outline-primary w-100 mb-75" data-bs-toggle="modal"
@@ -202,6 +207,34 @@
                         </div>
                         <!-- Invoice Edit Right ends -->
                     </div>
+
+                    <!-- Send Invoice Email Sidebar -->
+                    <div class="modal modal-slide-in fade" id="sendEmail" aria-hidden="true">
+                        <div class="modal-dialog sidebar-lg">
+                            <div class="modal-content p-0">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
+                                <div class="modal-header mb-1">
+                                    <h5 class="modal-title">
+                                        <span class="align-middle">Create Invoice</span>
+                                    </h5>
+                                </div>
+                                <div class="modal-body flex-grow-1">
+                                    <form @submit.prevent="createInvoice">
+                                        <div class="mb-1">
+                                            <label class="form-label">Customer Email</label>
+                                            <input type="text" class="form-control" />
+                                        </div>
+
+                                        <div class="mb-1 d-flex flex-wrap mt-2">
+                                            <button type="submit" class="btn btn-primary me-1" data-bs-dismiss="modal">Create</button>
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Send Invoice Email Sidebar -->
 
                     <!-- Send Invoice Sidebar -->
                     <div class="modal modal-slide-in fade" id="createInvoice" aria-hidden="true">
@@ -452,6 +485,7 @@
         return pref;
     })
 
+    const sendEmail = ref(props.quotation.client.email)
 
 </script>
 

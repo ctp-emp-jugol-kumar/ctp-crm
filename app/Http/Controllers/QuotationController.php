@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ServicesRequest;
+use App\Mail\QuotationMail;
 use App\Models\Client;
 use App\Models\Design;
 use App\Models\Domain;
@@ -21,6 +22,7 @@ use Carbon\Carbon;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
@@ -266,7 +268,7 @@ class QuotationController extends Controller
         }
 
 
-        Quotation::create([
+        $quotation = Quotation::create([
             'quotation_id' => Request::input('quotationId'),
             'client_id' => Request::input('clientId'),
             'qut_date' => Request::input('date'),
@@ -280,6 +282,13 @@ class QuotationController extends Controller
             'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
             'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
         ]);
+
+        if (Request::input('sendMail')){
+            if ($quotation->client->email){
+                Mail::to($quotation->client->email)->send(new QuotationMail($quotation->client));
+            }
+        }
+
         return Redirect::route('quotations.index');
     }
 
@@ -1136,4 +1145,8 @@ class QuotationController extends Controller
         return back();
     }
 
+    public function sendMail($id){
+        $quotation = Quotation::with('client')->findOrFail($id);
+        Mail::to($quotation->customer->email)->send(new QuotationMail($quotation->customer));
+    }
 }

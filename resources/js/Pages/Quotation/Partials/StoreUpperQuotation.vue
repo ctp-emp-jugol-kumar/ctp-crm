@@ -194,6 +194,15 @@
                                         </div>
                                     </div>
 
+
+                                    <div class="d-flex justify-content-between">
+                                        <label class="invoice-terms-title mb-0" for="paymentStub">Send Mail</label>
+                                        <div class="form-check form-switch">
+                                            <input v-model="formData.sendMail" type="checkbox" class="form-check-input" id="sendMail" />
+                                            <label class="form-check-label" for="sendMail"></label>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -374,7 +383,8 @@ const formData = useForm({
     paymentPolicy:policyStore.getPaymentPolicy,
     servicePolicy:policyStore.getServicePolicy,
     attachPaymentPolicy:true,
-    attachServicePolicy:true
+    attachServicePolicy:true,
+    sendMail:false,
 })
 
 // const clientId = ref(quotationStore.getClientId)

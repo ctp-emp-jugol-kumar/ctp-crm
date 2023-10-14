@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InvoiceMail;
+use App\Mail\QuotationMail;
 use App\Models\Client;
 use App\Models\CustomInvoice;
 use App\Models\Invoice;
@@ -15,6 +17,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use FontLib\Table\Type\kern;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
@@ -61,6 +64,7 @@ class InvoiceController extends Controller
                 ->through(fn($invoice) => [
                     'id' => $invoice->id,
                     'invoice_id' => $invoice->invoice_id,
+                    'quotation_id' => $invoice->quotation_id,
                     'client' => $invoice->client ?? $invoice->quotation?->client,
                     'user' => $invoice->user,
                     'total_amount' => $invoice->total_price,
@@ -251,6 +255,10 @@ class InvoiceController extends Controller
             "payment_date" => now(),
             "method_id" => Request::input('payment_method')
         ]);
+
+        if ($invoice->client->email){
+            Mail::to($quotation->client->email)->send(new InvoiceMail($quotation->client, $invoice));
+        }
 
         return back();
     }
