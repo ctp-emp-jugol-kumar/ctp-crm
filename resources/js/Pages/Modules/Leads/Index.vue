@@ -425,7 +425,6 @@ import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/v
 import {useDate} from "../../../composables/useDate";
 const range = useDate();
 
-
 let props = defineProps({
     clients: Object,
     users: Object,

@@ -10,6 +10,14 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Services Information's </h4>
+                                    <div
+                                        class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
+                                        <div class="select-search-area">
+                                            <label>Search:<input v-model="search" type="search"
+                                                                 class="form-control" placeholder="what you find ?"
+                                                                 aria-controls="DataTables_Table_0"></label>
+                                        </div>
+                                    </div>
                                     <button class="dt-button add-new btn btn-primary"
                                             v-if="this.$page.props.auth.user.can.includes('services.create') || this.$page.props.auth.user.role.includes('Administrator')"
                                     @click="addServiceModal">
@@ -27,34 +35,36 @@
                         </ul>
                     </div>
                     <div class="col-md-3" v-for="item in props.services.data" :key="item.id">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h2 class="card-title">{{ item.name }}</h2>
-                                    <CDropdown v-if="this.$page.props.auth.user.can.includes('services.delete') || this.$page.props.auth.user.can.includes('services.edit') || this.$page.props.auth.user.role.includes('Administrator')">
-                                        <CDropdownToggle class="p-0">
-                                            <vue-feather type="more-vertical" />
-                                        </CDropdownToggle>
-                                        <CDropdownMenu>
-                                            <CDropdownItem @click="editService(item.edit_url)"
-                                                           v-if="this.$page.props.auth.user.can.includes('services.edit')  || this.$page.props.auth.user.role.includes('Administrator')">
-                                                <vue-feather type="edit" size="15"/>
-                                                <span class="ms-1">Edit</span>
-                                            </CDropdownItem>
+                        <a :href="item.show_url">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h2 class="card-title">{{ item.name }}</h2>
+                                        <CDropdown v-if="this.$page.props.auth.user.can.includes('services.delete') || this.$page.props.auth.user.can.includes('services.edit') || this.$page.props.auth.user.role.includes('Administrator')">
+                                            <CDropdownToggle class="p-0">
+                                                <vue-feather type="more-vertical" />
+                                            </CDropdownToggle>
+                                            <CDropdownMenu>
+                                                <CDropdownItem @click="editService(item.edit_url)"
+                                                               v-if="this.$page.props.auth.user.can.includes('services.edit')  || this.$page.props.auth.user.role.includes('Administrator')">
+                                                    <vue-feather type="edit" size="15"/>
+                                                    <span class="ms-1">Edit</span>
+                                                </CDropdownItem>
 
-                                            <CDropdownItem @click="deleteItem(props.main_url, item.id)"
-                                                           v-if="this.$page.props.auth.user.can.includes('services.delete') || this.$page.props.auth.user.role.includes('Administrator') ">
-                                            <vue-feather type="trash-2" size="15"/>
-                                                <span class="ms-1">Delete</span>
-                                            </CDropdownItem>
-                                        </CDropdownMenu>
-                                    </CDropdown>
-                                </div>
-                                <span class="badge bg-primary"  style="margin-right:5px;" v-for="plat in item.platforms">
+                                                <CDropdownItem @click="deleteItem(props.main_url, item.id)"
+                                                               v-if="this.$page.props.auth.user.can.includes('services.delete') || this.$page.props.auth.user.role.includes('Administrator') ">
+                                                    <vue-feather type="trash-2" size="15"/>
+                                                    <span class="ms-1">Delete</span>
+                                                </CDropdownItem>
+                                            </CDropdownMenu>
+                                        </CDropdown>
+                                    </div>
+                                    <span class="badge bg-primary"  style="margin-right:5px;" v-for="plat in item.platforms">
                                     {{ plat.name }}
                                 </span>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
 
                     <div class="col-md-12">
@@ -91,7 +101,7 @@
                                    type="text" placeholder="e.g Web Development"/>
                         </div>
 
-                        <div class="mb-1">
+<!--                        <div class="mb-1">
                             <label class="form-label" for="amount">Service Platforms</label>
                             <v-select  label="name"
                                        :options="props.platforms"
@@ -101,12 +111,12 @@
                                        v-model="formData.platforms"
                                        placeholder="e.g Laravel, vue js, react js etc">
                             </v-select>
-                        </div>
+                        </div>-->
 
 
                         <div class="d-flex flex-wrap mb-0">
                             <button type="submit" class="btn btn-primary me-1" data-bs-dismiss="modal">Save</button>
-                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Reset</button>
+                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </form>
                 </div>

@@ -14,7 +14,7 @@ export function useDate(date = null){
     ranges["This Month"] = [moment().startOf('month').format('YYYY-MM-DD'), moment().endOf('month').format('YYYY-MM-DD')];
     ranges["Last Month"] = [moment().subtract(1, 'month').startOf('month').format('YYYY-MM-DD'),moment().subtract(1, 'month').endOf('month').format('YYYY-MM-DD')];
     ranges["This Month Last Year"] = [moment().subtract(1, 'year').startOf('month').format('YYYY-MM-DD'),moment().subtract(1, 'year').endOf('month').format('YYYY-MM-DD'),];
-    ranges["This Year"] = [moment().startOf('year'), moment().endOf('year').format('YYYY-MM-DD')];
+    ranges["This Year"] = [moment().startOf('year').format('YYYY-MM-DD'), moment().endOf('year').format('YYYY-MM-DD')];
     ranges["Last Year"] = [moment().startOf('year').subtract(1, 'year').format('YYYY-MM-DD'),moment().endOf('year').subtract(1, 'year').format('YYYY-MM-DD')];
 
 

@@ -74,6 +74,9 @@ Route::prefix('admin')->group(function(){
         Route::resource('designs', DesignController::class);
         // services management
         Route::resource('services', SearviceController::class);
+        Route::post('services/create-package', [SearviceController::class, 'createPackage'])->name('createPackage');
+        Route::post('services/create-feature', [SearviceController::class, 'createFeature'])->name('createFeature');
+
         // platforms management
         Route::resource('platforms', PlatformController::class);
         // package management
