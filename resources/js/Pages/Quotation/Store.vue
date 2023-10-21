@@ -60,27 +60,34 @@
 
                                         <div v-if="formData.items[index].activeTab === 'custom'">
                                             <div class="border">
-                                                <textarea class="form-control" rows="5" placeholder="e.g wright your custom quotation">{{ packs?.descriptions }}</textarea>
+                                                <textarea class="form-control rounded-0" rows="5"
+                                                          placeholder="e.g wright your custom quotation"
+                                                          v-model="formData.items[index].customItem.description"></textarea>
                                             </div>
-                                            <div class="d-flex gap-2 mt-1 align-items-center">
+                                            <div class="d-flex gap-2 my-1 align-items-center">
                                                 <div class="d-flex">
-                                                    <button class="btn btn-icon btn-primary rounded-0">
+                                                    <button @click="minusCustomQty(index)" class="btn btn-icon btn-primary rounded-0">
                                                         <vue-feather type="minus"/>
                                                     </button>
-                                                    <input type="text" class="form-control rounded-0" readonly placeholder="change here qty and price">
-                                                    <button class="btn btn-icon btn-primary rounded-0">
+                                                    <input type="text" class="form-control rounded-0" :value="formData.items[index].customItem?.qty" placeholder="change here qty and price">
+                                                    <button @click="plusCustomQty(index)" class="btn btn-icon btn-primary rounded-0">
                                                         <vue-feather type="plus"/>
                                                     </button>
                                                 </div>
-
                                                 <div>
-                                                    <input type="text" class="form-control rounded-0" placeholder="e.g total price">
+                                                    <label for="customItemPrice">Package Price</label>
+                                                    <input type="text" id="customItemPrice" class="form-control rounded-0" v-model="formData.items[index].customItem.price"
+                                                           @input="changeCustomSubTotal(index)" placeholder="e.g total price">
+                                                </div>
+                                                <div>
+                                                    <label for="customItemSubTotal">Sub Total</label>
+                                                    <input type="text" id="customItemSubTotal" class="form-control rounded-0" v-model="formData.items[index].customItem.subTotal" placeholder="e.g total price">
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="showContentQuotation border p-2" v-if="formData.items[index].activeTab === 'feature'">
-                                            <table class="table table-striped details-table">
+                                        <div class="showContentQuotation border p-2" v-if="formData.items[index].activeTab === 'feature'" v-for="(fes, j)  in formData.items[index].checkFeatrueds">
+<!--                                            <table class="table table-striped details-table">
                                                 <thead>
                                                     <th>Name</th>
                                                     <th>Price</th>
@@ -107,14 +114,45 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
-                                            </table>
+                                            </table>-->
+                                            <div class="d-flex flex-column gap-1 position-relative" >
+                                                <vue-feather type="x" class="packDelete" size="15" @click="itemRemove(index, j)"/>
+                                                <div class="d-flex gap-1">
+                                                    <div>
+                                                        <label for="featureTitle">Title</label>
+                                                        <input type="text" id="featureTitle" class="form-control rounded-0" v-model="formData.items[index].checkFeatrueds[j].name">
 
+                                                    </div>
+                                                    <div>
+                                                        <label for="featurePrice">Package Price</label>
+                                                        <input type="text" id="featurePrice" class="form-control rounded-0"
+                                                               v-model="formData.items[index].checkFeatrueds[j].price"
+                                                               @input="changeFeatureSubTotal(index, j)" placeholder="e.g total price">
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-1">
+                                                    <div class="d-flex">
+                                                        <button @click="qtyMinus(index, j)" class="btn btn-icon btn-primary rounded-0">
+                                                            <vue-feather type="minus"/>
+                                                        </button>
+                                                        <input type="text" class="form-control rounded-0" :value="fes?.qty" placeholder="change here qty and price">
+                                                        <button @click="qtyPlus(index, j)" class="btn btn-icon btn-primary rounded-0">
+                                                            <vue-feather type="plus"/>
+                                                        </button>
+                                                    </div>
+                                                    <div>
+                                                        <label for="featureSubTotal">Sub Total</label>
+                                                        <input type="text" id="featureSubTotal" class="form-control rounded-0"
+                                                               v-model="formData.items[index].checkFeatrueds[j].subTotal" placeholder="e.g subtotal">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
 
                                         <div v-if="formData.items[index].activeTab === 'package'" v-for="(packs, k) in formData.items[index].checkPackages">
                                             <div class="border position-relative">
-                                                <textarea class="form-control" rows="5">{{ packs?.descriptions }}</textarea>
+                                                <textarea class="form-control rounded-0" rows="5">{{ packs?.descriptions }}</textarea>
                                                 <vue-feather type="x" class="packDelete" size="15" @click="packItemRemove(index, k)"/>
                                             </div>
                                             <div class="d-flex gap-2 my-1 align-items-center">
@@ -221,6 +259,12 @@
             packages:[],
             checkFeatrueds:[],
             checkPackages:[],
+            customItem:{
+                descriptioins:null,
+                price:0,
+                qty:1,
+                subTotal:0
+            },
             activeTab:'custom'
         }]
     })
@@ -239,16 +283,22 @@
 
     const addItem = () =>{
         formData.items.push({
-                name:null,
-                service:null,
-                platform:null,
-                platforms:[],
-                features:[],
-                packages:[],
-                checkFeatrueds:[],
-                checkPackages:[],
-                activeTab:'custom'
-            })
+            name:null,
+            service:null,
+            platform:null,
+            platforms:[],
+            features:[],
+            packages:[],
+            checkFeatrueds:[],
+            checkPackages:[],
+            customItem:{
+                descriptioins:null,
+                price:0,
+                qty:1,
+                subTotal:0
+            },
+            activeTab:'custom'
+        })
     }
     const removeItem = (index) => {
         alert("want to delete "+ index)
@@ -291,16 +341,12 @@
 
 
     const loadPlatforms = (event) => {
-        // console.log(event)
-
-        // console.log(formData.items[event].service);
-
         const service = props.services.filter(item => {
             return item.id === formData.items[event].service;
         })[0];
 
         const featuresValue = service.features.map(features =>{
-            return {...features, qty:1}
+            return {...features, qty:1, subTotal:features.price * 1}
         });
         const packageValue = service.packages.map(pack =>{
             return {...pack, qty:1, subTotal:pack.price * 1}
@@ -339,13 +385,64 @@
         formData.items[index].packages = [];
     }
 
+    /*
+    *
+    *
+    * change custom qty price and subtotal manage here
+    * this is new featured here
+    *
+    *
+    * */
+    const changeCustomSubTotal = (index) =>{
+        if(!event.target.value){
+            $toast.warning("Price Not Valid")
+            formData.items[index].customItem.price = 0
+            return;
+        }
+        formData.items[index].customItem.subTotal = formData.items[index].customItem.qty * parseInt(formData.items[index].customItem.price)
+    }
+    const plusCustomQty = (index) =>{
+        formData.items[index].customItem.qty++
+        formData.items[index].customItem.subTotal = formData.items[index].customItem.qty * parseInt(formData.items[index].customItem.price)
+        $toast.success("Quantity Increase")
+    }
+    const minusCustomQty = (index) =>{
+        if (formData.items[index].customItem.qty > 1){
+            formData.items[index].customItem.qty--
+            formData.items[index].customItem.subTotal = formData.items[index].customItem.qty * parseInt(formData.items[index].customItem.price)
+            $toast.warning("Quantity Decrees")
+        }else{
+            $toast.error("Minimum Quantity 1")
+        }
+    }
+
+
+
+
+    /*
+    *
+    * change featured qty price and subtotal manage here
+    * this is new featured here
+    *
+    *
+    * */
+
+    const changeFeatureSubTotal = (index, jIndex) =>{
+
+        formData.items[index].checkFeatrueds[jIndex].subTotal = formData.items[index].checkFeatrueds[jIndex].qty * parseInt(formData.items[index].checkFeatrueds[jIndex].price)
+    }
+
     const qtyPlus = (iIndex, jIndex) =>{
         formData.items[iIndex].checkFeatrueds[jIndex].qty++
+        formData.items[iIndex].checkFeatrueds[jIndex].subTotal = formData.items[iIndex].checkFeatrueds[jIndex].qty * parseInt(formData.items[iIndex].checkFeatrueds[jIndex].price)
+
         $toast.success("Quantity Increase")
     }
     const qtyMinus = (iIndex, jIndex) => {
         if (formData.items[iIndex].checkFeatrueds[jIndex].qty > 1){
             formData.items[iIndex].checkFeatrueds[jIndex].qty--
+            formData.items[iIndex].checkFeatrueds[jIndex].subTotal = formData.items[iIndex].checkFeatrueds[jIndex].qty * parseInt(formData.items[iIndex].checkFeatrueds[jIndex].price)
+
             $toast.warning("Quantity Decrees")
         }else{
             $toast.warning("Minimum Quantity 1")
@@ -356,8 +453,13 @@
         $toast.error("Item Deleted")
     }
 
-
-    // package manage remove, qty update and manage sub total
+    /*
+    *
+    *
+    * change package qty price and subtotal manage here
+    * this is new featured here
+    *
+    * */
 
     const changeSubTotal = (index, kIndex) =>{
         formData.items[index].checkPackages[kIndex].subTotal = formData.items[index].checkPackages[kIndex].qty * parseInt(formData.items[index].checkPackages[kIndex].price)
@@ -388,13 +490,13 @@
         let total= 0;
         formData.items.map(item =>{
             item.checkFeatrueds.map(fes =>{
-                total += fes.price * fes.qty;
+                total += parseInt(fes.subTotal)
             })
             item.checkPackages.map(pac => {
                 total += parseInt(pac.subTotal)
             })
+            total += parseInt(item.customItem.subTotal)
         })
-
         formData.totalPrice = total
         return total;
     })
