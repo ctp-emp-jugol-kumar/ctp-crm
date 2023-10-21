@@ -204,7 +204,12 @@ class QuotationController extends Controller
      */
     public function create(){
 
-        $services = Searvice::all()->map(function ($service){
+   /*
+    * this is for package platform and features system
+    * but here change the logic
+    * now applied only service an service have multiple features and packages
+    *
+    *      $services = Searvice::all()->map(function ($service){
             $service["platforms"] = Platform::with("packages")
                 ->whereIn('id', json_decode($service->platforms))
                 ->get()
@@ -213,11 +218,11 @@ class QuotationController extends Controller
                     return collect($platform)->only(['id', 'name', 'features', 'packages']);
                 });
             return collect($service)->only(['service_name', 'id', 'platforms']);
-        });
+        });*/
 
+        $services = Searvice::with(['packages', 'features'])->get();
+//        return $services;
         $clients   = Client::where('is_client', true)->latest()->get();
-
-
 
         return inertia('Quotation/Store', [
             'services' => $services,
