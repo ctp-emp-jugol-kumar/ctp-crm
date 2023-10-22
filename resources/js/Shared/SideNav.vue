@@ -89,7 +89,7 @@
                         </ul>
                     </li>
 
-                    <li class=" nav-item has-sub" :class="{'open' : clickMenu === 3}"  @click="toggleSubMenu(3)"
+<!--                    <li class=" nav-item has-sub" :class="{'open' : clickMenu === 3}"  @click="toggleSubMenu(3)"
                         v-if="
                              this.$page.props.auth.user.role.includes('Administrator') ||
                              this.$page.props.auth.user.can.includes('platform.index') ||
@@ -120,7 +120,7 @@
                                     <span class="menu-title text-truncate" data-i18n="Chat">Services</span>
                                 </Link>
                             </li>
-<!--                            <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('feature.show') || this.$page.props.auth.user.role.includes('Administrator') ">
+&lt;!&ndash;                            <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('feature.show') || this.$page.props.auth.user.role.includes('Administrator') ">
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/features">
                                     <vue-feather type="circle" />
                                     <span class="menu-title text-truncate" data-i18n="Chat">Feature</span>
@@ -145,9 +145,16 @@
                                     <vue-feather type="circle" />
                                     <span class="menu-title text-truncate" data-i18n="Chat">Hostings</span>
                                 </Link>
-                            </li>-->
+                            </li>&ndash;&gt;
                         </ul>
+                    </li>-->
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('services.index') || this.$page.props.auth.user.role.includes('Administrator') ">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/services">
+                            <vue-feather type="gift" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Services</span>
+                        </Link>
                     </li>
+
 
                     <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('quotation.index') || this.$page.props.auth.user.role.includes('Administrator') ">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/quotations">

@@ -12,24 +12,30 @@
                                     <div :class="formData.items[index].service ? 'col-md-7' : 'col-md-12'">
                                         <div class="input-group"
                                              v-if="!formData.items[index].platforms?.length > 0">
-                                            <v-select :options="services"
-                                                      v-model="formData.items[index].service"
-                                                      label="service_name"
-                                                      class="form-control select-padding p-0 rounded-0"
-                                                      style="width:100%; padding: 0px 0px !important;"
-                                                      :reduce="service => service.id"
-                                                      @update:modelValue="loadPlatforms(index)"
-                                                      placeholder="e.g Select Service">
-                                                <template v-slot:option="option">
-                                                    <li class="d-flex align-items-start py-1">
-                                                        <div class="d-flex align-items-center justify-content-between w-100">
-                                                            <div class="me-1 d-flex flex-column" >
-                                                                <h6 class="mb-25">{{ option.service_name }}</h6>
+                                            <div class="d-flex w-100">
+                                                <v-select :options="services"
+                                                          v-model="formData.items[index].service"
+                                                          label="service_name"
+                                                          class="form-control select-padding p-0 rounded-0"
+                                                          style="width:100%; padding: 0px 0px !important;"
+                                                          :clearable="false"
+                                                          :reduce="service => service.id"
+                                                          @update:modelValue="loadPlatforms(this, index)"
+                                                          placeholder="e.g Select Service">
+                                                    <template v-slot:option="option">
+                                                        <li class="d-flex align-items-start py-1">
+                                                            <div class="d-flex align-items-center justify-content-between w-100">
+                                                                <div class="me-1 d-flex flex-column" >
+                                                                    <h6 class="mb-25">{{ option.service_name }}</h6>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </li>
-                                                </template>
-                                            </v-select>
+                                                        </li>
+                                                    </template>
+                                                </v-select>
+                                                <button v-if="formData.items[index].service != null" class="btn border-1 border-start-0 close-select" @click="clearSelect(index)">
+                                                    <vue-feather type="x"></vue-feather>
+                                                </button>
+                                            </div>
                                         </div>
 <!--                                        <div class="d-flex"
                                              v-if="formData.items[index].platforms?.length > 0">
@@ -77,15 +83,14 @@
                                                 <div>
                                                     <label for="customItemPrice">Package Price</label>
                                                     <input type="text" id="customItemPrice" class="form-control rounded-0" v-model="formData.items[index].customItem.price"
-                                                           @input="changeCustomSubTotal(index)" placeholder="e.g total price">
+                                                           @input="changeCustomSubTotal(index)"  placeholder="e.g total price">
                                                 </div>
                                                 <div>
                                                     <label for="customItemSubTotal">Sub Total</label>
-                                                    <input type="text" id="customItemSubTotal" class="form-control rounded-0" v-model="formData.items[index].customItem.subTotal" placeholder="e.g total price">
+                                                    <input type="text" id="customItemSubTotal" disabled class="form-control rounded-0" v-model="formData.items[index].customItem.subTotal" placeholder="e.g total price">
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="showContentQuotation border p-2" v-if="formData.items[index].activeTab === 'feature'" v-for="(fes, j)  in formData.items[index].checkFeatrueds">
 <!--                                            <table class="table table-striped details-table">
                                                 <thead>
@@ -143,12 +148,11 @@
                                                     <div>
                                                         <label for="featureSubTotal">Sub Total</label>
                                                         <input type="text" id="featureSubTotal" class="form-control rounded-0"
-                                                               v-model="formData.items[index].checkFeatrueds[j].subTotal" placeholder="e.g subtotal">
+                                                               v-model="formData.items[index].checkFeatrueds[j].subTotal" disabled placeholder="e.g subtotal">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
 
                                         <div v-if="formData.items[index].activeTab === 'package'" v-for="(packs, k) in formData.items[index].checkPackages">
                                             <div class="border position-relative">
@@ -171,7 +175,7 @@
                                                 </div>
                                                 <div>
                                                     <label for="subtotalPackage">Sub Total</label>
-                                                    <input type="text" id="subtotalPackage" class="form-control rounded-0" v-model="formData.items[index].checkPackages[k].subTotal" placeholder="e.g total price">
+                                                    <input type="text" id="subtotalPackage" disabled class="form-control rounded-0" v-model="formData.items[index].checkPackages[k].subTotal" placeholder="e.g total price">
                                                 </div>
                                             </div>
                                         </div>
@@ -233,9 +237,10 @@
 <script setup>
     import UpperQuotation from "./Partials/StoreUpperQuotation.vue"
     import {useForm, usePage} from "@inertiajs/inertia-vue3";
-    import {computed, ref, onMounted } from "vue"
+    import {computed, ref, onMounted, watch } from "vue"
     import {useQuotationStore} from "../../Store/useQuotationStore";
     import {Inertia} from "@inertiajs/inertia";
+    import Swal from "sweetalert2";
 
     const quotationStore = useQuotationStore()
 
@@ -260,7 +265,7 @@
             checkFeatrueds:[],
             checkPackages:[],
             customItem:{
-                descriptioins:null,
+                description:null,
                 price:0,
                 qty:1,
                 subTotal:0
@@ -305,7 +310,6 @@
         formData.items.splice(index, 1);
     }
 
-    // const isFeatured = ref(true)
 
     const getPlatItems=(index, active)=>{
         formData.items[index].activeTab = active;
@@ -336,26 +340,70 @@
 
 
 
-    const selected = ref(null)
 
 
+    const loadPlatforms = (event, index) => {
 
-    const loadPlatforms = (event) => {
-        const service = props.services.filter(item => {
-            return item.id === formData.items[event].service;
+        let service = null;
+        service = props.services.filter(item => {
+            return item.id === formData.items[index].service;
         })[0];
 
-        const featuresValue = service.features.map(features =>{
+        const featuresValue = service?.features?.map(features =>{
             return {...features, qty:1, subTotal:features.price * 1}
         });
-        const packageValue = service.packages.map(pack =>{
+        const packageValue = service?.packages?.map(pack =>{
             return {...pack, qty:1, subTotal:pack.price * 1}
         });
 
-        formData.items[event].features = featuresValue;
-        formData.items[event].packages = packageValue;
+        formData.items[index].features = featuresValue;
+        formData.items[index].packages = packageValue;
 
     }
+
+
+    const clearSelect =(index)=>{
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You want to cancel this service. if you cancel it then removed package and features",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                formData.items[index].service = null;
+                formData.items[index].checkPackages = [];
+                formData.items[index].checkFeatrueds = [];
+                formData.items[index].features = [];
+                formData.items[index].packages = [];
+                formData.items[index].activeTab = 'custom';
+                $toast.success("Services Removed...")
+            }
+          /*  else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'Your imaginary file is safe :)',
+                    'error'
+                )
+            }*/
+        })
+
+
+    }
+
+
+
 
 /*
         //  this function used for package platform and featured systems
@@ -428,7 +476,12 @@
     * */
 
     const changeFeatureSubTotal = (index, jIndex) =>{
-
+        if(!event.target.value){
+            $toast.warning("Price Not Valid")
+            formData.items[index].checkFeatrueds[jIndex].price = 0
+            formData.items[index].checkFeatrueds[jIndex].subTotal = formData.items[index].checkFeatrueds[jIndex].qty * parseInt(formData.items[index].checkFeatrueds[jIndex].price)
+            return;
+        }
         formData.items[index].checkFeatrueds[jIndex].subTotal = formData.items[index].checkFeatrueds[jIndex].qty * parseInt(formData.items[index].checkFeatrueds[jIndex].price)
     }
 
@@ -462,6 +515,12 @@
     * */
 
     const changeSubTotal = (index, kIndex) =>{
+        if(!event.target.value){
+            $toast.warning("Price Not Valid")
+            formData.items[index].checkPackages[kIndex].price = 0
+            formData.items[index].checkPackages[kIndex].subTotal = formData.items[index].checkPackages[kIndex].qty * parseInt(formData.items[index].checkPackages[kIndex].price)
+            return;
+        }
         formData.items[index].checkPackages[kIndex].subTotal = formData.items[index].checkPackages[kIndex].qty * parseInt(formData.items[index].checkPackages[kIndex].price)
     }
 
@@ -485,6 +544,10 @@
         $toast.error("Item Deleted")
     }
 
+    const closeServiceItem = (index) =>{
+        console.log(event)
+        console.log(index)
+    }
 
     const totalPrice = computed(()=>{
         let total= 0;
@@ -500,7 +563,6 @@
         formData.totalPrice = total
         return total;
     })
-
 
 
 </script>
@@ -523,6 +585,10 @@
     padding: 1px;
     top: -7px;
     border-radius: 50px;
+}
+.close-select{
+    border-color: #d8d6de;
+    border-radius: 0;
 }
 </style>
 

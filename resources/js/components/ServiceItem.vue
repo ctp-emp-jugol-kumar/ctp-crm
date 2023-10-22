@@ -11,7 +11,7 @@
 
             <QtyButton/>
 
-            <input type="number" class="form-control border-0" v-model="discount" @input="modalValue" placeholder="Discount">
+            <input type="number" class="form-control border-0" @input="modalValue" placeholder="Discount">
         </div>
     </div>
 </template>
@@ -26,6 +26,7 @@
             name:String,
             price:String,
             id:String,
+            discount:null,
         },
     })
 

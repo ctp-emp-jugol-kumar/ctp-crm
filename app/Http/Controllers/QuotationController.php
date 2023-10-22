@@ -267,10 +267,16 @@ class QuotationController extends Controller
         $storeItems = [];
         foreach (Request::input('items') as $item){
             $storeItems[] = [
+                'customItem' => $item['customItem'],
                 'checkFeatrueds' => $item['checkFeatrueds'],
                 'checkPackages' =>  $item['checkPackages']
             ];
         }
+
+
+//        return $storeItems;
+
+
 
 
         $quotation = Quotation::create([
@@ -549,6 +555,8 @@ class QuotationController extends Controller
     public function show($id)
     {
         $quotation = Quotation::with(['client', 'user:id,name', 'invoice'])->findOrFail($id);
+
+//        return json_decode($quotation->items);
         $pref = [];
         foreach (json_decode($quotation->items) as $item){
             if ($item->checkPackages){
@@ -568,6 +576,15 @@ class QuotationController extends Controller
                         'price' => $feared->price,
                     ];
                 }
+            }
+            if ($item->customItem){
+//                foreach ($item->customItem as $cItem){
+                    $pref[] =[
+                        'name'=> $item?->customItem->description ?? 'custom_service',
+                        'qty' => $item?->customItem->qty,
+                        'price' => $item?->customItem->price,
+                    ];
+//                }
             }
         }
 

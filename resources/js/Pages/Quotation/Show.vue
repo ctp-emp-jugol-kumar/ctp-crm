@@ -480,6 +480,13 @@
                     })
                 })
             }
+            if(item.customItem){
+                pref.push({
+                    name:item.customItem.description,
+                    qty:item.customItem.qty,
+                    price:item.customItem.price
+                })
+            }
 
         })
         return pref;
