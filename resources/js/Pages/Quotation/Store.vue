@@ -404,35 +404,6 @@
 
 
 
-
-/*
-        //  this function used for package platform and featured systems
-       const loadPlatformFeatureds = (event) => {
-
-
-        const platform = formData.items[event].platforms.filter(item => {
-            return item.value === formData.items[event].platform.value;
-        })[0];
-
-        const value = platform.value === formData.items[event].platform.value ? platform.features.map(fetures => {
-            return {...fetures, qty:1};
-        }) : [];
-
-
-        const packageValue = platform.value === formData.items[event].platform.value ? platform.packages.map(packageItem => {
-            return {...packageItem, qty:1};
-        }) : [];
-
-        formData.items[event].features = value;
-        formData.items[event].packages = packageValue;
-    }*/
-
-    const reback = (index) => {
-        formData.items[index].platforms = [];
-        formData.items[index].features = [];
-        formData.items[index].packages = [];
-    }
-
     /*
     *
     *
@@ -565,6 +536,37 @@
     })
 
 
+
+
+    /*
+            //  this function used for package platform and featured systems
+           const loadPlatformFeatureds = (event) => {
+
+
+            const platform = formData.items[event].platforms.filter(item => {
+                return item.value === formData.items[event].platform.value;
+            })[0];
+
+            const value = platform.value === formData.items[event].platform.value ? platform.features.map(fetures => {
+                return {...fetures, qty:1};
+            }) : [];
+
+
+            const packageValue = platform.value === formData.items[event].platform.value ? platform.packages.map(packageItem => {
+                return {...packageItem, qty:1};
+            }) : [];
+
+            formData.items[event].features = value;
+            formData.items[event].packages = packageValue;
+        }*/
+
+    /*
+        const reback = (index) => {
+            formData.items[index].platforms = [];
+            formData.items[index].features = [];
+            formData.items[index].packages = [];
+        }
+    */
 </script>
 
 

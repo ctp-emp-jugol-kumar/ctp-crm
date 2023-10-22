@@ -158,6 +158,9 @@ class SearviceController extends Controller
     public function destroy($id)
     {
         $service = Searvice::findOrFail($id);
+        $service->features->each->delete();
+        $service->packages->each->delete();
+
         $service->delete();
         return back();
     }

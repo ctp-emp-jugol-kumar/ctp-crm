@@ -10,19 +10,6 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">{{ service?.service_name }}</h4>
-<!--                                    <div
-                                        class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
-                                        <div class="select-search-area">
-                                            <label>Search:<input v-model="search" type="search"
-                                                                 class="form-control" placeholder="what you find ?"
-                                                                 aria-controls="DataTables_Table_0"></label>
-                                        </div>
-                                    </div>
-                                    <button class="dt-button add-new btn btn-primary"
-                                            v-if="this.$page.props.auth.user.can.includes('services.create') || this.$page.props.auth.user.role.includes('Administrator')"
-                                            @click="addServiceModal">
-                                        Add Service
-                                    </button>-->
                                 </div>
                             </div>
                         </div>
@@ -178,9 +165,7 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>

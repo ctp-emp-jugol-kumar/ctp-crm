@@ -267,17 +267,12 @@ class QuotationController extends Controller
         $storeItems = [];
         foreach (Request::input('items') as $item){
             $storeItems[] = [
+                'service' => $item['service'],
                 'customItem' => $item['customItem'],
                 'checkFeatrueds' => $item['checkFeatrueds'],
                 'checkPackages' =>  $item['checkPackages']
             ];
         }
-
-
-//        return $storeItems;
-
-
-
 
         $quotation = Quotation::create([
             'quotation_id' => Request::input('quotationId'),
@@ -865,7 +860,11 @@ class QuotationController extends Controller
     public function editQuotation($id){
         $quot = Quotation::with('client')->findOrFail($id);
 
-        $services = Searvice::all()->map(function ($service){
+/*
+ *
+ * this is the old system of load services for package platforms modules
+ *
+ *         $services = Searvice::all()->map(function ($service){
             $service["platforms"] = Platform::with("packages")
                 ->whereIn('id', json_decode($service->platforms))
                 ->get()
@@ -874,7 +873,11 @@ class QuotationController extends Controller
                     return collect($platform)->only(['id', 'name', 'features', 'packages']);
                 });
             return collect($service)->only(['service_name', 'id', 'platforms']);
-        });
+        });*/
+
+
+
+        $services = Searvice::with(['packages', 'features'])->get();
 
         $clients = Client::where('is_client', true)->latest()->get();
 
@@ -908,6 +911,8 @@ class QuotationController extends Controller
         $storeItems = [];
         foreach (Request::input('items') as $item){
             $storeItems[] = [
+                'service' => $item['service'],
+                'customItem' => $item['customItem'],
                 'checkFeatrueds' => $item['checkFeatrueds'],
                 'checkPackages' =>  $item['checkPackages']
             ];

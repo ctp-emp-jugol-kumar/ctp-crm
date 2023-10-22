@@ -25,7 +25,7 @@ class OldDataController extends Controller
                                 ->orWhere('email', 'like', "%{$search}%");
                         });
                 })
-                ->latest()
+                ->oldest()
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
                 ->through(fn($quotation) => [
@@ -52,7 +52,7 @@ class OldDataController extends Controller
                         ->where('subject', 'like', "%{$search}%")
                         ->orWhere('status', 'like', "%{$search}%");
                 })
-                ->latest()
+                ->oldest()
                 ->paginate(Request::input('perPage') ?? 10)
                 ->withQueryString()
                 ->through(fn($invoice) => [
