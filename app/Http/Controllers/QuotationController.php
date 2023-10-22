@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ServicesRequest;
+use App\Mail\QuotationMail;
 use App\Models\Client;
 use App\Models\Design;
 use App\Models\Domain;
@@ -21,6 +22,7 @@ use Carbon\Carbon;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
@@ -202,7 +204,12 @@ class QuotationController extends Controller
      */
     public function create(){
 
-        $services = Searvice::all()->map(function ($service){
+   /*
+    * this is for package platform and features system
+    * but here change the logic
+    * now applied only service an service have multiple features and packages
+    *
+    *      $services = Searvice::all()->map(function ($service){
             $service["platforms"] = Platform::with("packages")
                 ->whereIn('id', json_decode($service->platforms))
                 ->get()
@@ -211,11 +218,11 @@ class QuotationController extends Controller
                     return collect($platform)->only(['id', 'name', 'features', 'packages']);
                 });
             return collect($service)->only(['service_name', 'id', 'platforms']);
-        });
+        });*/
 
+        $services = Searvice::with(['packages', 'features'])->get();
+//        return $services;
         $clients   = Client::where('is_client', true)->latest()->get();
-
-
 
         return inertia('Quotation/Store', [
             'services' => $services,
@@ -260,13 +267,19 @@ class QuotationController extends Controller
         $storeItems = [];
         foreach (Request::input('items') as $item){
             $storeItems[] = [
+                'customItem' => $item['customItem'],
                 'checkFeatrueds' => $item['checkFeatrueds'],
                 'checkPackages' =>  $item['checkPackages']
             ];
         }
 
 
-        Quotation::create([
+//        return $storeItems;
+
+
+
+
+        $quotation = Quotation::create([
             'quotation_id' => Request::input('quotationId'),
             'client_id' => Request::input('clientId'),
             'qut_date' => Request::input('date'),
@@ -280,6 +293,13 @@ class QuotationController extends Controller
             'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
             'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
         ]);
+
+        if (Request::input('sendMail')){
+            if ($quotation->client->email){
+                Mail::to($quotation->client->email)->send(new QuotationMail($quotation->client));
+            }
+        }
+
         return Redirect::route('quotations.index');
     }
 
@@ -535,6 +555,8 @@ class QuotationController extends Controller
     public function show($id)
     {
         $quotation = Quotation::with(['client', 'user:id,name', 'invoice'])->findOrFail($id);
+
+//        return json_decode($quotation->items);
         $pref = [];
         foreach (json_decode($quotation->items) as $item){
             if ($item->checkPackages){
@@ -554,6 +576,15 @@ class QuotationController extends Controller
                         'price' => $feared->price,
                     ];
                 }
+            }
+            if ($item->customItem){
+//                foreach ($item->customItem as $cItem){
+                    $pref[] =[
+                        'name'=> $item?->customItem->description ?? 'custom_service',
+                        'qty' => $item?->customItem->qty,
+                        'price' => $item?->customItem->price,
+                    ];
+//                }
             }
         }
 
@@ -1048,8 +1079,8 @@ class QuotationController extends Controller
     public function destroy(Quotation $quotation)
     {
         if ($quotation->invoice){
-            if ($quotation->invoice()->transactions){
-                $quotation->invoice()->transactions()->delete();
+            if ($quotation->invoice->transactions->count()){
+                $quotation->invoice->transactions()->delete();
             }
             $quotation->invoice()->delete();
         }
@@ -1136,4 +1167,8 @@ class QuotationController extends Controller
         return back();
     }
 
+    public function sendMail($id){
+        $quotation = Quotation::with('client')->findOrFail($id);
+        Mail::to($quotation->customer->email)->send(new QuotationMail($quotation->customer));
+    }
 }

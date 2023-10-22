@@ -66,15 +66,26 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store()
     {
         if (!auth()->user()->can('user.create')){
             abort(404);
         }
+
+        Request::validate([
+            'email'       => ['required','unique:users'],
+            'name'   => ['required', 'string'],
+            'phone'    => ['required'],
+            'password'    => ['required','min:6'],
+            'password_confirmation' => ['required_with:password','same:password','min:6']
+        ]);
+
         $image_path = "";
         if (Request::hasFile('photo')){
             $image_path = Request::file('photo')->store('image', 'public');
         }
+
+
 
         User::create([
             'name' => Request::input('name'),

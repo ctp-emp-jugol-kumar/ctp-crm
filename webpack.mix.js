@@ -30,4 +30,6 @@ mix.webpackConfig({
     stats: {
         children: false
    }
-});
+}).disableNotifications();
+
+

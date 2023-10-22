@@ -16,7 +16,7 @@
                                         class="dt-button add-new btn btn-primary"
                                         @click="addDataModal"
                                     >
-                                        Add Lead
+                                        Add Lead btn
                                     </button>
                                     <!--                                    <div>
                                                                             <CDropdown>
@@ -425,7 +425,6 @@ import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/v
 import {useDate} from "../../../composables/useDate";
 const range = useDate();
 
-
 let props = defineProps({
     clients: Object,
     users: Object,
@@ -482,7 +481,7 @@ const updateStatus = (id, status) =>{
 }
 
 
-let status = ref([])
+let status = ref([{"name":'New Lead'}, {"name":'Contacted'}, {"name":'Qualified'}, {"name":'Disqualified'}, {"name":'Follow Up'}])
 
 let deleteItemModal = (id) => {
     Swal.fire({

@@ -87,6 +87,7 @@
                                                             <vue-feather type="eye" size="15"/>
                                                             <span class="ms-1">Show</span>
                                                         </CDropdownItem>
+
                                                         <CDropdownItem :href="invoice.edit_url" target="_blank"
                                                                        v-if="this.$page.props.auth.user.can.includes('invoice.edit') || this.$page.props.auth.user.role.includes('Administrator') && !invoice.quotation_id">
                                                             <vue-feather type="edit" size="15"/>

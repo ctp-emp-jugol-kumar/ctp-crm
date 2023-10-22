@@ -15,4 +15,13 @@ class Searvice extends Model
         return $this->hasMany(Platform::class, 'platform_id');
     }
 
+    public function packages()
+    {
+        return $this->hasMany(ServicePackage::class, 'service_id');
+    }
+    public function features()
+    {
+        return $this->hasMany(ServiceFeature::class, 'service_id');
+    }
+
 }

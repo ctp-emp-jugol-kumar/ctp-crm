@@ -87,7 +87,9 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <button type="submit" @click="addPackage" class="btn btn-primary me-2">Save</button>
-                                        <button type="reset" class="btn btn-danger">Cancel</button>
+                                        <a :href="$page.props.auth.ADMIN_URL+'/package'" class="dt-button add-new btn btn-danger">
+                                            Back
+                                        </a>
                                     </div>
                                 </div>
                             </div>

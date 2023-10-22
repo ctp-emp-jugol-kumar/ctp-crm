@@ -10,6 +10,16 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">Platform Information's </h4>
+
+                                    <div
+                                        class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
+                                        <div class="select-search-area">
+                                            <label>Search:<input v-model="search" type="search"
+                                                                 class="form-control" placeholder="what you find ?"
+                                                                 aria-controls="DataTables_Table_0"></label>
+                                        </div>
+                                    </div>
+
                                     <a class="dt-button add-new btn btn-primary"
                                        v-if="this.$page.props.auth.user.can.includes('platform.create') || this.$page.props.auth.user.role.includes('Administrator')"
                                     :href="props.main_url+'/create'">
@@ -71,7 +81,10 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
+                <Pagination :links="platforms.links" :from="platforms.from" :to="platforms.to" :total="platforms.total"/>
+
             </div>
         </div>
     </div>
@@ -85,10 +98,13 @@
 <script setup>
 
     import {useAction} from "../../composables/useAction";
-    import {ref, onMounted} from "vue";
+    import {ref, onMounted, watch} from "vue";
     import {useForm} from "@inertiajs/inertia-vue3";
+    import Pagination from "../../components/Pagination"
 
     import MiniMasonry from "minimasonry";
+    import debounce from "lodash/debounce";
+    import {Inertia} from "@inertiajs/inertia";
 
     const {swalSuccess, deleteItem} = useAction()
 
@@ -122,7 +138,6 @@
 
 
     onMounted(() =>{
-
         var masonry1 = new MiniMasonry({
             container: '.container_1',
             baseWidth: 400,
@@ -132,7 +147,12 @@
         });
     })
 
+    const search = ref(props.filters.search);
+    const perPage = ref(props.filters.perPage);
 
+    watch([search, perPage], debounce(function ([val, val2]) {
+        Inertia.get(props.main_url, {search: val, perPage: val2}, {preserveState: true, replace: true});
+    }, 300));
 
 /*
     let editData = ref([]);

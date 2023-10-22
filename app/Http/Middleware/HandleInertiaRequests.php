@@ -57,7 +57,7 @@ class HandleInertiaRequests extends Middleware
                     'can' => $can,
                     'notifications' => $user->notifications()->where('read_at', '=', NULL)->latest()->take(10)->get()
                 ],
-                'ADMIN_URL' => 'http://127.0.0.1:8000/admin',
+                'ADMIN_URL' => config('app.url').'/admin',
                 'MAIN_URL' => config('app.url'),
             ] : null
         ]);

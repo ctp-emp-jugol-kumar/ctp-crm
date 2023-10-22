@@ -167,7 +167,7 @@
                             <Required/>
                         </label>
                         <div class="">
-                            <input v-model="createForm.name" type="text" placeholder="Name" class="form-control">
+                            <input v-model="createForm.name" type="text" placeholder="project url" class="form-control">
                             <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
                         </div>
                     </div>

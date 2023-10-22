@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InvoiceMail;
+use App\Mail\QuotationMail;
 use App\Models\Client;
 use App\Models\CustomInvoice;
 use App\Models\Invoice;
@@ -15,10 +17,12 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use FontLib\Table\Type\kern;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
+use Mockery\Generator\StringManipulation\Pass\RemoveUnserializeForInternalSerializableClassesPass;
 use function PHPUnit\Framework\isEmpty;
 use function PHPUnit\Framework\isNull;
 use function Symfony\Component\Mime\toString;
@@ -60,6 +64,7 @@ class InvoiceController extends Controller
                 ->through(fn($invoice) => [
                     'id' => $invoice->id,
                     'invoice_id' => $invoice->invoice_id,
+                    'quotation_id' => $invoice->quotation_id,
                     'client' => $invoice->client ?? $invoice->quotation?->client,
                     'user' => $invoice->user,
                     'total_amount' => $invoice->total_price,
@@ -210,7 +215,6 @@ class InvoiceController extends Controller
 
     public function createInvoice($id)
     {
-
         if (Request::input("pay") != null){
             Request::validate([
                 'payment_method' => 'required'
@@ -224,7 +228,7 @@ class InvoiceController extends Controller
 
         $due = $grandTotal - (int)Request::input('pay');
 
-        Invoice::create([
+        $invoice = Invoice::create([
             'invoice_id' => now()->format('Ymd'),
             'quotation_id' => $quotation->id,
             'client_id' => Request::input('clientId'),
@@ -237,6 +241,24 @@ class InvoiceController extends Controller
             'due' => $due,
             'note' => Request::input('note')
         ]);
+
+        Transaction::create([
+            'transaction_id' =>  now()->format('Ymd'),
+            'transactionable_id' => $invoice->id,
+            'transactionable_type' => "App\\Models\\Invoice",
+            'received_by' => Auth::id(),
+            'payment_by' => Request::input('clientId'),
+            "transaction_type" => "Credited",
+            "amount" => $quotation->total_price,
+            "pay" => Request::input('pay'),
+            "due" => $due,
+            "payment_date" => now(),
+            "method_id" => Request::input('payment_method')
+        ]);
+
+        if ($invoice->client->email){
+            Mail::to($quotation->client->email)->send(new InvoiceMail($quotation->client, $invoice));
+        }
 
         return back();
     }

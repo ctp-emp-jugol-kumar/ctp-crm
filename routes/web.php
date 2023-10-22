@@ -15,12 +15,14 @@ use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MethodController;
 use App\Http\Controllers\NoteCategoryController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\BusinessSettingController;
 use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PurposeController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\QuotationInvoice;
 use App\Http\Controllers\SearviceController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
@@ -72,6 +74,9 @@ Route::prefix('admin')->group(function(){
         Route::resource('designs', DesignController::class);
         // services management
         Route::resource('services', SearviceController::class);
+        Route::post('services/create-package', [SearviceController::class, 'createPackage'])->name('createPackage');
+        Route::post('services/create-feature', [SearviceController::class, 'createFeature'])->name('createFeature');
+
         // platforms management
         Route::resource('platforms', PlatformController::class);
         // package management
@@ -97,6 +102,7 @@ Route::prefix('admin')->group(function(){
         Route::post('quotation/update-status', [QuotationController::class, 'chnageQuotationStatus'])->name('chnageQuotationStatus');
         Route::get('quotations-to-invoice/{id}', [QuotationController::class, 'quotationInvoice'])->name('quotations.quotationInvoice');
         Route::post('quotations-invoice-payment', [QuotationController::class, 'addPayment'])->name('quotations.addPayment');
+        Route::get('quotations-send-by-email/{id}', [QuotationController::class, 'sendMail'])->name('quotations.sendMail');
 
 
         // invoices management
@@ -142,17 +148,30 @@ Route::prefix('admin')->group(function(){
         Route::post('notes-update', [NoteController::class, 'update'])->name('notes.update');
         Route::get('employee-notes', [NoteController::class, 'employeeNotes'])->name('notes.empNots');
 
+        // todo management
         Route::resource('todos', TodoController::class);
         Route::get('change-todo-status/{id}', [TodoController::class, 'show']);
         Route::post('todos/replay-todo', [TodoController::class, 'replayTodo'])->name('replayTodo');
         Route::get('my-todos', [TodoController::class, 'myTodos'])->name('myTodos');
         Route::get('complete-todos', [TodoController::class, 'completeTodos'])->name('completeTodos');
         Route::get('read-all-notification', [TodoController::class, 'readAllNotification'])->name('readAllNotification');
+
+        // old invoice and quotation management
+        Route::get('old-quotation', [\App\Http\Controllers\OldDataController::class, 'quotation'])->name('oldQuotation');
+        Route::get('old-quotation/{id}', [\App\Http\Controllers\OldDataController::class, 'showQuotation'])->name('showQuotation');
+        Route::get('old-invoice', [\App\Http\Controllers\OldDataController::class, 'invoice'])->name('oldInvoice');;
+        Route::get('old-invoice/{id}', [\App\Http\Controllers\OldDataController::class, 'showInvoice'])->name('showInvoice');;
+
+
+        // update smtp setup
+        Route::get('business-settings', [BusinessSettingController::class, 'index'])->name('businessIndex');
+        Route::post('mail-setup', [BusinessSettingController::class, 'updateSmtp'])->name('updateSmtp');
     });
 
     Route::post('/logout', [LoginController::class, 'destroy']);
 });
 
+Route::get('/qut-email', [TestController::class, 'testEmail']);
 
 Route::get('invoice-show/{id}',  [QuotationController::class, 'createInvoice']);
 
@@ -163,7 +182,7 @@ Route::post('/test/create', [\App\Http\Controllers\TestController::class, 'creat
 Route::get('/test/edit/{id}', [\App\Http\Controllers\TestController::class, 'edit'])->name('test.edit');
 Route::put('/test/update/{id}', [\App\Http\Controllers\TestController::class, 'update'])->name('test.update');
 
-//
+
 //Route::fallback(function() {
 //    return \Inertia\Inertia::render('Pages/Errors/404',[
 //        "info" =>[

@@ -15,8 +15,9 @@
                 :collapseTogglerIcon="collapseTogglerIcon"
             >
                 <ul class="nav navbar-nav flex-row">
-                    <li class="nav-item me-auto"><Link preserve-scroll class="navbar-brand"
-                            href="#">
+                    <li class="nav-item me-auto">
+                        <Link preserve-scroll class="navbar-brand"
+                            href="/">
                             <span class="brand-logo">
                             </span>
                             <h2 class="brand-text">CTP BD CRM</h2>
@@ -88,7 +89,7 @@
                         </ul>
                     </li>
 
-                    <li class=" nav-item has-sub" :class="{'open' : clickMenu === 3}"  @click="toggleSubMenu(3)"
+<!--                    <li class=" nav-item has-sub" :class="{'open' : clickMenu === 3}"  @click="toggleSubMenu(3)"
                         v-if="
                              this.$page.props.auth.user.role.includes('Administrator') ||
                              this.$page.props.auth.user.can.includes('platform.index') ||
@@ -119,7 +120,7 @@
                                     <span class="menu-title text-truncate" data-i18n="Chat">Services</span>
                                 </Link>
                             </li>
-<!--                            <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('feature.show') || this.$page.props.auth.user.role.includes('Administrator') ">
+&lt;!&ndash;                            <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('feature.show') || this.$page.props.auth.user.role.includes('Administrator') ">
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/features">
                                     <vue-feather type="circle" />
                                     <span class="menu-title text-truncate" data-i18n="Chat">Feature</span>
@@ -144,9 +145,16 @@
                                     <vue-feather type="circle" />
                                     <span class="menu-title text-truncate" data-i18n="Chat">Hostings</span>
                                 </Link>
-                            </li>-->
+                            </li>&ndash;&gt;
                         </ul>
+                    </li>-->
+                    <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('services.index') || this.$page.props.auth.user.role.includes('Administrator') ">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/services">
+                            <vue-feather type="gift" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Services</span>
+                        </Link>
                     </li>
+
 
                     <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('quotation.index') || this.$page.props.auth.user.role.includes('Administrator') ">
                         <Link preserve-scroll class="d-flex align-items-center" href="/admin/quotations">
@@ -223,7 +231,7 @@
                             <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('expanse.index') || this.$page.props.auth.user.role.includes('Administrator') ">
                                 <Link preserve-scroll class="d-flex align-items-center" href="/admin/expense">
                                     <vue-feather type="circle" />
-                                    <span class="menu-title text-truncate" data-i18n="Chat">Expanse</span>
+                                    <span class="menu-title text-truncate" data-i18n="Chat">Expense</span>
                                 </Link>
                             </li>
                             <li class=" nav-item" v-if="this.$page.props.auth.user.can.includes('method.index') || this.$page.props.auth.user.role.includes('Administrator') ">
@@ -251,11 +259,48 @@
 
 
                     <li class="nav-item">
+                        <Link preserve-scroll class="d-flex align-items-center" href="/admin/business-settings">
+                            <vue-feather type="settings" />
+                            <span class="menu-title text-truncate" data-i18n="Chat">Settings</span>
+                        </Link>
+                    </li>
+
+                    <li class="nav-item">
                         <Link preserve-scroll class="d-flex align-items-center" method="post" href="/admin/logout">
                             <vue-feather type="log-out" />
                             <span class="menu-title text-truncate" data-i18n="Chat">Logout</span>
                         </Link>
                     </li>
+
+
+                    <li class="nav-item has-sub" :class="{'open' : clickMenu === 6}"  @click="toggleSubMenu(6)">
+                        <a preserve-scroll class="d-flex align-items-center">
+                            <vue-feather type="anchor" />
+                            <span class="menu-title text-truncate"
+                                  data-i18n="Authentication">Old Data</span>
+                        </a>
+                        <ul class="menu-content">
+                            <li class="nav-item">
+                                <Link preserve-scroll class="d-flex align-items-center" href="/admin/old-quotation">
+                                    <vue-feather type="circle" />
+                                    <span class="menu-title text-truncate" data-i18n="Chat">Old Quotation</span>
+                                </Link>
+                            </li>
+                            <li class="nav-item">
+                                <Link preserve-scroll class="d-flex align-items-center" href="/admin/old-invoice">
+                                    <vue-feather type="circle" />
+                                    <span class="menu-title text-truncate" data-i18n="Chat">Old Invoice</span>
+                                </Link>
+                            </li>
+
+                        </ul>
+                    </li>
+
+
+
+
+
+
 <!--                    <li class=" nav-item">
                         <Link preserve-scroll method="post" class="d-flex align-items-center" href="/admin/logout">
                             <vue-feather type="power" />

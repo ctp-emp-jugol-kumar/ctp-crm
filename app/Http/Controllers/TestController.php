@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\QuotationMail;
+use App\Models\Client;
 use App\Models\Method;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
@@ -50,4 +53,9 @@ class TestController extends Controller
         return Redirect::route('test.index');
     }
 
+
+    public function testEmail(){
+//        Mail::send(new QuotationMail($customer));
+        return "mail send successfully done";
+    }
 }

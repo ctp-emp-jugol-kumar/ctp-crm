@@ -98,22 +98,22 @@
                                         <tr v-for="tra in transactions.data" :key="tra.id">
                                             <td>
                                                 <a href="#">
-                                                    #Tran-{{ tra.tran.transaction_id+tra.tran.id }}
+                                                    #Tran-{{ tra.tran.transaction_id+tra?.tran?.id }}
                                                 </a>
                                             </td>
                                             <td>
-                                                {{ tra.tran.method.name }}
+                                                {{ tra.tran?.method?.name }}
                                             </td>
                                             <td>
-                                                {{ tra.tran.pay }} Tk
+                                                {{ tra.tran?.pay }} Tk
                                             </td>
-                                            <td class="cursor-pointer" v-if="tra.tran.transaction_type ==='Credited'"  v-c-tooltip="`Cash In  ${tra.tran.pay} Tk \n Rechived By ${tra.tran.received_by.name}`">
+                                            <td class="cursor-pointer" v-if="tra.tran?.transaction_type ==='Credited'"  v-c-tooltip="`Cash In  ${tra.tran?.pay} Tk \n Rechived By ${tra.tran.received_by?.name}`">
                                                 <span class="text-bold text-success font-bold d-flex align-items-center">
                                                     <vue-feather type="trending-up"/>
                                                     <span class="ms-1">Credited</span>
                                                 </span>
                                             </td>
-                                            <td class="cursor-pointer" v-else v-c-tooltip="`Cash Out  ${tra.tran.pay} Tk \n Expanse By ${tra.tran.received_by.name}`">
+                                            <td class="cursor-pointer" v-else v-c-tooltip="`Cash Out  ${tra.tran?.pay} Tk \n Expanse By ${tra.tran.received_by?.name}`">
                                                 <span class="text-danger text-bold font-bold d-flex align-items-center">
                                                     <vue-feather type="trending-down"/>
                                                     <span class="ms-1">Debited</span>
