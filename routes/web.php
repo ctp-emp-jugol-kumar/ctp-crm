@@ -74,8 +74,18 @@ Route::prefix('admin')->group(function(){
         Route::resource('designs', DesignController::class);
         // services management
         Route::resource('services', SearviceController::class);
+        // service packages
         Route::post('services/create-package', [SearviceController::class, 'createPackage'])->name('createPackage');
+        Route::get('services/edit-package/{id}', [SearviceController::class, 'editPackage'])->name('editPackage');
+        Route::put('services/update-package/{id}', [SearviceController::class, 'updatePackage'])->name('updatePackage');
+        Route::delete('services/delete-package/{id}', [SearviceController::class, 'deletePackage'])->name('deletePackage');
+
+
+        // services featured
         Route::post('services/create-feature', [SearviceController::class, 'createFeature'])->name('createFeature');
+        Route::get('services/edit-feature/{id}', [SearviceController::class, 'editFeature'])->name('editFeature');
+        Route::put('services/update-feature/{id}', [SearviceController::class, 'updateFeature'])->name('updateFeature');
+        Route::delete('services/delete-feature/{id}', [SearviceController::class, 'deleteFeature'])->name('deleteFeature');
 
         // platforms management
         Route::resource('platforms', PlatformController::class);

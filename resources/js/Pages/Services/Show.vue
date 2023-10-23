@@ -47,7 +47,7 @@
                                                         </CDropdownToggle>
                                                         <CDropdownMenu>
                                                             <CDropdownItem
-                                                                href="#"
+                                                                @click="editPackage(pac.id)"
                                                                 v-if="this.$page.props.auth.user.can.includes('packages.edit') || this.$page.props.auth.user.role.includes('Administrator')"
                                                             >
                                                                 <vue-feather type="edit" size="15"/>
@@ -56,7 +56,7 @@
 
                                                             <CDropdownItem
                                                                 v-if="this.$page.props.auth.user.can.includes('packages.delete') || this.$page.props.auth.user.role.includes('Administrator')"
-                                                                @click="deleteItem('')">
+                                                                @click="deleteItem(`${props.main_url}/delete-package`, pac.id)">
                                                                 <vue-feather type="trash-2" size="15"/>
                                                                 <span class="ms-1">Delete</span>
                                                             </CDropdownItem>
@@ -171,7 +171,7 @@
     </div>
 
 
-    <Modal id="createPackage" title="Add New Package" v-vb-is:modal size="lg">
+    <Modal id="createPackage" :title="editPackageData ? 'Edit Package' : 'Add New Package'" v-vb-is:modal size="lg">
         <form @submit.prevent="addPackage">
             <div class="modal-body">
                 <div class="mb-1">
@@ -247,21 +247,16 @@ import {Inertia} from "@inertiajs/inertia";
 import axios from "axios";
 import debounce from "lodash/debounce";
 import Pagination from "../../components/Pagination"
+const {swalSuccess, deleteItem} = useAction()
 
 const props = defineProps({
     service: Object | {} | null,
+    main_url:String|null,
     save_packages:String|null,
     save_feature:String|null,
     errors: Object,
-
 })
-let addDataModal = () => {
-    document.getElementById('createPackage').$vb.modal.show()
-}
-let addNewFeture = () => {
-    document.getElementById('createFeature').$vb.modal.show()
-}
-
+const  processing = ref(false)
 
 const formData = useForm({
     serviceId:props.service?.id,
@@ -269,24 +264,64 @@ const formData = useForm({
     price:null,
     descriptions:null,
 })
+const editPackageData = ref(null);
+let addDataModal = () => {
+    reset()
+    document.getElementById('createPackage').$vb.modal.show()
+}
+const editPackage = (id) =>{
+    axios.get(`${props.main_url}/edit-package/${id}`).then((res)=>{
+        editPackageData.value = res.data
+        formData.name = res.data.name,
+            formData.price = res.data.price;
+        formData.descriptions = res.data.descriptions
+        document.getElementById('createPackage').$vb.modal.show()
+    })
+}
+const addPackage = ()=>{
+    if(editPackageData.value == null){
+        formData.post(props.save_packages,{
+            preserveState: true,
+            onStart: () =>{ processing.value = true},
+            onFinish: () => {processing.value = false},
+            onSuccess: ()=> {
+                document.getElementById('createPackage').$vb.modal.hide()
+                formData.reset()
+                $toast.success("Package Saved.")
+            },
+        })
+    }else{
+        formData.put(props.main_url+'/update-package/'+editPackageData.value.id,{
+            preserveState: true,
+            onStart: () =>{ processing.value = true},
+            onFinish: () => {processing.value = false},
+            onSuccess: ()=> {
+                document.getElementById('createPackage').$vb.modal.hide()
+                formData.reset()
+                $toast.success("Package Updated.")
+            },
+        })
+    }
+}
+
+
+
 
 const featureForm = useForm({
     serviceId:props.service?.id,
     name:null,
     price:null,
 })
-
-const processing = ref(false);
-const addPackage = ()=>{
-    formData.post(props.save_packages,{
-        preserveState: true,
-        onStart: () =>{ processing.value = true},
-        onFinish: () => {processing.value = false},
-        onSuccess: ()=> {
-            document.getElementById('createPackage').$vb.modal.hide()
-            formData.reset()
-            $toast.success("Package Saved.")
-        },
+let addNewFeture = () => {
+    document.getElementById('createFeature').$vb.modal.show()
+}
+const editFeatured = (id) =>{
+    axios.get(`${props.main_url}/edit-featured/${id}`).then((res)=>{
+        editPackageData.value = res.data
+        featureForm.name = res.data.name
+        featureForm.price = res.data.price
+        featureForm.descriptions = res.data.descriptions
+        document.getElementById('createPackage').$vb.modal.show()
     })
 }
 const addFetaure = ()=>{
@@ -302,6 +337,22 @@ const addFetaure = ()=>{
     })
 }
 
+
+
+const reset =()=>{
+    formData.name = null
+    formData.price = null
+    formData.descriptions = null
+    editPackageData.value = null
+}
+
+
+
+/*
+*
+* this is for featured sections
+*
+* */
 
 </script>
 
