@@ -11,7 +11,7 @@ class Quotation extends Model
 
     protected $guarded = ['id'];
 
-    protected $dates = ['qut_date'];
+    protected $dates = ['qut_date', 'due_date'];
 
     public function client(){
         return $this->belongsTo(Client::class, 'client_id');

@@ -201,7 +201,8 @@
                 <tbody>
 
                 @foreach ($pref as $item)
-                    <tr @if($loop->last) style="border-bottom:1px solid #e7e7e7" @endif>
+{{--                    <tr @if($loop->last) style="border-bottom:1px solid #e7e7e7" @endif>--}}
+                    <tr style="border-bottom:1px solid #e7e7e7">
                         <td class="border text-left"  colspan="3" @if($loop->last) style="padding-bottom: 7px" @endif>
                             {!! nl2br($item['name']) !!}
                         </td>

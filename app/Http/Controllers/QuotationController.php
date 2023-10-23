@@ -258,17 +258,19 @@ class QuotationController extends Controller
         Request::validate([
             'clientId' => 'required',
             'date' => 'required',
-            'subject' => 'required'
+            'due_date' => 'required',
+//            'subject' => 'required'
         ],[
             'clientId.required' => 'First Select An Client...',
             'qutDate.required' => 'Please Select Quotation Date...',
         ]);
 
+
         $storeItems = [];
         foreach (Request::input('items') as $item){
             $storeItems[] = [
                 'service' => $item['service'],
-                'customItem' => $item['customItem'],
+                'customItem' => $item['customItem']["description"] ? $item['customItem'] : null,
                 'checkFeatrueds' => $item['checkFeatrueds'],
                 'checkPackages' =>  $item['checkPackages']
             ];
@@ -278,6 +280,7 @@ class QuotationController extends Controller
             'quotation_id' => Request::input('quotationId'),
             'client_id' => Request::input('clientId'),
             'qut_date' => Request::input('date'),
+            'due_date' => Request::input('due_date'),
             'subject' => Request::input('subject'),
             'created_by' => Auth::id(),
             "total_price" => Request::input('totalPrice'),

@@ -276,6 +276,7 @@
 
     const processing = ref(false)
     const saveQuotation = (events) =>{
+
         Inertia.post(props.main_url, {...formData, ...events}, {
             preserveState: true,
             onStart: () =>{ processing.value = true},

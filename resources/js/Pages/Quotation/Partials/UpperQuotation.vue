@@ -43,10 +43,16 @@
                                                            :value="props.quotation.quotation_id+''+props.quotation.id" readonly/>
                                                 </div>
                                             </div>
-                                            <div class="d-flex align-items-center mb-1">
+                                            <div class="d-flex align-items-center mb-1 flex-column">
+                                                asdfasdf asdfasdf
                                                 <Datepicker v-model="formData.date"
                                                             :monthChangeOnScroll="false"
                                                             placeholder="Select Quotation Date"
+                                                            autoApply></Datepicker>
+
+                                                <Datepicker v-model="formData.due_date"
+                                                            :monthChangeOnScroll="false"
+                                                            placeholder="Select Quotation Due Date"
                                                             autoApply></Datepicker>
                                             </div>
                                             <!--                                            <div class="d-flex align-items-center">
@@ -409,6 +415,7 @@ const props = defineProps({
 const formData = useForm({
     clientId:props.quotation.client_id,
     date:props.quotation.qut_date,
+    due_date:props.quotation.due_date,
     subject:props.quotation.subject,
     note:props.quotation.note,
     paymentPolicy:props.quotation.payment_policy,

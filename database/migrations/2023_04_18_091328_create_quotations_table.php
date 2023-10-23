@@ -18,8 +18,9 @@ return new class extends Migration
             $table->foreignId('client_id')->constrained('clients');
             $table->foreignId('created_by')->constrained('users');
             $table->string('quotation_id');
-            $table->string('qut_date');
-            $table->string('subject');
+            $table->string('qut_date')->nullable();
+            $table->string('due_date')->nullable();
+            $table->string('subject')->nullable();
             $table->json('items');
             $table->integer('total_price')->default(0);
             $table->integer('discount')->default(0);
