@@ -423,5 +423,12 @@ const saveQuotation =()=> emits("handleQuotation", formData)
 
 <style lang="sass" scoped>
 @import "../../../../sass/base/pages/app-invoice.scss"
-</style>
 
+</style>
+<style scoped>
+
+.dp__input_icon_pad
+{
+    padding-left: 38px;
+}
+</style>

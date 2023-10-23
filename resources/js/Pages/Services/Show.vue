@@ -143,12 +143,12 @@
                                                                 <vue-feather type="more-vertical" />
                                                             </CDropdownToggle>
                                                             <CDropdownMenu>
-                                                                <CDropdownItem  @click="editClient(feature?.show_url)"   v-if="this.$page.props.auth.user.can.includes('client.edit') || this.$page.props.auth.user.role.includes('Administrator')">
+                                                                <CDropdownItem  @click="editFeatured(feature.id)"   v-if="this.$page.props.auth.user.can.includes('client.edit') || this.$page.props.auth.user.role.includes('Administrator')">
                                                                     <Icon title="pencil" />
                                                                     <span class="ms-1">Edit</span>
                                                                 </CDropdownItem>
 
-                                                                <CDropdownItem @click="deleteItemModal(feature?.id)" type="button"
+                                                                <CDropdownItem @click="deleteItem(`${props.main_url}/delete-feature`, feature?.id)" type="button"
                                                                                v-if="this.$page.props.auth.user.can.includes('client.delete') || this.$page.props.auth.user.role.includes('Administrator') ">
                                                                     <Icon title="trash" />
                                                                     <span class="ms-1">Delete</span>
@@ -205,7 +205,7 @@
     </Modal>
 
 
-    <Modal id="createFeature" title="Add New Feature" v-vb-is:modal size="lg">
+    <Modal id="createFeature" :title="editFeaturedData ? 'Edit Feature' : 'Add New Feature'" v-vb-is:modal size="lg">
         <form @submit.prevent="addFetaure">
             <div class="modal-body">
                 <div class="mb-1">
@@ -272,8 +272,8 @@ let addDataModal = () => {
 const editPackage = (id) =>{
     axios.get(`${props.main_url}/edit-package/${id}`).then((res)=>{
         editPackageData.value = res.data
-        formData.name = res.data.name,
-            formData.price = res.data.price;
+        formData.name = res.data.name
+        formData.price = res.data.price;
         formData.descriptions = res.data.descriptions
         document.getElementById('createPackage').$vb.modal.show()
     })
@@ -306,7 +306,7 @@ const addPackage = ()=>{
 
 
 
-
+const editFeaturedData = ref(null)
 const featureForm = useForm({
     serviceId:props.service?.id,
     name:null,
@@ -316,25 +316,43 @@ let addNewFeture = () => {
     document.getElementById('createFeature').$vb.modal.show()
 }
 const editFeatured = (id) =>{
-    axios.get(`${props.main_url}/edit-featured/${id}`).then((res)=>{
-        editPackageData.value = res.data
+    axios.get(`${props.main_url}/edit-feature/${id}`).then((res)=>{
+        editFeaturedData.value = res.data
         featureForm.name = res.data.name
         featureForm.price = res.data.price
-        featureForm.descriptions = res.data.descriptions
-        document.getElementById('createPackage').$vb.modal.show()
+        document.getElementById('createFeature').$vb.modal.show()
     })
 }
 const addFetaure = ()=>{
-    featureForm.post(props.save_feature,{
-        preserveState: true,
-        onStart: () =>{ processing.value = true},
-        onFinish: () => {processing.value = false},
-        onSuccess: ()=> {
-            document.getElementById('createFeature').$vb.modal.hide()
-            formData.reset()
-            $toast.success("Feature Saved.")
-        },
-    })
+    if(editFeaturedData.value === null){
+        featureForm.post(props.save_feature,{
+            preserveState: true,
+            onStart: () =>{ processing.value = true},
+            onFinish: () => {processing.value = false},
+            onSuccess: ()=> {
+                document.getElementById('createFeature').$vb.modal.hide()
+                featureForm.reset()
+                reset()
+                $toast.success("Feature Saved.")
+            },
+        })
+    }else {
+        featureForm.put(props.main_url + '/update-feature/' + editFeaturedData.value.id, {
+            preserveState: true,
+            onStart: () => {
+                processing.value = true
+            },
+            onFinish: () => {
+                processing.value = false
+            },
+            onSuccess: () => {
+                document.getElementById('createFeature').$vb.modal.hide()
+                featureForm.reset()
+                reset()
+                $toast.success("Featured Updated.")
+            },
+        })
+    }
 }
 
 
@@ -342,8 +360,13 @@ const addFetaure = ()=>{
 const reset =()=>{
     formData.name = null
     formData.price = null
+
+    featureForm.name = null
+    featureForm.price = null
+
     formData.descriptions = null
     editPackageData.value = null
+    editFeaturedData.value = null
 }
 
 

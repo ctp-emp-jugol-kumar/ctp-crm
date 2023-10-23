@@ -209,7 +209,6 @@ class SearviceController extends Controller
             'serviceId' => 'required',
             'name' => 'required',
             'price' => 'required',
-            'descriptions' => 'required'
         ]);
         $data['service_id'] = Request::input('serviceId');
         ServiceFeature::findOrFail($id)->update($data);
@@ -223,7 +222,6 @@ class SearviceController extends Controller
      * @return RedirectResponse
      */
     public function deleteFeature($id){
-
         ServiceFeature::findOrFail($id)->delete();
         return back();
     }
