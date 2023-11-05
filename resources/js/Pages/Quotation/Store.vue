@@ -298,7 +298,7 @@
             checkFeatrueds:[],
             checkPackages:[],
             customItem:{
-                descriptioins:null,
+                description:null,
                 price:0,
                 qty:1,
                 subTotal:0

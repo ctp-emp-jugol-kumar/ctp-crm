@@ -109,6 +109,7 @@ class InvoiceController extends Controller
             'qutDate.required' => 'Please Select Quotation Date...',
         ]);
 
+//        return dd(Request::all());
 
         Invoice::create([
             'invoice_id' => now()->format('Ymd'),
@@ -123,6 +124,7 @@ class InvoiceController extends Controller
             'note' => Request::input('note'),
             'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
             'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
+            'payment_methods' => Request::input('attachPaymentMethods') ? Request::input('payemtnPolicy') : NULL,
         ]);
 
         return back();
@@ -159,6 +161,15 @@ class InvoiceController extends Controller
                         ];
                     }
                 }
+                if ($item->customItem){
+//                foreach ($item->customItem as $cItem){
+                    $pref[] =[
+                        'name'=> $item?->customItem->description ?? 'custom_service',
+                        'qty' => $item?->customItem->qty,
+                        'price' => $item?->customItem->price,
+                    ];
+//                }
+                }
             }
         }else{
             if (json_decode($invoice?->items)){
@@ -180,6 +191,8 @@ class InvoiceController extends Controller
         $invoice = $invoice->load('user', 'client', 'quotation', 'transactions', 'transactions.receivedBy:id,name', 'transactions.method:id,name');
         $pref = $this->invoiceItemsGenerate($invoice);
 
+
+//        return $invoice->quotation->items;//->quotation->customItem;
 
         return Inertia::render('Invoice/Show',   [
             "invoice" =>$invoice,
@@ -287,6 +300,15 @@ class InvoiceController extends Controller
                         ];
                     }
                 }
+                if ($item->customItem){
+//                foreach ($item->customItem as $cItem){
+                    $pref[] =[
+                        'name'=> $item?->customItem->description ?? 'custom_service',
+                        'qty' => $item?->customItem->qty,
+                        'price' => $item?->customItem->price,
+                    ];
+//                }
+                }
             }
         }else{
             foreach(json_decode($invoice->items) as $item){
@@ -303,6 +325,7 @@ class InvoiceController extends Controller
 
 
         $pdf = Pdf::loadView('invoice.quotationInvoice', compact('invoice','pref', 'isPrint'));
+//        return view('invoice.quotationInvoice', compact('invoice','pref', 'isPrint'));
         return $pdf->download($clientName."_".now()->format('d_m_Y')."_".'invoice.pdf');
     }
 
@@ -393,6 +416,7 @@ class InvoiceController extends Controller
             'note' => Request::input('note'),
             'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
             'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
+            'payment_methods' => Request::input('attachPaymentMethods') ? Request::input('payemtnPolicy') : NULL,
         ]);
 
         return Redirect::route('invoices.index');

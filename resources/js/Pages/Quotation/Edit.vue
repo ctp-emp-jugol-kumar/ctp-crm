@@ -301,7 +301,7 @@
             checkFeatrueds:[],
             checkPackages:[],
             customItem:{
-                descriptioins:null,
+                description:null,
                 price:0,
                 qty:1,
                 subTotal:0
@@ -537,7 +537,7 @@
             item.checkPackages.map(pac => {
                 total += parseInt(pac.subTotal)
             })
-            total += parseInt(item.customItem.subTotal)
+            total += parseInt(item.customItem?.subTotal)
         })
         formData.totalPrice = total
         return total;
@@ -547,9 +547,21 @@
 
     onMounted(() =>{
         const allItems = JSON.parse(props.quotation.items).map(item =>{
-            item['activeTab'] = 'custom'
+            item['activeTab'] = 'custom';
+            // item.service = null;
+            if(item.customItem === null){
+                item.customItem = {
+                    description:null,
+                    price:0,
+                    qty:1,
+                    subTotal:0
+                }
+            }
             return item;
         })
+
+
+
         formData.items = allItems;
     })
 

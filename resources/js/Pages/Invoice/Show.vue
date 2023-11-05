@@ -243,11 +243,10 @@ const addDiscount = () =>{
         onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
     })
 }
-
-
+console.log(props.invoice.quotation.items)
 const preparedForShow = computed(()=>{
     let pref = [];
-    JSON.parse(props.quotation.items).map(item =>{
+    JSON.parse(props.invoice.quotation.items).map(item =>{
         if (item.checkPackages.length){
             item.checkPackages.map(pack =>{
                 pref.push({
@@ -264,6 +263,13 @@ const preparedForShow = computed(()=>{
                     qty:fes.qty,
                     price:fes.price,
                 })
+            })
+        }
+        if(item.customItem){
+            pref.push({
+                name:item.customItem.description,
+                qty:item.customItem.qty,
+                price:item.customItem.price
             })
         }
     })

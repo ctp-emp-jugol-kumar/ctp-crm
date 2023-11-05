@@ -266,6 +266,7 @@ class QuotationController extends Controller
         ]);
 
 
+
         $storeItems = [];
         foreach (Request::input('items') as $item){
             $storeItems[] = [
@@ -275,6 +276,9 @@ class QuotationController extends Controller
                 'checkPackages' =>  $item['checkPackages']
             ];
         }
+
+
+//        return $storeItems;
 
         $quotation = Quotation::create([
             'quotation_id' => Request::input('quotationId'),
@@ -290,6 +294,7 @@ class QuotationController extends Controller
             'note' => Request::input('note'),
             'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
             'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
+            'payment_methods' => Request::input('attachPaymentMethods') ? Request::input('paymentMethos') : NULL,
         ]);
 
         if (Request::input('sendMail')){
@@ -590,6 +595,7 @@ class QuotationController extends Controller
         if (Request::input('download')) {
             $isPrint = false;
             $pdf = Pdf::loadView('invoice.quotation', compact('quotation', 'pref', 'isPrint'));
+//            return view('invoice.quotation', compact('quotation', 'pref', 'isPrint'));
             return $pdf->download($quotation->client->name."_".now()->format('d_m_Y')."_".'quotation.pdf');
         }
 
@@ -905,17 +911,19 @@ class QuotationController extends Controller
         Request::validate([
             'clientId' => 'required',
             'date' => 'required',
-            'subject' => 'required'
+            'due_date' => 'required',
         ],[
             'clientId.required' => 'First Select An Client...',
             'qutDate.required' => 'Please Select Quotation Date...',
         ]);
 
+//        return Request::input('items');
+
         $storeItems = [];
         foreach (Request::input('items') as $item){
             $storeItems[] = [
                 'service' => $item['service'],
-                'customItem' => $item['customItem'],
+                'customItem' => $item['customItem']["description"] ? $item['customItem'] : null,
                 'checkFeatrueds' => $item['checkFeatrueds'],
                 'checkPackages' =>  $item['checkPackages']
             ];
@@ -935,6 +943,7 @@ class QuotationController extends Controller
             'note' => Request::input('note'),
             'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
             'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
+            'payment_methods' => Request::input('attachPaymentMethods') ? Request::input('paymentMethos') : NULL,
         ]);
 
 

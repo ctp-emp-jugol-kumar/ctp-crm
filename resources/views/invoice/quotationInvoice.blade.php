@@ -53,7 +53,7 @@
 
         .logo-img {
             max-width: 100%;
-            height: 30px;
+            height: 60px;
             padding-top: 15px;
         }
 
@@ -139,9 +139,9 @@
         <div class="col-1">
             <div id="logo">
                 @if($isPrint)
-                    <img src="{{ asset('images/creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img" height="30">
+                    <img src="{{ asset('images/creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img">
                 @else
-                    <img src="{{ public_path('creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img" height="30">
+                    <img src="{{ public_path('creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img">
                 @endif
             </div>
         </div>
@@ -186,8 +186,7 @@
         <div class="col-1"></div>
         <div class="col-1">
             <div class="to" style="text-align: right">
-                <h3> Invoice ID:
-                    CTP-{{ $invoice->invoice_id }}{{ $invoice->id }}</h3>
+                <h3>ID:{{ env('INV_PREFIX') }}{{ $invoice->invoice_id }}{{ $invoice->id }}</h3>
                 <p>Date: {{ $invoice->created_at }}</p>
             </div>
         </div>
@@ -212,7 +211,8 @@
                 <tbody>
 
                 @foreach ($pref as $item)
-                    <tr @if($loop->last) style="border-bottom:1px solid #e7e7e7" @endif>
+{{--                    <tr @if($loop->last) style="border-bottom:1px solid #e7e7e7" @endif>--}}
+                    <tr style="border-bottom:1px solid #e7e7e7">
                         <td class="border text-left"  colspan="3" @if($loop->last) style="padding-bottom: 7px" @endif>
                             {!! nl2br($item['name']) !!}
                         </td>
@@ -282,69 +282,27 @@
     <div class="page-break"></div>
     <div class="row">
         <div class="col-3">
-            <h3>Payment Mehod:</h3>
-            <p>Pay Direct to Our Corporate Bank Account</p>
-            <table class="table" width="100%">
-                <thead>
-                <tr>
-                    <th>Bank Name</th>
-                    <th>Account Name</th>
-                    <th>Account No</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>EASTERN BANK LTD</td>
-                    <td>CREATIVE TECH PARK</td>
-                    <td>1241070056170</td>
-                </tr>
-                <tr>
-                    <td>THE CITY BANK LTD</td>
-                    <td>CREATIVE TECH PARK</td>
-                    <td>1502467424001</td>
-                </tr>
-                <tr>
-                    <td>DUTCH BANGLA BANK LTD</td>
-                    <td>CREATIVE TECH PARK</td>
-                    <td>246.110.0005044</td>
-                </tr>
-                <tr>
-                    <td>PREMIER BANK LTD</td>
-                    <td>CREATIVE TECH PARK</td>
-                    <td>13611100000331</td>
-                </tr>
-                </tbody>
-            </table>
-            <p><strong>Pay Using Our Merchant Mobile Banking Account:</strong></p>
-            <p><strong>Bkash: 01639200002 (Payment)</strong></p>
-            <ul>
-                <li>Go to Your bKash Mobile Menu by dialing *247#</li>
-                <li>Choose "Payment"</li>
-                <li>Enter Merchant bKash Account Number 01639200002</li>
-                <li>Enter the amount (Invoice Amount)</li>
-                <li>Enter a reference (Invoice No/ Your Name)</li>
-                <li>Enter Counter Number 0</li>
-                <li>Now enter your bKash Mobile Menu PIN to Confirm!</li>
-                <li>Done! You will receive a confirmation message from bKash*</li>
-            </ul>
-            <h3>Direct Payment Bill Online at <a href="https://creativetechpark.com/pay" target="_blank">https://creativetechpark.com/pay</a>
-            </h3>
+            @if (!is_null($invoice->quotation->payment_methods))
+                <h3>Payment Mehod:</h3>
+                {!! nl2br($invoice->quotation->payment_methods) !!}
+            @endif
+            <h3>Direct Payment Bill Online at <a href="https://creativetechpark.com/pay" target="_blank">https://creativetechpark.com/pay</a></h3>
         </div>
     </div>
-    @if (!is_null($invoice->payment_policy))
+    @if (!is_null($invoice->quotation->payment_policy))
         <div class="row">
             <div class="col-3">
                 <h3>Payment Policy:</h3>
-                {!! nl2br($invoice->payment_policy) !!}
+                {!! nl2br($invoice->quotation->payment_policy) !!}
             </div>
         </div>
     @endif
 
-    @if (!is_null($invoice->trams_of_service))
+    @if (!is_null($invoice->quotation->trams_of_service))
         <div class="row mb-50">
             <div class="col-3">
                 <h3>Terms of Service:</h3>
-                {!! nl2br($invoice->trams_of_service) !!}
+                {!! nl2br($invoice->quotation->trams_of_service) !!}
             </div>
         </div>
     @endif

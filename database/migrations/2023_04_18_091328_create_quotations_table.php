@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('grand_total')->default(0);
             $table->boolean('status')->default(true);
             $table->enum('steps', ['created', 'sender', 'updated', 'cti'])->default('created');
+            $table->longText('payment_methods')->nullable();
             $table->longText('trams_of_service')->nullable();
             $table->longText('payment_policy')->nullable();
             $table->text('note')->nullable();
