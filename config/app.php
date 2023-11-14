@@ -143,6 +143,11 @@ return [
         // 'store'  => 'redis',
     ],
 
+
+
+
+    'electrically_generated_message' => 'This is an electronically generated document, no signature is required',
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

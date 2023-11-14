@@ -35,16 +35,25 @@
                         </ul>
                     </div>
                     <div class="col-md-3" v-for="item in props.services.data" :key="item.id">
-                        <a :href="item.show_url">
+<!--                        <a :href="item.show_url">-->
                             <div class="card">
                                 <div class="card-body">
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <h2 class="card-title">{{ item.name }}</h2>
+                                        <a :href="item.show_url">
+                                            <h2 class="card-title">{{ item.name }}</h2>
+                                        </a>
                                         <CDropdown v-if="this.$page.props.auth.user.can.includes('services.delete') || this.$page.props.auth.user.can.includes('services.edit') || this.$page.props.auth.user.role.includes('Administrator')">
                                             <CDropdownToggle class="p-0">
                                                 <vue-feather type="more-vertical" />
                                             </CDropdownToggle>
                                             <CDropdownMenu>
+
+                                                <CDropdownItem :href="item.show_url" target="_blank"
+                                                               v-if="this.$page.props.auth.user.can.includes('services.show') || this.$page.props.auth.user.role.includes('Administrator')">
+                                                    <vue-feather type="eye" size="15"/>
+                                                    <span class="ms-1">Edit</span>
+                                                </CDropdownItem>
+
                                                 <CDropdownItem @click="editService(item.edit_url)"
                                                                v-if="this.$page.props.auth.user.can.includes('services.edit')  || this.$page.props.auth.user.role.includes('Administrator')">
                                                     <vue-feather type="edit" size="15"/>
@@ -64,7 +73,7 @@
                                 </span>
                                 </div>
                             </div>
-                        </a>
+<!--                        </a>-->
                     </div>
 
                     <div class="col-md-12">

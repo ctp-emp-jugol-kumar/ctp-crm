@@ -152,16 +152,6 @@
                 <div class="mt-2">
                     <div class="invoice-terms mt-1">
                         <div class="d-flex justify-content-between">
-                            <label class="invoice-terms-title mb-0" for="paymentTerms">Payment Policy</label>
-                            <div class="form-check form-switch">
-                                <input v-model="formData.attachPaymentPolicy" type="checkbox" class="form-check-input" checked id="paymentTerms" />
-                                <label class="form-check-label" for="paymentTerms"></label>
-                                <vue-feather type="edit" size="20" class="cursor-pointer" v-c-tooltip="'Edit This Payment Policy'"
-                                             @click="editPaymentPolicy"/>
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-between">
                             <label class="invoice-terms-title mb-0" for="paymentStub">Service Policy</label>
                             <div class="form-check form-switch">
                                 <input v-model="formData.attachServicePolicy" type="checkbox" class="form-check-input" id="paymentStub" />
@@ -170,6 +160,25 @@
                                              @click="editServicePolicy"/>
                             </div>
                         </div>
+                        <div class="d-flex justify-content-between">
+                            <label class="invoice-terms-title mb-0" for="paymentTerms">Payment Policy</label>
+                            <div class="form-check form-switch">
+                                <input v-model="formData.attachPaymentPolicy" type="checkbox" class="form-check-input" checked id="paymentTerms" />
+                                <label class="form-check-label" for="paymentTerms"></label>
+                                <vue-feather type="edit" size="20" class="cursor-pointer" v-c-tooltip="'Edit This Payment Policy'"
+                                             @click="editPaymentPolicy"/>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <label class="invoice-terms-title mb-0" for="paymentMethods">Payment Methods</label>
+                            <div class="form-check form-switch">
+                                <input v-model="formData.attachPaymentMethods" type="checkbox" class="form-check-input" checked id="paymentMethods" />
+                                <label class="form-check-label" for="paymentMethods"></label>
+                                <vue-feather type="edit" size="20" class="cursor-pointer" v-c-tooltip="'Edit This Payment Methods'"
+                                             @click="editPaymentMethods"/>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 <!--                <div class="mt-2">
@@ -304,9 +313,9 @@
             <div class="modal-body">
                 <div class="row mb-1">
                     <div class="col-md">
-                                    <textarea v-model="formData.paymentPolicy" type="text"
-                                              placeholder="Domain Full Description"
-                                              rows="5" class="form-control"></textarea>
+                        <textarea v-model="formData.paymentPolicy" type="text"
+                                  placeholder="Edit payment policy"
+                                  rows="5" class="form-control"></textarea>
                     </div>
                 </div>
             </div>
@@ -319,8 +328,22 @@
                 <div class="row mb-1">
                     <div class="col-md">
                                     <textarea v-model="formData.servicePolicy" type="text"
-                                              placeholder="Domain Full Description"
+                                              placeholder="Edit Service Policy"
                                               rows="5" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary waves-effect waves-float waves-light" data-bs-dismiss="modal">ok</button>
+            </div>
+        </Modal>
+        <Modal id="payemntMethods" title="Edit Payment Methods" v-vb-is:modal size="lg">
+            <div class="modal-body">
+                <div class="row mb-1">
+                    <div class="col-md">
+                        <textarea v-model="formData.payemtnPolicy" type="text"
+                                  placeholder="Edit Payment Methods"
+                                  rows="5" class="form-control"></textarea>
                     </div>
                 </div>
             </div>
@@ -366,8 +389,10 @@ const formData = useForm({
     note:null,
     paymentPolicy:policyStore.getPaymentPolicy,
     servicePolicy:policyStore.getServicePolicy,
+    payemtnPolicy:policyStore.getPaymentMethods,
     attachPaymentPolicy:true,
-    attachServicePolicy:true
+    attachServicePolicy:true,
+    attachPaymentMethods:true
 })
 
 
@@ -387,6 +412,7 @@ const loadClient = (clientId)=> clientDetails.value = props.clients.filter(item 
 
 const editPaymentPolicy = () => document.getElementById('paymentPolicy').$vb.modal.show()
 const editServicePolicy = () => document.getElementById('servicePolicy').$vb.modal.show()
+const editPaymentMethods = () => document.getElementById('payemntMethods').$vb.modal.show()
 
 
 

@@ -12,7 +12,7 @@
 
         p {
             margin: 2px 0;
-            font-size: 10px;
+            font-size: 12px;
         }
 
         h3 {
@@ -53,7 +53,7 @@
 
         .logo-img {
             max-width: 100%;
-            height: 30px;
+            height: 60px;
             padding-top: 15px;
         }
 
@@ -139,9 +139,9 @@
         <div class="col-1">
             <div id="logo">
                 @if($isPrint)
-                    <img src="{{ asset('images/creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img" height="30">
+                    <img src="{{ asset('images/creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img">
                 @else
-                    <img src="{{ public_path('creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img" height="30">
+                    <img src="{{ public_path('creativeTechPark.png') }}" alt="Creative Tech Park" class="logo-img">
                 @endif
             </div>
         </div>
@@ -174,19 +174,22 @@
         <div class="col-1"></div>
         <div class="col-1">
             <div class="to" style="text-align: right">
-                <h3> Quotation ID:
-                    CTP-{{ $quotation->quotation_id }}{{ $quotation->id }}</h3>
-                <p>Date: {{ $quotation->qut_date }}</p>
+                <h3>ID:{{ env('QUT_PREFIX')}}{{ $quotation->quotation_id }}{{ $quotation->id }}</h3>
+                <p>Created on: {{ $quotation->qut_date?->format('y-m-d') }}</p>
+                <p>Valid until: {{ $quotation->due_date?->format('y-m-d') }}</p>
             </div>
         </div>
     </div>
 
 
-    <div class="row" style="margin: 0">
-        <h2 style="margin: 0">
-            Subject: {{ $quotation->subject }}
-        </h2>
-    </div>
+    @if($quotation->subject)
+        <div class="row" style="margin: 0">
+            <h2 style="margin: 0">
+                Subject: {{ $quotation->subject }}
+            </h2>
+        </div>
+    @endif
+
     <div class="row">
         <div class="col-3">
             <table class="main-table">
@@ -201,12 +204,13 @@
                 <tbody>
 
                 @foreach ($pref as $item)
-                    <tr @if($loop->last) style="border-bottom:1px solid #e7e7e7" @endif>
+{{--                    <tr @if($loop->last) style="border-bottom:1px solid #e7e7e7" @endif>--}}
+                    <tr style="border-bottom:1px solid #e7e7e7">
                         <td class="border text-left"  colspan="3" @if($loop->last) style="padding-bottom: 7px" @endif>
                             {!! nl2br($item['name']) !!}
                         </td>
                         <td class="border text-right" @if($loop->last) style="padding-bottom: 7px" @endif>
-                            <p>{{ ($item['price'] * $item['qty']) ?? 0 }}</p>
+                            <p>{{ $item['price'] ?? 0 }} * {{ $item['qty'] ?? 1 }}</p>
                         </td>
                     </tr>
                 @endforeach
@@ -239,11 +243,12 @@
             @endphp
             <p id="inword">
                 <strong>Inword:</strong>
-                {{ $numberTransformer->toWords($quotation->grand_total) }} Taka Only.
+                {{ $numberTransformer->toWords($quotation->grand_total) }} {{ $quotation->currency }} Only.
             </p>
         </div>
     </div>
 
+    @if($quotation?->note)
     <div class="row">
           <div class="col-3">
               <h3>Note:</h3>
@@ -254,63 +259,22 @@
               <br>
           </div>
       </div>
+    @endif
 
     <div class="row mt-3">
         <div class="col-3 text-center">
             <p class="text-center">Created By {{ $quotation->user->name }}</p>
-
+            <p>{{ config('app.electrically_generated_message') }}</p>
         </div>
     </div>
     <div class="page-break"></div>
     <div class="row">
         <div class="col-3">
-            <h3>Payment Mehod:</h3>
-            <p>Pay Direct to Our Corporate Bank Account</p>
-            <table class="table" width="100%">
-                <thead>
-                <tr>
-                    <th>Bank Name</th>
-                    <th>Account Name</th>
-                    <th>Account No</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>EASTERN BANK LTD</td>
-                    <td>CREATIVE TECH PARK</td>
-                    <td>1241070056170</td>
-                </tr>
-                <tr>
-                    <td>THE CITY BANK LTD</td>
-                    <td>CREATIVE TECH PARK</td>
-                    <td>1502467424001</td>
-                </tr>
-                <tr>
-                    <td>DUTCH BANGLA BANK LTD</td>
-                    <td>CREATIVE TECH PARK</td>
-                    <td>246.110.0005044</td>
-                </tr>
-                <tr>
-                    <td>PREMIER BANK LTD</td>
-                    <td>CREATIVE TECH PARK</td>
-                    <td>13611100000331</td>
-                </tr>
-                </tbody>
-            </table>
-            <p><strong>Pay Using Our Merchant Mobile Banking Account:</strong></p>
-            <p><strong>Bkash: 01639200002 (Payment)</strong></p>
-            <ul>
-                <li>Go to Your bKash Mobile Menu by dialing *247#</li>
-                <li>Choose "Payment"</li>
-                <li>Enter Merchant bKash Account Number 01639200002</li>
-                <li>Enter the amount (Invoice Amount)</li>
-                <li>Enter a reference (Invoice No/ Your Name)</li>
-                <li>Enter Counter Number 0</li>
-                <li>Now enter your bKash Mobile Menu PIN to Confirm!</li>
-                <li>Done! You will receive a confirmation message from bKash*</li>
-            </ul>
-            <h3>Direct Payment Bill Online at <a href="https://creativetechpark.com/pay" target="_blank">https://creativetechpark.com/pay</a>
-            </h3>
+            @if (!is_null($quotation->payment_methods))
+                <h3>Payment Mehod:</h3>
+                {!! nl2br($quotation->payment_methods) !!}
+            @endif
+            <h3>Direct Payment Bill Online at <a href="https://creativetechpark.com/pay" target="_blank">https://creativetechpark.com/pay</a></h3>
         </div>
     </div>
     @if (!is_null($quotation->payment_policy))

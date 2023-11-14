@@ -43,10 +43,15 @@
                                                            :value="props.quotation.quotation_id+''+props.quotation.id" readonly/>
                                                 </div>
                                             </div>
-                                            <div class="d-flex align-items-center mb-1">
+                                            <div class="d-flex align-items-center mb-1 flex-column">
                                                 <Datepicker v-model="formData.date"
                                                             :monthChangeOnScroll="false"
                                                             placeholder="Select Quotation Date"
+                                                            autoApply></Datepicker>
+
+                                                <Datepicker v-model="formData.due_date"
+                                                            :monthChangeOnScroll="false"
+                                                            placeholder="Select Quotation Due Date"
                                                             autoApply></Datepicker>
                                             </div>
                                             <!--                                            <div class="d-flex align-items-center">
@@ -179,6 +184,16 @@
                             <div class="mt-2">
                                 <div class="invoice-terms mt-1">
                                     <div class="d-flex justify-content-between">
+                                        <label class="invoice-terms-title mb-0" for="paymentStub">Service Policy</label>
+                                        <div class="form-check form-switch">
+                                            <input v-model="formData.attachServicePolicy" type="checkbox" class="form-check-input" id="paymentStub" />
+                                            <label class="form-check-label" for="paymentStub"></label>
+                                            <vue-feather type="edit" size="20" class="cursor-pointer" v-c-tooltip="'Edit This Service Policy'"
+                                                         @click="editServicePolicy"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between">
                                         <label class="invoice-terms-title mb-0" for="paymentTerms">Payment Policy</label>
                                         <div class="form-check form-switch">
                                             <input v-model="formData.attachPaymentPolicy" type="checkbox" class="form-check-input" checked id="paymentTerms" />
@@ -189,14 +204,15 @@
                                     </div>
 
                                     <div class="d-flex justify-content-between">
-                                        <label class="invoice-terms-title mb-0" for="paymentStub">Service Policy</label>
+                                        <label class="invoice-terms-title mb-0" for="payemntMethods">Payment Methods</label>
                                         <div class="form-check form-switch">
-                                            <input v-model="formData.attachServicePolicy" type="checkbox" class="form-check-input" id="paymentStub" />
-                                            <label class="form-check-label" for="paymentStub"></label>
-                                            <vue-feather type="edit" size="20" class="cursor-pointer" v-c-tooltip="'Edit This Service Policy'"
-                                                         @click="editServicePolicy"/>
+                                            <input v-model="formData.attachPaymentMethods" type="checkbox" class="form-check-input" checked id="payemntMethods" />
+                                            <label class="form-check-label" for="payemntMethods"></label>
+                                            <vue-feather type="edit" size="20" class="cursor-pointer" v-c-tooltip="'Edit This Payment Policy'" @click="editPaymentMethods"/>
                                         </div>
                                     </div>
+
+
                                 </div>
                             </div>
                         </div>
@@ -333,6 +349,21 @@
                             <button type="submit" class="btn btn-primary waves-effect waves-float waves-light" data-bs-dismiss="modal">ok</button>
                         </div>
                     </Modal>
+                    <Modal id="payemntMethos" title="Edit Payment Methods" v-vb-is:modal size="lg">
+                        <div class="modal-body">
+                            <div class="row mb-1">
+                                <div class="col-md">
+                                    <textarea v-model="formData.paymentMethos" type="text"
+                                              placeholder="Edit Payment Policy"
+                                              rows="5" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary waves-effect waves-float waves-light" data-bs-dismiss="modal">ok</button>
+                        </div>
+                    </Modal>
+
 
                     <div class="modal modal-slide-in fade" id="givenDiscount" aria-hidden="true">
                         <div class="modal-dialog sidebar-lg">
@@ -409,13 +440,16 @@ const props = defineProps({
 const formData = useForm({
     clientId:props.quotation.client_id,
     date:props.quotation.qut_date,
+    due_date:props.quotation.due_date,
     subject:props.quotation.subject,
     note:props.quotation.note,
     paymentPolicy:props.quotation.payment_policy,
     servicePolicy:props.quotation.trams_of_service,
+    paymentMethos:props.quotation.payment_methods,
 
     attachPaymentPolicy:props.quotation.payment_policy !== null,
     attachServicePolicy:props.quotation.trams_of_service !== null,
+    attachPaymentMethods:props.quotation.payment_methods !== null,
 })
 
 
@@ -434,6 +468,7 @@ const loadClient = (clientId)=> clientDetails.value = props.clients.filter(item 
 
 const editPaymentPolicy = () => document.getElementById('paymentPolicy').$vb.modal.show()
 const editServicePolicy = () => document.getElementById('servicePolicy').$vb.modal.show()
+const editPaymentMethods = () => document.getElementById('payemntMethos').$vb.modal.show()
 
 let afterDiscount = ref(0);
 const discountInput = (event) =>{

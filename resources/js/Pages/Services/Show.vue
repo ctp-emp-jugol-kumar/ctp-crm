@@ -10,19 +10,6 @@
                             <div class="card">
                                 <div class="card-header border-bottom d-flex justify-content-between">
                                     <h4 class="card-title">{{ service?.service_name }}</h4>
-<!--                                    <div
-                                        class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
-                                        <div class="select-search-area">
-                                            <label>Search:<input v-model="search" type="search"
-                                                                 class="form-control" placeholder="what you find ?"
-                                                                 aria-controls="DataTables_Table_0"></label>
-                                        </div>
-                                    </div>
-                                    <button class="dt-button add-new btn btn-primary"
-                                            v-if="this.$page.props.auth.user.can.includes('services.create') || this.$page.props.auth.user.role.includes('Administrator')"
-                                            @click="addServiceModal">
-                                        Add Service
-                                    </button>-->
                                 </div>
                             </div>
                         </div>
@@ -60,7 +47,7 @@
                                                         </CDropdownToggle>
                                                         <CDropdownMenu>
                                                             <CDropdownItem
-                                                                href="#"
+                                                                @click="editPackage(pac.id)"
                                                                 v-if="this.$page.props.auth.user.can.includes('packages.edit') || this.$page.props.auth.user.role.includes('Administrator')"
                                                             >
                                                                 <vue-feather type="edit" size="15"/>
@@ -69,7 +56,7 @@
 
                                                             <CDropdownItem
                                                                 v-if="this.$page.props.auth.user.can.includes('packages.delete') || this.$page.props.auth.user.role.includes('Administrator')"
-                                                                @click="deleteItem('')">
+                                                                @click="deleteItem(`${props.main_url}/delete-package`, pac.id)">
                                                                 <vue-feather type="trash-2" size="15"/>
                                                                 <span class="ms-1">Delete</span>
                                                             </CDropdownItem>
@@ -156,12 +143,12 @@
                                                                 <vue-feather type="more-vertical" />
                                                             </CDropdownToggle>
                                                             <CDropdownMenu>
-                                                                <CDropdownItem  @click="editClient(feature?.show_url)"   v-if="this.$page.props.auth.user.can.includes('client.edit') || this.$page.props.auth.user.role.includes('Administrator')">
+                                                                <CDropdownItem  @click="editFeatured(feature.id)"   v-if="this.$page.props.auth.user.can.includes('client.edit') || this.$page.props.auth.user.role.includes('Administrator')">
                                                                     <Icon title="pencil" />
                                                                     <span class="ms-1">Edit</span>
                                                                 </CDropdownItem>
 
-                                                                <CDropdownItem @click="deleteItemModal(feature?.id)" type="button"
+                                                                <CDropdownItem @click="deleteItem(`${props.main_url}/delete-feature`, feature?.id)" type="button"
                                                                                v-if="this.$page.props.auth.user.can.includes('client.delete') || this.$page.props.auth.user.role.includes('Administrator') ">
                                                                     <Icon title="trash" />
                                                                     <span class="ms-1">Delete</span>
@@ -178,15 +165,13 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>
 
 
-    <Modal id="createPackage" title="Add New Package" v-vb-is:modal size="lg">
+    <Modal id="createPackage" :title="editPackageData ? 'Edit Package' : 'Add New Package'" v-vb-is:modal size="lg">
         <form @submit.prevent="addPackage">
             <div class="modal-body">
                 <div class="mb-1">
@@ -220,7 +205,7 @@
     </Modal>
 
 
-    <Modal id="createFeature" title="Add New Feature" v-vb-is:modal size="lg">
+    <Modal id="createFeature" :title="editFeaturedData ? 'Edit Feature' : 'Add New Feature'" v-vb-is:modal size="lg">
         <form @submit.prevent="addFetaure">
             <div class="modal-body">
                 <div class="mb-1">
@@ -262,21 +247,16 @@ import {Inertia} from "@inertiajs/inertia";
 import axios from "axios";
 import debounce from "lodash/debounce";
 import Pagination from "../../components/Pagination"
+const {swalSuccess, deleteItem} = useAction()
 
 const props = defineProps({
     service: Object | {} | null,
+    main_url:String|null,
     save_packages:String|null,
     save_feature:String|null,
     errors: Object,
-
 })
-let addDataModal = () => {
-    document.getElementById('createPackage').$vb.modal.show()
-}
-let addNewFeture = () => {
-    document.getElementById('createFeature').$vb.modal.show()
-}
-
+const  processing = ref(false)
 
 const formData = useForm({
     serviceId:props.service?.id,
@@ -284,39 +264,118 @@ const formData = useForm({
     price:null,
     descriptions:null,
 })
+const editPackageData = ref(null);
+let addDataModal = () => {
+    reset()
+    document.getElementById('createPackage').$vb.modal.show()
+}
+const editPackage = (id) =>{
+    axios.get(`${props.main_url}/edit-package/${id}`).then((res)=>{
+        editPackageData.value = res.data
+        formData.name = res.data.name
+        formData.price = res.data.price;
+        formData.descriptions = res.data.descriptions
+        document.getElementById('createPackage').$vb.modal.show()
+    })
+}
+const addPackage = ()=>{
+    if(editPackageData.value == null){
+        formData.post(props.save_packages,{
+            preserveState: true,
+            onStart: () =>{ processing.value = true},
+            onFinish: () => {processing.value = false},
+            onSuccess: ()=> {
+                document.getElementById('createPackage').$vb.modal.hide()
+                formData.reset()
+                $toast.success("Package Saved.")
+            },
+        })
+    }else{
+        formData.put(props.main_url+'/update-package/'+editPackageData.value.id,{
+            preserveState: true,
+            onStart: () =>{ processing.value = true},
+            onFinish: () => {processing.value = false},
+            onSuccess: ()=> {
+                document.getElementById('createPackage').$vb.modal.hide()
+                formData.reset()
+                $toast.success("Package Updated.")
+            },
+        })
+    }
+}
 
+
+
+const editFeaturedData = ref(null)
 const featureForm = useForm({
     serviceId:props.service?.id,
     name:null,
     price:null,
 })
-
-const processing = ref(false);
-const addPackage = ()=>{
-    formData.post(props.save_packages,{
-        preserveState: true,
-        onStart: () =>{ processing.value = true},
-        onFinish: () => {processing.value = false},
-        onSuccess: ()=> {
-            document.getElementById('createPackage').$vb.modal.hide()
-            formData.reset()
-            $toast.success("Package Saved.")
-        },
+let addNewFeture = () => {
+    document.getElementById('createFeature').$vb.modal.show()
+}
+const editFeatured = (id) =>{
+    axios.get(`${props.main_url}/edit-feature/${id}`).then((res)=>{
+        editFeaturedData.value = res.data
+        featureForm.name = res.data.name
+        featureForm.price = res.data.price
+        document.getElementById('createFeature').$vb.modal.show()
     })
 }
 const addFetaure = ()=>{
-    featureForm.post(props.save_feature,{
-        preserveState: true,
-        onStart: () =>{ processing.value = true},
-        onFinish: () => {processing.value = false},
-        onSuccess: ()=> {
-            document.getElementById('createFeature').$vb.modal.hide()
-            formData.reset()
-            $toast.success("Feature Saved.")
-        },
-    })
+    if(editFeaturedData.value === null){
+        featureForm.post(props.save_feature,{
+            preserveState: true,
+            onStart: () =>{ processing.value = true},
+            onFinish: () => {processing.value = false},
+            onSuccess: ()=> {
+                document.getElementById('createFeature').$vb.modal.hide()
+                featureForm.reset()
+                reset()
+                $toast.success("Feature Saved.")
+            },
+        })
+    }else {
+        featureForm.put(props.main_url + '/update-feature/' + editFeaturedData.value.id, {
+            preserveState: true,
+            onStart: () => {
+                processing.value = true
+            },
+            onFinish: () => {
+                processing.value = false
+            },
+            onSuccess: () => {
+                document.getElementById('createFeature').$vb.modal.hide()
+                featureForm.reset()
+                reset()
+                $toast.success("Featured Updated.")
+            },
+        })
+    }
 }
 
+
+
+const reset =()=>{
+    formData.name = null
+    formData.price = null
+
+    featureForm.name = null
+    featureForm.price = null
+
+    formData.descriptions = null
+    editPackageData.value = null
+    editFeaturedData.value = null
+}
+
+
+
+/*
+*
+* this is for featured sections
+*
+* */
 
 </script>
 

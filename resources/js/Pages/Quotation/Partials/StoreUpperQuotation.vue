@@ -43,10 +43,17 @@
                                                            :value="quotationStore.getQuotId" readonly/>
                                                 </div>
                                             </div>
-                                            <div class="d-flex align-items-center mb-1">
+                                            <div class="d-flex align-items-center mb-1 flex-column gap-1">
                                                 <Datepicker v-model="formData.date"
                                                             :monthChangeOnScroll="false"
+                                                            :enable-time-picker="false"
                                                             placeholder="Select Quotation Date"
+                                                            autoApply></Datepicker>
+
+                                                <Datepicker v-model="formData.due_date"
+                                                            :monthChangeOnScroll="false"
+                                                            :enable-time-picker="false"
+                                                            placeholder="Select Quotation Due Date"
                                                             autoApply></Datepicker>
                                             </div>
                                             <!--                                            <div class="d-flex align-items-center">
@@ -86,7 +93,7 @@
                                                                             <span >{{ option.email }}</span>
                                                                             <span >{{ option.phone }}
                                                                                <span v-if="option.secondary_phone">/ {{ option.secondary_phone}}</span>
-                                                                           </span>
+                                                                            </span>
                                                                         </div>
                                                                     </div>
                                                                 </li>
@@ -177,15 +184,6 @@
                             <div class="mt-2">
                                 <div class="invoice-terms mt-1">
                                     <div class="d-flex justify-content-between">
-                                        <label class="invoice-terms-title mb-0" for="paymentTerms">Payment Policy</label>
-                                        <div class="form-check form-switch">
-                                            <input v-model="formData.attachPaymentPolicy" type="checkbox" class="form-check-input" checked id="paymentTerms" />
-                                            <label class="form-check-label" for="paymentTerms"></label>
-                                            <vue-feather type="edit" size="20" class="cursor-pointer" v-c-tooltip="'Edit This Payment Policy'" @click="editPaymentPolicy"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="d-flex justify-content-between">
                                         <label class="invoice-terms-title mb-0" for="paymentStub">Service Policy</label>
                                         <div class="form-check form-switch">
                                             <input v-model="formData.attachServicePolicy" type="checkbox" class="form-check-input" id="paymentStub" />
@@ -194,6 +192,24 @@
                                         </div>
                                     </div>
 
+                                    <div class="d-flex justify-content-between">
+                                        <label class="invoice-terms-title mb-0" for="paymentTerms">Payment Policy</label>
+                                        <div class="form-check form-switch">
+                                            <input v-model="formData.attachPaymentPolicy" type="checkbox" class="form-check-input" checked id="paymentTerms" />
+                                            <label class="form-check-label" for="paymentTerms"></label>
+                                            <vue-feather type="edit" size="20" class="cursor-pointer" v-c-tooltip="'Edit This Payment Policy'" @click="editPaymentPolicy"/>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="d-flex justify-content-between">
+                                        <label class="invoice-terms-title mb-0" for="payemntMethods">Payment Methods</label>
+                                        <div class="form-check form-switch">
+                                            <input v-model="formData.attachPaymentMethods" type="checkbox" class="form-check-input" checked id="payemntMethods" />
+                                            <label class="form-check-label" for="payemntMethods"></label>
+                                            <vue-feather type="edit" size="20" class="cursor-pointer" v-c-tooltip="'Edit This Payment Policy'" @click="editPaymentMethods"/>
+                                        </div>
+                                    </div>
 
                                     <div class="d-flex justify-content-between">
                                         <label class="invoice-terms-title mb-0" for="paymentStub">Send Mail</label>
@@ -202,7 +218,12 @@
                                             <label class="form-check-label" for="sendMail"></label>
                                         </div>
                                     </div>
-
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center justify-content-between gap-5" style="margin-top: 5px;">
+                                            <label class="invoice-terms-title mb-0" for="currency">Currency</label>
+                                            <input type="text" v-model="formData.currency" class="form-control" placeholder="e.g currency" id="currency">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -316,7 +337,7 @@
                             <div class="row mb-1">
                                 <div class="col-md">
                                     <textarea v-model="formData.paymentPolicy" type="text"
-                                              placeholder="Domain Full Description"
+                                              placeholder="Edit Payment policy"
                                               rows="5" class="form-control"></textarea>
                                 </div>
                             </div>
@@ -330,7 +351,21 @@
                             <div class="row mb-1">
                                 <div class="col-md">
                                     <textarea v-model="formData.servicePolicy" type="text"
-                                              placeholder="Domain Full Description"
+                                              placeholder="Edit Service Policy"
+                                              rows="5" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary waves-effect waves-float waves-light" data-bs-dismiss="modal">ok</button>
+                        </div>
+                    </Modal>
+                    <Modal id="payemntMethos" title="Edit Payment Methods" v-vb-is:modal size="lg">
+                        <div class="modal-body">
+                            <div class="row mb-1">
+                                <div class="col-md">
+                                    <textarea v-model="formData.paymentMethos" type="text"
+                                              placeholder="Edit Payment Policy"
                                               rows="5" class="form-control"></textarea>
                                 </div>
                             </div>
@@ -378,19 +413,23 @@ const props = defineProps({
 const formData = useForm({
     clientId:null,
     date:null,
+    due_date:null,
     subject:null,
     note:null,
     paymentPolicy:policyStore.getPaymentPolicy,
     servicePolicy:policyStore.getServicePolicy,
+    paymentMethos:policyStore.getPaymentMethods,
+    // attachPaymentMethods:policyStore.getPaymentMethods,
     attachPaymentPolicy:true,
+    attachPaymentMethods:true,
     attachServicePolicy:true,
     sendMail:false,
+    currency:'Taka'
 })
 
 // const clientId = ref(quotationStore.getClientId)
 // const date = ref(quotationStore.getQutDate)
 // const subject = ref(quotationStore.getSubject)
-
 // const storeDate = () =>{
 //     quotationStore.setQutDate(date.value);
 // }
@@ -413,6 +452,7 @@ const loadClient = (clientId)=> clientDetails.value = props.clients.filter(item 
 
 const editPaymentPolicy = () => document.getElementById('paymentPolicy').$vb.modal.show()
 const editServicePolicy = () => document.getElementById('servicePolicy').$vb.modal.show()
+const editPaymentMethods = () => document.getElementById('payemntMethos').$vb.modal.show()
 
 
 
@@ -423,5 +463,12 @@ const saveQuotation =()=> emits("handleQuotation", formData)
 
 <style lang="sass" scoped>
 @import "../../../../sass/base/pages/app-invoice.scss"
-</style>
 
+</style>
+<style scoped>
+
+.dp__input_icon_pad
+{
+    padding-left: 38px;
+}
+</style>

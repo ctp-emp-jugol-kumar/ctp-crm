@@ -59,14 +59,14 @@
                                         </div>
                                     </div>
 
-                                    <table class="user-list-table table">
+                                    <table class="table table-responsive table-striped table-borderless">
                                         <thead class="table-light">
                                         <tr class=null>
-                                            <th class="sorting">Client</th>
+                                            <th class="sorting" style="width:7%">Client</th>
                                             <th class="sorting">Phone</th>
                                             <th class="sorting">Assigned</th>
                                             <th class="sorting">Status</th>
-                                            <th class="sorting">Created At</th>
+<!--                                            <th class="sorting">Created At</th>-->
                                             <th class="sorting">Created By</th>
                                             <th class="sorting">Last Updated By</th>
                                             <th class="sorting">Actions</th>
@@ -85,32 +85,32 @@
                                                     </div>
                                                     <div class="d-flex flex-column">
                                                         <div class="user_name text-truncate text-body">
-                                                            <span class="fw-bolder">{{ user.name }}</span>
+                                                            <span class="fw-bolder">{{ user.name?.slice(0, 10) }}</span>
                                                         </div>
                                                         <small class="emp_post text-muted">{{ user.email }}</small>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>{{ user.phone }} <span v-if="user.secondary_phone">/ {{ user.secondary_phone }}</span></td>
+                                            <td>{{ user.phone }} <span v-if="user.secondary_phone"></span></td>
                                             <td>
                                                 <span v-for="user in user.users">{{ user.name }}, </span>
                                             </td>
                                             <td class="d-flex flex-column" style="padding:19px 0;"><span class="badge" style="width: max-content" :class="{
                                                 'badge-light-primary' : user.status === 'Proposal Sent',
-                                                'badge-light-info' : user.status === 'Contacted',
-                                                'badge-light-warning' : user.status === 'Quote Sent',
-                                                'badge-light-purple' : user.status === 'Qualified',
+                                                'badge-light-secondary' : user.status === 'Contacted',
+                                                'badge-light-info' : user.status === 'Quote Sent',
+                                                'badge-light-success' : user.status === 'Qualified',
                                                 'badge-light-danger' : user.status === 'Disqualified',
-                                                'badge-light-purple' : user.status === 'New Lead',
-                                                'badge-light-indego' : user.status === 'Follow Up',
-                                                'badge-light-indego' : user.status === 'Converted to Customer',
+                                                'badge-light-warning' : user.status === 'Follow Up',
+                                                'bg-purple' : user.status === 'New Lead',
+                                                'bg-pink' : user.status === 'Converted to Customer',
                                             }">{{ user.status }}
                                             </span>
                                                 <span v-if="user.followUp">
                                                     {{ moment(user.followUp).format('ll') }}
                                                 </span>
                                             </td>
-                                            <td>{{ user.created_at }}</td>
+<!--                                            <td>{{ user.created_at }}</td>-->
                                             <td>{{ user.createdBy?.name ?? '---'}}</td>
                                             <td>{{ user.updatedBy?.name ?? '---'}}</td>
                                             <td>
@@ -575,6 +575,13 @@
 .dp__input_icon_pad {
     padding: 8px 35px !important;
     border-radius: 5px !important;
+}
+.bg-purple{
+    background:purple;
+}
+
+.bg-pink{
+    background:pink;
 }
 </style>
 

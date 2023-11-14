@@ -222,7 +222,7 @@ class QuotationController extends Controller
 
         $services = Searvice::with(['packages', 'features'])->get();
 //        return $services;
-        $clients   = Client::where('is_client', true)->latest()->get();
+        $clients   = Client::latest()->get(); //where('is_client', true)
 
         return inertia('Quotation/Store', [
             'services' => $services,
@@ -258,16 +258,20 @@ class QuotationController extends Controller
         Request::validate([
             'clientId' => 'required',
             'date' => 'required',
-            'subject' => 'required'
+            'due_date' => 'required',
+//            'subject' => 'required'
         ],[
             'clientId.required' => 'First Select An Client...',
             'qutDate.required' => 'Please Select Quotation Date...',
         ]);
 
+
+
         $storeItems = [];
         foreach (Request::input('items') as $item){
             $storeItems[] = [
-                'customItem' => $item['customItem'],
+                'service' => $item['service'],
+                'customItem' => $item['customItem']["description"] ? $item['customItem'] : null,
                 'checkFeatrueds' => $item['checkFeatrueds'],
                 'checkPackages' =>  $item['checkPackages']
             ];
@@ -276,13 +280,11 @@ class QuotationController extends Controller
 
 //        return $storeItems;
 
-
-
-
         $quotation = Quotation::create([
             'quotation_id' => Request::input('quotationId'),
             'client_id' => Request::input('clientId'),
             'qut_date' => Request::input('date'),
+            'due_date' => Request::input('due_date'),
             'subject' => Request::input('subject'),
             'created_by' => Auth::id(),
             "total_price" => Request::input('totalPrice'),
@@ -292,6 +294,8 @@ class QuotationController extends Controller
             'note' => Request::input('note'),
             'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
             'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
+            'payment_methods' => Request::input('attachPaymentMethods') ? Request::input('paymentMethos') : NULL,
+            'currency' => Request::input('currency') ?? 'Taka',
         ]);
 
         if (Request::input('sendMail')){
@@ -591,7 +595,11 @@ class QuotationController extends Controller
 
         if (Request::input('download')) {
             $isPrint = false;
+
+
+
             $pdf = Pdf::loadView('invoice.quotation', compact('quotation', 'pref', 'isPrint'));
+//            return view('invoice.quotation', compact('quotation', 'pref', 'isPrint'));
             return $pdf->download($quotation->client->name."_".now()->format('d_m_Y')."_".'quotation.pdf');
         }
 
@@ -850,11 +858,10 @@ class QuotationController extends Controller
 
 
 
-//        return view('invoice.quotation', compact('data', 'isQuotation'));
-//        exit();
+        return view('invoice.quotation', compact('data', 'isQuotation'));
+        exit();
 
         $pdf = Pdf::loadView('invoice.quotation', compact('data', 'isQuotation'));
-
         return $pdf->download($data["quotation_owner"]["client"]["name"]."_".now()->format('d_m_Y')."_".'quotation.pdf');
 
 
@@ -865,7 +872,11 @@ class QuotationController extends Controller
     public function editQuotation($id){
         $quot = Quotation::with('client')->findOrFail($id);
 
-        $services = Searvice::all()->map(function ($service){
+/*
+ *
+ * this is the old system of load services for package platforms modules
+ *
+ *         $services = Searvice::all()->map(function ($service){
             $service["platforms"] = Platform::with("packages")
                 ->whereIn('id', json_decode($service->platforms))
                 ->get()
@@ -874,7 +885,11 @@ class QuotationController extends Controller
                     return collect($platform)->only(['id', 'name', 'features', 'packages']);
                 });
             return collect($service)->only(['service_name', 'id', 'platforms']);
-        });
+        });*/
+
+
+
+        $services = Searvice::with(['packages', 'features'])->get();
 
         $clients = Client::where('is_client', true)->latest()->get();
 
@@ -899,15 +914,19 @@ class QuotationController extends Controller
         Request::validate([
             'clientId' => 'required',
             'date' => 'required',
-            'subject' => 'required'
+            'due_date' => 'required',
         ],[
             'clientId.required' => 'First Select An Client...',
             'qutDate.required' => 'Please Select Quotation Date...',
         ]);
 
+//        return Request::input('items');
+
         $storeItems = [];
         foreach (Request::input('items') as $item){
             $storeItems[] = [
+                'service' => $item['service'],
+                'customItem' => $item['customItem']["description"] ? $item['customItem'] : null,
                 'checkFeatrueds' => $item['checkFeatrueds'],
                 'checkPackages' =>  $item['checkPackages']
             ];
@@ -927,6 +946,7 @@ class QuotationController extends Controller
             'note' => Request::input('note'),
             'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
             'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
+            'payment_methods' => Request::input('attachPaymentMethods') ? Request::input('paymentMethos') : NULL,
         ]);
 
 

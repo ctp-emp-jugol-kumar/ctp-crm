@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DomainRequest;
 use App\Models\Platform;
 use App\Models\Searvice;
 use App\Models\ServiceFeature;
 use App\Models\ServicePackage;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\URL;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 use function Ramsey\Collection\Map\toArray;
 
 class SearviceController extends Controller
@@ -16,7 +20,7 @@ class SearviceController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @return Response|ResponseFactory
      */
     public function index()
     {
@@ -51,37 +55,6 @@ class SearviceController extends Controller
         //
     }
 
-    public function createPackage()
-    {
-
-
-        $data = Request::validate([
-           'serviceId' => 'required',
-            'name' => 'required',
-            'price' => 'required',
-            'descriptions' => 'required'
-        ]);
-
-        $data['service_id'] = Request::input('serviceId');
-
-        ServicePackage::create($data);
-        return back();
-    }
-
-    public function createFeature()
-    {
-
-        $data = Request::validate([
-           'serviceId' => 'required',
-            'name' => 'required',
-            'price' => 'required',
-        ]);
-
-        $data['service_id'] = Request::input('serviceId');
-        ServiceFeature::create($data);
-        return back();
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -102,8 +75,8 @@ class SearviceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Searvice  $searvice
-     * @return \Inertia\Response|\Inertia\ResponseFactory
+     * @param $id
+     * @return Response|ResponseFactory
      */
     public function show($id)
     {
@@ -112,7 +85,8 @@ class SearviceController extends Controller
         return inertia('Services/Show',[
             'service' => $service,
             'save_packages' => URL::route('createPackage'),
-            'save_feature' => URL::route('createFeature')
+            'save_feature' => URL::route('createFeature'),
+            'main_url' => URL::route('services.index')
         ]);
     }
 
@@ -158,7 +132,101 @@ class SearviceController extends Controller
     public function destroy($id)
     {
         $service = Searvice::findOrFail($id);
+        $service->features->each->delete();
+        $service->packages->each->delete();
+
         $service->delete();
         return back();
+
     }
+
+
+    public function createPackage()
+    {
+        $data = Request::validate([
+            'serviceId' => 'required',
+            'name' => 'required',
+            'price' => 'required',
+            'descriptions' => 'required'
+        ]);
+
+        $data['service_id'] = Request::input('serviceId');
+
+        ServicePackage::create($data);
+        return back();
+    }
+
+    public function editPackage($id){
+        return ServicePackage::findOrFail($id);
+    }
+
+    public function updatePackage($id){
+        $data = Request::validate([
+            'serviceId' => 'required',
+            'name' => 'required',
+            'price' => 'required',
+            'descriptions' => 'required'
+        ]);
+        $data['service_id'] = Request::input('serviceId');
+        ServicePackage::findOrFail($id)->update($data);
+        return back();
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param ServicePackage $servicePackage
+     * @return RedirectResponse
+     */
+    public function deletePackage($id){
+        ServicePackage::findOrFail($id)->delete();
+        return back();
+    }
+
+
+
+
+    public function createFeature()
+    {
+
+        $data = Request::validate([
+            'serviceId' => 'required',
+            'name' => 'required',
+            'price' => 'required',
+        ]);
+
+        $data['service_id'] = Request::input('serviceId');
+        ServiceFeature::create($data);
+        return back();
+    }
+
+    public function editFeature($id){
+        return ServiceFeature::findOrFail($id);
+    }
+
+    public function updateFeature($id){
+        $data = Request::validate([
+            'serviceId' => 'required',
+            'name' => 'required',
+            'price' => 'required',
+        ]);
+        $data['service_id'] = Request::input('serviceId');
+        ServiceFeature::findOrFail($id)->update($data);
+        return back();
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param ServicePackage $servicePackage
+     * @return RedirectResponse
+     */
+    public function deleteFeature($id){
+        ServiceFeature::findOrFail($id)->delete();
+        return back();
+    }
+
+
+
+
 }
