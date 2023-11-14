@@ -46,11 +46,13 @@
                                             <div class="d-flex align-items-center mb-1 flex-column gap-1">
                                                 <Datepicker v-model="formData.date"
                                                             :monthChangeOnScroll="false"
+                                                            :enable-time-picker="false"
                                                             placeholder="Select Quotation Date"
                                                             autoApply></Datepicker>
 
                                                 <Datepicker v-model="formData.due_date"
                                                             :monthChangeOnScroll="false"
+                                                            :enable-time-picker="false"
                                                             placeholder="Select Quotation Due Date"
                                                             autoApply></Datepicker>
                                             </div>
