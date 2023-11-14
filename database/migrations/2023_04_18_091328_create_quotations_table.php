@@ -30,6 +30,7 @@ return new class extends Migration
             $table->longText('payment_methods')->nullable();
             $table->longText('trams_of_service')->nullable();
             $table->longText('payment_policy')->nullable();
+            $table->string('currency')->default('taka');
             $table->text('note')->nullable();
             $table->timestamps();
         });

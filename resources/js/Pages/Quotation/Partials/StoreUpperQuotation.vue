@@ -93,7 +93,7 @@
                                                                             <span >{{ option.email }}</span>
                                                                             <span >{{ option.phone }}
                                                                                <span v-if="option.secondary_phone">/ {{ option.secondary_phone}}</span>
-                                                                           </span>
+                                                                            </span>
                                                                         </div>
                                                                     </div>
                                                                 </li>
@@ -218,7 +218,12 @@
                                             <label class="form-check-label" for="sendMail"></label>
                                         </div>
                                     </div>
-
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center justify-content-between gap-5" style="margin-top: 5px;">
+                                            <label class="invoice-terms-title mb-0" for="currency">Currency</label>
+                                            <input type="text" v-model="formData.currency" class="form-control" placeholder="e.g currency" id="currency">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -419,6 +424,7 @@ const formData = useForm({
     attachPaymentMethods:true,
     attachServicePolicy:true,
     sendMail:false,
+    currency:'Taka'
 })
 
 // const clientId = ref(quotationStore.getClientId)

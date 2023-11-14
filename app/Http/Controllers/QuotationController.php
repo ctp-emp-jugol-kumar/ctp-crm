@@ -594,6 +594,9 @@ class QuotationController extends Controller
 
         if (Request::input('download')) {
             $isPrint = false;
+
+
+
             $pdf = Pdf::loadView('invoice.quotation', compact('quotation', 'pref', 'isPrint'));
 //            return view('invoice.quotation', compact('quotation', 'pref', 'isPrint'));
             return $pdf->download($quotation->client->name."_".now()->format('d_m_Y')."_".'quotation.pdf');
@@ -854,11 +857,10 @@ class QuotationController extends Controller
 
 
 
-//        return view('invoice.quotation', compact('data', 'isQuotation'));
-//        exit();
+        return view('invoice.quotation', compact('data', 'isQuotation'));
+        exit();
 
         $pdf = Pdf::loadView('invoice.quotation', compact('data', 'isQuotation'));
-
         return $pdf->download($data["quotation_owner"]["client"]["name"]."_".now()->format('d_m_Y')."_".'quotation.pdf');
 
 

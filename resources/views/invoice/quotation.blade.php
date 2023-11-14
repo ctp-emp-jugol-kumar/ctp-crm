@@ -12,7 +12,7 @@
 
         p {
             margin: 2px 0;
-            font-size: 10px;
+            font-size: 12px;
         }
 
         h3 {
@@ -207,7 +207,7 @@
                             {!! nl2br($item['name']) !!}
                         </td>
                         <td class="border text-right" @if($loop->last) style="padding-bottom: 7px" @endif>
-                            <p>{{ ($item['price'] * $item['qty']) ?? 0 }}</p>
+                            <p>{{ $item['price'] ?? 0 }} * {{ $item['qty'] ?? 1 }}</p>
                         </td>
                     </tr>
                 @endforeach
