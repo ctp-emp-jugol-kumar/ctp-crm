@@ -175,18 +175,21 @@
         <div class="col-1">
             <div class="to" style="text-align: right">
                 <h3>ID:{{ env('QUT_PREFIX')}}{{ $quotation->quotation_id }}{{ $quotation->id }}</h3>
-                <p>Created on: {{ $quotation->qut_date }}</p>
-                <p>Valid until: {{ $quotation->due_date }}</p>
+                <p>Created on: {{ $quotation->qut_date?->format('y-m-d') }}</p>
+                <p>Valid until: {{ $quotation->due_date?->format('y-m-d') }}</p>
             </div>
         </div>
     </div>
 
 
-    <div class="row" style="margin: 0">
-        <h2 style="margin: 0">
-            Subject: {{ $quotation->subject }}
-        </h2>
-    </div>
+    @if($quotation->subject)
+        <div class="row" style="margin: 0">
+            <h2 style="margin: 0">
+                Subject: {{ $quotation->subject }}
+            </h2>
+        </div>
+    @endif
+
     <div class="row">
         <div class="col-3">
             <table class="main-table">
@@ -240,11 +243,12 @@
             @endphp
             <p id="inword">
                 <strong>Inword:</strong>
-                {{ $numberTransformer->toWords($quotation->grand_total) }} Taka Only.
+                {{ $numberTransformer->toWords($quotation->grand_total) }} {{ $quotation->currency }} Only.
             </p>
         </div>
     </div>
 
+    @if($quotation?->note)
     <div class="row">
           <div class="col-3">
               <h3>Note:</h3>
@@ -255,11 +259,12 @@
               <br>
           </div>
       </div>
+    @endif
 
     <div class="row mt-3">
         <div class="col-3 text-center">
             <p class="text-center">Created By {{ $quotation->user->name }}</p>
-
+            <p>{{ config('app.electrically_generated_message') }}</p>
         </div>
     </div>
     <div class="page-break"></div>

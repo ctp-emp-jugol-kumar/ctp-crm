@@ -222,7 +222,7 @@ class QuotationController extends Controller
 
         $services = Searvice::with(['packages', 'features'])->get();
 //        return $services;
-        $clients   = Client::where('is_client', true)->latest()->get();
+        $clients   = Client::latest()->get(); //where('is_client', true)
 
         return inertia('Quotation/Store', [
             'services' => $services,
@@ -295,6 +295,7 @@ class QuotationController extends Controller
             'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
             'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
             'payment_methods' => Request::input('attachPaymentMethods') ? Request::input('paymentMethos') : NULL,
+            'currency' => Request::input('currency') ?? 'Taka',
         ]);
 
         if (Request::input('sendMail')){

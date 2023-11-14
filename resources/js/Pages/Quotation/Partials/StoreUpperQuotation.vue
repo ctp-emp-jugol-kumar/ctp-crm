@@ -430,7 +430,6 @@ const formData = useForm({
 // const clientId = ref(quotationStore.getClientId)
 // const date = ref(quotationStore.getQutDate)
 // const subject = ref(quotationStore.getSubject)
-
 // const storeDate = () =>{
 //     quotationStore.setQutDate(date.value);
 // }
