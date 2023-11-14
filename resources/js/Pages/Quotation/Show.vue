@@ -64,7 +64,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <h4 class="subject-line">Subject: {{ props.quotation.subject }}</h4>
+                                    <h4 class="subject-line" v-if="props.quotation?.subject">Subject: {{ props.quotation.subject }}</h4>
                                 </div>
                                 <!-- Address and Contact ends -->
                                 <table class="table">
