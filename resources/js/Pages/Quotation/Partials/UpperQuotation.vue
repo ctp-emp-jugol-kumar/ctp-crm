@@ -47,10 +47,14 @@
                                                 <Datepicker v-model="formData.date"
                                                             :monthChangeOnScroll="false"
                                                             placeholder="Select Quotation Date"
+                                                            :enable-time-picker="false"
+                                                            :format="'d-MM-Y'"
                                                             autoApply></Datepicker>
 
                                                 <Datepicker v-model="formData.due_date"
                                                             :monthChangeOnScroll="false"
+                                                            :enable-time-picker="false"
+                                                            :format="'d-MM-Y'"
                                                             placeholder="Select Quotation Due Date"
                                                             autoApply></Datepicker>
                                             </div>
@@ -209,6 +213,13 @@
                                             <input v-model="formData.attachPaymentMethods" type="checkbox" class="form-check-input" checked id="payemntMethods" />
                                             <label class="form-check-label" for="payemntMethods"></label>
                                             <vue-feather type="edit" size="20" class="cursor-pointer" v-c-tooltip="'Edit This Payment Policy'" @click="editPaymentMethods"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex align-items-center justify-content-between gap-5" style="margin-top: 5px;">
+                                            <label class="invoice-terms-title mb-0" for="currency">Currency</label>
+                                            <input type="text" v-model="formData.currency" class="form-control" placeholder="e.g currency" id="currency">
                                         </div>
                                     </div>
 
@@ -413,9 +424,12 @@ import Fuse from "fuse.js";
 import {usePolicyStore} from "../../../Store/usePolicyStore";
 import {useForm} from "@inertiajs/inertia-vue3";
 import Modal from "../../../components/Modal.vue";
+import {storeToRefs} from "pinia";
 
 const quotationStore = useQuotationStore();
 const policyStore = usePolicyStore()
+policyStore.setServicePolicy();
+const servicePolicy  = storeToRefs(policyStore);
 
 const props = defineProps({
     subtotal:{
@@ -450,6 +464,9 @@ const formData = useForm({
     attachPaymentPolicy:props.quotation.payment_policy !== null,
     attachServicePolicy:props.quotation.trams_of_service !== null,
     attachPaymentMethods:props.quotation.payment_methods !== null,
+
+    currency: props.quotation.currency,
+
 })
 
 

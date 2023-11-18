@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use function GuzzleHttp\Promise\all;
@@ -512,7 +513,6 @@ class QuotationController extends Controller
      * Display the specified resource.
      *
      * @param Quotation $quotation
-     * @return false|string
      */
     /* public function show($id)
      {
@@ -556,11 +556,10 @@ class QuotationController extends Controller
 
 
 
-    public function show($id)
+    public function show($id, $attatchment=false)
     {
         $quotation = Quotation::with(['client', 'user:id,name', 'invoice'])->findOrFail($id);
 
-//        return json_decode($quotation->items);
         $pref = [];
         foreach (json_decode($quotation->items) as $item){
             if ($item->checkPackages){
@@ -595,12 +594,13 @@ class QuotationController extends Controller
 
         if (Request::input('download')) {
             $isPrint = false;
-
-
-
             $pdf = Pdf::loadView('invoice.quotation', compact('quotation', 'pref', 'isPrint'));
 //            return view('invoice.quotation', compact('quotation', 'pref', 'isPrint'));
             return $pdf->download($quotation->client->name."_".now()->format('d_m_Y')."_".'quotation.pdf');
+        }
+
+        if ($attatchment){
+            return ['quotation'=> $quotation, 'pref' => $pref];
         }
 
         if (Request::input('print')){
@@ -920,8 +920,6 @@ class QuotationController extends Controller
             'qutDate.required' => 'Please Select Quotation Date...',
         ]);
 
-//        return Request::input('items');
-
         $storeItems = [];
         foreach (Request::input('items') as $item){
             $storeItems[] = [
@@ -944,6 +942,7 @@ class QuotationController extends Controller
             'items' => json_encode($storeItems),
             'status' => true,
             'note' => Request::input('note'),
+            'currency' => Request::input('currency') ?? 'Taka',
             'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
             'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
             'payment_methods' => Request::input('attachPaymentMethods') ? Request::input('paymentMethos') : NULL,
@@ -1094,7 +1093,6 @@ class QuotationController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Quotation  $quotation
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Quotation $quotation)
     {
@@ -1187,8 +1185,36 @@ class QuotationController extends Controller
         return back();
     }
 
-    public function sendMail($id){
-        $quotation = Quotation::with('client')->findOrFail($id);
-        Mail::to($quotation->customer->email)->send(new QuotationMail($quotation->customer));
+    public function sendMail($id=null){
+
+        Request::validate([
+            'email' => 'required|email'
+        ]);
+
+        $email = Request::input('email');
+        $data = $this->show($id, true);
+
+        $quotation = $data['quotation'];
+        $pref = $data['pref'];
+        $isPrint = false;
+        $pdf = Pdf::loadView('invoice.attatchement_quotation', compact('quotation', 'pref', 'isPrint'));
+
+        if($email){
+//            Mail::send('emails.quotation', $data, function($message) use($data, $pdf) {
+//                $message->from('jk23717933@gmail.com', 'PuraBox');
+//                $message->to('jk23717933@gmail.com');
+//                $message->subject("send attatchment");
+//                $message->attachData($pdf->output(), 'myfile.pdf');
+//            });
+            Mail::to($email)->send(new QuotationMail($data['quotation'], $pdf));
+
+            return redirect()->back()->with([
+                'message' => 'Email Send Success...'
+            ]);
+        }
+
+        return redirect()->back()->withErrors([
+            'message' => 'No have any email for send this data..'
+        ]);
     }
 }

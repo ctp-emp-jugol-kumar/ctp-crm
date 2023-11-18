@@ -35,7 +35,9 @@
     <div id="container">
         <div class="row">
             <div class="col-3">
-                <h3>Dear {{ $client->name }},</h3>
+                @if($quotation)
+                <h3>Dear {{ $quotation?->client?->name }},</h3>
+                @endif
                 <p>Greetings from Creative Tech Park! Hope you are doing well.</p>
                 <p>This is a notice that an quotation has been generated on {{ now()->format('l, F jS, Y')}}.</p>
                 <p>Please find the attached Quotation.</p>

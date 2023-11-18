@@ -20,6 +20,16 @@ class BusinessSettingController extends Controller
         $setting = BusinessSetting::where('type', $key)->first();
         return $setting == null ? $default : $setting->value;
     }
+
+    public function getAllPolicy(){
+        $data = [
+            'trams_and_condition' => $this->get_setting('trams_and_condition'),
+            'payment_policy' => $this->get_setting('payment_policy'),
+            'payment_methods' => $this->get_setting('payment_methods'),
+        ];
+        return $data;
+    }
+
     public function overWriteEnv($key, $value)
     {
         $envFile = base_path('.env');
@@ -40,12 +50,20 @@ class BusinessSettingController extends Controller
             return "Environment variable updated successfully!";
         }
     }
+
     public function index()
     {
         return inertia('Settings/Setting', [
             'main_url' => URL::route('businessIndex'),
             'updateSmtp' => URL::route('updateSmtp'),
             'bSettings' =>[
+                'trams_and_condition' => $this->get_setting('trams_and_condition'),
+                'payment_policy' => $this->get_setting('payment_policy'),
+                'payment_methods' => $this->get_setting('payment_methods'),
+
+                'quotation_template' => $this->get_setting('quotation_template'),
+                'invoice_template' => $this->get_setting('invoice_template'),
+
                 'mailDriver' => $this->get_setting('mailDriver'),
                 'mailHost' => $this->get_setting('mailHost'),
                 'mailPort' => $this->get_setting('mailPort'),
@@ -56,6 +74,36 @@ class BusinessSettingController extends Controller
                 'encryption' => $this->get_setting('encryption'),
             ]
         ]);
+    }
+
+    public function updateSettings(){
+        foreach (Request::all() as $type => $value) {
+            $business_settings = BusinessSetting::where('type', $type)->first();
+            if($business_settings != null) {
+                if ($value != null){
+                    if(gettype($value) == 'array'){
+                        $business_settings->value = json_encode($value);
+                    }
+                    else {
+                        $business_settings->value = $value;
+                    }
+                    $business_settings->save();
+                }
+            } else{
+                if ($value != null){
+                    $business_settings = new BusinessSetting;
+                    $business_settings->type = $type;
+                    if(gettype($value) == 'array'){
+                        $business_settings->value = json_encode($value);
+                    }
+                    else {
+                        $business_settings->value = $value;
+                    }
+                    $business_settings->save();
+                }
+            }
+        }
+        return back();
     }
 
 

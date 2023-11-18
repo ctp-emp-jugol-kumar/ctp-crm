@@ -23,6 +23,47 @@
                                             type="button" role="tab"
                                             aria-controls="v-pills-smtp"
                                             aria-selected="false">SMTP Setup</button>
+
+                                    <button class="nav-link"
+                                            id="v-pills-tac-tab"
+                                            data-bs-toggle="pill"
+                                            data-bs-target="#v-pills-tac"
+                                            type="button" role="tab"
+                                            aria-controls="v-pills-tac"
+                                            aria-selected="false">Trams And Condition</button>
+
+                                    <button class="nav-link"
+                                            id="v-pills-payment_policy-tab"
+                                            data-bs-toggle="pill"
+                                            data-bs-target="#v-pills-payment_policy"
+                                            type="button" role="tab"
+                                            aria-controls="v-pills-payment_policy"
+                                            aria-selected="false">Payment Policy</button>
+
+                                    <button class="nav-link"
+                                            id="v-pills-payment_method-tab"
+                                            data-bs-toggle="pill"
+                                            data-bs-target="#v-pills-payment_method"
+                                            type="button" role="tab"
+                                            aria-controls="v-pills-payment_method"
+                                            aria-selected="false">Payment Methods</button>
+
+
+                                    <button class="nav-link"
+                                            id="v-pills-quotation_template-tab"
+                                            data-bs-toggle="pill"
+                                            data-bs-target="#v-pills-quotation_template"
+                                            type="button" role="tab"
+                                            aria-controls="v-pills-quotation_template"
+                                            aria-selected="false">Quotation Template</button>
+
+                                    <button class="nav-link"
+                                            id="v-pills-invoice_template-tab"
+                                            data-bs-toggle="pill"
+                                            data-bs-target="#v-pills-invoice_template"
+                                            type="button" role="tab"
+                                            aria-controls="v-pills-invoice_template"
+                                            aria-selected="false">Invoice Template</button>
                                 </div>
                             </div>
                             <div class="col-md-9">
@@ -94,13 +135,122 @@
                                                         <button v-else class="btn btn-primary me-1 waves-effect waves-float waves-light">
                                                             Submit
                                                         </button>
-                                                        <button type="reset" class="btn btn-outline-secondary waves-effect">Reset</button>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
 
+                                    <div class="tab-pane fade show" id="v-pills-tac" role="tabpanel" aria-labelledby="v-pills-tac">
+                                        <div class="card">
+                                            <h2>Trams And Condition</h2>
+                                            <form class="form form-vertical" @submit.prevent="updateSettings">
+                                                <textarea type="text"
+                                                          v-model="createForm.trams_and_condition"
+                                                      placeholder="Edit trams and conditions"
+                                                      rows="5" class="form-control"></textarea>
+
+                                                <div class="col-12 mt-2 d-inline-flex align-item-center">
+                                                    <button v-if="!isLoding" type="submit" disabled class="btn btn-primary me-1 waves-effect waves-float waves-light">
+                                                        <div class="spinner-border text-white me-1"  role="status"></div>
+                                                        <span>Submit</span>
+                                                    </button>
+
+                                                    <button v-else class="btn btn-primary me-1 waves-effect waves-float waves-light">
+                                                        Submit
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade show" id="v-pills-payment_policy" role="tabpanel" aria-labelledby="v-pills-payment_policy">
+                                        <div class="card">
+                                            <h2>Payment Policy</h2>
+                                            <form class="form form-vertical" @submit.prevent="updateSettings">
+                                                <textarea type="text"
+                                                          v-model="createForm.payment_policy"
+                                                      placeholder="Edit trams and conditions"
+                                                      rows="5" class="form-control"></textarea>
+
+                                                <div class="col-12 mt-2 d-inline-flex align-item-center">
+                                                    <button v-if="!isLoding" type="submit" disabled class="btn btn-primary me-1 waves-effect waves-float waves-light">
+                                                        <div class="spinner-border text-white me-1"  role="status"></div>
+                                                        <span>Submit</span>
+                                                    </button>
+
+                                                    <button v-else class="btn btn-primary me-1 waves-effect waves-float waves-light">
+                                                        Submit
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade show" id="v-pills-payment_method" role="tabpanel" aria-labelledby="v-pills-payment_method">
+                                        <div class="card">
+                                            <h2>Payment Methods</h2>
+                                            <form class="form form-vertical" @submit.prevent="updateSettings">
+                                                <textarea type="text"
+                                                          v-model="createForm.payment_methods"
+                                                      placeholder="Edit trams and conditions"
+                                                      rows="5" class="form-control"></textarea>
+
+                                                <div class="col-12 mt-2 d-inline-flex align-item-center">
+                                                    <button v-if="!isLoding" type="submit" disabled class="btn btn-primary me-1 waves-effect waves-float waves-light">
+                                                        <div class="spinner-border text-white me-1"  role="status"></div>
+                                                        <span>Submit</span>
+                                                    </button>
+
+                                                    <button v-else class="btn btn-primary me-1 waves-effect waves-float waves-light">
+                                                        Submit
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade show" id="v-pills-quotation_template" role="tabpanel" aria-labelledby="v-pills-quotation_template">
+                                        <div class="card">
+                                            <h2>Quotaiton Email Template</h2>
+                                            <form class="form form-vertical" @submit.prevent="updateSettings">
+                                                <textarea type="text"
+                                                          v-model="createForm.quotation_template"
+                                                      placeholder="Edit trams and conditions"
+                                                      rows="5" class="form-control"></textarea>
+
+                                                <div class="col-12 mt-2 d-inline-flex align-item-center">
+                                                    <button v-if="!isLoding" type="submit" disabled class="btn btn-primary me-1 waves-effect waves-float waves-light">
+                                                        <div class="spinner-border text-white me-1"  role="status"></div>
+                                                        <span>Submit</span>
+                                                    </button>
+
+                                                    <button v-else class="btn btn-primary me-1 waves-effect waves-float waves-light">
+                                                        Submit
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade show" id="v-pills-invoice_template" role="tabpanel" aria-labelledby="v-pills-invoice_template">
+                                        <div class="card">
+                                            <h2>Invoice Email Template</h2>
+                                            <form class="form form-vertical" @submit.prevent="updateSettings">
+                                                <textarea type="text"
+                                                          v-model="createForm.invoice_template"
+                                                          placeholder="Edit trams and conditions"
+                                                          rows="5" class="form-control"></textarea>
+
+                                                <div class="col-12 mt-2 d-inline-flex align-item-center">
+                                                    <button v-if="!isLoding" type="submit" disabled class="btn btn-primary me-1 waves-effect waves-float waves-light">
+                                                        <div class="spinner-border text-white me-1"  role="status"></div>
+                                                        <span>Submit</span>
+                                                    </button>
+
+                                                    <button v-else class="btn btn-primary me-1 waves-effect waves-float waves-light">
+                                                        Submit
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -139,40 +289,12 @@ let props = defineProps({
 
 
 let createForm = useForm({
-    name        : props.bSettings.name ?? '',
-    header_logo : props.bSettings.header_logo ?? '',
-    logo_fabs   : props.bSettings.logo_fabs ?? '',
-    app_details : props.bSettings.details ?? '',
-    timezone    : props.bSettings.timezone?.tz ?? '',
-    country     : props.bSettings.country?.name ?? '',
+    trams_and_condition:props.bSettings.trams_and_condition ?? '',
+    payment_policy:props.bSettings.payment_policy ?? '',
+    payment_methods:props.bSettings.payment_methods ?? '',
 
-    address     : props.bSettings.address ?? '',
-    email       : props.bSettings.email ?? '',
-    phone       : props.bSettings.phone ?? '',
-
-    facebook_profile  : props.bSettings.facebook_profile ?? '',
-    youtube           : props.bSettings.youtube ?? '',
-    google_drive      : props.bSettings.google_drive ?? '',
-    linkedin_profile  : props.bSettings.linkedin_profile ?? '',
-    twitter_profile   : props.bSettings.twitter_profile ?? '',
-    instagram_profile : props.bSettings.instagram_profile ?? '',
-
-    api_url           : props.bSettings.api_url ?? '',
-    api_user_name     : props.bSettings.api_user_name ?? '',
-    api_user_pass     : props.bSettings.api_user_pass ?? '',
-
-    inSizeDhaka:null,
-    outSizeDhaka:null,
-    shippingType:null,
-
-    header_categories: props.bSettings.header_categories ?? [],
-
-    headerMenuSetup:props.bSettings.headerMenuSetup ?? [{
-        link:usePage().props.value.auth.MAIN_URL
-
-    }]
-
-
+    quotation_template:props.bSettings.quotation_template ?? '',
+    invoice_template:props.bSettings.invoice_template ?? '',
 
 })
 
@@ -187,31 +309,7 @@ const mailSetup = useForm({
     encryption        : props.bSettings.encryption ?? '',
 })
 
-let addRow = () => {
-    createForm.headerMenuSetup.push({
-        title: '',
-        link:usePage().props.value.auth.MAIN_URL
-    })
-}
-let deleteRow = (index) => {
-    createForm.headerMenuSetup.splice(index, 1)
-}
-
-
-
-let logoForm = useForm({
-    header_logo     :   '',
-    footer_logo     :   '',
-    logo_fabs       :   '',
-    lightColor      : null,
-    mainColor       : null,
-    textColor       : null
-
-})
-
-
 let isLoding = ref({});
-
 let updateMailSetup = () =>{
     isLoding.value = false
     mailSetup.post(props.updateSmtp, {
@@ -232,29 +330,27 @@ let updateMailSetup = () =>{
     });
 }
 
-const renderOptionGroup = (categories, prefix = '') => {
-    return categories.map((category) => {
-
-        let cValue = '';
-        for (let i = 0; i < category.order_level; i++) {
-            cValue += '--';
-        }
-        const label = `${cValue}${category.title}`;
-        if (category.children && category.children.length > 0) {
-            const childPrefix = `${prefix}\xa0\xa0\xa0`;
-            return {
-                label,
-                options: renderOptionGroup(category.children, childPrefix),
-            };
-        } else {
-            const value = {...category};
-            return {
-                label,
-                value,
-            };
+const updateSettings = () =>{
+    isLoding.value = false
+    createForm.post(props.main_url+"/all-settings", {
+        onSuccess: (res)=>{
+            isLoding.value = true
+            Swal.fire({
+                icon: "success",
+                text: "Business Settings Update Successfully Done.:)",
+            });
+        },
+        onError: (res) =>{
+            Swal.fire({
+                icon: "error",
+                text: "Business Settings Not Update (:",
+            });
         }
     });
-};
+}
+
+
+
 
 const smtpMillers = [
         {name:"smtp"}, {name:"sendmail"}, {name:"mailgun"}, {name:"ses"}, {name:"postmark"}, {name:"log"}, {name:"array"}, {name:"failover"}
