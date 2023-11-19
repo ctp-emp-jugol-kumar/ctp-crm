@@ -114,6 +114,7 @@ class InvoiceController extends Controller
         Invoice::create([
             'invoice_id' => now()->format('Ymd'),
             'client_id' => Request::input('clientId'),
+            'invoice_date' => Request::input('date'),
             'user_id' => Auth::id(),
             'invoice_type' => 'custom',
             'items' => json_encode(Request::input('items')),
@@ -122,6 +123,7 @@ class InvoiceController extends Controller
             'grand_total' => Request::input('totalPrice'),
             'due' => Request::input('totalPrice'),
             'note' => Request::input('note'),
+            'currency' => Request::input('currency'),
             'payment_policy' => Request::input('attachPaymentPolicy') ? Request::input('paymentPolicy') : NULL,
             'trams_of_service' => Request::input('attachServicePolicy') ? Request::input('servicePolicy') : NULL,
             'payment_methods' => Request::input('attachPaymentMethods') ? Request::input('payemtnPolicy') : NULL,
@@ -233,13 +235,13 @@ class InvoiceController extends Controller
                 'payment_method' => 'required'
             ]);
         }
-
         $quotation = Quotation::findOrFail(Request::input('quotationId'));
         $discount = $quotation->discount + Request::input('discount') ?? 0;
-
         $grandTotal = $quotation->total_price - $discount;
-
         $due = $grandTotal - (int)Request::input('pay');
+
+
+//        return $quotation;
 
         $invoice = Invoice::create([
             'invoice_id' => now()->format('Ymd'),
@@ -252,9 +254,13 @@ class InvoiceController extends Controller
             'grand_total' => $grandTotal,
             'pay' => Request::input('pay'),
             'due' => $due,
-            'note' => Request::input('note')
+            'currency'=> $quotation->currency ?? 'Taka',
+            'invoice_date' => now(),
+            'note' => Request::input('note'),
+            'payment_policy' => $quotation?->payment_policy ?? NULL,
+            'trams_of_service' => $quotation?->trams_of_service ?? NULL,
+            'payment_methods' => $quotation?->payment_methods ??  NULL,
         ]);
-
         Transaction::create([
             'transaction_id' =>  now()->format('Ymd'),
             'transactionable_id' => $invoice->id,
@@ -269,15 +275,18 @@ class InvoiceController extends Controller
             "method_id" => Request::input('payment_method')
         ]);
 
-        if ($invoice->client->email){
-            Mail::to($quotation->client->email)->send(new InvoiceMail($quotation->client, $invoice));
+        $data = $this->downloadInvoice($invoice->id, true);
+        $clientEmail = $invoice->quotation?->client?->email ?? $invoice->client?->email;
+
+        if (is_array($data) && $clientEmail){
+            Mail::to($clientEmail)->send(new InvoiceMail($data['invoice'], $data['pref']));
         }
 
         return back();
     }
 
-    public function downloadInvoice($id){
-        $invoice = Invoice::with(['user', 'quotation', 'client'])->findOrFail($id);
+    public function downloadInvoice($id, $emailData=false){
+        $invoice = Invoice::with(['user', 'quotation', 'client', 'transactions'])->findOrFail($id);
         $pref = [];
 
         if (!is_null($invoice) && !is_null($invoice->quotation_id)){
@@ -323,9 +332,15 @@ class InvoiceController extends Controller
         $clientName = $invoice->quotation?->client?->name ?? $invoice->client?->name;
         $isPrint = false;
 
+        if($emailData){
+            return [
+                'invoice' => $invoice,
+                'pref' => $pref,
+            ];
+        }
 
         $pdf = Pdf::loadView('invoice.quotationInvoice', compact('invoice','pref', 'isPrint'));
-//        return view('invoice.quotationInvoice', compact('invoice','pref', 'isPrint'));
+        return view('invoice.quotationInvoice', compact('invoice','pref', 'isPrint'));
         return $pdf->download($clientName."_".now()->format('d_m_Y')."_".'invoice.pdf');
     }
 
@@ -369,7 +384,7 @@ class InvoiceController extends Controller
         ];
 
 
-//        return view('invoice.invoice', compact("data"));
+        return view('invoice.invoice', compact("data"));
 
         $pdf = Pdf::loadView('invoice.invoice', compact("data"));
         return $pdf->download('invoice.pdf');
@@ -493,6 +508,24 @@ class InvoiceController extends Controller
         return back();
     }
 
+    public function sendMail($id=null){
+        Request::validate([
+            'email' => 'required|email'
+        ]);
+        $email = Request::input('email');
+        $data = $this->downloadInvoice($id, true);
+        if($data && $email){
+            Mail::to($email)->send(new InvoiceMail($data['invoice'], $data['pref']));
+            return redirect()->back()->with([
+                'message' => 'Email Send Success...'
+            ]);
+        }
+
+        return redirect()->back()->withErrors([
+            'message' => 'No have any email for send this data..'
+        ]);
+
+    }
 
 
 }

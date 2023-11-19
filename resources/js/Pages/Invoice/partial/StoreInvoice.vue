@@ -38,6 +38,8 @@
                                 <div class="d-flex align-items-center mb-1">
                                     <Datepicker v-model="formData.date"
                                                 :monthChangeOnScroll="false"
+                                                :enable-time-picker="false"
+                                                :format="'d-MM-Y'"
                                                 placeholder="Select Quotation Date"
                                                 autoApply></Datepicker>
                                 </div>
@@ -179,6 +181,12 @@
                             </div>
                         </div>
 
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center justify-content-between gap-5" style="margin-top: 5px;">
+                                <label class="invoice-terms-title mb-0" for="currency">Currency</label>
+                                <input type="text" v-model="formData.currency" class="form-control" placeholder="e.g currency" id="currency">
+                            </div>
+                        </div>
                     </div>
                 </div>
 <!--                <div class="mt-2">
@@ -244,10 +252,10 @@
                                             </textarea>
                             </div>
                             <div class="mb-1">
-                                            <span class="badge badge-light-primary">
-                                                <i data-feather="link" class="me-25"></i>
-                                                <span class="align-middle">Invoice Attached</span>
-                                            </span>
+                                <span class="badge badge-light-primary">
+                                    <i data-feather="link" class="me-25"></i>
+                                    <span class="align-middle">Invoice Attached</span>
+                                </span>
                             </div>
                             <div class="mb-1 d-flex flex-wrap mt-2">
                                 <button type="button" class="btn btn-primary me-1" data-bs-dismiss="modal">Send</button>
@@ -363,10 +371,12 @@ import Fuse from "fuse.js";
 import {useForm} from "@inertiajs/inertia-vue3";
 import {usePolicyStore} from "../../../Store/usePolicyStore";
 import Modal from "../../../components/Modal.vue";
+import {storeToRefs} from "pinia";
 
 const quotationStore = useQuotationStore();
-const policyStore = usePolicyStore()
-
+const policyStore = usePolicyStore();
+policyStore.setServicePolicy();
+const servicePolicy  = storeToRefs(policyStore);
 const props = defineProps({
     subtotal:{
         type:Number,
@@ -387,12 +397,13 @@ const formData = useForm({
     clientId:null,
     date:null,
     note:null,
-    paymentPolicy:policyStore.getPaymentPolicy,
-    servicePolicy:policyStore.getServicePolicy,
-    payemtnPolicy:policyStore.getPaymentMethods,
+    paymentPolicy:servicePolicy.getPaymentPolicy,
+    servicePolicy:servicePolicy.getTramsAndCondition,
+    payemtnPolicy:servicePolicy.getPaymentMethods,
     attachPaymentPolicy:true,
     attachServicePolicy:true,
-    attachPaymentMethods:true
+    attachPaymentMethods:true,
+    currency:'Taka',
 })
 
 

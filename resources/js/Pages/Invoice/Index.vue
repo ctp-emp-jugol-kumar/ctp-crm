@@ -55,7 +55,11 @@
                                         </thead>
                                         <tbody>
                                         <tr v-for="invoice in invoices.data" :key="invoice.id">
-                                            <td>#{{ invoice.invoice_id+''+invoice.id }}</td>
+                                            <td>
+                                                <a :href="invoice.show_url" >
+                                                    #{{ invoice.invoice_id+''+invoice.id }}
+                                                </a>
+                                            </td>
                                             <td>{{ invoice.client?.name ?? '---'}}</td>
                                             <td>{{ invoice.user?.name }}</td>
                                             <td>{{ invoice.invoice_type === 'custom' ? 'Custom' : 'Quotation'}}</td>

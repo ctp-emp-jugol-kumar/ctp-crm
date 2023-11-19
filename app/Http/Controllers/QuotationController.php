@@ -1190,15 +1190,8 @@ class QuotationController extends Controller
         Request::validate([
             'email' => 'required|email'
         ]);
-
         $email = Request::input('email');
         $data = $this->show($id, true);
-
-        $quotation = $data['quotation'];
-        $pref = $data['pref'];
-        $isPrint = false;
-        $pdf = Pdf::loadView('invoice.attatchement_quotation', compact('quotation', 'pref', 'isPrint'));
-
         if($email){
 //            Mail::send('emails.quotation', $data, function($message) use($data, $pdf) {
 //                $message->from('jk23717933@gmail.com', 'PuraBox');
@@ -1206,8 +1199,7 @@ class QuotationController extends Controller
 //                $message->subject("send attatchment");
 //                $message->attachData($pdf->output(), 'myfile.pdf');
 //            });
-            Mail::to($email)->send(new QuotationMail($data['quotation'], $pdf));
-
+            Mail::to($email)->send(new QuotationMail($data['quotation'], $data['pref']));
             return redirect()->back()->with([
                 'message' => 'Email Send Success...'
             ]);

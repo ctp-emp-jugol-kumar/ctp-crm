@@ -28,7 +28,7 @@
                             Invoice Id:  <vue-feather type="hash" size="15"/>_{{  props.invoice.invoice_id }}{{ props.invoice.id }}
                         </div>
                         <div class="d-flex align-items-center mb-1">
-                            <p>Valid Date: {{moment(props.invoice.created_at).format('D/M/Y')  }}</p>
+                            <p>Invoice Date: {{moment(props.invoice.created_at).format('D/M/Y')  }}</p>
                         </div>
                     </div>
                 </div>
@@ -127,11 +127,11 @@
 
             <hr class="invoice-spacing mt-0" />
 
-            <div class="card-body invoice-padding py-0">
+            <div class="card-body invoice-padding py-0" v-if="props.invoice.note">
                 <!-- Invoice Note starts -->
                 <div class="row">
                     <div class="col-12">
-                        <div class="mb-2">
+                        <div class="mb-2" >
                             <label for="note" class="form-label fw-bold">Note:</label>
                             <p id="note">{{ props.invoice.note }}</p>
                             <p class="text-justify"></p>

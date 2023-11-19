@@ -229,7 +229,7 @@
                                         </div>
 
                                         <div class="mb-1 d-flex flex-wrap mt-2">
-                                            <button type="submit" class="btn btn-primary me-1" data-bs-dismiss="modal">Create</button>
+                                            <button type="submit" class="btn btn-primary me-1" data-bs-dismiss="modal">Send</button>
                                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                                         </div>
                                     </form>

@@ -92,6 +92,9 @@
         .main-table .border {
             /*border: 1px solid #44423f;*/
         }
+        .trx-table tr td{
+            border-right: 1px solid #e7e7e7 !important;
+        }
 
         .no-border-btm {
             border-bottom: 0;
@@ -187,7 +190,7 @@
         <div class="col-1">
             <div class="to" style="text-align: right">
                 <h3>ID:{{ env('INV_PREFIX') }}{{ $invoice->invoice_id }}{{ $invoice->id }}</h3>
-                <p>Date: {{ $invoice->created_at }}</p>
+                <p>Date: {{ $invoice?->invoice_date?->format('y-m-d') }}</p>
             </div>
         </div>
     </div>
@@ -257,52 +260,102 @@
             @endphp
             <p id="inword">
                 <strong>Inword:</strong>
-                {{ $numberTransformer->toWords( $invoice->due ?? 0 ) }} Taka Only.
+                {{ $numberTransformer->toWords( $invoice->due ?? 0 ) }} {{ $invoice?->currency ?? 'Taka' }} Only.
             </p>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-3">
-            <h3>Note:</h3>
-            <span style="margin-bottom: 20px">
-                  {!! nl2br($invoice->note ?? ' ') !!}
-              </span>
-            <br>
-            <br>
+    @if($invoice->note)
+        <div class="row">
+            <div class="col-3">
+                <h3>Note:</h3>
+                <span style="margin-bottom: 20px">
+                      {!! nl2br($invoice->note ?? ' ') !!}
+                  </span>
+                <br>
+                <br>
+            </div>
         </div>
-    </div>
-
+    @endif
     <div class="row mt-3">
         <div class="col-3 text-center">
             <p class="text-center">Created By {{ $invoice->user?->name }}</p>
-
+            <p>{{ config('app.electrically_generated_message') }}</p>
         </div>
     </div>
+
+
+
+
+
+    @if($invoice?->transactions->count())
+        <div class="row" style="margin-top: 3rem;">
+        <div class="col-3">
+            <h3>Payment Details:</h3>
+            <table class="trx-table">
+                <thead>
+                <tr>
+                    <th class="text-left">Trx Id</th>
+                    <th class="text-center">Trx Date</th>
+                    <th class="text-center">Total Pay</th>
+                    <th class="text-center">Total Due</th>
+                    <th class="text-right">Payment Method</th>
+                </tr>
+                </thead>
+                <tbody>
+                @forelse($invoice?->transactions as $item)
+                    @if($item)
+                        <tr style="border-bottom:1px solid #e7e7e7">
+                            <td class="border text-left">
+                                Trx_{{ $item?->transaction_id }}
+                            </td>
+                            <td class="border text-center">
+                                {{ $item?->payment_date->format('y-m-d')}}
+                            </td>
+                            <td class="border text-center">
+                                {{ $item?->pay ?? '---'}}
+                            </td>
+                            <td class="border text-center">
+                                {{ $item?->due ?? '---'}}
+                            </td>
+                            <td class="border text-right">
+                                {{ $item?->method?->name  ?? '---'}}
+                            </td>
+                        </tr>
+                    @endif
+                    @empty
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
+
+
     <div class="page-break"></div>
     <div class="row">
         <div class="col-3">
-            @if (!is_null($invoice->quotation->payment_methods))
+            @if (!is_null($invoice->payment_methods ?? $invoice->quotation->payment_methods))
                 <h3>Payment Mehod:</h3>
-                {!! nl2br($invoice->quotation->payment_methods) !!}
+                {!! nl2br($invoice->payment_methods ?? $invoice->quotation->payment_methods) !!}
             @endif
             <h3>Direct Payment Bill Online at <a href="https://creativetechpark.com/pay" target="_blank">https://creativetechpark.com/pay</a></h3>
         </div>
     </div>
-    @if (!is_null($invoice->quotation->payment_policy))
+    @if (!is_null($invoice?->payment_policy ?? $invoice->quotation->payment_policy))
         <div class="row">
             <div class="col-3">
                 <h3>Payment Policy:</h3>
-                {!! nl2br($invoice->quotation->payment_policy) !!}
+                {!! nl2br($invoice?->payment_policy  ?? $invoice->quotation->payment_policy) !!}
             </div>
         </div>
     @endif
 
-    @if (!is_null($invoice->quotation->trams_of_service))
+    @if (!is_null($invoice?->trams_of_service ?? $invoice->quotation->trams_of_service))
         <div class="row mb-50">
             <div class="col-3">
                 <h3>Terms of Service:</h3>
-                {!! nl2br($invoice->quotation->trams_of_service) !!}
+                {!! nl2br($invoice?->trams_of_service ?? $invoice->quotation->trams_of_service) !!}
             </div>
         </div>
     @endif

@@ -122,6 +122,7 @@ Route::prefix('admin')->group(function(){
         Route::post('invoice/quotation/{id}', [InvoiceController::class, 'createInvoice'])->name('invoices.createInvoice');
         Route::get('invoice/download/{id}', [InvoiceController::class, 'downloadInvoice'])->name('invoices.downloadInvoice');
         Route::post('invoices/given-discount/{id}', [InvoiceController::class, 'addDiscount'])->name('invoices.addDiscount');
+        Route::post('/send-invoice-email/{id?}', [InvoiceController::class, 'sendMail'])->name('invoices.sendCustom.email');
 
 
         Route::get('edit/invoice/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');

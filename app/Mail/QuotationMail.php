@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use App\Models\Client;
 use App\Models\Quotation;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -22,11 +23,11 @@ class QuotationMail extends Mailable
      * @return void
      */
     protected $quotation;
-    protected $attachment;
-    public function __construct(Quotation $quotation, $attachment)
+    protected $pref;
+    public function __construct(Quotation $quotation, $pref)
     {
         $this->quotation = $quotation;
-        $this->attachment = $attachment;
+        $this->pref = $pref;
     }
 
     /**
@@ -64,7 +65,10 @@ class QuotationMail extends Mailable
      */
     public function attachments()
     {
+        $quotation = $this->quotation;
+        $pref = $this->pref;
+        $pdf = Pdf::loadView('invoice.attatchement_quotation', compact('quotation','pref'));
         $name = $this->quotation?->client?->name."_".now()->format('d_m_Y')."_".'quotation.pdf';
-        return [Attachment::fromData(fn() => $this->attachment->output(), $name),];
+        return [Attachment::fromData(fn() => $pdf->output(), $name),];
     }
 }
