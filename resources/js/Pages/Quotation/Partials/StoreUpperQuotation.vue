@@ -47,12 +47,14 @@
                                                 <Datepicker v-model="formData.date"
                                                             :monthChangeOnScroll="false"
                                                             :enable-time-picker="false"
+                                                            :format="'d-MM-Y'"
                                                             placeholder="Select Quotation Date"
                                                             autoApply></Datepicker>
 
                                                 <Datepicker v-model="formData.due_date"
                                                             :monthChangeOnScroll="false"
                                                             :enable-time-picker="false"
+                                                            :format="'d-MM-Y'"
                                                             placeholder="Select Quotation Due Date"
                                                             autoApply></Datepicker>
                                             </div>

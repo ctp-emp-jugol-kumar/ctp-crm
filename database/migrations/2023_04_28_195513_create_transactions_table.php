@@ -26,6 +26,7 @@ return new class extends Migration
             $table->integer('pay')->nullable();
             $table->integer('due')->nullable();
             $table->text('note')->nullable();
+            $table->longText('purpose')->nullable();
             $table->string('payment_date')->nullable();
             $table->enum('payment_status', ['Paid', 'Pending', 'Due', 'Cancel', 'Failed'])->default('Paid');
             $table->timestamps();

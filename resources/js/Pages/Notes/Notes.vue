@@ -109,23 +109,23 @@
                                             <div class="col-md-6">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <h2 class="card-title">Create Note's</h2>
+                                                        <h2 class="card-title">Create Notes</h2>
                                                         <div class="row mb-1">
                                                             <label>Title <Required/> </label>
                                                             <div class=null>
-                                                                <input v-model="createForm.title" type="text" placeholder="e.g Single Note Title" class="form-control">
+                                                                <input v-model="createForm.title" type="text" placeholder="e.g Single Notes Title" class="form-control">
                                                                 <span v-if="errors.title" class="error text-sm text-danger">{{ errors.title }}</span>
                                                             </div>
                                                         </div>
                                                         <div class="row mb-1">
                                                             <div class="col-md">
-                                                            <label>Note Category <Required/></label>
+                                                            <label>Notes Category <Required/></label>
                                                             <v-select v-model="createForm.category"
                                                                       label="title"
                                                                       :options="categories"
                                                                       class="form-control select-padding"
                                                                       :reduce="cat => cat.id"
-                                                                      placeholder="Select Note Category"></v-select>
+                                                                      placeholder="Select Notes Category"></v-select>
                                                             <span v-if="errors.category" class="error text-sm text-danger">{{ errors.category }}</span>
                                                             </div>
                                                         </div>
@@ -158,7 +158,7 @@
                                                                 <span v-if="errors.agents" class="error text-sm text-danger">{{ errors.agents }}</span>
                                                             </div>
                                                         </div>
-                                                        <div class="d-flex flex-column">
+<!--                                                        <div class="d-flex flex-column">
                                                             <label class="form-check-label mb-50"
                                                                    for="customSwitch10">Primary</label>
                                                             <div class="form-check form-switch form-check-primary">
@@ -170,7 +170,7 @@
                                                                     <span class="switch-icon-right"><i data-feather="x"></i></span>
                                                                 </label>
                                                             </div>
-                                                        </div>
+                                                        </div>-->
                                                     </div>
                                                 </div>
                                             </div>
@@ -179,7 +179,7 @@
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <div class="row mb-1">
-                                                            <label>Name: <Required/> </label>
+                                                            <label>About Notes: <Required/> </label>
                                                             <div>
                                                                 <textarea v-model="createForm.notes" rows="10" class="form-control" placeholder="e.g what's you want to write here ?"></textarea>
                                                                 <span v-if="errors.notes" class="error text-sm text-danger">{{ errors.notes }}</span>
