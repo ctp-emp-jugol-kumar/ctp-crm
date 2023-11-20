@@ -261,6 +261,7 @@ class InvoiceController extends Controller
             'trams_of_service' => $quotation?->trams_of_service ?? NULL,
             'payment_methods' => $quotation?->payment_methods ??  NULL,
         ]);
+
         Transaction::create([
             'transaction_id' =>  now()->format('Ymd'),
             'transactionable_id' => $invoice->id,
@@ -270,6 +271,7 @@ class InvoiceController extends Controller
             "transaction_type" => "Credited",
             "amount" => $quotation->total_price,
             "pay" => Request::input('pay'),
+            "purpose" => $invoice->invoice_id ?? NULL,
             "due" => $due,
             "payment_date" => now(),
             "method_id" => Request::input('payment_method')
@@ -340,7 +342,7 @@ class InvoiceController extends Controller
         }
 
         $pdf = Pdf::loadView('invoice.quotationInvoice', compact('invoice','pref', 'isPrint'));
-        return view('invoice.quotationInvoice', compact('invoice','pref', 'isPrint'));
+//        return view('invoice.quotationInvoice', compact('invoice','pref', 'isPrint'));
         return $pdf->download($clientName."_".now()->format('d_m_Y')."_".'invoice.pdf');
     }
 
@@ -484,7 +486,7 @@ class InvoiceController extends Controller
             'user_id'    => Auth::id(),
             'client_id'  => $invoice->client->id,
             'invoice_id' => $invoice->id,
-
+            "purpose" => $invoice->invoice_id ?? NULL,
             'amount'     => $invoice->grand_total,
             'pay_amount' => Request::input('pay_amount'),
             'discount'   => Request::input('discount'),

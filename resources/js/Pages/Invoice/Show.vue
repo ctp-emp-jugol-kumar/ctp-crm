@@ -371,4 +371,8 @@ const preparedForShow = computed(()=>{
 .vs__dropdown-toggle{
     border: 1px solid;
 }
+.swal2-actions{
+     gap:10px !important;
+     flex-direction: row-reverse;
+ }
 </style>
