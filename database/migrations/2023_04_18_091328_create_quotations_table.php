@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('quotations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained('clients');
+            $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('created_by')->constrained('users');
             $table->string('quotation_id');
             $table->string('qut_date')->nullable();

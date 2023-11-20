@@ -291,7 +291,12 @@ class ClientsController extends Controller
 //        }
 
         $client = Client::findOrFail($id);
+
+//        $client->delete();
+
         $invoices = $client->invoices;
+
+        return $invoices;
         if ($invoices){
             foreach ($invoices as $invoice) {
                 $transactions = $invoice->transactions;

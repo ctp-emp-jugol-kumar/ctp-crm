@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_id')->nullable();
             $table->unsignedBigInteger('quotation_id')->nullable();
-            $table->foreignId('client_id')->nullable()->constrained('clients');
+            $table->foreignId('client_id')->nullable()->constrained('clients')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('user_id')->constrained('users');
             $table->enum('invoice_type', ['quotation', 'custom'])->default('custom');
             $table->integer('total_price')->nullable();

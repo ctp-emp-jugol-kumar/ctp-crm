@@ -102,15 +102,15 @@ class ProjectController extends Controller
     {
 
         Request::validate([
-           'name' => 'required|url',
+           'name' => 'required',
            'invoiceId' => 'required',
            'date' => 'required',
            'start_date' => 'required',
            'end_date' => 'required',
         ]);
 
-        $filePath = "";
 
+        $filePath= NULL;
         if (Request::hasFile('files')) {
             $filePath = Storage::putFile('public/project', Request::file('files'));
         }

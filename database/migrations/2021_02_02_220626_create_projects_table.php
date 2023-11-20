@@ -17,12 +17,14 @@ class CreateProjectsTable extends Migration
             $table->string('name');
             $table->text('url')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('client_id');
+            $table->unsignedBigInteger('invoice_id');
+            $table->foreignId('client_id')->nullable()->constrained('clients')->cascadeOnDelete()->cascadeOnUpdate();
             $table->date('date');
             $table->date('start')->nullable();
             $table->date('end')->nullable();
             $table->longText('description')->nullable();
             $table->longText('credential')->nullable();
+            $table->json('backup')->nullable();
             $table->string('status')->default('New');
             $table->unsignedInteger('progress')->default(10);
             $table->string('files')->nullable();

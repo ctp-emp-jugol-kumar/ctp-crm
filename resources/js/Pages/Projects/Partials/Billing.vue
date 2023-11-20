@@ -95,7 +95,7 @@
                             <td>{{ item.amount }}</td>
                             <td>{{ item.pay }}</td>
                             <td>{{ item.due }}</td>
-                            <td>{{ item.method.name }}</td>
+                            <td>{{ item.method?.name }}</td>
                         </tr>
                         </tbody>
                     </table>
