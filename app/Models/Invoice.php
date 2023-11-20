@@ -12,6 +12,8 @@ class Invoice extends Model
 {
     use HasFactory;
 
+    protected $dates = ['invoice_date'];
+
     protected $guarded = ['id'];
 
     public function client(){

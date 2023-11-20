@@ -38,8 +38,9 @@
                                             <div class="d-flex align-items-center justify-content-md-end mb-1">
                                                 Quotation Id:  <vue-feather type="hash" size="15"/>_{{  props.quotation.quotation_id }}{{ props.quotation.id }}
                                             </div>
-                                            <div class="d-flex align-items-center mb-1">
-                                                <p>Valid Date: {{moment(props.quotation.qut_date).format('D/M/Y')  }}</p>
+                                            <div class="d-flex align-items-center mb-1 flex-column">
+                                                <p>Created on: {{moment(props.quotation.qut_date).format('D-M-Y')  }}</p>
+                                                <p>Valid until: {{moment(props.quotation.due_date).format('D-M-Y')  }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -88,7 +89,7 @@
 
 
                                 <!-- Invoice Total starts -->
-                                <div class="card-body invoice-padding">
+                                <div class="card-body invoice-padding pb-5">
                                     <div class="row invoice-sales-total-wrapper">
                                         <div class="col-md-6 order-md-1 order-2 mt-md-0 mt-3">
                                             <div class="d-flex align-items-center mb-1">
@@ -128,11 +129,11 @@
                                 </div>
                                 <!-- Invoice Total ends -->
 
-                                <hr class="invoice-spacing mt-0" />
+                                <hr class="invoice-spacing mt-0" v-if="props.quotation?.note"/>
 
                                 <div class="card-body invoice-padding py-0">
                                     <!-- Invoice Note starts -->
-                                    <div class="row">
+                                    <div class="row" v-if="props.quotation?.note">
                                         <div class="col-12">
                                             <div class="mb-2">
                                                 <label for="note" class="form-label fw-bold">Note:</label>
@@ -154,11 +155,13 @@
                                     <a :href="props.url.edit_url" class="btn btn-primary w-100 mb-75">
                                         Edit Quotation
                                     </a>
-                                    <button type="button" class="btn btn-outline-primary w-100 mb-75"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#sendEmail">
+                                    <button type="button" class="btn btn-outline-primary w-100 mb-75" @click="sendEmail">
                                         Send Email
                                     </button>
+
+<!--                                    data-bs-toggle="modal"-->
+<!--                                    data-bs-target="#sendEmail"-->
+
                                     <a :href="props.url.show_url+'?download=true'"  class="btn btn-outline-primary w-100 mb-75">Download PDF</a>
                                     <a :href="props.url.show_url+'?print=true'"  class="btn btn-outline-primary w-100 mb-75">Print Quotation</a>
                                     <button type="button" class="btn btn-outline-primary w-100 mb-75" data-bs-toggle="modal"
@@ -209,24 +212,24 @@
                     </div>
 
                     <!-- Send Invoice Email Sidebar -->
-                    <div class="modal modal-slide-in fade" id="sendEmail" aria-hidden="true">
+                    <div class="modal modal-slide-in fade" id="sendEmail" aria-hidden="true" v-vb-is:modal>
                         <div class="modal-dialog sidebar-lg">
                             <div class="modal-content p-0">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
                                 <div class="modal-header mb-1">
                                     <h5 class="modal-title">
-                                        <span class="align-middle">Create Invoice</span>
+                                        <span class="align-middle">Send Email</span>
                                     </h5>
                                 </div>
                                 <div class="modal-body flex-grow-1">
-                                    <form @submit.prevent="createInvoice">
+                                    <form @submit.prevent="emailSendApiCall">
                                         <div class="mb-1">
                                             <label class="form-label">Customer Email</label>
-                                            <input type="text" class="form-control" />
+                                            <input v-model="customerEmail" type="email" class="form-control" placeholder="e.g customer@mail.com" />
                                         </div>
 
                                         <div class="mb-1 d-flex flex-wrap mt-2">
-                                            <button type="submit" class="btn btn-primary me-1" data-bs-dismiss="modal">Create</button>
+                                            <button type="submit" class="btn btn-primary me-1" data-bs-dismiss="modal">Send</button>
                                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
                                         </div>
                                     </form>
@@ -396,6 +399,8 @@
     import moment from "moment";
     import {computed, ref} from "vue";
     import {useForm} from "@inertiajs/inertia-vue3";
+    import Swal from "sweetalert2";
+    import {Inertia} from "@inertiajs/inertia";
 
     const props = defineProps({
         quotation:Object|[]|null,
@@ -457,8 +462,6 @@
         })
     }
 
-
-
     const preparedForShow = computed(()=>{
         let pref = [];
         JSON.parse(props.quotation.items).map(item =>{
@@ -491,8 +494,49 @@
         })
         return pref;
     })
+    const customerEmail = ref(props.quotation.client.email)
+    const sendEmail = () => {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger",
+                denyButton: "btn btn-info",
+            },
+            buttonsStyling: false
+        });
+        swalWithBootstrapButtons.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Send Now",
+            cancelButtonText: "Cancel It",
+            showDenyButton: true,
+            denyButtonText: `Change Mail`,
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                customerEmail.value = props.quotation.client.email
+                emailSendApiCall();
+            } else if (result.isDenied) {
+                document.getElementById('sendEmail').$vb.modal.show()
+            }else if (
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.close()
+            }
+        });
+    }
 
-    const sendEmail = ref(props.quotation.client.email)
+    const emailSendApiCall =()=>{
+        Inertia.post(`/admin/send-quotation-email/${props.quotation.id}`, {email:customerEmail.value}, {
+            preserveState: true,
+            onStart: () =>{ processing.value = true},
+            onFinish: () => {processing.value = false},
+            onSuccess: (message)=> { $toast.success('Email Send Successfully Done....') },
+            onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
+        })
+    }
 
 </script>
 
@@ -509,5 +553,9 @@
 }
 .vs__dropdown-toggle{
     border: 1px solid;
+}
+.swal2-actions{
+    gap:10px !important;
+    flex-direction: row-reverse;
 }
 </style>

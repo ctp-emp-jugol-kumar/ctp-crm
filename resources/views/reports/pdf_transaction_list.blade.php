@@ -136,8 +136,9 @@
                 <table>
                     <tr style="border: none;">
                         <td style="text-align: left">
-                            <p>Repot Date: {{ date('Y-m-d',strtotime(now()))  }}</p>
-                            <p>Created By: {{ Auth::user()->name }}</p>
+                            <h3>Account Statement</h3>
+                            <p>Report Date: @if(is_array($dateRange)) {{ date('d-m-Y', strtotime($dateRange[0])) }} To {{ date('d-m-Y', strtotime($dateRange[1])) }} @else {{ date('Y-m-d',strtotime(now())) }}@endif</p>
+                            <p style="text-transform: capitalize">Created By: {{ Auth::user()->name }}</p>
                         </td>
                         <td style="text-align: right">
                             <p>Page : {{ $data->currentPage() }} of {{ $data->lastPage() }}</p>
@@ -149,11 +150,13 @@
             <table class="main-table">
                 <thead>
                 <tr>
-                    <th class="text-center">Id</th>
+                    <th class="text-center">Trx_Id</th>
                     <th class="text-center">Amount</th>
                     <th class="text-center">Type</th>
-                    <th class="text-center">Receive By</th>
-                    <th class="text-right">Join Date</th>
+                    <th class="text-center">Trx By</th>
+                    <th class="text-right">Trx Method</th>
+                    <th class="text-center">Purpose</th>
+                    <th class="text-right">Trx Date</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -170,21 +173,22 @@
                         }
                     @endphp
                     <tr style="background:{{ $key %2 == 0 ? "#f1f1f1" : "#ffffff" }} ">
-
                         <td>#{{ $item['tran']?->transaction_id ?? ''  }}{{ $item['tran']?->id ?? ''  }}</td>
                         <td>{{ $item['tran']?->pay }} Tk</td>
                         <td style="color: {{ $item['tran']?->transaction_type === 'Credited' ? '#16cd00' : 'red' }}">
-                            {{ $item['tran']?->transaction_type === 'Credited' ? "Credited" : "Debited" }}
+                            {{ $item['tran']?->transaction_type === 'Credited' ? "Credit " : "Debit" }}
                         </td>
-                        <td>{{ $item["tran"]["receivedBy"]["name"] ?? '' }}</td>
-                        <td>{{ date('Y-m-d H:i:s',strtotime($item['created_at'])) }}</td>
+                        <td style="text-transform: capitalize">{{ $item["tran"]["receivedBy"]["name"] ?? '' }}</td>
+                        <td style="text-transform: capitalize">{{ $item["tran"]["method"]["name"] }}</td>
+                        <td>{{ $item["tran"]["purpose"] }}</td>
+                        <td>{{ date('d-m-Y',strtotime($item['created_at'])) }}</td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
 
 
-            <div>
+{{--            <div>
                 <h2>
                     Total Credited : {{ $credit }} Tk
                 </h2>
@@ -197,7 +201,7 @@
                 </h2>
                 <h2>Net Profit : {{ $credit - $debit }} Tk</h2>
             </div>
-
+--}}
         </div>
     </div>
 

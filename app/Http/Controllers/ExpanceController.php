@@ -48,6 +48,7 @@ class ExpanceController extends Controller
                     'method' => $expance->method,
                     'amount' => $expance->amount,
                     'subject' => $expance->subject,
+                    'date' => $expance->date->format('d M Y'),
                     'created_at' => $expance->created_at->format('d M Y'),
                     'show_url' => URL::route('expense.show', $expance->id),
                 ]),
@@ -78,7 +79,7 @@ class ExpanceController extends Controller
     {
         Request::validate([
             'purpose_id' => 'required|integer',
-            'subject' => 'required',
+//            'subject' => 'required',
             'amount' => 'required',
             'method_id' => 'required',
             'expanse_date' => 'required',
@@ -89,6 +90,9 @@ class ExpanceController extends Controller
         if (Request::hasFile('document')) {
             $filePath = Request::file('document')->store('expanses', 'public');
         }
+
+
+        $purpose = Purpose::findOrFail(Request::input('purpose_id'));
 
         $expanse = Expanse::create([
             'u_id' => date('Yd', strtotime(now())),
@@ -113,6 +117,7 @@ class ExpanceController extends Controller
             "due" => 0,
             "payment_date" => Request::input('expanse_date'),
             "method_id" => Request::input('method_id'),
+            "purpose" => $purpose?->name ?? NULL,
             "note" => Request::input('details'),
         ]);
         return back();
@@ -155,7 +160,7 @@ class ExpanceController extends Controller
         $expance = Expanse::findOrFail($id);
         Request::validate([
             'purpose_id' => 'required|integer',
-            'subject' => 'required',
+//            'subject' => 'required',
             'amount' => 'required',
             'method_id' => 'required',
             'expanse_date' => 'required',

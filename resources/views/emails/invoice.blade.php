@@ -35,9 +35,9 @@
     <div id="container">
         <div class="row">
             <div class="col-3">
-                <h3>Dear {{ $invoice->quotation->client->name }},</h3>
+                <h3>Dear {{ $invoice->client?->email??  $invoice->quotation?->client?->email }},</h3>
                 <p>Greetings from Creative Tech Park! Hope you are doing well.</p>
-                <p>This is a notice that an invoice has been generated on {{ $invoice->date->format('l, F jS, Y')}}.</p>
+                <p>This is a notice that an invoice has been generated on {{ $invoice?->invoice_date?->format('l, F jS, Y')}}.</p>
                 <p>Please find the attached Invoice and pay as soon as possible.</p>
                 <p>You can pay the invoice at <a href="https://creativetechpark.com/pay" target="_blank" rel="noopener noreferrer">https://creativetechpark.com/pay</a></p>
                 <br>

@@ -31,6 +31,7 @@ return new class extends Migration
             $table->enum('status', ['created', 'sent', 'canceled', 'paid'])->default('created');
             $table->date('invoice_date')->nullable();
             $table->date('due_date')->nullable();
+            $table->string('currency')->default('taka');
             $table->longText('trams_of_service')->nullable();
             $table->longText('payment_policy')->nullable();
             $table->longText('payment_methods')->nullable();

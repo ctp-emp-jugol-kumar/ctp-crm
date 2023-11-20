@@ -47,12 +47,14 @@
                                                 <Datepicker v-model="formData.date"
                                                             :monthChangeOnScroll="false"
                                                             :enable-time-picker="false"
+                                                            :format="'d-MM-Y'"
                                                             placeholder="Select Quotation Date"
                                                             autoApply></Datepicker>
 
                                                 <Datepicker v-model="formData.due_date"
                                                             :monthChangeOnScroll="false"
                                                             :enable-time-picker="false"
+                                                            :format="'d-MM-Y'"
                                                             placeholder="Select Quotation Due Date"
                                                             autoApply></Datepicker>
                                             </div>
@@ -332,12 +334,12 @@
                     </div>
                     <!-- /Add Payment Sidebar -->
 
-                    <Modal id="paymentPolicy" title="Edit Payment Policy" v-vb-is:modal size="lg">
+                    <Modal id="servicePolicy" title="Edit Service Policy" v-vb-is:modal size="lg">
                         <div class="modal-body">
                             <div class="row mb-1">
                                 <div class="col-md">
-                                    <textarea v-model="formData.paymentPolicy" type="text"
-                                              placeholder="Edit Payment policy"
+                                    <textarea v-model="formData.servicePolicy" type="text"
+                                              placeholder="Edit Service Policy"
                                               rows="5" class="form-control"></textarea>
                                 </div>
                             </div>
@@ -346,12 +348,12 @@
                             <button type="submit" class="btn btn-primary waves-effect waves-float waves-light" data-bs-dismiss="modal">ok</button>
                         </div>
                     </Modal>
-                    <Modal id="servicePolicy" title="Edit Service Policy" v-vb-is:modal size="lg">
+                    <Modal id="paymentPolicy" title="Edit Payment Policy" v-vb-is:modal size="lg">
                         <div class="modal-body">
                             <div class="row mb-1">
                                 <div class="col-md">
-                                    <textarea v-model="formData.servicePolicy" type="text"
-                                              placeholder="Edit Service Policy"
+                                    <textarea v-model="formData.paymentPolicy" type="text"
+                                              placeholder="Edit Payment policy"
                                               rows="5" class="form-control"></textarea>
                                 </div>
                             </div>
@@ -390,9 +392,14 @@ import Fuse from "fuse.js";
 import {useForm} from "@inertiajs/inertia-vue3";
 import {usePolicyStore} from "../../../Store/usePolicyStore";
 import Modal from "../../../components/Modal.vue";
+import { storeToRefs } from 'pinia'
 
 const quotationStore = useQuotationStore();
 const policyStore = usePolicyStore()
+
+policyStore.setServicePolicy();
+const servicePolicy  = storeToRefs(policyStore);
+
 
 const props = defineProps({
     subtotal:{
@@ -416,9 +423,9 @@ const formData = useForm({
     due_date:null,
     subject:null,
     note:null,
-    paymentPolicy:policyStore.getPaymentPolicy,
-    servicePolicy:policyStore.getServicePolicy,
-    paymentMethos:policyStore.getPaymentMethods,
+    servicePolicy:servicePolicy.tramsAndCondition,
+    paymentPolicy:servicePolicy.paymentPolicy,
+    paymentMethos:servicePolicy.paymentMethods,
     // attachPaymentMethods:policyStore.getPaymentMethods,
     attachPaymentPolicy:true,
     attachPaymentMethods:true,
@@ -426,6 +433,14 @@ const formData = useForm({
     sendMail:false,
     currency:'Taka'
 })
+
+
+// onMounted(() =>{
+//     policyStore.setServicePolicy()
+//     formData.servicePolicy = policyStore.servicePolicy
+//
+// })
+
 
 // const clientId = ref(quotationStore.getClientId)
 // const date = ref(quotationStore.getQutDate)

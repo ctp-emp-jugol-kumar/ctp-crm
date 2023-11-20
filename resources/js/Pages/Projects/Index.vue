@@ -163,12 +163,19 @@
             <div class="modal-body">
                 <div class="row mb-1">
                     <div class="col-md">
-                        <label>Project Domain Name:
+                        <label>Project Name:
                             <Required/>
                         </label>
                         <div class="">
                             <input v-model="createForm.name" type="text" placeholder="project url" class="form-control">
                             <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <label>Project Domain Name <small>(Optional)</small>:
+                        </label>
+                        <div class="">
+                            <input v-model="createForm.url" type="text" placeholder="project url" class="form-control">
                         </div>
                     </div>
                     <div class="col-md">
@@ -359,6 +366,7 @@
 
     const createForm = useForm({
         name: null,
+        url:null,
         note: null,
         status: null,
         date:null,

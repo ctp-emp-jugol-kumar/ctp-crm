@@ -38,6 +38,8 @@
                                 <div class="d-flex align-items-center mb-1">
                                     <Datepicker v-model="formData.date"
                                                 :monthChangeOnScroll="false"
+                                                :enable-time-picker="false"
+                                                :format="'d-MM-Y'"
                                                 placeholder="Select Quotation Date"
                                                 autoApply></Datepicker>
                                 </div>

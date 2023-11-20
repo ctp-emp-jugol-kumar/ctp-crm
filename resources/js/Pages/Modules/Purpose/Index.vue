@@ -14,8 +14,8 @@
                                     <h4 class="card-title">Purposes Information's </h4>
                                     <button class="dt-button add-new btn btn-primary"
                                             v-if="this.$page.props.auth.user.can.includes('purpose.create')  || this.$page.props.auth.user.role.includes('Administrator')"
-                                            tabindex="0" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#createPurpose"
+                                            tabindex="0" type="button"
+                                            @click="addPurpose"
                                     >Add Purposes</button>
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
@@ -159,6 +159,7 @@
         main_url: String,
     });
 
+    const addPurpose = () => document.getElementById('createPurpose').$vb.modal.show()
 
 
     let editData = ref([]);

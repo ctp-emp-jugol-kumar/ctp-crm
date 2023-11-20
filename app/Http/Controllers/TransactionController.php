@@ -24,6 +24,14 @@ class TransactionController extends Controller
     public function index()
     {
 
+
+//        $search = Request::input('dateRange');
+//
+//        $start_date = date('Y-m-d H:i:s', strtotime($search[0]));
+//        $end_date = date('Y-m-d H:i:s', strtotime($search[1]));
+//
+//        return $start_date."     ".$end_date;
+
         $transactions = Transaction::query()
             ->latest()
             ->with(['receivedBy', 'paymentBy', 'method'])
@@ -43,7 +51,9 @@ class TransactionController extends Controller
             ->when(Request::input('dateRange'), function ($query, $search){
                 $start_date = date('Y-m-d H:i:s', strtotime($search[0]));
                 $end_date = date('Y-m-d H:i:s', strtotime($search[1]));
-                $query->whereBetween('created_at', [$start_date, $end_date]);
+//                $query->whereBetween('created_at', [$start_date, $end_date]);
+                $query->whereDate('payment_date', '>=', $start_date)
+                    ->whereDate('payment_date', '<=', $end_date);
             })
             ->latest()
             ->paginate(Request::input('perPage') ?? 10)
@@ -56,7 +66,7 @@ class TransactionController extends Controller
             ]);
 
         if (Request::input('export_pdf') === 'true'){
-            return $this->loadDownload($transactions);
+            return $this->loadDownload($transactions, Request::input('dateRange'));
         }
 
 
@@ -72,10 +82,10 @@ class TransactionController extends Controller
         ]);
     }
 
-    protected function loadDownload($data){
+    protected function loadDownload($data, $dateRange=null){
         Pdf::setOption(['enable_php', true]);
-//        return view('reports.pdf_transaction_list', compact('data'));
-        $pdf = Pdf::loadView('reports.pdf_transaction_list', compact('data'));
+//        return view('reports.pdf_transaction_list', compact('data', 'dateRange'));
+        $pdf = Pdf::loadView('reports.pdf_transaction_list', compact('data', 'dateRange'));
         return $pdf->download("transaction"."_".now()->format('d_m_Y')."_".'quotation.pdf');
     }
 
@@ -106,19 +116,6 @@ class TransactionController extends Controller
             'date' => 'required'
         ]);
 
-        Transaction::create([
-            'transaction_id' =>  now()->format('Ymd'),
-            'transactionable_id' => Request::input('invoiceId'),
-            'transactionable_type' => "App\\Models\\Invoice",
-            'received_by' => Auth::id(),
-            'payment_by' => Request::input('clientId'),
-            "transaction_type" => "Credited",
-            "amount" => Request::input("totalPrice"),
-            "pay" => Request::input("pay"),
-            "due" => (int)Request::input("totalPrice") - (int)Request::input("pay"),
-            "payment_date" => Request::input('date'),
-            "method_id" => Request::input('payment_method')
-        ]);
 
         $invoice = Invoice::findOrFail(Request::input('invoiceId'));
 
@@ -126,6 +123,21 @@ class TransactionController extends Controller
         $pay = $invoice->pay + (int)Request::input("pay");
         $invoice->pay = $pay;
         $invoice->update();
+
+        Transaction::create([
+            'transaction_id' =>  now()->format('Ymd'),
+            'transactionable_id' => Request::input('invoiceId'),
+            'transactionable_type' => "App\\Models\\Invoice",
+            "purpose" => "#".env('INV_PREFIX')."_".$invoice->invoice_id ?? NULL,
+            'received_by' => Auth::id(),
+            'payment_by' => Request::input('clientId'),
+            "transaction_type" => "Credited",
+            "amount" => Request::input("totalPrice"),
+            "pay" => Request::input("pay"),
+            "due" => $invoice->due,
+            "payment_date" => Request::input('date'),
+            "method_id" => Request::input('payment_method')
+        ]);
 
         return back();
     }

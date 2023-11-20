@@ -18,9 +18,12 @@
                         <div class="col-xl-3 col-md-4 col-12" v-if="props.isShowSidebar">
                             <div class="card">
                                 <div class="card-body">
-<!--                                    <a :href="props.url.edit_url" class="btn btn-primary w-100 mb-75">
+                                    <a v-if="props.invoice.invoice_type === 'custom'" :href="props.url.edit_url" class="btn btn-primary w-100 mb-75">
                                         Edit Invoice
-                                    </a>-->
+                                    </a>
+                                    <button type="button" class="btn btn-outline-primary w-100 mb-75" @click="sendEmail">
+                                        Send Email
+                                    </button>
                                     <a :href="props.url.invoice_url"  class="btn btn-outline-primary w-100 mb-75">Download PDF</a>
 <!--                                    <a :href="props.url.show_url+'?print=true'"  class="btn btn-outline-primary w-100 mb-75">Print Invoice</a>-->
                                     <button type="button" class="btn btn-outline-primary w-100 mb-75" data-bs-toggle="modal"
@@ -172,6 +175,33 @@
                             </tbody>
                         </table>
                     </Modal>
+                    <!-- Send Invoice Email Sidebar -->
+                    <div class="modal modal-slide-in fade" id="sendEmail" aria-hidden="true" v-vb-is:modal>
+                        <div class="modal-dialog sidebar-lg">
+                            <div class="modal-content p-0">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
+                                <div class="modal-header mb-1">
+                                    <h5 class="modal-title">
+                                        <span class="align-middle">Send Email</span>
+                                    </h5>
+                                </div>
+                                <div class="modal-body flex-grow-1">
+                                    <form @submit.prevent="emailSendApiCall">
+                                        <div class="mb-1">
+                                            <label class="form-label">Customer Email</label>
+                                            <input v-model="customerEmail" type="email" class="form-control" placeholder="e.g customer@mail.com" />
+                                        </div>
+
+                                        <div class="mb-1 d-flex flex-wrap mt-2">
+                                            <button type="submit" class="btn btn-primary me-1" data-bs-dismiss="modal">Send</button>
+                                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Send Invoice Email Sidebar -->
                 </section>
             </div>
         </div>
@@ -189,6 +219,8 @@ import Modal from "../../components/Modal.vue"
 import {useAction} from "../../composables/useAction";
 import {useActionStore} from "../../Store/useActionStore";
 import InvoiceContent from "../../components/modules/InvoiceContent.vue"
+import Swal from "sweetalert2";
+import {Inertia} from "@inertiajs/inertia";
 const props = defineProps({
     invoice:Object|[]|null,
     pref:Array|[]|null,
@@ -229,7 +261,7 @@ const savePayment = () =>{
         preserveState: true,
         onStart: () =>{ processing.value = true},
         onFinish: () => {processing.value = false},
-        onSuccess: ()=> { $toast.success('Quotation Discount Done...') },
+        onSuccess: ()=> { $toast.success('Add Payment Done...') },
         onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
     })
 }
@@ -239,11 +271,59 @@ const addDiscount = () =>{
         preserveState: true,
         onStart: () =>{ processing.value = true},
         onFinish: () => {processing.value = false},
-        onSuccess: ()=> { $toast.success('Quotation Discount Done...') },
+        onSuccess: ()=> { $toast.success('Add Discount Done...') },
         onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
     })
 }
-console.log(props.invoice.quotation.items)
+
+
+
+const customerEmail = ref(props.invoice?.quotation?.client?.email ?? props.invoice?.client?.email)
+const sendEmail = () => {
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger",
+            denyButton: "btn btn-info",
+        },
+        buttonsStyling: false
+    });
+    swalWithBootstrapButtons.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Send Now",
+        cancelButtonText: "Cancel It",
+        showDenyButton: true,
+        denyButtonText: `Change Mail`,
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            customerEmail.value = props.invoice?.quotation?.client?.email ?? props.invoice?.client?.email
+            emailSendApiCall();
+        } else if (result.isDenied) {
+            document.getElementById('sendEmail').$vb.modal.show()
+        }else if (
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.close()
+        }
+    });
+}
+
+const emailSendApiCall =()=>{
+    Inertia.post(`/admin/send-invoice-email/${props.invoice.id}`, {email:customerEmail.value}, {
+        preserveState: true,
+        onStart: () =>{ processing.value = true},
+        onFinish: () => {processing.value = false},
+        onSuccess: (message)=> { $toast.success('Email Send Successfully Done....') },
+        onError: ()=> { $toast.error('Have An Error. Please Try Again.') },
+    })
+}
+
+
+// console.log(props.invoice.quotation.items)
 const preparedForShow = computed(()=>{
     let pref = [];
     JSON.parse(props.invoice.quotation.items).map(item =>{
@@ -291,4 +371,8 @@ const preparedForShow = computed(()=>{
 .vs__dropdown-toggle{
     border: 1px solid;
 }
+.swal2-actions{
+     gap:10px !important;
+     flex-direction: row-reverse;
+ }
 </style>

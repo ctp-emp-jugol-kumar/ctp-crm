@@ -51,11 +51,11 @@
                                                     <option selected disabled :value="undefined">Filter By Type</option>
                                                     <option :value="null">All</option>
                                                     <option value="Credited" >Credited</option>
-                                                    <option value="Debited" >Deviated</option>
+                                                    <option value="Debited" >Debited</option>
                                                 </select>
                                             </div>
                                             <div v-if="!isCustom">
-                                                <select v-model="dateRange" @update:modelValue="changeDateRange" class="select2 form-select select w-100 ms-1" id="select2-basic">
+                                                <select  v-model="dateRange" @update:model-value="changeDateRange" class="select2 form-select select w-100 ms-1" id="select2-basic">
                                                     <option selected disabled :value="undefined">Filter By Date</option>
                                                     <option :value="null">All</option>
                                                     <option v-for="(type, index) in range.ranges" :value="type">
@@ -65,8 +65,13 @@
                                                 </select>
                                             </div>
                                             <div v-else>
-                                                <Datepicker v-model="dateRange" :monthChangeOnScroll="false" range multi-calendars
-                                                            placeholder="Select Date Range" autoApply  @update:model-value="handleDate" ></Datepicker>
+                                                <Datepicker v-model="dateRange"
+                                                            :monthChangeOnScroll="false"
+                                                            range multi-calendars
+                                                            :enable-time-picker="false"
+                                                            :format="'d-MM-Y'"
+                                                            placeholder="Select Date Range" autoApply
+                                                            @update:model-value="handleDate" ></Datepicker>
                                             </div>
                                         </div>
                                         <div
@@ -88,9 +93,11 @@
                                         <tr class="">
                                             <th class="sorting">#id</th>
                                             <th class="sorting">Method</th>
+                                            <th class="sorting">Purpose</th>
                                             <th class="sorting">Amount</th>
                                             <th class="sorting">Payment Type</th>
                                             <th class="sorting">User</th>
+                                            <th class="sorting">Payment Date</th>
                                             <th class="sorting">Created At</th>
                                         </tr>
                                         </thead>
@@ -98,16 +105,20 @@
                                         <tr v-for="tra in transactions.data" :key="tra.id">
                                             <td>
                                                 <a href="#">
-                                                    #Tran-{{ tra.tran.transaction_id+tra?.tran?.id }}
+                                                    #TRX_{{ tra.tran.transaction_id+tra?.tran?.id }}
                                                 </a>
                                             </td>
                                             <td>
                                                 {{ tra.tran?.method?.name }}
                                             </td>
                                             <td>
+                                                {{ tra.tran?.purpose }}
+                                            </td>
+                                            <td>
                                                 {{ tra.tran?.pay }} Tk
                                             </td>
-                                            <td class="cursor-pointer" v-if="tra.tran?.transaction_type ==='Credited'"  v-c-tooltip="`Cash In  ${tra.tran?.pay} Tk \n Rechived By ${tra.tran.received_by?.name}`">
+                                            <td class="cursor-pointer" v-if="tra.tran?.transaction_type ==='Credited'"
+                                                v-c-tooltip="`Cash In  ${tra.tran?.pay} Tk \n Rechived By ${tra.tran.received_by?.name}`">
                                                 <span class="text-bold text-success font-bold d-flex align-items-center">
                                                     <vue-feather type="trending-up"/>
                                                     <span class="ms-1">Credited</span>
@@ -123,7 +134,10 @@
                                                 {{ tra.tran.received_by?.name }}
                                             </td>
                                             <td>
-                                                {{  moment(tra.tran.created_at).format('lll') }}
+                                                {{  moment(tra.tran.payment_date).format('D-MM-y') }}
+                                            </td>
+                                            <td>
+                                                {{  moment(tra.tran.created_at).format('D-MM-y') }}
                                             </td>
                                         </tr>
                                         </tbody>

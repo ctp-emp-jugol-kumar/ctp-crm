@@ -4,9 +4,11 @@ namespace App\Mail;
 
 use App\Models\Client;
 use App\Models\Invoice;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -21,12 +23,12 @@ class InvoiceMail extends Mailable
      * @return void
      */
 
-    protected $client;
+    protected $pref;
     protected $invoice;
-    public function __construct(Client $client, Invoice $invoice)
+    public function __construct($invoice, $pref)
     {
-        $this->client = $client;
         $this->invoice = $invoice;
+        $this->pref = $pref;
     }
 
     /**
@@ -37,7 +39,7 @@ class InvoiceMail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Invoice Mail',
+            subject: 'Invoice From Creative Tech Park'
         );
     }
 
@@ -49,9 +51,8 @@ class InvoiceMail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.quotation',
+            view: 'emails.invoice',
             with: [
-                'client' => $this->client,
                 'invoice' => $this->invoice,
             ],
         );
@@ -64,6 +65,12 @@ class InvoiceMail extends Mailable
      */
     public function attachments()
     {
-        return [];
+        $invoice = $this->invoice;
+        $pref = $this->pref;
+        $isPrint = false;
+        $pdf = Pdf::loadView('invoice.quotationInvoice', compact('invoice','pref', 'isPrint'));
+        $name = $this->invoice?->client?->name."_".now()->format('d_m_Y')."_".'invoice.pdf';
+        return [Attachment::fromData(fn() => $pdf->output(), $name),];
+
     }
 }

@@ -108,6 +108,8 @@ Route::prefix('admin')->group(function(){
 
         Route::get('download/quotation-invoice/{id}', [QuotationController::class, 'createInvoice'])
             ->name('quotation.download');
+
+        Route::post('/send-quotation-email/{id?}', [QuotationController::class, 'sendMail'])->name('quotations.sendCustom.email');
         Route::get('edit/quotation/{id}', [QuotationController::class, 'editQuotation'])->name('quotations.edit');
         Route::post('quotation/update-status', [QuotationController::class, 'chnageQuotationStatus'])->name('chnageQuotationStatus');
         Route::get('quotations-to-invoice/{id}', [QuotationController::class, 'quotationInvoice'])->name('quotations.quotationInvoice');
@@ -120,6 +122,7 @@ Route::prefix('admin')->group(function(){
         Route::post('invoice/quotation/{id}', [InvoiceController::class, 'createInvoice'])->name('invoices.createInvoice');
         Route::get('invoice/download/{id}', [InvoiceController::class, 'downloadInvoice'])->name('invoices.downloadInvoice');
         Route::post('invoices/given-discount/{id}', [InvoiceController::class, 'addDiscount'])->name('invoices.addDiscount');
+        Route::post('/send-invoice-email/{id?}', [InvoiceController::class, 'sendMail'])->name('invoices.sendCustom.email');
 
 
         Route::get('edit/invoice/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
@@ -175,7 +178,11 @@ Route::prefix('admin')->group(function(){
 
         // update smtp setup
         Route::get('business-settings', [BusinessSettingController::class, 'index'])->name('businessIndex');
+        Route::post('business-settings/all-settings', [BusinessSettingController::class, 'updateSettings'])->name('businessIndex.updateSettings');
         Route::post('mail-setup', [BusinessSettingController::class, 'updateSmtp'])->name('updateSmtp');
+
+        Route::get('/all-policy-settings', [BusinessSettingController::class, 'getAllPolicy']);
+
     });
 
     Route::post('/logout', [LoginController::class, 'destroy']);
@@ -200,9 +207,9 @@ Route::put('/test/update/{id}', [\App\Http\Controllers\TestController::class, 'u
 //            'code' => 404
 //        ]
 //    ]);
-//
-//
 //});
+
+
 
 
 Route::get('/pdf', function(){
