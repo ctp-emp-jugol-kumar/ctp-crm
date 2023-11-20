@@ -42,11 +42,12 @@
                                         <thead class="table-light">
                                         <tr class="">
                                             <th class="sorting">#id</th>
-                                            <th class="sorting">Subject</th>
+<!--                                            <th class="sorting">Subject</th>-->
                                             <th class="sorting">Purpose</th>
                                             <th class="sorting">Method</th>
                                             <th class="sorting">Amount</th>
                                             <th class="sorting">User</th>
+                                            <th class="sorting">Exp Date</th>
                                             <th class="sorting">Created At</th>
                                             <th class="sorting">Actions</th>
                                         </tr>
@@ -54,11 +55,11 @@
                                         <tbody>
                                         <tr v-for="exp in expanses.data" :key="exp.id">
                                             <td>
-                                                <a href="#">
+                                                <a href="javascript:void(0)" @click="editItem(exp.show_url, true)">
                                                     #EXP_{{ exp.id }}
                                                 </a>
                                             </td>
-                                            <td>{{ exp.subject }}</td>
+<!--                                            <td>{{ exp.subject }}</td>-->
                                             <td>{{ exp.purpse.name }}</td>
                                             <td>{{ exp.method.name }}</td>
                                             <td>{{ exp.amount+" Tk" }}</td>
@@ -67,6 +68,7 @@
                                                     {{ exp.user.name }}
                                                 </a>
                                             </td>
+                                            <td>{{ exp.date }}</td>
                                             <td>{{ exp.created_at }}</td>
                                             <td>
                                                 <button type="button"  @click="editItem(exp.show_url)"
@@ -110,11 +112,12 @@
                         <span v-if="errors.purpose_id" class="error text-sm text-danger">{{ errors.purpose_id }}</span>
                     </div>
 
-                    <div class="col mb-1">
+<!--                    <div class="col mb-1">
                         <label>Expanse Subject <Required/></label>
                         <input v-model="createForm.subject" type="text" placeholder="e.g expanse subject" class="form-control">
                         <span v-if="errors.subject" class="error text-sm text-danger">{{ errors.subject }}</span>
-                    </div>
+                    </div>-->
+
                     <div class="col mb-1">
                         <label>Expanse Amount <Required/></label>
                         <input v-model="createForm.amount" type="text" placeholder="e.g 00.00 Tk" class="form-control">
@@ -134,6 +137,8 @@
                         <label>Expanse Date <Required/></label>
                         <Datepicker v-model="createForm.expanse_date"
                                     :monthChangeOnScroll="false"
+                                    :enable-time-picker="false"
+                                    :format="'d-MM-Y'"
                                     placeholder="Select Date" autoApply></Datepicker>
                         <span v-if="errors.expanse_date" class="error text-sm text-danger">{{ errors.expanse_date }}</span>
                     </div>
@@ -171,11 +176,11 @@
                         <span v-if="errors.purpose_id" class="error text-sm text-danger">{{ errors }}</span>
                     </div>
 
-                    <div class="col mb-1">
-                        <label>Expanse Subject <Required/></label>
-                        <input v-model="updateForm.subject" type="text" placeholder="e.g expanse subject" class="form-control">
-                        <span v-if="errors.subject" class="error text-sm text-danger">{{ errors.subject }}</span>
-                    </div>
+<!--                    <div class="col mb-1">-->
+<!--                        <label>Expanse Subject <Required/></label>-->
+<!--                        <input v-model="updateForm.subject" type="text" placeholder="e.g expanse subject" class="form-control">-->
+<!--                        <span v-if="errors.subject" class="error text-sm text-danger">{{ errors.subject }}</span>-->
+<!--                    </div>-->
                     <div class="col mb-1">
                         <label>Expanse Amount <Required/></label>
                         <input v-model="updateForm.amount" type="text" placeholder="e.g 00.00 Tk" class="form-control">
@@ -195,6 +200,8 @@
                         <label>Expanse Date <Required/></label>
                         <Datepicker v-model="updateForm.expanse_date"
                                     :monthChangeOnScroll="false"
+                                    :enable-time-picker="false"
+                                    :format="'d-MM-Y'"
                                     placeholder="Select Date" autoApply></Datepicker>
                         <span v-if="errors.expanse_date" class="error text-sm text-danger">{{ errors.expanse_date }}</span>
                     </div>
@@ -216,6 +223,22 @@
             </div>
         </form>
     </Modal>
+
+
+    <Modal id="showExpanse" title="Show This Expanse" v-vb-is:modal size="md">
+        <div class="modal-body">
+            <h3>Purpose: {{ editData.purpse?.name }}</h3>
+            <h5>Amount: {{ editData.amount }}</h5>
+            <h5>Exp Date: {{ moment(editData.date).format('D-MM-y')}}</h5>
+            <div class="flex flex-column mb-3" style="display:flex; flex-direction: column;" v-if="editData.document">
+                <label for="image">Document</label>
+                <img id="image" :src="`/storage/${editData.document}`" alt="">
+            </div>
+            <small v-if="editData.details">Notes: {{ editData?.details }}</small>
+
+        </div>
+    </Modal>
+
 </template>
 <script>
 
@@ -226,7 +249,7 @@ import Icon from '../../../components/Icon'
 import Modal from '../../../components/Modal'
 import ImageUploader from "../../../components/ImageUploader"
 import Textarea from "../../../components/Textarea";
-
+import moment from "moment";
 
 import {ref, watch} from "vue";
 import debounce from "lodash/debounce";
@@ -300,16 +323,22 @@ let updateForm = useForm({
 })
 let editData = ref([]);
 
-const editItem = (url) =>{
+const editItem = (url, isShow=false) =>{
     axios.get(url+"/?data=true").then((res)=>{
+        console.log(res.data.date)
         editData.value = res.data;
         updateForm.purpose_id = res.data.purpose_id;
         updateForm.method_id = res.data.method_id;
         updateForm.subject = res.data.subject;
         updateForm.amount = res.data.amount;
-        updateForm.expanse_date = res.data.expanse_date;
+        updateForm.expanse_date = res.data.date;
         updateForm.details = res.data.details;
-        document.getElementById('updateData').$vb.modal.show()
+
+        if(isShow){
+            document.getElementById('showExpanse').$vb.modal.show()
+        }else{
+            document.getElementById('updateData').$vb.modal.show()
+        }
     }).catch((err) =>{
         console.log(err);
     });
