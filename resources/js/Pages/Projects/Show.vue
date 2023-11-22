@@ -178,7 +178,6 @@
                                     </li>
                                 </template>
                             </v-select>
-
                         </div>
 
                         <div class="d-flex flex-wrap mb-0 mt-5">

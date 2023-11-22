@@ -145,6 +145,22 @@ Route::prefix('admin')->group(function(){
         Route::post('project/change-status', [ProjectController::class, 'updateProgress'])->name('projects.updateProgress');
         Route::post('project/update-details/{id}', [ProjectController::class, 'updateProjectDetails'])->name('projects.updateProjectDetails');
         Route::post('project/update-project-backup/{id}', [ProjectController::class, 'updateProjectBackup'])->name('projects.updateProjectBackup');
+        Route::post('project/update-attachment/{id}', [ProjectController::class, 'updateProjectAttachment'])->name('projects.updateProjectAttachment');
+
+        Route::get('project/download-attachment/{path?}', function(){
+//            return request()->all();
+
+
+            $path = request()->input('path');
+//            return \Illuminate\Support\Facades\Storage::download($path, 'file.png');
+
+            return \Illuminate\Support\Facades\Storage::disk('public')->download($path);
+
+
+
+
+            return \Illuminate\Support\Facades\Storage::disk('public')->download(request()->input('path'));
+        });
 
 
         // transaction management

@@ -292,8 +292,11 @@ class ClientsController extends Controller
 
         $client = Client::findOrFail($id);
 
-//        $client->delete();
+        $client->delete();
 
+
+
+/*
         $invoices = $client->invoices;
 
         return $invoices;
@@ -310,10 +313,10 @@ class ClientsController extends Controller
                 }
                 $invoice->delete();
             }
-        }
+        }*/
 
 
-        $client->delete();
+//        $client->delete();
         return back();
     }
 }

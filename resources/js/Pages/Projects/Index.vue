@@ -176,16 +176,18 @@
                         </label>
                         <div class="">
                             <input v-model="createForm.url" type="text" placeholder="project url" class="form-control">
+                            <InputFieldError :errors="errors.url"/>
                         </div>
                     </div>
                     <div class="col-md">
-                        <label>Invoice: <span class="text-danger">*</span></label>
-                        <div class="">
+                        <label>{{ isClient ? 'Invoice' : 'Client' }}: <span class="text-danger">*</span></label>
+                        <a href="javascript:void(0)" @click="changeSelect">{{  isClient ? 'Use Clients' : 'Use Invoice' }}</a>
+                        <div v-if="isClient">
                             <v-select v-model="createForm.invoiceId" :options="preparedInvoices"
                                       @update:modelValue="setClientId"
                                       class="form-control select-padding"
                                       :reduce="invoice => invoice.id" label="invoiceId"
-                                      placeholder="Select Client">
+                                      placeholder="Select Invoice">
                                 <template v-slot:option="option">
                                     <li class="d-flex align-items-start py-1">
                                         <div class="d-flex align-items-center justify-content-between w-100">
@@ -199,8 +201,30 @@
                                     </li>
                                 </template>
                             </v-select>
-                            <InputFieldError :errors="errors.invoiceId"/>
+<!--                            <InputFieldError :errors="errors.invoiceId"/>-->
                         </div>
+                        <div v-else class="">
+                            <v-select v-model="createForm.clientId"
+                                      :options="props.clients"
+                                      class="form-control select-padding"
+                                      :reduce="item => item.id" label="name"
+                                      placeholder="Select Client">
+                                <template v-slot:option="option">
+                                    <li class="d-flex align-items-start py-1">
+                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                            <div class="me-1 d-flex flex-column">
+                                                <span>{{ option.name }}</span>
+                                                <span>{{ option.email ?? ''}}</span>
+                                                <span>{{ option.phone ?? ''}}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </template>
+                            </v-select>
+<!--                            <InputFieldError :errors="errors.invoiceId"/>-->
+                        </div>
+                        <InputFieldError :errors="errors.invoiceId || errors.clientId"/>
+
                     </div>
                 </div>
 
@@ -210,8 +234,12 @@
                             <Required/>
                         </label>
                         <div class="">
-                            <Datepicker v-model="createForm.date" :monthChangeOnScroll="false"
-                                        placeholder="Select Date" autoApply></Datepicker>
+                            <Datepicker v-model="createForm.date"
+                                        :monthChangeOnScroll="false"
+                                        :enable-time-picker="false"
+                                        :format="'d-MM-Y'"
+                                        placeholder="Select Date"
+                                        autoApply></Datepicker>
                             <InputFieldError :errors="errors.date"/>
                         </div>
                     </div>
@@ -223,6 +251,8 @@
                         <div class="">
                             <Datepicker v-model="createForm.start_date"
                                         :monthChangeOnScroll="false"
+                                        :enable-time-picker="false"
+                                        :format="'d-MM-Y'"
                                         placeholder="Select Date" autoApply></Datepicker>
                             <InputFieldError :errors="errors.start_date"/>
                         </div>
@@ -236,6 +266,8 @@
                         <div class="">
                             <Datepicker v-model="createForm.end_date"
                                         :monthChangeOnScroll="false"
+                                        :enable-time-picker="false"
+                                        :format="'d-MM-Y'"
                                         placeholder="Select Date" autoApply></Datepicker>
                             <InputFieldError :errors="errors.end_date"/>
                         </div>
@@ -259,13 +291,12 @@
                     </div>
                 </div>
 
-<!--
                 <div class="row mb-1">
                     <div class="col-md">
                         <label>Upload Files</label>
                         <ImageUploader v-model="createForm.files" label="Project Files" />
                     </div>
-                </div>-->
+                </div>
 
                 <div class="row mb-1">
                     <div class="col-md">
@@ -309,7 +340,7 @@
 
                 <div class="row mb-1">
                     <div class="col-md-12 mt-2">
-                        <label>Nots : </label>
+                        <label>Notes : </label>
                         <div class="">
                             <textarea v-model="createForm.note" class="form-control" placeholder="e.g Write an note about this project..." rows="6"></textarea>
                         </div>
@@ -361,7 +392,8 @@
         users:Object,
     });
 
-
+    const isClient = ref(true);
+    const changeSelect =()=> isClient.value = !isClient.value
 
 
     const createForm = useForm({

@@ -207,15 +207,19 @@
                 <!-- Card header -->
                 <div class="card-header card-header-height d-flex justify-content-between align-items-center">
                     <div>
-                        <h4 class="mb-0">Recent Activity
+                        <h4 class="mb-0">Project Attachment
                         </h4>
                     </div>
-                    <div><a href="#">View All</a></div>
+                    <div class="cursor-pointer d-flex gap-1">
+                        <a :href="`/admin/project/download-attachment?path=${props.info.files}`">
+                            <vue-feather type="download"/>
+                        </a>
+                        <vue-feather type="edit" @click="editAttatchment"/>
+                    </div>
                 </div>
                 <!-- Card body -->
                 <div class="card-body">
-                    <!-- List group -->
-                    coming soon....
+                    <img :src="`/storage/${props.info.files}`" alt="" class="w-100 h-100 object-fit-contain" style="max-height:120px;">
                 </div>
             </div>
         </div>
@@ -289,17 +293,36 @@
             </div>
         </form>
     </Modal>
+
+    <Modal id="editAttachment" title="Update Attachment" v-vb-is:modal size="lg">
+        <form @submit.prevent="updatAttachment">
+            <div class="modal-body">
+                <ImageUploader v-model="updateFile.files" label="Project Files" />
+            </div>
+
+
+            <div class="modal-footer">
+                <button :disabled="formData.processing" type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Submit
+                </button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel
+                </button>
+            </div>
+        </form>
+    </Modal>
 </template>
 
 <script setup>
 
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import moment from "moment";
 import ProgressChart from "../../../components/ProgressChart.vue";
 import {useForm} from "@inertiajs/inertia-vue3";
 import Modal from '../../../components/Modal.vue';
 import {Inertia} from "@inertiajs/inertia";
 import Swal from "sweetalert2";
+import ImageUploader from "../../../components/ImageUploader.vue";
 
 
 const props = defineProps({
@@ -345,6 +368,38 @@ const props = defineProps({
         })
     }
 
+
+    const editAttatchment=()=> document.getElementById('editAttachment').$vb.modal.show()
+    const updateFile = useForm({
+        files:null,
+    })
+    const updatAttachment=()=>{
+        updateFile.post('/admin/project/update-attachment/'+props.info.id,{
+            onSuccess:()=>{
+                Swal.fire(
+                    'Updated!',
+                    'Project Attachment Has been Updated.',
+                    'success'
+                )
+                document.getElementById('editAttachment').$vb.modal.hide()
+            }
+        })
+    }
+
+    const downloadAttachment = (path) =>{
+        Inertia.get('/admin/project/download-attachment/', {
+            path:path
+        }, {
+            onSuccess:()=>{
+                Swal.fire(
+                    'Updated!',
+                    'Project Attachment Has been Updated.',
+                    'success'
+                )
+                document.getElementById('editAttachment').$vb.modal.hide()
+            }
+        })
+    }
 
 
 </script>

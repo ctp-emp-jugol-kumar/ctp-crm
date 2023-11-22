@@ -17,7 +17,7 @@ class CreateProjectsTable extends Migration
             $table->string('name');
             $table->text('url')->nullable();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('invoice_id');
+            $table->foreignId('invoice_id')->nullable()->constrained('invoices')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('client_id')->nullable()->constrained('clients')->cascadeOnDelete()->cascadeOnUpdate();
             $table->date('date');
             $table->date('start')->nullable();
