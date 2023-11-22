@@ -153,10 +153,6 @@
                 </div>
                 <div class="modal-body flex-grow-1">
                     <form @submit.prevent="assignDevelopers">
-                        <div class="add-client-note">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor doloribus facilis iste quasi repudiandae. Ab accusamus blanditiis dolor doloribus dolorum eligendi eum fugiat illum, ipsam necessitatibus nemo nihil numquam unde.
-                        </div>
-
                         <div class="mt-2">
                             <label>Select Developers</label>
                             <v-select :options="props.users"
