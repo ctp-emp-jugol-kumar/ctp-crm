@@ -93,7 +93,16 @@ const passwordToggleIcon = computed(() =>{
 })
 
 let submit = () => {
-    form.post('/admin/login');
+    form.post('/admin/login',{
+        onSuccess:(res)=>{
+            $toast.info("Welcome Back...", {
+                position: 'top-right'
+            })
+        },
+        onError: (res)=>{
+            $toast.error("Connection Error!")
+        }
+    });
 };
 </script>
 

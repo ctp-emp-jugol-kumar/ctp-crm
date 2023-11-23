@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('transaction_id');
             $table->unsignedBigInteger('transactionable_id');
             $table->foreignId('received_by')->nullable()->constrained('users');
-            $table->foreignId('payment_by')->nullable()->constrained('clients');
+            $table->foreignId('payment_by')->nullable()->constrained('clients')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('transactionable_type');
             $table->string('transaction_type')->nullable();
             $table->foreignId('method_id')->nullable()->constrained('methods');

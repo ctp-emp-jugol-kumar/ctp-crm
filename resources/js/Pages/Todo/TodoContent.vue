@@ -9,7 +9,8 @@
                 <img :src="props.todo.downloadUrl" class="todo-file" alt="user_avatar">
                 <div class="d-flex flex-column gap-1">
                     <a class="btn btn-sm btn-primary"
-                       :href="props.todo.downloadUrl" style="width:40%" target="_blank">Download File</a>
+
+                       :href="`/admin/project/download-attachment?path=${props.todo.file}`" style="width:40%" >Download File</a>
                 </div>
             </div>
 
@@ -18,7 +19,7 @@
                 <div class="d-flex flex-column gap-1">
                     <span class="d-block" style="width: 70%">{{$page.props.auth.ADMIN_URL+''+props.todo.downloadUrl}}</span>
                     <a class="btn btn-sm btn-primary"
-                       :href="props.todo.downloadUrl" style="width:40%" target="_blank">Download File</a>
+                       :href="`/admin/project/download-attachment?path=${props.todo.file}`" style="width:40%" >Download File</a>
                 </div>
             </div>
 
@@ -27,7 +28,7 @@
                 <div class="d-flex flex-column gap-1">
                     <span class="d-block" style="width: 70%">{{$page.props.auth.ADMIN_URL+''+props.todo.downloadUrl}}</span>
                     <a class="btn btn-sm btn-primary"
-                       :href="props.todo.downloadUrl" style="width:40%" target="_blank">Download File</a>
+                       :href="`/admin/project/download-attachment?path=${props.todo.file}`" style="width:40%" >Download File</a>
                 </div>
             </div>
             <div class="d-flex gap-1" v-if="isImage(props.todo.downloadUrl) === 'pdf'">
@@ -35,7 +36,7 @@
                 <div class="d-flex flex-column gap-1">
                     <span class="d-block" style="width: 70%">{{$page.props.auth.ADMIN_URL+''+props.todo.downloadUrl}}</span>
                     <a class="btn btn-sm btn-primary"
-                       :href="props.todo.downloadUrl" style="width:40%" target="_blank">Download File</a>
+                       :href="`/admin/project/download-attachment?path=${props.todo.file}`" style="width:40%" >Download File</a>
                 </div>
             </div>
             <div class="d-flex gap-1" v-if="isImage(props.todo.downloadUrl) === 'xlsx'">
@@ -43,7 +44,7 @@
                 <div class="d-flex flex-column gap-1">
                     <span class="d-block" style="width: 70%">{{$page.props.auth.ADMIN_URL+''+props.todo.downloadUrl}}</span>
                     <a class="btn btn-sm btn-primary"
-                       :href="props.todo.downloadUrl" style="width:40%" target="_blank">Download File</a>
+                       :href="`/admin/project/download-attachment?path=${props.todo.file}`" style="width:40%" >Download File</a>
                 </div>
             </div>
             <div class="d-flex gap-1" v-if="isImage(props.todo.downloadUrl) === 'other'">
@@ -51,7 +52,7 @@
                 <div class="d-flex flex-column gap-1">
                     <span class="d-block" style="width: 70%">{{$page.props.auth.ADMIN_URL+''+props.todo.downloadUrl}}</span>
                     <a class="btn btn-sm btn-primary"
-                       :href="props.todo.downloadUrl" style="width:40%" target="_blank">Download File</a>
+                       :href="`/admin/project/download-attachment?path=${props.todo.file}`" style="width:40%" >Download File</a>
                 </div>
             </div>
             <p v-if="props.todo.about_todo">{{ props.todo.about_todo }}</p>

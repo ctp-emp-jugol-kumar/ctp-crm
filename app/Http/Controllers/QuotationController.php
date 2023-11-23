@@ -221,9 +221,16 @@ class QuotationController extends Controller
             return collect($service)->only(['service_name', 'id', 'platforms']);
         });*/
 
-        $services = Searvice::with(['packages', 'features'])->get();
+//        $services = Searvice::with(['packages', 'features'])->get();
 //        return $services;
-        $clients   = Client::latest()->get(); //where('is_client', true)
+
+        $services = Searvice::with([
+            'packages'=>fn($query)=>$query->oldest('position'),
+            'features'=>fn($query)=>$query->oldest('position')
+        ])->oldest('position')->get();
+
+
+        $clients   = Client::query()->latest()->get(); //where('is_client', true)
 
         return inertia('Quotation/Store', [
             'services' => $services,

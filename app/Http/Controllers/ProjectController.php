@@ -101,18 +101,32 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
 
+
+
         Request::validate([
-           'name' => 'required|url',
-           'invoiceId' => 'required',
+           'name' => 'required',
            'date' => 'required',
            'start_date' => 'required',
            'end_date' => 'required',
+            'url' => 'nullable|url'
         ]);
 
-        $filePath = "";
+        if(empty(Request::input('invoiceId')) && empty(Request::input('clientId'))){
+            Request::validate([
+                'invoiceId' => 'required|integer',
+                'clientId' => 'required|integer',
+            ],[
+                'invoiceId.required' => 'Invoice Id Or Client Id Is Required',
+                'clientId.required' => 'Invoice Id Or Client Id Is Required'
+            ]);
+        }
 
+        $filePath= NULL;
         if (Request::hasFile('files')) {
-            $filePath = Storage::putFile('public/project', Request::file('files'));
+//            $filePath = Storage::putFile('/project', Request::file('files'));
+
+//            Storage::disk('public')->delete($project->files);
+            $filePath = Request::file('files')->store('project', 'public');
         }
 
         $project = Project::create([
@@ -163,6 +177,13 @@ class ProjectController extends Controller
         $pref = $invObj->invoiceItemsGenerate($project->invoice);
 
 
+
+        $fileInfo = [];
+        if(file_exists('storage/'.$project->files)){
+            $fileInfo = stat('storage/'.$project->files);
+        }
+
+
         return inertia('Projects/Show', [
             "info" =>  $project,
             "pref" => $pref,
@@ -207,8 +228,9 @@ class ProjectController extends Controller
 
         if (Request::hasFile('files')) {
 
-            $filePath = Storage::putFile('public/project', Request::file('files'));
-//            $filePath = Request::file('files')->store('image', 'public');
+
+//            Storage::disk('public')->delete($project->files);
+            $filePath = Request::file('files')->store('project', 'public');//            $filePath = Request::file('files')->store('image', 'public');
 
             $project->files = $filePath;
             $project->save();
@@ -256,6 +278,17 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
         $project->backup = json_encode(Request::input('files'));
         $project->save();
+        return back();
+    }
+    public function updateProjectAttachment($id){
+        $project = Project::findOrFail($id);
+        if (Request::hasFile('files')) {
+            Storage::disk('public')->delete($project->files);
+            $filePath = Request::file('files')->store('project', 'public');
+//            $filePath = Storage::putFile('project', Request::file('files'));
+            $project->files = $filePath;
+            $project->save();
+        }
         return back();
     }
 

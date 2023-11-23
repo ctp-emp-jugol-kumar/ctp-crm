@@ -6,6 +6,7 @@ use App\Http\Requests\ClientRequest;
 use App\Http\Requests\UpdateClient;
 use App\Models\Client;
 use App\Models\User;
+use Cassandra\Custom;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Request;
@@ -209,6 +210,23 @@ class ClientsController extends Controller
 //            abort(401 );
 //        }
 
+
+        if(Request::input('type') == 'assignEmployee'){
+            $agents = [];
+            if (Request::input('agents') != null){
+                foreach (Request::input("agents") as $item){
+                    if (is_int($item)){
+                        $agents[] = $item;
+                    }else{
+                        $agents[] = $item["id"];
+                    }
+                }
+            }
+            $client->users()->sync($agents);
+            return back();
+        }
+
+
         if(Request::input('status') == 'Follow Up'){
             Request::validate([
                 'followDate' => 'required'
@@ -291,7 +309,15 @@ class ClientsController extends Controller
 //        }
 
         $client = Client::findOrFail($id);
+
+        $client->delete();
+
+
+
+/*
         $invoices = $client->invoices;
+
+        return $invoices;
         if ($invoices){
             foreach ($invoices as $invoice) {
                 $transactions = $invoice->transactions;
@@ -305,10 +331,20 @@ class ClientsController extends Controller
                 }
                 $invoice->delete();
             }
-        }
+        }*/
 
 
-        $client->delete();
+//        $client->delete();
         return back();
     }
+
+
+    public function setFollowUp(){
+        $customer = Client::findOrFail(Request::input('clientId'));
+        $customer->follow_up = Request::input('followDate');
+        $customer->follow_up_message = Request::input('message');
+        $customer->save();
+        return back();
+    }
+
 }

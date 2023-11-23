@@ -27,6 +27,8 @@
                                                     <option value="25">25</option>
                                                     <option value="50">50</option>
                                                     <option value="100">100</option>
+                                                    <option value="200">200</option>
+                                                    <option value="500">500</option>
                                                 </select> entries</label>
                                             </div>
                                         </div>
@@ -34,7 +36,7 @@
                                             <div
                                                 class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
                                                 <div class="select-search-area">
-                                                    <label>Search:<input v-model="search" type="search" class="form-control" placeholder=""
+                                                    <label>Search:<input v-model="search" type="search" class="form-control" placeholder="Search Now"
                                                                          aria-controls="DataTables_Table_0"></label>
                                                 </div>
                                             </div>

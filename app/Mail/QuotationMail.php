@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Http\Controllers\BusinessSettingController;
 use App\Models\Client;
 use App\Models\Quotation;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -50,10 +51,15 @@ class QuotationMail extends Mailable
      */
     public function content()
     {
+        $bSetting = new BusinessSettingController();
+
+        $qTemplate = $bSetting->get_setting('quotation_template');
+
         return new Content(
             view: 'emails.quotation',
             with: [
                 'quotation' => $this->quotation,
+                'template' => $qTemplate
             ],
         );
     }

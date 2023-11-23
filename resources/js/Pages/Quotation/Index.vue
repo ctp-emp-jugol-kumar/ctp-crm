@@ -21,6 +21,8 @@
                                                 <option value="25">25</option>
                                                 <option value="50">50</option>
                                                 <option value="100">100</option>
+                                                <option value="200">200</option>
+                                                <option value="500">500</option>
                                             </select>
                                             <Link href="quotations/create"
                                                   v-if="this.$page.props.auth.user.can.includes('quotation.create') || this.$page.props.auth.user.role.includes('Administrator')"
@@ -48,7 +50,8 @@
                                                 </select>
                                             </div>
                                             <div v-else>
-                                                <Datepicker class="ms-2" v-model="dateRange" :monthChangeOnScroll="false" range multi-calendars
+                                                <Datepicker class="ms-2" v-model="dateRange"
+                                                            :monthChangeOnScroll="false" range multi-calendars
                                                             placeholder="Select Date Range" autoApply  @update:model-value="handleDate" ></Datepicker>
                                             </div>
                                         </div>
@@ -59,7 +62,7 @@
                                                     <input v-model="search"
                                                            type="text"
                                                            class="form-control"
-                                                           placeholder="What You Find ?"
+                                                           placeholder="Search Now"
                                                            aria-controls="DataTables_Table_0">
                                                 </label>
                                             </div>

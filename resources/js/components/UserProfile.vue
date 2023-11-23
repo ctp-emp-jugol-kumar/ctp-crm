@@ -10,11 +10,11 @@
                 </div>
                 <div class="content-body">
 
-                    <div class="">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-4 d-flex justify-content-between flex-column">
+                    <div class="row match-height">
+                        <div class="col-md-4">
+                            <div class="card bg-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between flex-column">
                                         <div class="d-flex justify-content-start">
                                             <span class="b-avatar badge-light-danger rounded">
                                                 <img :src="props.user.photo ?? $page.props.auth.MAIN_URL+props.image" class="rounded me-2"  style="width: 140px;height: 140px;"  alt="avatar">
@@ -23,103 +23,141 @@
                                                 <h4 class="mb-0 text-capitalize"> {{ props.user.name }} </h4>
                                                 <p class="card-text">{{ props.user.email }}</p>
                                                 <p class="badge badge-light-purple text-capitalize"> {{ props.user.status }} </p>
-                                                <p v-if="props.user?.follow_up" v-c-tooltip="'follow up date'">{{ moment(props.user?.follow_up).format('ll')  }}</p>
+
+<!--                                                <p v-if="props.user?.follow_up" v-c-tooltip="'follow up date'">{{ moment(props.user?.follow_up)  }}</p>-->
                                                 <div class="d-flex align-items-center gap-1">
-                                                    <button @click="editClient" class="btn-sm btn btn-primary">Change Status</button>
-                                                    <button v-if="props.user?.note" class="btn btn-info btn-sm" @click="showClientNote" v-c-tooltip="'click for show client note.'">
-                                                        <vue-feather type="info"/>
-                                                    </button>
+                                                    <button @click="editClient" class="btn-sm btn btn-primary w-100">Edit Me</button>
+<!--                                                    <button v-if="props.user?.note" class="btn btn-info btn-sm" @click="showClientNote" v-c-tooltip="'click for show client note.'">-->
+<!--                                                        <vue-feather type="info"/>-->
+<!--                                                    </button>-->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-12">
-                                        <h2>Assigned Users
-                                            <vue-feather type="edit" class="cursor-pointer" @click="editClient"/>
-                                        </h2>
-                                        <div class="row">
-                                            <div class="col-md-6 col-12" v-for="(developer, index) in user.users" :key="developer.id">
-                                                <div class="card mb-4">
-                                                    <!-- card body  -->
-                                                    <div class="card-body py-1 px-1">
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar avatar-lg">
-                                                                <img :src="developer.photo" alt="" class="rounded-circle">
-                                                            </div>
-                                                            <div class="ms-2">
-                                                                <h4 class="mb-0 fs-5 fw-bold">
-                                                                    <a href="#" class="text-black">{{ developer.name }}</a>
-                                                                </h4>
-                                                                <p class="mb-0 text-muted fs-6" v-for="role in developer.roles">{{ role.name }}</p>
-                                                            </div>
-                                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--                                    <div class="col-md-4 col-12">
+                                                                <h2>Assigned Users
+                                                                    <vue-feather type="edit" class="cursor-pointer" @click="editClient"/>
+                                                                </h2>
+                                                                <div class="row">
+
+                                                                </div>
+                                                            </div>-->
+                        <div class="col-md-4">
+                            <div class="card bg-white">
+                                <div class="card-body">
+                                    <table class="mt-2 mt-xl-0 w-100">
+                                        <tr>
+                                            <th class="pb-50">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
+                                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                     class="me-75 feather feather-user">
+                                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                    <circle cx="12" cy="7" r="4"></circle>
+                                                </svg>
+                                                <span class="font-weight-bold">Username</span>
+                                            </th>
+                                            <td class="pb-50">{{ props.user.name }} </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="pb-50 d-flex align-items-center">
+                                                <vue-feather type="mail" size="14" class="me-75"/>
+                                                <span class="font-weight-bold">Email</span>
+                                            </th>
+                                            <td class="pb-50">{{ props.user.email }} </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="pb-50">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
+                                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                     class="me-75 feather feather-check">
+                                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                                </svg>
+                                                <span class="font-weight-bold">Status</span>
+                                            </th>
+                                            <td class="pb-50 text-capitalize"> {{ props.user.status }} </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="pb-50">
+                                                <vue-feather type="clock" size="15" />
+                                                <span class="font-weight-bold ms-1">Joining</span>
+                                            </th>
+                                            <td class="pb-50"> {{ formatted(props.user.created_at) }} </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="pb-50">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
+                                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                     class="me-75 feather feather-flag">
+                                                    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                                                    <line x1="4" y1="22" x2="4" y2="15"></line>
+                                                </svg>
+                                                <span class="font-weight-bold">Address</span>
+                                            </th>
+                                            <td class="pb-50"> {{ props.user.address }} </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
+                                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                     class="me-75 feather feather-phone">
+                                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                                </svg>
+                                                <span class="font-weight-bold">Contact</span>
+                                            </th>
+                                            <td> {{ props.user.phone }} </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex gap-2 flex-column">
+                            <div class="card bg-white">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="d-flex align-items-center">
+                                                <!-- avatar group -->
+                                                <div class="avatar-group flex-wrap">
+                                                    <div v-c-tooltip="developer.name"
+                                                         title=""
+                                                         class="avatar pull-up"
+                                                         data-bs-original-title="Elicia Rieske"
+                                                         v-for="(developer, index) in user.users" :key="developer.id">
+                                                        <img :src="developer.photo" alt="Avatar" height="30" width="30">
                                                     </div>
                                                 </div>
+                                                <div class="pull-up add-new-user ms-2"  v-c-tooltip="'Assign New User'" @click="assignEmployee">
+                                                    +
+                                                </div>
                                             </div>
-
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <table class="mt-2 mt-xl-0 w-100">
-                                                <tr>
-                                                    <th class="pb-50">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
-                                                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                             class="me-75 feather feather-user">
-                                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                                            <circle cx="12" cy="7" r="4"></circle>
-                                                        </svg>
-                                                        <span class="font-weight-bold">Username</span>
-                                                    </th>
-                                                    <td class="pb-50">{{ props.user.name }} </td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="pb-50">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
-                                                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                             class="me-75 feather feather-check">
-                                                            <polyline points="20 6 9 17 4 12"></polyline>
-                                                        </svg>
-                                                        <span class="font-weight-bold">Status</span>
-                                                    </th>
-                                                    <td class="pb-50 text-capitalize"> {{ props.user.status }} </td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="pb-50">
-                                                        <vue-feather type="clock" size="15" />
-                                                        <span class="font-weight-bold ms-1">Joining</span>
-                                                    </th>
-                                                    <td class="pb-50"> {{ formatted(props.user.created_at) }} </td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="pb-50">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
-                                                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                             class="me-75 feather feather-flag">
-                                                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
-                                                            <line x1="4" y1="22" x2="4" y2="15"></line>
-                                                        </svg>
-                                                        <span class="font-weight-bold">Address</span>
-                                                    </th>
-                                                    <td class="pb-50"> {{ props.user.address }} </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 24 24" fill="none"
-                                                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                             class="me-75 feather feather-phone">
-                                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                                                        </svg>
-                                                        <span class="font-weight-bold">Contact</span>
-                                                    </th>
-                                                    <td> {{ props.user.phone }} </td>
-                                                </tr>
-                                            </table>
+                                    <hr>
+                                    <div class="row mt-1">
+                                        <div class="col-md-12">
+                                            <div v-if="props.user.follow_up ||  props.user.follow_up_message">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <h3>Follow up </h3>
+                                                    <vue-feather type="edit" size="20" class="cursor-pointer" @click="editFollowUp"/>
+                                                </div>
+                                                <p v-if="props.user.follow_up">Follow Date: {{ moment(props.user.follow_up)?.format('ll')}}</p>
+                                                <small>{{ props.user.follow_up_message?.slice(0, 60) }}</small>
+                                                <a v-if="props.user.follow_up_message?.length > 60" href="javascript:void(0)" >Read More...</a>
+                                            </div>
+                                            <button v-else class="btn bg-light-gray d-flex align-items-center gap-2" @click="editFollowUp">
+                                                <vue-feather type="plus"/>
+                                                <p class="m-0 p-0">Set Follow Up</p>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
 
                     <div class="col-xl-12 col-lg-7 col-md-7 order-0 order-md-1">
                         <!-- User Pills -->
@@ -133,6 +171,7 @@
                                 </button>
                             </li>
                         </ul>
+
                         <!--/ User Pills -->
                         <Component :is="active"
                                    :transactions="user.transactions"
@@ -246,9 +285,9 @@
                             multiple
                             v-model="updateForm.agents"
                             :options="props.users"
+                            :reduce="user => user.id"
                             class="form-control select-padding"
                             placeholder="Select Assign Employee"
-                            :reduce="user => user.id"
                             label="name">
                             <template v-slot:option="option">
                                 <li class="d-flex align-items-start py-1">
@@ -270,7 +309,43 @@
 
             <div class="modal-footer">
                 <button type="submit"
-                        class="btn btn-primary waves-effect waves-float waves-light">Submit
+                        class="btn btn-primary waves-effect waves-float waves-light">Update
+                </button>
+                <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Cancel
+                </button>
+            </div>
+        </form>
+    </Modal>
+
+
+    <Modal id="editFollowUp" title="Set Follow Up" v-vb-is:modal size="sm">
+        <form @submit.prevent="setupFollow">
+            <div class="modal-body">
+                <div class="col-md">
+                    <label>Follow Up Date:
+                        <Required/>
+                    </label>
+                    <div class="single-datepiker">
+                        <Datepicker v-model="followUpData.followDate"
+                                    :monthChangeOnScroll="false"
+                                    :enable-time-picker="false"
+                                    :format="'d-MM-Y'"
+                                    placeholder="Select Date" autoApply></Datepicker>
+                        <span v-if="errors.followDate" class="error text-sm text-danger">{{ errors.followDate }}</span>
+                    </div>
+                </div>
+                <div class="col-md mt-2">
+                    <label>Follow Up Message:</label>
+                    <textarea class="form-control" v-model="followUpData.message" rows="5" placeholder="Follow up message..."></textarea>
+                    <span v-if="errors.followDate" class="error text-sm text-danger">{{ errors.followDate }}</span>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="submit"
+                        class="btn btn-primary waves-effect waves-float waves-light">Set Follow
                 </button>
                 <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                         aria-label="Close">Cancel
@@ -284,6 +359,55 @@
     <Modal id="showUserNote" title="Show Client" v-vb-is:modal :size="followUp ? 'sm' : 'lg'">
         <p class="p-3">{{ props.user?.note ?? 'no have note in this user' }}</p>
     </Modal>
+
+
+    <div class="modal modal-slide-in fade" id="assignEmployee" v-vb-is:modal>
+        <div class="modal-dialog sidebar-lg">
+            <div class="modal-content p-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title">
+                        <span class="align-middle">Assigned Developer</span>
+                    </h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <form @submit.prevent="assignEmployes">
+                        <div class="mt-2">
+                            <label>Select Employee</label>
+                            <v-select
+                                multiple
+                                v-model="updateForm.agents"
+                                :options="props.users"
+                                :reduce="user => user.id"
+                                class="form-control select-padding"
+                                placeholder="Select Assign Employee"
+                                label="name">
+                                <template v-slot:option="option">
+                                    <li class="d-flex align-items-start py-1">
+                                        <div class="avatar me-75">
+                                            <img :src="`${option.photo}`" alt="" width="38" height="38">
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between w-100">
+                                            <div class="me-1 d-flex flex-column">
+                                                <strong class="mb-25">{{ option.name }}</strong>
+                                                <span >{{ option.email }}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </template>
+                            </v-select>
+                        </div>
+
+                        <div class="d-flex flex-wrap mb-0 mt-5">
+                            <button type="submit" class="btn btn-primary me-1">Assigned</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </template>
 
 <script setup>
@@ -314,8 +438,11 @@ let props = defineProps({
 
 let status = [
     {"name":'New Lead'}, {"name":'Contacted'}, {"name":'Proposal Sent'},
-    {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'},  {"name":'Follow Up'}, {"name":'Converted to Customer'},
+    {"name":'Quote Sent'}, {"name":'Qualified'}, {"name":'Disqualified'},   {"name":'Converted to Customer'},
 ]
+
+// {"name":'Follow Up'},
+
 
 const followUp = ref(false);
 const changeStatus = (event) =>{
@@ -367,20 +494,47 @@ let updateClientForm = (id) => {
             document.getElementById('editClient').$vb.modal.hide()
             Swal.fire(
                 'Saved!',
-                'Your file has been Updated.',
+                'Updated Successfully Done...',
                 'success'
             )
         },
     })
 }
 
+
 const showClientNote = () =>{
     document.getElementById('showUserNote').$vb.modal.show()
 }
 
+const editFollowUp = () => document.getElementById('editFollowUp').$vb.modal.show()
 
+const followUpData = useForm({
+    clientId:props.user.id,
+    followDate:props.user?.follow_up,
+    message:props.user?.follow_up_message,
+})
+const setupFollow = () =>{
+    followUpData.post('/admin/clients/set-follow-up',{
+        onSuccess:()=> {
+            document.getElementById('editFollowUp').$vb.modal.hide()
+            $toast.success('Follow Up Set Done...')
+        }
+    })
+}
+const assignEmployee = () => {
+    updateForm.agents = props.user.users;
+    document.getElementById('assignEmployee').$vb.modal.show()
+}
 
-
+let assignEmployes = (id) => {
+    Inertia.put(props.showUrl+'?type=assignEmployee', updateForm, {
+        preserveState: true,
+        onSuccess: () => {
+            document.getElementById('assignEmployee').$vb.modal.hide()
+            $toast.success('Employee Assigned Done...')
+        },
+    })
+}
 </script>
 
 <script>
@@ -412,5 +566,15 @@ export default {
 
 
 <style scoped>
-
+.add-new-user{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 11px;
+    border: 2px dashed gray;
+    border-radius: 50%;
+    background: none;
+    transition: 0.3s all ease;
+    cursor:pointer;
+}
 </style>

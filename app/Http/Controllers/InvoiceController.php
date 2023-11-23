@@ -88,7 +88,7 @@ class InvoiceController extends Controller
     {
         return Inertia::render('Invoice/Create', [
             "quotations" => Quotation::all(),
-            "clients"   => Client::where('is_client', true)->get(),
+            "clients"   => Client::query()->latest()->get(), //where('is_client', true)-> only for converted clients
             "paymentMethods" => Method::all(),
             "store_url" => URL::route('invoices.store')
         ]);

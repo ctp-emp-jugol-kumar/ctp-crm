@@ -39,6 +39,8 @@
                                                             <option value="25">25</option>
                                                             <option value="50">50</option>
                                                             <option value="100">100</option>
+                                                            <option value="200">200</option>
+                                                            <option value="500">500</option>
                                                         </select> entries</label>
                                                     </div>
                                                 </div>
@@ -46,7 +48,9 @@
                                                     <div
                                                         class="d-flex align-items-center justify-content-center justify-content-lg-end flex-lg-nowrap flex-wrap">
                                                         <div class="select-search-area">
-                                                            <label>Search <input v-model="search" type="search" class="form-control" placeholder="e.g Search Everything"
+                                                            <label>Search <input v-model="search"
+                                                                                 type="search" class="form-control"
+                                                                                 placeholder="Search Now"
                                                                                  aria-controls="DataTables_Table_0"></label>
                                                         </div>
                                                     </div>
@@ -75,12 +79,14 @@
                                                                 </CDropdownToggle>
                                                                 <CDropdownMenu>
                                                                     <CDropdownItem :href="item.show_url+'?satus=edit'"
-                                                                                   v-if="this.$page.props.auth.user.can.includes('note.edit') || this.$page.props.auth.user.role == 'Administrator' ">
+                                                                                   v-if="this.$page.props.auth.user.can.includes('note.edit') ||
+                                                                                   this.$page.props.auth.user.role == 'Administrator' ">
                                                                     <Icon title="pencil" />
                                                                         <span class="ms-1">Edit</span>
                                                                     </CDropdownItem>
                                                                     <CDropdownItem :href="item.show_url" target="_blank"
-                                                                                   v-if="this.$page.props.auth.user.can.includes('note.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                                                                                   v-if="this.$page.props.auth.user.can.includes('note.show') ||
+                                                                                   this.$page.props.auth.user.role == 'Administrator' ">
                                                                     <Icon title="eye" />
                                                                         <span class="ms-1">Show</span>
                                                                     </CDropdownItem>

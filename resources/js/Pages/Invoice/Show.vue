@@ -95,6 +95,8 @@
                                             <Datepicker :monthChangeOnScroll="false"
                                                         v-model="paymentFormData.date"
                                                         placeholder="Select Payment Date"
+                                                        :enable-time-picker="false"
+                                                        :format="'d-MM-Y'"
                                                         autoApply></Datepicker>
                                         </div>
                                         <div class="mb-1">

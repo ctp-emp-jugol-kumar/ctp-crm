@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Http\Controllers\BusinessSettingController;
 use App\Models\Client;
 use App\Models\Invoice;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -50,10 +51,14 @@ class InvoiceMail extends Mailable
      */
     public function content()
     {
+        $bSetting = new BusinessSettingController();
+        $qTemplate = $bSetting->get_setting('invoice_template');
+
         return new Content(
             view: 'emails.invoice',
             with: [
                 'invoice' => $this->invoice,
+                'template' => $qTemplate
             ],
         );
     }

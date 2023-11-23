@@ -111,7 +111,7 @@ const changeStatus = () =>{
 
 
 const backupData = useForm({
-    files: JSON.parse(props.info.backup) != null ? JSON.parse(props.info.backup) : [null]
+    files: props?.info?.backup ? JSON.parse(props?.info?.backup ?? "") : [null]
 })
 const errors = ref({});
 const uploadBackup = () =>{

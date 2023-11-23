@@ -48,6 +48,8 @@
                                                 <option value="25">25</option>
                                                 <option value="50">50</option>
                                                 <option value="100">100</option>
+                                                <option value="200">200</option>
+                                                <option value="500">500</option>
                                             </select>
                                             <div class="ml-2">
                                                 <select v-model="searchByStatus" class="select2 form-select select w-100">
@@ -78,14 +80,14 @@
                                                     <input v-model="search"
                                                            type="search"
                                                            class="form-control"
-                                                           placeholder="What You Find ?"
+                                                           placeholder="Search Now"
                                                            aria-controls="DataTables_Table_0">
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <table class="user-list-table table">
+                                    <table class="user-list-table table table-striped">
                                         <thead class="table-light">
                                         <tr class=null>
                                             <th class="sorting">Client</th>
@@ -139,6 +141,10 @@
                                                                        v-if="this.$page.props.auth.user.can.includes('leads.edit') || this.$page.props.auth.user.role == 'Administrator'">
                                                             <Icon title="pencil" />
                                                             <span class="ms-1">Edit</span>
+                                                        </CDropdownItem>
+                                                        <CDropdownItem :href="`/admin/show-lead/${user.id}`" v-if="this.$page.props.auth.user.can.includes('leads.show') || this.$page.props.auth.user.role.includes('Administrator')">
+                                                            <Icon title="eye" />
+                                                            <span class="ms-1">Show</span>
                                                         </CDropdownItem>
                                                         <CDropdownItem  @click="deleteItemModal(user.id)"  type="button"
                                                                         v-if="this.$page.props.auth.user.can.includes('leads.delete') || this.$page.props.auth.user.role == 'Administrator' ">

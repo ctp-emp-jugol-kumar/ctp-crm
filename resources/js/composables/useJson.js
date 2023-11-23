@@ -78,7 +78,6 @@ export function useJson(){
         {"name":'Quote Sent'},
         {"name":'Qualified'},
         {"name":'Disqualified'},
-        {"name":'Follow Up'},
         {"name":'Converted to Customer'}
     ]
 
