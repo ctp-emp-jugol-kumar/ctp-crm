@@ -22,7 +22,8 @@
         </section>
 
         <div class="row">
-            <div class="col-md-6" v-if="this.$page.props.auth.user.can.includes('leads.index') || this.$page.props.auth.user.role.includes('Administrator')">
+            <div class="col-md-6" v-if="this.$page.props.auth.user.can.includes('leads.index') ||
+            this.$page.props.auth.user.role.includes('Administrator')">
                 <div class="card">
                     <div class="card-body">
                         <h2 class="card-title">Today Followup Leads</h2>
@@ -35,7 +36,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="lead in followup_leads">
+                                <tr v-for="lead in props.followup_leads">
                                     <td>{{ lead.name}}</td>
                                     <td>{{ lead.email}}</td>
                                     <td>{{ lead.phone}}</td>
@@ -44,9 +45,33 @@
                         </table>
                     </div>
                 </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Others Followup Leads</h2>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="lead in props.others_followup_leads">
+                                    <td>{{ lead.name}}</td>
+                                    <td>{{ lead.email}}</td>
+                                    <td>{{ lead.phone}}</td>
+                                    <td>{{ moment(lead.follow_up)?.format('D-MM-y') }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-md-6" v-if="this.$page.props.auth.user.can.includes('client.index') || this.$page.props.auth.user.role.includes('Administrator')">
+            <div class="col-md-6" v-if="this.$page.props.auth.user.can.includes('client.index') ||
+            this.$page.props.auth.user.role.includes('Administrator')">
                 <div class="card">
                     <div class="card-body">
                         <h2 class="card-title">Today Followup Clients</h2>
@@ -59,10 +84,33 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="client in followup_clients">
+                            <tr v-for="client in props.followup_clients">
+                                <td>{{ client.name }}</td>
+                                <td>{{ client.email }}</td>
+                                <td>{{ client.phone }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Others Followup Clients</h2>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="client in props.others_followup_Clients">
                                 <td>{{ client.name}}</td>
                                 <td>{{ client.email}}</td>
                                 <td>{{ client.phone}}</td>
+                                <td>{{ moment(client.follow_up)?.format('D-MM-y') }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -71,13 +119,83 @@
             </div>
         </div>
 
-        <div class="row" v-if="this.$page.props.auth.user.can.includes('note.employees') || this.$page.props.auth.user.can.includes('note.index') || this.$page.props.auth.user.role.includes('Administrator')">
-            <h2>Active Notes</h2>
-            <div class="col-md-6" v-for="note in props.notes">
-                <div class="card" >
+        <div class="row" v-if="this.$page.props.auth.user.can.includes('note.employees')
+        || this.$page.props.auth.user.can.includes('note.index') || this.$page.props.auth.user.role.includes('Administrator')">
+            <div class="col-md-6">
+                <div class="card bg-white">
                     <div class="card-body">
-                        <h2 class="card-title"> {{ note.title }}</h2>
-                        <p class="newlineStringStyle" v-text="note.notes"></p>
+                        <h2>Notes</h2>
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th></th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="note in props.notes">
+                                <td class="d-flex flex-column">
+                                    <strong class="text-capitalize">{{ note?.title }}</strong>
+                                    <small>Category: {{ note?.note_category?.title }}</small>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <a :href="`/admin/notes/${note.id}`" class="btn btn-sm btn-default">
+                                        <vue-feather type="eye" size="14"/>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-white">
+                    <div class="card-body">
+                        <h2>Active Todos</h2>
+                        <ul id="chat" class="m-0 p-0" style="list-style:none">
+                            <li v-for="todo in props.todos" class="todo-item-style p-1 border-bottom">
+                                <a :href="`/admin/todos/${todo.id}?show_data=true`" class="d-flex align-items-center justify-content-between">
+                                   <div class="d-flex align-items-center">
+                                        <div class="ms-1 todo-content cursor-pointer">
+                                            <h4 class="m-0 text-black" >
+                                                {{ todo?.title.slice(0, 100) }}
+                                            </h4>
+                                            <small @click="showItem(todo.id)">
+                                                <span style="margin-left:5px;">{{ todo.about_todo?.slice(0, 100) }}</span>
+                                                <span v-if="todo.file">
+                                                    |
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 15px;">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                                    </svg>
+                                                </span>
+                                            </small>
+                                        </div>
+                                   </div>
+                                    <div class="d-flex align-items-center" style="gap:5px">
+                                    <span class="badge"
+                                          :class="{
+                                            'badge-light-success' : todo.priority === 'Complete',
+                                            'badge-light-primary' : todo.priority === 'Normal',
+                                            'badge-light-info' : todo.priority === 'Contacted',
+                                            'badge-light-info' : todo.priority === 'Medium',
+                                            'badge-light-purple' : todo.priority === 'Low',
+                                            'badge-light-danger' : todo.priority === 'High',
+                                            'badge-light-indego' : todo.priority === 'New Lead',
+                                            'badge-light-warning' : todo.priority === 'In Process',
+                                            'badge-light-indego' : todo.priority === 'First',
+                                        }"
+                                    >{{ todo.priority }}</span>
+                                        <small class="badge text-black">{{ moment(todo.date).format('MMMM, D') }}</small>
+                                        <span class="avatar me-1" v-c-tooltip="todo.user?.name">
+                                        <img :src="todo.user.photo" height="32" width="32" alt="Generic placeholder image">
+                                    </span>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -320,6 +438,7 @@
 
 <script setup>
 import ProgressChart from "../components/ProgressChart.vue";
+import moment from "moment";
 import {
     Chart as ChartJS,
     Title,
@@ -336,8 +455,11 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 let props = defineProps({
     trans: Object,
-    followup_leads:[],
-    followup_clients:[],
+    followup_leads:[]|null,
+    others_followup_leads:[]|null,
+    followup_clients:[]|null,
+    others_followup_Clients:[]|null,
+    todos:[]|null,
     notes:[],
 })
 

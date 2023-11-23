@@ -65,6 +65,7 @@
                                                 </div>
                                                 <p class="text-capitalize">Price: {{ pac.price }}</p>
                                                 <p class="package-description" v-html="pac.descriptions"></p>
+                                                <small>Position: {{ pac.position }}</small>
                                             </div>
                                         </div>
                                     </div>
@@ -135,7 +136,12 @@
                                                 <tbody>
                                                 <tr v-for="feature in service?.features" :key="feature.id">
                                                     <td>{{ feature?.id }}</td>
-                                                    <td>{{ feature?.name }}</td>
+                                                    <td>
+                                                        <div class="d-flex flex-column">
+                                                            <strong>{{ feature?.name }}</strong>
+                                                            <small>Position: {{ feature?.position }}</small>
+                                                        </div>
+                                                    </td>
                                                     <td>{{ feature?.price }}</td>
                                                     <td>
                                                         <CDropdown>
@@ -178,18 +184,22 @@
                     <label class="form-label">Name</label>
                     <input v-model="formData.name" type="text" class="form-control" placeholder="e.g Package name">
                     <span v-if="errors.name" class="error text-sm text-danger">{{ errors.name }}</span>
-
                 </div>
+
                 <div class="mb-1">
                     <label class="form-label">Price</label>
                     <input v-model="formData.price" type="number" class="form-control" placeholder="e.g Package price">
                     <span v-if="errors.price" class="error text-sm text-danger">{{ errors.price }}</span>
-
                 </div>
                 <div class="">
                     <label class="form-label">Details</label>
                     <textarea v-model="formData.descriptions" class="form-control" rows="5" placeholder="e.g What you think about this package"></textarea>
                     <span v-if="errors.descriptions" class="error text-sm text-danger">{{ errors.descriptions }}</span>
+                </div>
+                <div class="mb-1">
+                    <label class="form-label">Position</label>
+                    <input v-model="formData.position" type="number" class="form-control" placeholder="e.g Order Position">
+                    <span v-if="errors.position" class="error text-sm text-danger">{{ errors.position }}</span>
                 </div>
             </div>
 
@@ -218,6 +228,12 @@
                     <label class="form-label">Price</label>
                     <input v-model="featureForm.price" type="number" class="form-control" placeholder="e.g Package price">
                     <span v-if="errors.price" class="error text-sm text-danger">{{ errors.price }}</span>
+                </div>
+                <div class="mb-1">
+                    <label class="form-label">Position</label>
+                    <input v-model="featureForm.position" type="text" class="form-control" placeholder="e.g Featured Position">
+                    <span v-if="errors.position" class="error text-sm text-danger">{{ errors.position }}</span>
+
                 </div>
             </div>
 
@@ -262,6 +278,7 @@ const formData = useForm({
     serviceId:props.service?.id,
     name:null,
     price:null,
+    position:null,
     descriptions:null,
 })
 const editPackageData = ref(null);
@@ -274,6 +291,7 @@ const editPackage = (id) =>{
         editPackageData.value = res.data
         formData.name = res.data.name
         formData.price = res.data.price;
+        formData.position = res.data.position;
         formData.descriptions = res.data.descriptions
         document.getElementById('createPackage').$vb.modal.show()
     })
@@ -310,6 +328,7 @@ const editFeaturedData = ref(null)
 const featureForm = useForm({
     serviceId:props.service?.id,
     name:null,
+    position:null,
     price:null,
 })
 let addNewFeture = () => {
@@ -319,6 +338,7 @@ const editFeatured = (id) =>{
     axios.get(`${props.main_url}/edit-feature/${id}`).then((res)=>{
         editFeaturedData.value = res.data
         featureForm.name = res.data.name
+        featureForm.position = res.data.position
         featureForm.price = res.data.price
         document.getElementById('createFeature').$vb.modal.show()
     })

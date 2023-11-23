@@ -42,6 +42,7 @@
                                     <div class="d-flex align-items-center justify-content-between">
                                         <a :href="item.show_url">
                                             <h2 class="card-title">{{ item.name }}</h2>
+                                            <small>Position:  {{ item.position }}</small>
                                         </a>
                                         <CDropdown v-if="this.$page.props.auth.user.can.includes('services.delete') || this.$page.props.auth.user.can.includes('services.edit') || this.$page.props.auth.user.role.includes('Administrator')">
                                             <CDropdownToggle class="p-0">
@@ -52,7 +53,7 @@
                                                 <CDropdownItem :href="item.show_url" target="_blank"
                                                                v-if="this.$page.props.auth.user.can.includes('services.show') || this.$page.props.auth.user.role.includes('Administrator')">
                                                     <vue-feather type="eye" size="15"/>
-                                                    <span class="ms-1">Edit</span>
+                                                    <span class="ms-1">Show</span>
                                                 </CDropdownItem>
 
                                                 <CDropdownItem @click="editService(item.edit_url)"
@@ -109,6 +110,13 @@
                                    id="amount"
                                    v-model="formData.serviceName"
                                    type="text" placeholder="e.g Web Development"/>
+                        </div>
+                        <div class="mb-1">
+                            <label class="form-label" for="orderLevel">Order Level</label>
+                            <input class="form-control"
+                                   id="orderLevel"
+                                   v-model="formData.serviceOrder"
+                                   type="number" placeholder="e.g Service position"/>
                         </div>
 
 <!--                        <div class="mb-1">
@@ -167,6 +175,7 @@ import Modal from "../../components/Modal";
     const processing = ref(false);
     const formData = useForm({
         serviceId:null,
+        serviceOrder:null,
         serviceName:null,
         platforms:[],
         errors:Object,
@@ -214,8 +223,9 @@ import Modal from "../../components/Modal";
     const editService = (url) => {
         axios.get(url).then((res)=>{
             serviceId.value = res.data.id;
-            formData.serviceId = res.data.id,
+            formData.serviceId = res.data.id;
             formData.serviceName = res.data.service_name;
+            formData.serviceOrder = res.data.position;
             formData.platforms = JSON.parse(res.data.platforms)
             document.getElementById('addServices').$vb.modal.show()
         })

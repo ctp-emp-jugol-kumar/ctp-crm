@@ -123,7 +123,10 @@ class ProjectController extends Controller
 
         $filePath= NULL;
         if (Request::hasFile('files')) {
-            $filePath = Storage::putFile('/project', Request::file('files'));
+//            $filePath = Storage::putFile('/project', Request::file('files'));
+
+//            Storage::disk('public')->delete($project->files);
+            $filePath = Request::file('files')->store('project', 'public');
         }
 
         $project = Project::create([
@@ -225,8 +228,9 @@ class ProjectController extends Controller
 
         if (Request::hasFile('files')) {
 
-            $filePath = Storage::putFile('public/project', Request::file('files'));
-//            $filePath = Request::file('files')->store('image', 'public');
+
+//            Storage::disk('public')->delete($project->files);
+            $filePath = Request::file('files')->store('project', 'public');//            $filePath = Request::file('files')->store('image', 'public');
 
             $project->files = $filePath;
             $project->save();
@@ -280,8 +284,8 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
         if (Request::hasFile('files')) {
             Storage::disk('public')->delete($project->files);
-//            $filePath = Storage::putFile('project', Request::file('files'));
             $filePath = Request::file('files')->store('project', 'public');
+//            $filePath = Storage::putFile('project', Request::file('files'));
             $project->files = $filePath;
             $project->save();
         }

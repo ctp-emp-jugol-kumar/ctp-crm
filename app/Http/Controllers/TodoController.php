@@ -59,6 +59,8 @@ class TodoController extends Controller
             ->paginate(Request::input('perPage') ?? 10)
             ->withQueryString();
 
+
+
         return inertia('Todo/MyTodos',[
             'users' =>  User::where('id', '!=', Auth::id())->get(),
             'todos' => $todos,
@@ -92,7 +94,8 @@ class TodoController extends Controller
         $path = null;
         if (Request::hasFile('file')) {
             $fileName = Request::file('file')->getClientOriginalName();
-            $path = Storage::putFileAs('public/todos', Request::file('file'), $fileName);
+//            $path = Storage::putFileAs('public/todos', Request::file('file'), $fileName);
+            $path = Request::file('file')->store('project', 'public');
         }
 
         $todo = Todo::create([
@@ -179,7 +182,10 @@ class TodoController extends Controller
         $path = null;
         if (Request::hasFile('attachment')) {
             $fileName = Request::file('attachment')->getClientOriginalName();
-            $path = Storage::putFileAs('public/todos', Request::file('attachment'), $fileName);
+
+//            Storage::disk('public')->delete($project->files);
+            $path = Request::file('attachment')->store('project', 'public');
+//            $path = Storage::putFileAs('public/todos', Request::file('attachment'), $fileName);
         }
 
         $todo = Todo::create([
@@ -224,6 +230,7 @@ class TodoController extends Controller
             }
 
             $todo->downloadUrl = $todo->file ? Storage::url($todo->file) : null;
+//            $todo->downloadFile = $todo->file ? Storage::download($todo->file) : null;
 
             if (Request::input('show_data') == 'true'){
                 if (Request::input('notification_id')){

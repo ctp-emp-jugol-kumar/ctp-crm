@@ -13,8 +13,8 @@ use App\Models\Note;
 use App\Models\Platform;
 use App\Models\Project;
 use App\Models\Quotation;
+use App\Models\Todo;
 use App\Models\Transaction;
-use App\Models\TransactionLine;
 use App\Models\User;
 use App\Models\Website;
 use App\Models\Work;
@@ -228,10 +228,11 @@ class DashboardController extends Controller
 //    }
 //
     public function __invoke(Request $request){
+
         if (Auth::user()->roles()->where('name', 'administrator')->exists()) {
-            $notes = Note::with('users')->get();
+            $notes = Note::with(['users','noteCategory'])->get();
         } else {
-            $notes = Note::with('users')->where(function($query) {
+            $notes = Note::with(['users','noteCategory'])->where(function($query) {
                 $query->whereHas('users', function($q) {
                     $q->where('user_id', Auth::id());
                 });
@@ -241,20 +242,51 @@ class DashboardController extends Controller
 
 
 
-
         $clients = Client::query()
-                            ->where('status', 'Follow Up')
-                            ->whereDate('follow_up',Carbon::today())
-                            ->where('is_client', true)
-                            ->get();
+            ->whereNotNull('follow_up')
+            ->whereDate('follow_up',Carbon::today())
+            ->where('is_client', true)
+            ->get();
+
+        $othersFollowUpClients = Client::query()
+            ->whereNotNull('follow_up')
+            ->whereDate('follow_up', "!=", Carbon::today())
+            ->where('is_client', true)
+            ->get();
 
 
+        $leads = Client::query()
+            ->whereNotNull('follow_up')
+            ->whereDate('follow_up', Carbon::today())
+            ->where('is_client', false)
+            ->get();
+
+        $othersFollowUpLeads = Client::query()
+            ->whereNotNull('follow_up')
+            ->whereDate('follow_up', "!=", Carbon::today())
+            ->where('is_client', false)
+            ->get();
+
+
+
+
+
+        $todos = Todo::query()
+            ->with('user')
+            ->where('user_id', Auth::id())
+            ->whereNull('todo_id')
+            ->where('priority', '!=', 'Complete')
+            ->latest()
+            ->get();
 
 
         return Inertia::render('Test',[
-            'followup_leads' => Client::where('status', 'Follow Up')->whereDate('follow_up',Carbon::today())->where('is_client', false)->get(),
+            'followup_leads' => $leads,
+            'others_followup_leads' => $othersFollowUpLeads,
             'followup_clients' => $clients,
+            'others_followup_Clients' => $othersFollowUpClients,
             'notes' => $notes,
+            'todos' => $todos
         ]);
 
     }

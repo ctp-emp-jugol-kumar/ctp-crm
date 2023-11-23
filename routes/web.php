@@ -68,8 +68,13 @@ Route::prefix('admin')->group(function(){
         // clients management
         Route::get('clients', [ClientsController::class, 'index']);
         Route::resource('clients', ClientsController::class);
+        Route::post('clients/set-follow-up', [ClientsController::class, 'setFollowUp'])->name('client.setFollowUp');
+
+
         // leads management
         Route::resource('leads', LeadController::class);
+        Route::get('show-lead/{id}', [ClientsController::class, 'show']);
+
         // designs management
         Route::resource('designs', DesignController::class);
         // services management
@@ -151,7 +156,10 @@ Route::prefix('admin')->group(function(){
 //            return request()->all();
 
 
+
             $path = request()->input('path');
+
+//            return $path;
 //            return \Illuminate\Support\Facades\Storage::download($path, 'file.png');
 
             return \Illuminate\Support\Facades\Storage::disk('public')->download($path);
@@ -227,12 +235,12 @@ Route::put('/test/update/{id}', [\App\Http\Controllers\TestController::class, 'u
 
 
 
-
-Route::get('/pdf', function(){
-    return view('invoice.newPdf');
-    $pdf = Pdf::loadView('invoice.newInvoice');
-    return $pdf->download('invoice.pdf');
-});
+//Route::get('/test-qot', function(){
+//    $bSetting = new BusinessSettingController();
+//    $template = $bSetting->get_setting('quotation_template');
+//
+//    return view('emails.quotation', compact('template'));
+//});
 
 
 Route::get("/test", function(){

@@ -13,7 +13,7 @@
                                 </div>
                                 <div class="card-datatable table-responsive pt-0">
                                     <div class="d-flex justify-content-between align-items-center header-actions mx-0 row mt-75">
-                                        <div class="col-sm-12 col-lg-4 d-flex justify-content-center justify-content-lg-start">
+                                        <div class="col-sm-12 col-lg-4 d-flex justify-content-center justify-content-lg-start align-items-center gap-2">
                                             <div class="select-search-area">
                                                 <label>Show <select class="form-select" v-model="perPage">
                                                     <option :value="undefined">10</option>
@@ -23,6 +23,26 @@
                                                     <option value="200">200</option>
                                                     <option value="500">500</option>
                                                 </select> entries</label>
+                                            </div>
+
+                                            <div v-if="!isCustom">
+                                                <select  v-model="dateRange" @update:model-value="changeDateRange" class="select2 form-select select w-100 ms-1" id="select2-basic">
+                                                    <option selected disabled :value="undefined">Filter By Date</option>
+                                                    <option :value="null">All</option>
+                                                    <option v-for="(type, index) in range.ranges" :value="type">
+                                                        {{ index }}
+                                                    </option>
+                                                    <option value="custom">Custom Range</option>
+                                                </select>
+                                            </div>
+                                            <div v-else>
+                                                <Datepicker v-model="dateRange"
+                                                            :monthChangeOnScroll="false"
+                                                            range multi-calendars
+                                                            :enable-time-picker="false"
+                                                            :format="'d-MM-Y'"
+                                                            placeholder="Select Date Range" autoApply
+                                                            @update:model-value="handleDate" ></Datepicker>
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-lg-8 ps-xl-75 ps-0">
@@ -99,6 +119,8 @@ import axios from 'axios';
 import {CDropdown,CDropdownToggle, CDropdownMenu, CDropdownItem} from '@coreui/vue'
 import {useAction} from "../../composables/useAction";
 import moment from "moment";
+import {useDate} from "../../composables/useDate";
+const range = useDate();
 const props = defineProps({
     oldInvoice: Object,
     filters: Object,
@@ -106,14 +128,22 @@ const props = defineProps({
 });
 
 
+const dateRange = ref(props.filters.dateRange)
+const isCustom =ref(false);
+const changeDateRange = (event) => {
+    if(event=== 'custom'){
+        isCustom.value = true;
+        dateRange.value = '';
+    }
+};
 
 
-const search = ref(props.filters.search);
-const perPage = ref(props.filters.perPage);
-
-watch([search, perPage], debounce(function ([val, val2]) {
-    Inertia.get(props.main_url, {search: val, perPage: val2}, {preserveState: true, replace: true});
+let search = ref(props.filters.search);
+let perPage = ref(props.filters.perPage);
+watch([search, perPage, dateRange], debounce(function ([val, val2, val3]) {
+    Inertia.get(props.main_url, { search: val, perPage: val2, dateRange: val3}, { preserveState: true, replace: true });
 }, 300));
+
 
 </script>
 

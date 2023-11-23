@@ -24,16 +24,19 @@ class SearviceController extends Controller
      */
     public function index()
     {
+
         return inertia('Services/Index',[
             'services' => Searvice::query()
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('service_name', 'like', "%{$search}%");
                 })
+                ->oldest('position')
                 ->paginate(Request::input('perPage') ?? 16)
                 ->withQueryString()
                 ->through(fn($service) => [
                     'id' => $service->id,
                     'name' => $service->service_name,
+                    'position' => $service->position,
                     'platforms' => Platform::whereIn('id', json_decode($service->platforms))->get(),
                     'created_at' => $service->created_at->format('d M Y'),
                     'edit_url' =>  URL::route('services.edit', $service->id),
@@ -65,8 +68,10 @@ class SearviceController extends Controller
         Request::validate([
             'serviceName' => 'required|unique:searvices,service_name'
         ]);
+
         Searvice::create([
             'service_name' => Request::input('serviceName'),
+            'position'=> Request::input('serviceOrder') ?? 0,
             'platforms' => json_encode(Request::input('platforms'))
         ]);
         return back();
@@ -80,8 +85,11 @@ class SearviceController extends Controller
      */
     public function show($id)
     {
-        $service = Searvice::with(['packages', 'features'])->findOrFail($id);
-//        return $service;
+        $service = Searvice::with([
+            'packages'=>fn($query)=>$query->oldest('position'),
+            'features'=>fn($query)=>$query->oldest('position')
+        ])->findOrFail($id);
+
         return inertia('Services/Show',[
             'service' => $service,
             'save_packages' => URL::route('createPackage'),
@@ -118,6 +126,7 @@ class SearviceController extends Controller
         $service = Searvice::findOrFail(Request::input('serviceId'));
         $service->update([
             'service_name' => Request::input('serviceName'),
+            'position'=> Request::input('serviceOrder') ?? 0,
             'platforms' => json_encode(Request::input('platforms'))
         ]);
         return back();
@@ -151,6 +160,7 @@ class SearviceController extends Controller
         ]);
 
         $data['service_id'] = Request::input('serviceId');
+        $data['position'] = Request::input('position') ?? 0;
 
         ServicePackage::create($data);
         return back();
@@ -168,6 +178,7 @@ class SearviceController extends Controller
             'descriptions' => 'required'
         ]);
         $data['service_id'] = Request::input('serviceId');
+        $data['position'] = Request::input('position') ?? 0;
         ServicePackage::findOrFail($id)->update($data);
         return back();
     }
@@ -196,6 +207,8 @@ class SearviceController extends Controller
         ]);
 
         $data['service_id'] = Request::input('serviceId');
+        $data['position'] = Request::input('position') ?? 0;
+
         ServiceFeature::create($data);
         return back();
     }
@@ -211,6 +224,8 @@ class SearviceController extends Controller
             'price' => 'required',
         ]);
         $data['service_id'] = Request::input('serviceId');
+        $data['position'] = Request::input('position') ?? 0;
+
         ServiceFeature::findOrFail($id)->update($data);
         return back();
     }

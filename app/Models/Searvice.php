@@ -9,7 +9,7 @@ class Searvice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['service_name', 'platforms'];
+    protected $fillable = ['service_name', 'platforms','position'];
 
     public function platforms(){
         return $this->hasMany(Platform::class, 'platform_id');

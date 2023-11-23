@@ -12,18 +12,6 @@ return new class extends Migration
      * @return void
      */
 
-
-//CREATE TABLE `designs` (
-//`id` bigint(20) UNSIGNED NOT NULL,
-//`name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-//`price` int(10) UNSIGNED NOT NULL DEFAULT 0,
-//`description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-//`created_at` timestamp NULL DEFAULT NULL,
-//`updated_at` timestamp NULL DEFAULT NULL,
-//`deleted_at` timestamp NULL DEFAULT NULL
-//) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
     public function up()
     {
         Schema::create('packages', function (Blueprint $table) {

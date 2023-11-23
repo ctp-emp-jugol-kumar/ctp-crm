@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('service_id')->constrained('searvices');
             $table->string('name')->unique();
             $table->integer('price');
+            $table->integer('position')->default(0);
             $table->longText('descriptions')->nullable();
             $table->timestamps();
         });

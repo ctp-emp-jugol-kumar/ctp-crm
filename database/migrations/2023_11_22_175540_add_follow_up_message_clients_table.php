@@ -13,12 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('searvices', function (Blueprint $table) {
-            $table->id();
-            $table->string('service_name')->unique();
-            $table->json('platforms')->nullable();
-            $table->integer('position')->default(0);
-            $table->timestamps();
+        Schema::table('clients', function (Blueprint $table) {
+            $table->longText('follow_up_message')->nullable()->after('follow_up');
         });
     }
 
@@ -29,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('searvices');
+        Schema::table('clients', function (Blueprint $table) {
+            //
+        });
     }
 };

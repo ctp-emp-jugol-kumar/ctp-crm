@@ -29,26 +29,28 @@
             width: 100%;
             float: left;
         }
+        .temp_content{
+             word-wrap: break-word !important;
+        }
     </style>
 </head>
 <body>
     <div id="container">
         <div class="row">
             <div class="col-3">
-                <h3>Dear {{ $invoice->client?->email??  $invoice->quotation?->client?->email }},</h3>
+                <h3>Dear {{ $invoice->client?->name??  $invoice->quotation?->client?->name }},</h3>
                 <p>Greetings from Creative Tech Park! Hope you are doing well.</p>
                 <p>This is a notice that an invoice has been generated on {{ $invoice?->invoice_date?->format('l, F jS, Y')}}.</p>
-                <p>Please find the attached Invoice and pay as soon as possible.</p>
-                <p>You can pay the invoice at <a href="https://creativetechpark.com/pay" target="_blank" rel="noopener noreferrer">https://creativetechpark.com/pay</a></p>
-                <br>
-                <br>
-                <p>Thank you.</p>
-                <p>Regards,</p>
+
+                @if($template)
+                    <p class="temp_content" style="margin-bottom: 1rem">{!! nl2br($template) !!}</p>
+                @endif
+
                 <p>Creative Tech Park Team</p>
                 <p>Phone: +8801639-200002</p>
                 <p>Email: info@creativetechpark.com</p>
-                <p>Address: 362/1 (2nd Floor), DIT Road,</p>
-                <p>East Rampura, Dhaka 1219</p>
+                <p>Address: The Imperial Irish Kingdom, Mo-03 (3rd Floor),</p>
+                <p>Merul Badda, Dhaka 1212</p>
                 <p><a href="https://creativetechpark.com" target="_blank" rel="noopener noreferrer">https://creativetechpark.com</a></p>
             </div>
         </div>

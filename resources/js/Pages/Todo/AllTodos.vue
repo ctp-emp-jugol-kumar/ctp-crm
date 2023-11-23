@@ -35,6 +35,7 @@
                                     'badge-light-purple' : todo.priority === 'Low',
                                     'badge-light-danger' : todo.priority === 'High',
                                     'badge-light-indego' : todo.priority === 'New Lead',
+                                    'badge-light-indego' : todo.priority === 'In Proce',
                                     'badge-light-indego' : todo.priority === 'First',
                                 }"
                             >{{ todo.priority }}</span>

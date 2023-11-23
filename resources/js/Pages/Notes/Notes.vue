@@ -79,12 +79,14 @@
                                                                 </CDropdownToggle>
                                                                 <CDropdownMenu>
                                                                     <CDropdownItem :href="item.show_url+'?satus=edit'"
-                                                                                   v-if="this.$page.props.auth.user.can.includes('note.edit') || this.$page.props.auth.user.role == 'Administrator' ">
+                                                                                   v-if="this.$page.props.auth.user.can.includes('note.edit') ||
+                                                                                   this.$page.props.auth.user.role == 'Administrator' ">
                                                                     <Icon title="pencil" />
                                                                         <span class="ms-1">Edit</span>
                                                                     </CDropdownItem>
                                                                     <CDropdownItem :href="item.show_url" target="_blank"
-                                                                                   v-if="this.$page.props.auth.user.can.includes('note.show') || this.$page.props.auth.user.role == 'Administrator' ">
+                                                                                   v-if="this.$page.props.auth.user.can.includes('note.show') ||
+                                                                                   this.$page.props.auth.user.role == 'Administrator' ">
                                                                     <Icon title="eye" />
                                                                         <span class="ms-1">Show</span>
                                                                     </CDropdownItem>
